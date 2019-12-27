@@ -19,6 +19,6 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with:
         # Artifact name
-        name: output.jar
+        name: imblocker
         # Directory containing files to upload
-        path: D:\a\IMBlocker\IMBlocker\build\reobfJar
+        path: build\libs

@@ -140,7 +140,7 @@ public class IMBlocker
         @SubscribeEvent
         public static void onOpenGui(GuiOpenEvent goe) {
             // 临时措施之二
-//            LOGGER.info("onOpenGui");
+            LOGGER.info("onOpenGui");
             checkScreen(goe.getGui());
         }
 
@@ -148,24 +148,24 @@ public class IMBlocker
         public static void inGuiMouseInput(GuiScreenEvent.MouseInputEvent mie) {
             // 先用这个，screen反应之前就决定是否开启输入法，所以需要点两下才能切换好输入法。
             // 退出gui的时候可能需要esc进入菜单点一下才能关闭输入法
-//            LOGGER.debug("onClickGui");
+            LOGGER.debug("onClickGui");
             checkScreen(mie.getGui());
         }
 
         @SubscribeEvent
         public static void onClickGui(GuiScreenEvent.MouseReleasedEvent.Post mie) { // 在鼠标放开之后再处理，给screen足够的反应时间
             // 由于Forge的bug而不能捕捉到事件，暂时无效 https://github.com/MinecraftForge/MinecraftForge/issues/6060
-//            LOGGER.info("onClickGui");
+            LOGGER.info("onClickGui");
             checkScreen(mie.getGui());
         }
 
     private static void checkScreen(Screen screen) {
         if (scanGui(screen)) {
             IMManager.makeOn();
-//            LOGGER.info("act");
+            LOGGER.info("act");
         } else {
             IMManager.makeOff();
-//            LOGGER.info("deact");
+            LOGGER.info("deact");
         }
     }
 }

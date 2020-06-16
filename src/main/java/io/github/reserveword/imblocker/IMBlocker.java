@@ -37,12 +37,11 @@ import java.util.*;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("imblocker")
-public class IMBlocker
-{
+public class IMBlocker {
     // Directly reference a log4j logger.
     static final Logger LOGGER = LogManager.getLogger();
 
-    //KeyBind
+    // KeyBind
     private static KeyBinding kb;
 
     public IMBlocker() {
@@ -53,18 +52,19 @@ public class IMBlocker
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    public void setup(final FMLCommonSetupEvent event)
-    {
+    public void setup(final FMLCommonSetupEvent event) {
         // some preinit code
-        kb = new KeyBinding("key.imblocker.switchIMEState", KeyConflictContext.UNIVERSAL, KeyModifier.ALT, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_BACKSPACE, "key.categories.misc");
+        kb = new KeyBinding("key.imblocker.switchIMEState", KeyConflictContext.UNIVERSAL, KeyModifier.ALT,
+                InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_BACKSPACE, "key.categories.misc");
         ClientRegistry.registerKeyBinding(kb);
     }
-
 
     @Mod.EventBusSubscriber
     public static class RegistryEvents {
         /**
-         * scans the screen's children and every field of every child, including collection fields.
+         * scans the screen's children and every field of every child, including
+         * collection fields.
+         *
          * @param s screen to scan
          * @return if there's any text field accepting input
          */
@@ -75,14 +75,15 @@ public class IMBlocker
             if (s == null) {
                 return false;
             }
-            for (IGuiEventListener widget: s.children()) {
-                if (widget == null) continue;
+            for (IGuiEventListener widget : s.children()) {
+                if (widget == null)
+                    continue;
                 if (widget instanceof TextFieldWidget) {
                     if (((TextFieldWidget) widget).func_212955_f()) {
                         return true;
                     }
                 } else {
-                    for (Field f: widget.getClass().getDeclaredFields()) {
+                    for (Field f : widget.getClass().getDeclaredFields()) {
                         if (IGuiEventListener.class.isAssignableFrom(f.getType())) {
                             f.setAccessible(true);
                             try {
@@ -98,12 +99,13 @@ public class IMBlocker
                         } else if (Collection.class.isAssignableFrom(f.getType())
                                 && f.getGenericType() instanceof ParameterizedType) {
                             Type t = ((ParameterizedType) f.getGenericType()).getActualTypeArguments()[0];
-                            if ((t instanceof Class    // like List<Screen>
+                            if ((t instanceof Class // like List<Screen>
                                     && IGuiEventListener.class.isAssignableFrom((Class) t))
-                                    || ((t instanceof WildcardType)    // like List<? extends Screen>
+                                    || ((t instanceof WildcardType) // like List<? extends Screen>
                                     && ((WildcardType) t).getUpperBounds().length > 0
-                                    && IGuiEventListener.class.isAssignableFrom((Class) ((WildcardType) t).getUpperBounds()[0]))
-                                    || t instanceof TypeVariable) {    // like List<T>
+                                    && IGuiEventListener.class
+                                    .isAssignableFrom((Class) ((WildcardType) t).getUpperBounds()[0]))
+                                    || t instanceof TypeVariable) { // like List<T>
                                 // There can be more cases but i don't want to write
                                 f.setAccessible(true);
                                 try {
@@ -112,7 +114,8 @@ public class IMBlocker
                                             if (((TextFieldWidget) o).func_212955_f()) {
                                                 return true;
                                             }
-                                        } else if (!(o instanceof IGuiEventListener)) break;
+                                        } else if (!(o instanceof IGuiEventListener))
+                                            break;
                                     }
                                 } catch (IllegalAccessException e) {
                                     e.printStackTrace();
@@ -125,10 +128,10 @@ public class IMBlocker
             return false;
         }
 
-//        @SubscribeEvent
-//        public static void onTick(TickEvent te) {
-//            int i = 0;
-//        }
+        // @SubscribeEvent
+        // public static void onTick(TickEvent te) {
+        // int i = 0;
+        // }
 
         @SubscribeEvent
         public static void onInput(InputEvent.KeyInputEvent kie) {
@@ -154,19 +157,20 @@ public class IMBlocker
 
         @SubscribeEvent
         public static void onClickGui(GuiScreenEvent.MouseReleasedEvent.Post mie) { // 在鼠标放开之后再处理，给screen足够的反应时间
-            // 由于Forge的bug而不能捕捉到事件，暂时无效 https://github.com/MinecraftForge/MinecraftForge/issues/6060
+            // 由于Forge的bug而不能捕捉到事件，暂时无效
+            // https://github.com/MinecraftForge/MinecraftForge/issues/6060
             LOGGER.info("onClickGui");
             checkScreen(mie.getGui());
         }
 
-    private static void checkScreen(Screen screen) {
-        if (scanGui(screen)) {
-            IMManager.makeOn();
-            LOGGER.info("act");
-        } else {
-            IMManager.makeOff();
-            LOGGER.info("deact");
+        private static void checkScreen(Screen screen) {
+            if (scanGui(screen)) {
+                IMManager.makeOn();
+                LOGGER.info("act");
+            } else {
+                IMManager.makeOff();
+                LOGGER.info("deact");
+            }
         }
     }
-}
 }

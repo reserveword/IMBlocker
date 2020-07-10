@@ -79,7 +79,7 @@ public class IMBlocker {
                 if (widget == null)
                     continue;
                 if (widget instanceof TextFieldWidget) {
-                    if (((TextFieldWidget) widget).func_212955_f()) {
+                    if (((TextFieldWidget) widget).canWrite()) {
                         return true;
                     }
                 } else {
@@ -89,7 +89,7 @@ public class IMBlocker {
                             try {
                                 IGuiEventListener wid = (IGuiEventListener) f.get(widget);
                                 if (wid instanceof TextFieldWidget) {
-                                    if (((TextFieldWidget) wid).func_212955_f()) {
+                                    if (((TextFieldWidget) wid).canWrite()) {
                                         return true;
                                     }
                                 }
@@ -111,7 +111,7 @@ public class IMBlocker {
                                 try {
                                     for (Object o : (Collection) f.get(widget)) {
                                         if (o instanceof TextFieldWidget) {
-                                            if (((TextFieldWidget) o).func_212955_f()) {
+                                            if (((TextFieldWidget) o).canWrite()) {
                                                 return true;
                                             }
                                         } else if (!(o instanceof IGuiEventListener))

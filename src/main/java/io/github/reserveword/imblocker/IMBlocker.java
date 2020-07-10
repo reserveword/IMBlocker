@@ -75,7 +75,7 @@ public class IMBlocker {
             if (s == null) {
                 return false;
             }
-            for (IGuiEventListener widget : s.children()) {
+            for (IGuiEventListener widget : s.func_231039_at__()) {
                 if (widget == null)
                     continue;
                 if (widget instanceof TextFieldWidget) {

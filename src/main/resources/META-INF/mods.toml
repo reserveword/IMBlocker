@@ -10,7 +10,7 @@ loaderVersion="[30,)" #mandatory (28 is current forge version)
 # A URL to refer people to when problems occur with this mod
 # issueTrackerURL="http://my.issue.tracker/" #optional
 # A list of mods - how many allowed here is determined by the individual mod loader
-licence="GPL3 or higher"
+license="GPL3 or higher"
 [[mods]] #mandatory
 # The modid of the mod
 modId="imblocker" #mandatory

@@ -143,7 +143,7 @@ public class IMBlocker {
         @SubscribeEvent
         public static void onOpenGui(GuiOpenEvent goe) {
             // 临时措施之二
-            LOGGER.info("onOpenGui");
+            LOGGER.debug("onOpenGui");
             checkScreen(goe.getGui());
         }
 
@@ -159,7 +159,7 @@ public class IMBlocker {
         public static void onClickGui(GuiScreenEvent.MouseReleasedEvent.Post mie) { // 在鼠标放开之后再处理，给screen足够的反应时间
             // 由于Forge的bug而不能捕捉到事件，暂时无效
             // https://github.com/MinecraftForge/MinecraftForge/issues/6060
-            LOGGER.info("onClickGui");
+            LOGGER.debug("onClickGui");
             checkScreen(mie.getGui());
         }
 

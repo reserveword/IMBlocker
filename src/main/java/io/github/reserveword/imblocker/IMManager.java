@@ -21,7 +21,7 @@ public class IMManager {
         Native.register("imm32");
     }
 
-    private static User32 u = User32.INSTANCE;
+    private static final User32 u = User32.INSTANCE;
     //
     // public static void activateIME() {
     // WinDef.HWND hwnd = u.GetForegroundWindow();

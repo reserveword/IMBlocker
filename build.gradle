@@ -1,7 +1,8 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
+        maven { url = 'https://maven.aliyun.com/repository/public'}
+//        jcenter() // jcenter快关了，该考虑换源了
         mavenCentral()
     }
     dependencies {
@@ -11,7 +12,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
+//apply plugin: 'maven-publish'
 
 version = '1.0'
 group = 'io.github.reserveword' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -135,15 +136,19 @@ def reobfArtifact = artifacts.add('default', reobfFile) {
     type 'jar'
     builtBy 'reobfJar'
 }
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact reobfArtifact
-        }
-    }
-    repositories {
-        maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
-        }
-    }
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            artifact reobfArtifact
+//        }
+//    }
+//    repositories {
+//        maven {
+//            url "file:///${project.projectDir}/mcmodsrepo"
+//        }
+//    }
+//}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
 }

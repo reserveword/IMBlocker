@@ -1,3 +1,5 @@
 {
-  "key.imblocker.switchIMEState": "Toggle Input Method"
+  "key.imblocker.switchIMEState": "Toggle Input Method (Deprecated)",
+  "key.imblocker.screenBlacklist": "Matched screen would disable your IME",
+  "key.imblocker.screenWhitelist": "Matched screen would enable your IME"
 }

@@ -8,30 +8,30 @@ modLoader="javafml" #mandatory
 # A version range to match for said mod loader - for regular FML @Mod it will be the forge version
 loaderVersion="[30,)" #mandatory (28 is current forge version)
 # A URL to refer people to when problems occur with this mod
-# issueTrackerURL="http://my.issue.tracker/" #optional
+issueTrackerURL="https://github.com/reserveword/IMBlocker/issues" #optional
 # A list of mods - how many allowed here is determined by the individual mod loader
+license="GPL3 or higher"
 [[mods]] #mandatory
 # The modid of the mod
 modId="imblocker" #mandatory
 # The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
-version="${file.jarVersion}" #mandatory
+version="${version}" #mandatory
  # A display name for the mod
 displayName="IMBlocker" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification <here>
 # updateJSONURL="http://myurl.me/" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
-# displayURL="http://example.com/" #optional
+displayURL="https://github.com/reserveword/IMBlocker" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
 # logoFile="examplemod.png" #optional
 # A text field displayed in the mod UI
-# credits="" #optional
+credits="TimmyOVO's InputMethodBlocker for inspiring me to make this mod" #optional
 # A text field displayed in the mod UI
 authors="reserveword" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
 Blocks Input Methods when you're not using it.
 在你不打字的时候自动关闭输入法
-感谢skystardust制作的ImputMethodBlocker，启发我制作这个mod https://www.mcbbs.net/thread-688825-12-1.html
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 #[[dependencies.examplemod]] #optional

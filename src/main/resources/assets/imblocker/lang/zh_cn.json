@@ -1,3 +1,5 @@
 {
-  "key.imblocker.switchIMEState": "开关输入法"
+  "key.imblocker.switchIMEState": "开关输入法（已弃用）",
+  "key.imblocker.screenBlacklist": "该列表中的GUI屏幕会禁用输入法",
+  "key.imblocker.screenWhitelist": "该列表中的GUI屏幕会激活输入法"
 }

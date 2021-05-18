@@ -22,40 +22,8 @@ public class IMManager {
     }
 
     private static final User32 u = User32.INSTANCE;
-    //
-    // public static void activateIME() {
-    // WinDef.HWND hwnd = u.GetForegroundWindow();
-    // IMBlocker.LOGGER.info(u.GetWindowTextLength(hwnd));
-    // IMBlocker.LOGGER.info(hwnd);
-    // WinNT.HANDLE himc = ImmGetContext(hwnd);
-    // IMBlocker.LOGGER.info(himc);
-    // if (himc != null) {
-    // ImmDestroyContext(himc);
-    // }
-    // himc = ImmCreateContext();
-    // IMBlocker.LOGGER.info(himc);
-    // ImmAssociateContext(hwnd, himc);
-    // ImmReleaseContext(hwnd, himc);
-    // }
-    //
-    // public static void deactivateIME() {
-    // WinDef.HWND hwnd = u.GetForegroundWindow();
-    // IMBlocker.LOGGER.info(hwnd);
-    // WinNT.HANDLE himc = ImmGetContext(hwnd); //useless?
-    // IMBlocker.LOGGER.info(himc);
-    // ImmAssociateContext(hwnd, null);
-    // }
-    //
-    // public static boolean checkIMEState() {
-    // WinDef.HWND hwnd = u.GetForegroundWindow();
-    // WinNT.HANDLE himc = ImmGetContext(hwnd); //need release?
-    // return himc == null;
-    // }
 
     public static void makeOn() {
-        // if (!checkIMEState()) {
-        // activateIME();
-        // }
         WinDef.HWND hwnd = u.GetForegroundWindow();
         WinNT.HANDLE himc = ImmGetContext(hwnd);
         if (himc == null) {
@@ -76,14 +44,17 @@ public class IMManager {
 
     public static boolean toggle() {
         WinDef.HWND hwnd = u.GetForegroundWindow();
-        WinNT.HANDLE himc = ImmAssociateContext(hwnd, null);
+        WinNT.HANDLE himc = ImmGetContext(hwnd);
         if (himc == null) {
             himc = ImmCreateContext();
             ImmAssociateContext(hwnd, himc);
             ImmReleaseContext(hwnd, himc);
             return true;
+        } else {
+            himc = ImmAssociateContext(hwnd, null);
+            ImmDestroyContext(himc);
+            ImmReleaseContext(hwnd, himc);
+            return false;
         }
-        ImmReleaseContext(hwnd, himc);
-        return false;
     }
 }

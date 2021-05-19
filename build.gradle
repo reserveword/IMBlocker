@@ -14,7 +14,7 @@ apply plugin: 'eclipse'
 
 version = '2.0'
 group = 'io.github.reserveword' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'imblocker-devonly'
+archivesBaseName = 'imblocker-1.16.5'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
 

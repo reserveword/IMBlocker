@@ -18,13 +18,14 @@ That's why we need IMBlocker, who can detect the game's current state and switch
     - *char input* is dispatched to Minecraft's current GUI `Screen`, which then usually delegates down to a `TextFieldWidget` somewhere
     - Normally a `TextFieldWidget` reacts for this input, but when GUI `Screen` does not exist, they decided not to call delegate, or the `TextFieldWidget` is not active, nothing would react
     - Whether reacted or not, the *char input* processing is called
-    - We can't find out if the game would like to receive out *char input* unless we **do input something**
+    - We can't find out if the game would like to receive out *char input*
 - How IMBlocker detect *char input* state
-    - We input a character
-    - If any `TextFieldWidget` receives it, the game accepts *char input*
-    - Normal *char input* throughout the game works too
-    - We use ASM to modify `TextFieldWidget.oncharTyped` so it tells us when called
-    - We only input `'\0'` as it won't be accepted by normal game, and normal *char input* remains uninterrupted
+    - We find out **all of** `TextFieldWidget`s
+    - We use ASM hacking its constructor to accomplish that
+    - If any `TextFieldWidget` accepts *char input*, we believe the game accepts it
 - Special cases
     - Some `Screen`s like *Book and Quill* and *Sign* directly receive input, rather than redirecting it to `TextFieldWidget`s
     - We can't capture their inputs, so we make a whitelist for them
+- Limits
+    - One `TextFieldWidget` can accept *char input*, but the game may not call him with real inputs
+    - Suggestions and feedbacks about this issue are welcomed

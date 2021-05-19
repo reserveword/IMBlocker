@@ -1,5 +1,7 @@
 {
   "key.imblocker.switchIMEState": "开关输入法（已弃用）",
+  "key.imblocker.checkDelay": "容许文本框响应时间（tick），更大的数值代表更好的准确度，但会降低性能",
+  "key.imblocker.checkInterval": "每多少tick检查一次文本框，请确保“容许文本框响应时间”是这一数值的整数倍",
   "key.imblocker.screenBlacklist": "该列表中的GUI屏幕会禁用输入法",
   "key.imblocker.screenWhitelist": "该列表中的GUI屏幕会激活输入法"
 }

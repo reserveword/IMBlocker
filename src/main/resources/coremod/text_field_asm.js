@@ -11,28 +11,29 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.gui.widget.TextFieldWidget',
-                'methodName': 'charTyped',
-                'methodDesc': '(CI)Z'
+                'methodName': '<init>',
+                'methodDesc': '(Lnet/minecraft/client/gui/FontRenderer;IIIILnet/minecraft/client/gui/widget/TextFieldWidget;Lnet/minecraft/util/text/ITextComponent;)V'
             },
             'transformer': function (method) {
-                var il = new InsnList();
-                il.add(new VarInsnNode(Opcodes.ALOAD, 0))
-                il.add(new VarInsnNode(Opcodes.ALOAD, 0))
-                il.add(new FieldInsnNode(
-                    Opcodes.GETFIELD,
-                    'net/minecraft/client/gui/widget/TextFieldWidget',
-                    ASMAPI.mapField('field_146226_p'),
-                    'Z'
-                ))
-                il.add(new MethodInsnNode(
+                i1 = new VarInsnNode(Opcodes.ALOAD, 0)
+                i2 = new MethodInsnNode(
                     Opcodes.INVOKESTATIC,
-                    'io/github/reserveword/imblocker/IMBlocker$TextFieldConfirmEvent',
-                    'fireEvent',
-                    '(Lnet/minecraft/client/gui/widget/TextFieldWidget;Z)V',
+                    'io/github/reserveword/imblocker/IMBlocker$RegistryEvents',
+                    'collectTextField',
+                    '(Lnet/minecraft/client/gui/widget/TextFieldWidget;)V',
                     false
-                ))
-                method.instructions.insert(il)
-                ASMAPI.log('DEBUG','patched TextFieldWidget.chatTyped')
+                )
+                iter = method.instructions.iterator(method.instructions.size())
+                ASMAPI.log('INFO', 'instruction size ' + method.instructions.size())
+                while (iter.hasPrevious()) {
+                    var op = iter.previous()
+                    if (op.getOpcode() === Opcodes.RETURN) {
+                        iter.add(i1)
+                        iter.add(i2)
+                        ASMAPI.log('DEBUG','patched a return of TextFieldWidget.<init>')
+                    }
+                }
+                ASMAPI.log('INFO', 'instruction size after patch ' + method.instructions.size())
                 return method
             }
         }

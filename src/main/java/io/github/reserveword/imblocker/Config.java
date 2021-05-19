@@ -16,6 +16,10 @@ public class Config {
      */
     public static class Client {
 
+        public final ForgeConfigSpec.ConfigValue<Integer> checkDelay;
+
+        public final ForgeConfigSpec.ConfigValue<Integer> checkInterval;
+
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> imeBlacklist;
 
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> screenWhitelist;
@@ -23,6 +27,19 @@ public class Config {
         Client(ForgeConfigSpec.Builder builder) {
             builder.comment("Client only settings")
                     .push("client");
+
+            checkDelay = builder
+                    .comment("We want to check if any TextWidgetField comes to life after several ticks.",
+                            "How many ticks should we check?",
+                            "Larger number means more precise and more error-tolerant, but less efficiency.",
+                            "Better be rounded to an exact multiple of `checkInterval`")
+                    .translation("key.imblocker.checkDelay")
+                    .defineInRange("checkDelayTime", 10, 1, Integer.MAX_VALUE);
+
+            checkInterval = builder
+                    .comment("Checking Every tick is not efficient, how about check once every several tick?")
+                    .translation("key.imblocker.checkInterval")
+                    .defineInRange("checkInterval", 2, 1, Integer.MAX_VALUE);
 
             imeBlacklist = builder
                     .comment("Matched screens would disable your IME")

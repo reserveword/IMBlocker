@@ -3,9 +3,11 @@ package io.github.reserveword.imblocker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraftforge.client.event.GuiScreenEvent;
 
 import java.lang.ref.WeakReference;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 
 public class ActiveTextFieldSniffer {
 
@@ -15,104 +17,103 @@ public class ActiveTextFieldSniffer {
         return INSTANCE;
     }
 
-    private static final int OFF            = 0b0000;
-    private static final int ON             = 0b0001;
-    private static final int POSITIVE       = 0b0010;
-    private static final int INPUTING       = 0b0100;
-    private static final int WHITELIST      = 0b1000;
-    private int state = ON;
+    public enum State {NONE, OPEN, CLOSE};
+    // basic flags
+    private int needCheck = Config.CLIENT.checkDelay.get();
+    private boolean on = true;
+    private boolean forceSync = false;
+    // screen cache
+    private State screenState = State.NONE;
     private WeakReference<Object> lastScreen = new WeakReference<>(null);
+    // TFW cache
+    private final Collection<WeakReference<TextFieldWidget>> allTFW = new HashSet<>();
+    private WeakReference<TextFieldWidget> lastTFW = new WeakReference<>(null);
 
-    public void textFieldConfirm(TextFieldWidget tfw, boolean enabled) {
-        if ((state & WHITELIST) != 0) {
-            return;
-        }
-        if (tfw.func_212955_f() && enabled) {
-            IMBlocker.LOGGER.debug("state {} -> confirm", state);
-            state = (state & ON) | POSITIVE | INPUTING;
-        } else {
-            IMBlocker.LOGGER.debug("textFieldWidget state: visible={}, active={}, focused={}, enabled={}", tfw.visible, tfw.active, tfw.isFocused(), enabled);
-            IMBlocker.LOGGER.debug("state {} -> confirm inactive", state);
-            state = (state & ON) | POSITIVE;
-        }
+    public void listen(TextFieldWidget tfw) {
+        allTFW.add(new WeakReference<>(tfw));
     }
 
-    public void guiChallengeEvent(GuiScreenEvent gse) {
-        if (state == (ON | INPUTING)) {
-            IMBlocker.LOGGER.debug("state {} -> challenge", state);
-            state &= ~INPUTING;
-        }
-    }
-    public void guiTryEvent(GuiScreenEvent gse) {
-        if (state == OFF) {
-            IMBlocker.LOGGER.debug("state {} -> try confirm", state);
-            state |= INPUTING;
-        }
+    public void scheduleCheck() {
+        needCheck = Config.CLIENT.checkDelay.get();
     }
 
-    public void makeChallenge() {
-        if (state == ON || state == (OFF | INPUTING)) {
-            IGuiEventListener gel = Minecraft.getInstance().currentScreen;
-            if (gel != null) {
-                IMBlocker.LOGGER.debug("state {} -> sendchallenge", state);
-                state = (state & ON) | POSITIVE;
-                try {
-                    gel.charTyped('\0', 0);
-                } catch (Exception e) {
-                    state = (state & ON);
-                }
-            } else {
-                IMBlocker.LOGGER.debug("currentScreen is null");
-                state = (state & ON) | POSITIVE;
-            }
-        }
+    public void scheduleCheck(boolean sync) {
+        needCheck = Config.CLIENT.checkDelay.get();
+        forceSync = sync;
     }
 
-    public boolean checkWhitelist() {
+    public State checkScreen() {
         IGuiEventListener gel = Minecraft.getInstance().currentScreen;
         // screen cache
         if (lastScreen.get() != gel) {
             lastScreen = new WeakReference<>(gel);
             IMBlocker.LOGGER.debug("currentScreen {}", gel);
         } else {
-            return (state & WHITELIST) != 0;
+            return screenState;
         }
         if (gel != null) {
             // check if is whitelist screen
             for (Class<?> c:Config.getScreenWhitelist()) {
                 if (c.isInstance(gel)) {
                     IMBlocker.LOGGER.debug("found whitelisted screen");
-                    if ((state & ON) == OFF) {
-                        IMManager.makeOn();
-                    }
-                    state = ON | POSITIVE | INPUTING | WHITELIST;
-                    return true;
+                    screenState = State.OPEN;
+                    return State.OPEN;
                 }
             }
-            state &= ~WHITELIST;
+            screenState = State.NONE;
+            return State.NONE;
         } else { // if no screen
-            IMBlocker.LOGGER.debug("currentScreen is null");
-            IMManager.makeOff();
-            state = OFF | POSITIVE | WHITELIST;
-            return true;
+            screenState = State.CLOSE;
+            return State.CLOSE;
         }
-        return false;
     }
 
-    public void concludeState() {
-        if (checkWhitelist()) {
-            return;
+    public State checkTFW() {
+        TextFieldWidget tfw = lastTFW.get();
+        if (tfw != null && tfw.canWrite()) {
+            return State.OPEN;
         }
-        if ((state & POSITIVE) != 0) {
-            IMBlocker.LOGGER.debug("state {} -> conclude", state);
-            if (state == (ON | POSITIVE)) {
-                IMManager.makeOff();
-                state = OFF;
-            } else if (state == (OFF | POSITIVE | INPUTING)) {
-                IMManager.makeOn();
-                state = ON | INPUTING;
+        IMBlocker.LOGGER.debug("allTFW size {}", allTFW.size());
+        Iterator<WeakReference<TextFieldWidget>> iterator = allTFW.iterator();
+        while (iterator.hasNext()) {
+            WeakReference<TextFieldWidget> wr = iterator.next();
+            tfw = wr.get();
+            if (tfw == null) {
+                iterator.remove();
+            } else if (tfw.canWrite()) {
+                lastTFW = wr;
+                return State.OPEN;
             }
-            state &= ~POSITIVE;
         }
+        return State.CLOSE;
     }
+
+    public State checkState() {
+        if (needCheck <= 0) {
+            return State.NONE;
+        }
+        needCheck --;
+        if (needCheck % Config.CLIENT.checkInterval.get() != 0) {
+            return State.NONE;
+        }
+        IMBlocker.LOGGER.debug("state check, on={}", on);
+        State currentState = checkScreen();
+        if (currentState == State.NONE) {
+            currentState = checkTFW();
+        }
+        if (currentState == State.OPEN && (!on || forceSync)) {
+            IMManager.makeOn();
+            on = true;
+            forceSync = false;
+        } else if (currentState == State.CLOSE && (on || forceSync)) {
+            IMManager.makeOff();
+            on = false;
+            forceSync = false;
+        } else {
+            currentState = State.NONE;
+        }
+        IMBlocker.LOGGER.debug("state -> {}, on={}", currentState, on);
+        return currentState;
+    }
+
 }

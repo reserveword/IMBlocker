@@ -23,7 +23,7 @@ displayName="IMBlocker" #mandatory
 # A URL for the "homepage" for this mod, displayed in the mod UI
 displayURL="https://github.com/reserveword/IMBlocker" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
-# logoFile="examplemod.png" #optional
+logoFile="IMBlocker.png" #optional
 # A text field displayed in the mod UI
 credits="TimmyOVO's InputMethodBlocker for inspiring me to make this mod" #optional
 # A text field displayed in the mod UI

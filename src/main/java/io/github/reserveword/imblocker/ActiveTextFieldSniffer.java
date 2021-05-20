@@ -17,7 +17,7 @@ public class ActiveTextFieldSniffer {
         return INSTANCE;
     }
 
-    public enum State {NONE, OPEN, CLOSE};
+    public enum State {NONE, OPEN, CLOSE}
     // basic flags
     private int needCheck = Config.CLIENT.checkDelay.get();
     private boolean on = true;
@@ -34,11 +34,11 @@ public class ActiveTextFieldSniffer {
     }
 
     public void scheduleCheck() {
-        needCheck = Config.CLIENT.checkDelay.get();
+        needCheck = Config.CLIENT.checkDelay.get() - 1;
     }
 
     public void scheduleCheck(boolean sync) {
-        needCheck = Config.CLIENT.checkDelay.get();
+        needCheck = Config.CLIENT.checkDelay.get() - 1;
         forceSync = sync;
     }
 

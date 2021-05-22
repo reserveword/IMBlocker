@@ -28,4 +28,5 @@ That's why we need IMBlocker, who can detect the game's current state and switch
     - We can't capture their inputs, so we make a whitelist for them
 - Limits
     - One `TextFieldWidget` can accept *char input*, but the game may not call him with real inputs
-    - Suggestions and feedbacks about this issue are welcomed
+    - On Platforms other than *Windows* we don't know how to disable/enable input methods
+    - Suggestions and feedbacks are welcomed

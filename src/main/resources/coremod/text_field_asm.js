@@ -10,9 +10,9 @@ function initializeCoreMod() {
         'text_field_asm': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraft.client.gui.widget.TextFieldWidget',
+                'class': 'net.minecraft.client.gui.components.EditBox',
                 'methodName': '<init>',
-                'methodDesc': '(Lnet/minecraft/client/gui/FontRenderer;IIIILnet/minecraft/client/gui/widget/TextFieldWidget;Lnet/minecraft/util/text/ITextComponent;)V'
+                'methodDesc': '(Lnet/minecraft/client/gui/Font;IIIILnet/minecraft/client/gui/components/EditBox;Lnet/minecraft/network/chat/Component;)V'
             },
             'transformer': function (method) {
                 i1 = new VarInsnNode(Opcodes.ALOAD, 0)
@@ -20,7 +20,7 @@ function initializeCoreMod() {
                     Opcodes.INVOKESTATIC,
                     'io/github/reserveword/imblocker/IMBlocker$RegistryEvents',
                     'collectTextField',
-                    '(Lnet/minecraft/client/gui/widget/TextFieldWidget;)V',
+                    '(Lnet/minecraft/client/gui/components/EditBox;)V',
                     false
                 )
                 iter = method.instructions.iterator(method.instructions.size())

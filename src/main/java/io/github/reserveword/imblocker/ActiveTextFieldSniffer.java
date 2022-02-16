@@ -1,8 +1,8 @@
 package io.github.reserveword.imblocker;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.components.EditBox;
 
 import java.lang.ref.WeakReference;
 import java.util.Collection;
@@ -26,10 +26,10 @@ public class ActiveTextFieldSniffer {
     private State screenState = State.NONE;
     private WeakReference<Object> lastScreen = new WeakReference<>(null);
     // TFW cache
-    private final Collection<WeakReference<TextFieldWidget>> allTFW = new HashSet<>();
-    private WeakReference<TextFieldWidget> lastTFW = new WeakReference<>(null);
+    private final Collection<WeakReference<EditBox>> allTFW = new HashSet<>();
+    private WeakReference<EditBox> lastTFW = new WeakReference<>(null);
 
-    public void listen(TextFieldWidget tfw) {
+    public void listen(EditBox tfw) {
         allTFW.add(new WeakReference<>(tfw));
     }
 
@@ -43,7 +43,7 @@ public class ActiveTextFieldSniffer {
     }
 
     public State checkScreen() {
-        IGuiEventListener gel = Minecraft.getInstance().currentScreen;
+        GuiEventListener gel = Minecraft.m_91087_().f_91080_;
         // screen cache
         if (lastScreen.get() != gel) {
             lastScreen = new WeakReference<>(gel);
@@ -69,18 +69,18 @@ public class ActiveTextFieldSniffer {
     }
 
     public State checkTFW() {
-        TextFieldWidget tfw = lastTFW.get();
-        if (tfw != null && tfw.canWrite()) {
+        EditBox tfw = lastTFW.get();
+        if (tfw != null && tfw.m_94204_()) {
             return State.OPEN;
         }
         IMBlocker.LOGGER.debug("allTFW size {}", allTFW.size());
-        Iterator<WeakReference<TextFieldWidget>> iterator = allTFW.iterator();
+        Iterator<WeakReference<EditBox>> iterator = allTFW.iterator();
         while (iterator.hasNext()) {
-            WeakReference<TextFieldWidget> wr = iterator.next();
+            WeakReference<EditBox> wr = iterator.next();
             tfw = wr.get();
             if (tfw == null) {
                 iterator.remove();
-            } else if (tfw.canWrite()) {
+            } else if (tfw.m_94204_()) {
                 lastTFW = wr;
                 return State.OPEN;
             }

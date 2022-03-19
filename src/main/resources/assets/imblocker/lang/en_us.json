@@ -3,5 +3,7 @@
   "key.imblocker.checkDelay": "How many ticks do we wait for text field to respond? Larger number is more precise but less efficiency.",
   "key.imblocker.checkInterval" : "Per how many ticks do we check text field once? Make sure checkDelay is an exact multiple of this.",
   "key.imblocker.screenBlacklist": "Matched screen would disable your IME",
-  "key.imblocker.screenWhitelist": "Matched screen would enable your IME"
+  "key.imblocker.screenWhitelist": "Matched screen would enable your IME",
+  "key.imblocker.inputBlacklist": "Matched input box would disable your IME",
+  "key.imblocker.inputWhitelist": "Matched input box would enable your IME"
 }

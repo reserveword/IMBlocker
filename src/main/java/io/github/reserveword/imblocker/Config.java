@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 @Mod.EventBusSubscriber
 public class Config {
@@ -16,43 +17,39 @@ public class Config {
      */
     public static class Client {
 
-        public final ForgeConfigSpec.ConfigValue<Integer> checkDelay;
-
         public final ForgeConfigSpec.ConfigValue<Integer> checkInterval;
 
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> imeBlacklist;
-
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> screenWhitelist;
+
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> screenBlacklist;
+
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> inputWhitelist;
+
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> inputBlacklist;
+
+        public final Predicate<Object> checkClassForName = s -> {
+            try {
+                Class.forName((String) s);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        };
 
         Client(ForgeConfigSpec.Builder builder) {
             builder.comment("Client only settings")
                     .push("client");
 
-            checkDelay = builder
-                    .comment("We want to check if any TextWidgetField comes to life after several ticks.",
-                            "How many ticks should we check?",
-                            "Larger number means more precise and more error-tolerant, but less efficiency.",
-                            "Better be rounded to an exact multiple of `checkInterval`")
-                    .translation("key.imblocker.checkDelay")
-                    .defineInRange("checkDelayTime", 10, 1, Integer.MAX_VALUE);
-
             checkInterval = builder
-                    .comment("Checking Every tick is not efficient, how about check once every several tick?")
+                    .comment("Checking every tick is not efficient, how about check once every several tick?")
                     .translation("key.imblocker.checkInterval")
                     .defineInRange("checkInterval", 2, 1, Integer.MAX_VALUE);
 
-            imeBlacklist = builder
+            screenBlacklist = builder
                     .comment("Matched screens would disable your IME")
-                    .translation("key.imblocker.screenWhitelist")
-                    .defineList("screenBlacklist", Collections.emptyList(), s -> {
-                        try {
-                            Class.forName((String) s);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            return false;
-                        }
-                        return true;
-                    });
+                    .translation("key.imblocker.screenBlacklist")
+                    .defineList("screenBlacklist", Collections.emptyList(), checkClassForName);
 
             screenWhitelist = builder
                     .comment("Matched screens would enable your IME")
@@ -60,38 +57,37 @@ public class Config {
                     .defineList("screenWhitelist", Arrays.asList(
                             EditBookScreen.class.getName(),
                             EditSignScreen.class.getName()
-                    ), s -> {
-                        try {
-                            Class.forName((String) s);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            return false;
-                        }
-                        return true;
-                    });
+                    ), checkClassForName);
+
+            inputBlacklist = builder
+                    .comment("Matched input box would disable your IME")
+                    .translation("key.imblocker.inputBlacklist")
+                    .defineList("inputBlacklist", Collections.emptyList(), checkClassForName);
+
+            inputWhitelist = builder
+                    .comment("Matched input box would enable your IME")
+                    .translation("key.imblocker.inputWhitelist")
+                    .defineList("inputWhitelist", Collections.emptyList(), checkClassForName);
 
             builder.pop();
         }
     }
 
-    private static final Collection<Class<?>> screens = new ArrayList<>();
-    private static Collection<Class<?>> cache = null;
-    private static void bakeScreenWhitelist() {
-        screens.clear();
-        for (String s: CLIENT.screenWhitelist.get()) {
+    public static final Collection<Class<?>> screenBlacklist;
+    public static final Collection<Class<?>> screenWhitelist;
+    public static final Collection<Class<?>> inputBlacklist;
+    public static final Collection<Class<?>> inputWhitelist;
+    private static Collection<Class<?>> bakeList(ForgeConfigSpec.ConfigValue<List<? extends String>> cfg, String name) {
+        Collection<Class<?>> collection = new ArrayList<>();
+        for (String s : cfg.get()) {
             try {
-                screens.add(Class.forName(s));
+                collection.add(Class.forName(s));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
-        IMBlocker.LOGGER.debug("imblocker config result {}", screens);
-    }
-    public static Collection<Class<?>> getScreenWhitelist() {
-        if (cache == null) {
-            cache = Collections.unmodifiableCollection(screens);
-        }
-        return cache;
+        IMBlocker.LOGGER.debug("imblocker {} result {}", name, collection);
+        return Collections.unmodifiableCollection(collection);
     }
 
     static final ForgeConfigSpec clientSpec;
@@ -100,6 +96,9 @@ public class Config {
         final Pair<Config.Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Config.Client::new);
         clientSpec = specPair.getRight();
         CLIENT = specPair.getLeft();
-        bakeScreenWhitelist();
+        screenWhitelist = bakeList(CLIENT.screenWhitelist, "screenWhitelist");
+        screenBlacklist = bakeList(CLIENT.screenBlacklist, "screenBlacklist");
+        inputWhitelist = bakeList(CLIENT.inputWhitelist, "inputWhitelist");
+        inputBlacklist = bakeList(CLIENT.inputBlacklist, "inputBlacklist");
     }
 }

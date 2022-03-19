@@ -23,7 +23,9 @@ public class IMManager {
 
     private static final User32 u = User32.INSTANCE;
 
-    public static void makeOn() {
+    private static boolean state = true;
+
+    private static void makeOnImp() {
         WinDef.HWND hwnd = u.GetForegroundWindow();
         WinNT.HANDLE himc = ImmGetContext(hwnd);
         if (himc == null) {
@@ -33,7 +35,7 @@ public class IMManager {
         ImmReleaseContext(hwnd, himc);
     }
 
-    public static void makeOff() {
+    private static void makeOffImp() {
         WinDef.HWND hwnd = u.GetForegroundWindow();
         WinNT.HANDLE himc = ImmAssociateContext(hwnd, null);
         if (himc != null) {
@@ -42,7 +44,7 @@ public class IMManager {
         ImmReleaseContext(hwnd, himc);
     }
 
-    public static boolean toggle() {
+    private static boolean toggleImp() {
         WinDef.HWND hwnd = u.GetForegroundWindow();
         WinNT.HANDLE himc = ImmGetContext(hwnd);
         if (himc == null) {
@@ -56,5 +58,28 @@ public class IMManager {
             ImmReleaseContext(hwnd, himc);
             return false;
         }
+    }
+
+    public static void makeOn() {
+        if (!state) {
+            state = true;
+            makeOnImp();
+        }
+    }
+
+    public static void makeOff() {
+        if (state) {
+            state = false;
+            makeOffImp();
+        }
+    }
+
+    public static boolean getState() {
+        return state;
+    }
+
+    public static boolean toggle() {
+        state = !state;
+        return toggleImp();
     }
 }

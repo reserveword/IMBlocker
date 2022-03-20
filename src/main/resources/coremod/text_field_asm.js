@@ -11,7 +11,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.gui.widget.TextFieldWidget',
-                'methodName': 'tick',
+                'methodName': 'func_146178_a',
                 'methodDesc': '()V'
             },
             'transformer': function (method) {

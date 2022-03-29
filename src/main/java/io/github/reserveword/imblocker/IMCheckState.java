@@ -46,6 +46,9 @@ public class IMCheckState {
                     return;
                 } else {
                     screenLock = false;
+                    if (s != null) {
+                        Config.checkScreen(s.getClass());
+                    }
                 }
             } else if (screenLock) {
                 return;

@@ -2,10 +2,15 @@ package io.github.reserveword.imblocker;
 
 import net.minecraft.client.gui.screen.EditBookScreen;
 import net.minecraft.client.gui.screen.EditSignScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -26,6 +31,10 @@ public class Config {
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> inputWhitelist;
 
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> inputBlacklist;
+
+        public final ForgeConfigSpec.ConfigValue<Boolean> enableScreenRecovering;
+
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> recoveredScreens;
 
         public final Predicate<Object> checkClassForName = s -> {
             try {
@@ -69,6 +78,17 @@ public class Config {
                     .translation("key.imblocker.inputWhitelist")
                     .defineList("inputWhitelist", Collections.emptyList(), checkClassForName);
 
+            enableScreenRecovering = builder
+                    .comment("Do we output recoveredScreens? because it may cause lag")
+                    .translation("key.imblocker.enableScreenRecovering")
+                    .define("enableScreenRecovering", false);
+
+            recoveredScreens = builder
+                    .comment("Here lists all Screens that is not in whitelist nor blacklist, ",
+                            "so you may easily add those to whitelist/blacklist.")
+                    .translation("key.imblocker.recoveredScreens")
+                    .defineList("recoveredScreens", Collections.emptyList(), s -> true);
+
             builder.pop();
         }
     }
@@ -77,6 +97,8 @@ public class Config {
     public static Collection<Class<?>> screenWhitelist;
     public static Collection<Class<?>> inputBlacklist;
     public static Collection<Class<?>> inputWhitelist;
+    private final static Set<Class<?>> recoveredScreens = new HashSet<>();
+    private static Thread screenSaveThread = null;
     private static Collection<Class<?>> bakeList(ForgeConfigSpec.ConfigValue<List<? extends String>> cfg, String name) {
         Collection<Class<?>> collection = new ArrayList<>();
         for (String s : cfg.get()) {
@@ -90,11 +112,63 @@ public class Config {
         return Collections.unmodifiableCollection(collection);
     }
 
+    public static void checkScreen(Class<? extends Screen> cls) {
+        if (!CLIENT.enableScreenRecovering.get() || recoveredScreens.contains(cls)) {
+            return;
+        } else {
+            recoveredScreens.add(cls);
+        }
+        if (screenSaveThread == null || !screenSaveThread.isAlive()) {
+            screenSaveThread = new Thread(Config::dump);
+            screenSaveThread.start();
+        }
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private static void dumpSet(ForgeConfigSpec.ConfigValue<List<? extends String>> cfg, Set<Class<?>> set, String name) {
+        HashSet<String> cfg_new = new HashSet<>(cfg.get());
+        set.forEach((cls) -> {
+            CodeSource source = cls.getProtectionDomain().getCodeSource();
+            if (source == null) {
+                cfg_new.add("minecraft" + ":" + cls.getName());
+                return;
+            }
+            URL loc = source.getLocation();
+            ModList.get().forEachModContainer((modid, mod) -> {
+                try {
+                    if (!"minecraft".equals(modid) && !"imblocker".equals(modid) && loc.equals(mod.getMod().getClass()
+                            .getProtectionDomain().getCodeSource().getLocation())) {
+                        cfg_new.add(modid + ":" + cls.getName());
+                    }
+                } catch (NullPointerException npe) {
+                    IMBlocker.LOGGER.error("something is null when grabbing mod jar:");
+                    Object modobj = mod.getMod();
+                    Class<?> modcls = modobj != null ? modobj.getClass() : null;
+                    ProtectionDomain pd = modcls != null ? modcls.getProtectionDomain() : null;
+                    CodeSource cs = pd != null ? pd.getCodeSource() : null;
+                    IMBlocker.LOGGER.warn("modid {}, mod {}, class {}, domain {}, source {}",
+                            modid, modobj, modcls, pd, cs);
+                    IMBlocker.LOGGER.error("enableScreenRecovering disabled.");
+                    CLIENT.enableScreenRecovering.set(false);
+                }
+            });
+        });
+        ArrayList<String> cfg_list = new ArrayList<>(cfg_new);
+        cfg_list.sort(null);
+        cfg.set(cfg_list);
+        cfg.save();
+        IMBlocker.LOGGER.info("imblocker dumpmap {} result {}", name, cfg_list);
+    }
+
     public static void reload() {
         screenWhitelist = bakeList(CLIENT.screenWhitelist, "screenWhitelist");
         screenBlacklist = bakeList(CLIENT.screenBlacklist, "screenBlacklist");
         inputWhitelist = bakeList(CLIENT.inputWhitelist, "inputWhitelist");
         inputBlacklist = bakeList(CLIENT.inputBlacklist, "inputBlacklist");
+    }
+
+    public static void dump() {
+        dumpSet(CLIENT.recoveredScreens, recoveredScreens, "recoveredScreens");
     }
 
     static final ForgeConfigSpec clientSpec;

@@ -5,6 +5,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,6 +19,7 @@ public class IMBlocker {
 
     public IMBlocker() {
         // Register ourselves for server and other game events we are interested in
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onConfigLoadReload);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.clientSpec);
     }
 
@@ -26,5 +29,11 @@ public class IMBlocker {
         public static void onClientTick(TickEvent.ClientTickEvent cte) {
             IMCheckState.clientTick(cte);
         }
+    }
+
+    @SubscribeEvent
+    public void onConfigLoadReload(ModConfig.ModConfigEvent e) {
+        LOGGER.info("imblock {}loading config", (e instanceof ModConfig.Reloading)?"re":"");
+        Config.reload();
     }
 }

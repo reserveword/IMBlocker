@@ -73,10 +73,10 @@ public class Config {
         }
     }
 
-    public static final Collection<Class<?>> screenBlacklist;
-    public static final Collection<Class<?>> screenWhitelist;
-    public static final Collection<Class<?>> inputBlacklist;
-    public static final Collection<Class<?>> inputWhitelist;
+    public static Collection<Class<?>> screenBlacklist;
+    public static Collection<Class<?>> screenWhitelist;
+    public static Collection<Class<?>> inputBlacklist;
+    public static Collection<Class<?>> inputWhitelist;
     private static Collection<Class<?>> bakeList(ForgeConfigSpec.ConfigValue<List<? extends String>> cfg, String name) {
         Collection<Class<?>> collection = new ArrayList<>();
         for (String s : cfg.get()) {
@@ -90,15 +90,18 @@ public class Config {
         return Collections.unmodifiableCollection(collection);
     }
 
+    public static void reload() {
+        screenWhitelist = bakeList(CLIENT.screenWhitelist, "screenWhitelist");
+        screenBlacklist = bakeList(CLIENT.screenBlacklist, "screenBlacklist");
+        inputWhitelist = bakeList(CLIENT.inputWhitelist, "inputWhitelist");
+        inputBlacklist = bakeList(CLIENT.inputBlacklist, "inputBlacklist");
+    }
+
     static final ForgeConfigSpec clientSpec;
     public static final Config.Client CLIENT;
     static {
         final Pair<Config.Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Config.Client::new);
         clientSpec = specPair.getRight();
         CLIENT = specPair.getLeft();
-        screenWhitelist = bakeList(CLIENT.screenWhitelist, "screenWhitelist");
-        screenBlacklist = bakeList(CLIENT.screenBlacklist, "screenBlacklist");
-        inputWhitelist = bakeList(CLIENT.inputWhitelist, "inputWhitelist");
-        inputBlacklist = bakeList(CLIENT.inputBlacklist, "inputBlacklist");
     }
 }

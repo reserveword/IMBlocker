@@ -124,7 +124,7 @@ public class Config {
         HashSet<String> cfg_new = new HashSet<>(cfg.get());
         set.forEach((cls) -> {
             CodeSource source = cls.getProtectionDomain().getCodeSource();
-            if (source == null || cls.getPackageName().startsWith("net.minecraft.")) {
+            if (source == null || cls.getName().startsWith("net.minecraft.")) {
                 cfg_new.add("minecraft" + ":" + cls.getName());
                 return;
             }

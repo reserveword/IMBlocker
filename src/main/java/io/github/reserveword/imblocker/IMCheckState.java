@@ -50,6 +50,7 @@ public class IMCheckState {
                         Config.checkScreen(s.getClass());
                     }
                 }
+                IMManager.syncState(); // make it consistent
             } else if (screenLock) {
                 return;
             }

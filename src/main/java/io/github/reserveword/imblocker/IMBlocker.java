@@ -5,6 +5,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -32,8 +33,8 @@ public class IMBlocker {
     }
 
     @SubscribeEvent
-    public void onConfigLoadReload(ModConfig.ModConfigEvent e) {
-        LOGGER.info("imblock {}loading config", (e instanceof ModConfig.Reloading)?"re":"");
+    public void onConfigLoadReload(ModConfigEvent e) {
+        LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading)?"re":"");
         Config.reload();
     }
 }

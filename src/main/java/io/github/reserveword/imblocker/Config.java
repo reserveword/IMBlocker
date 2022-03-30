@@ -2,7 +2,7 @@ package io.github.reserveword.imblocker;
 
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
 import net.minecraft.client.gui.screens.inventory.SignEditScreen;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;

@@ -146,7 +146,7 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.18.1:9.2.1.69:api")
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-1.18.1:9.2.1.69")
-    runtimeOnly fg.deobf('curse.maven:configured-457570:3546348')
+    runtimeOnly fg.deobf('curse.maven:configured-457570:3559398')
 
     // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
     // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'

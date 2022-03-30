@@ -62,15 +62,24 @@ public class IMManager {
 
     public static void makeOn() {
         if (!state) {
-            state = true;
             makeOnImp();
+            state = true;
         }
     }
 
     public static void makeOff() {
         if (state) {
-            state = false;
             makeOffImp();
+            state = false;
+        }
+    }
+
+    public static void syncState() {
+        WinDef.HWND hwnd = u.GetForegroundWindow();
+        WinNT.HANDLE himc = ImmGetContext(hwnd);
+        if ((himc == null) == state) {
+            IMBlocker.LOGGER.warn("IM state inconsistent! state={}, im={}", state, himc != null);
+            toggle();
         }
     }
 
@@ -78,8 +87,9 @@ public class IMManager {
         return state;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static boolean toggle() {
-        state = !state;
-        return toggleImp();
+        state = toggleImp();
+        return state;
     }
 }

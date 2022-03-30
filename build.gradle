@@ -14,6 +14,7 @@ apply plugin: 'eclipse'
 
 version = '3.0'
 group = 'io.github.reserveword' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+//noinspection GroovyUnusedAssignment
 archivesBaseName = 'imblocker-1.18.1'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -98,6 +99,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            //noinspection GroovyAssignabilityCheck
             args '--mod', 'imblocker', '--all', '--output', file('src/generated/resources/')
 
             mods {
@@ -121,6 +123,9 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
     }
+    maven {
+        url = "https://www.cursemaven.com"
+    }
 }
 
 dependencies {
@@ -141,6 +146,7 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.18.1:9.2.1.69:api")
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-1.18.1:9.2.1.69")
+    runtimeOnly fg.deobf('curse.maven:configured-457570:3546348')
 
     // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
     // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
@@ -167,6 +173,7 @@ processResources {
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
+    //noinspection GroovyAssignabilityCheck
     manifest {
         attributes([
             "Specification-Title": "IMBlocker",
@@ -203,6 +210,7 @@ jar {
 //    }
 //}
 
+//noinspection GroovyAssignabilityCheck
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }

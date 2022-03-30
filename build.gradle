@@ -14,6 +14,7 @@ apply plugin: 'eclipse'
 
 version = '3.0'
 group = 'io.github.reserveword' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+//noinspection GroovyUnusedAssignment
 archivesBaseName = 'imblocker-devonly'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
@@ -100,6 +101,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            //noinspection GroovyAssignabilityCheck
             args '--mod', 'imblocker', '--all', '--output', file('src/generated/resources/')
 
             mods {
@@ -173,6 +175,7 @@ processResources {
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
+    //noinspection GroovyAssignabilityCheck
     manifest {
         attributes([
             "Specification-Title": "IMBlocker",
@@ -209,6 +212,7 @@ jar {
 //    }
 //}
 
+//noinspection GroovyAssignabilityCheck
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }

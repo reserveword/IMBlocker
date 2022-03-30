@@ -47,9 +47,6 @@ public class Config {
         };
 
         Client(ForgeConfigSpec.Builder builder) {
-            builder.comment("Client only settings")
-                    .push("client");
-
             checkInterval = builder
                     .comment("Checking every tick is not efficient, how about check once every several tick?")
                     .translation("key.imblocker.checkInterval")
@@ -88,8 +85,6 @@ public class Config {
                             "so you may easily add those to whitelist/blacklist.")
                     .translation("key.imblocker.recoveredScreens")
                     .defineList("recoveredScreens", Collections.emptyList(), s -> true);
-
-            builder.pop();
         }
     }
 
@@ -108,7 +103,7 @@ public class Config {
                 e.printStackTrace();
             }
         }
-        IMBlocker.LOGGER.debug("imblocker {} result {}", name, collection);
+        IMBlocker.LOGGER.info("imblocker bakelist {} result {}", name, collection);
         return Collections.unmodifiableCollection(collection);
     }
 

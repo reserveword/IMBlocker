@@ -1,10 +1,9 @@
 package io.github.reserveword.imblocker;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraft.client.gui.screen.IScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraftforge.event.TickEvent;
 
 import java.lang.ref.WeakReference;
@@ -12,9 +11,9 @@ import java.util.Collection;
 import java.util.WeakHashMap;
 
 public class IMCheckState {
-    private static WeakReference<IScreen> lastScreen = new WeakReference<>(null);
+    private static WeakReference<Screen> lastScreen = new WeakReference<>(null);
     private static boolean screenLock = false;
-    private static final WeakHashMap<IGuiEventListener, Boolean> lastInput = new WeakHashMap<>();
+    private static final WeakHashMap<GuiEventListener, Boolean> lastInput = new WeakHashMap<>();
 
     private static int count = Config.CLIENT.checkInterval.get();
     private static boolean test = false;
@@ -30,7 +29,7 @@ public class IMCheckState {
                 count = Config.CLIENT.checkInterval.get();
             }
             // screen whitelist/blacklist
-            Screen s = Minecraft.getInstance().currentScreen;
+            Screen s = Minecraft.m_91087_().f_91080_;
             if (s != lastScreen.get()) {
                 IMBlocker.LOGGER.debug("screen changed to {}", s);
                 lastScreen = new WeakReference<>(s);
@@ -61,9 +60,9 @@ public class IMCheckState {
         }
     }
 
-    public static void imTick(TextFieldWidget input) {
+    public static void imTick(EditBox input) {
         // canWrite
-        if (!input.canWrite()) {
+        if (!input.m_94204_()) {
             return;
         }
         // screenlock

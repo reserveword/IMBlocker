@@ -11,7 +11,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.gui.components.EditBox',
-                'methodName': 'func_146178_a',
+                'methodName': 'm_94120_',
                 'methodDesc': '()V'
             },
             'transformer': function (method) {

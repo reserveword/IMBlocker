@@ -6,7 +6,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 
 /**
- * We use this dummy class to help us decide how we modify EditBox.charTyped
+ * We use this dummy class to help us decide how we modify EditBox.tick
  */
 public class FakeTextFieldWidget extends EditBox {
 
@@ -17,7 +17,7 @@ public class FakeTextFieldWidget extends EditBox {
     }
 
     @Override
-    public void tick() {
+    public void m_94120_() {
         IMCheckState.imTick(this);
         ++this.cursorCounter;
     }

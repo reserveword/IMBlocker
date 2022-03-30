@@ -5,5 +5,7 @@
   "key.imblocker.screenBlacklist": "Matched screen would disable your IME",
   "key.imblocker.screenWhitelist": "Matched screen would enable your IME",
   "key.imblocker.inputBlacklist": "Matched input box would disable your IME",
-  "key.imblocker.inputWhitelist": "Matched input box would enable your IME"
+  "key.imblocker.inputWhitelist": "Matched input box would enable your IME",
+  "key.imblocker.enableScreenRecovering": "Do we output recoveredScreens? because it may cause lag",
+  "key.imblocker.recoveredScreens": "Here lists all Screens that is not in whitelist nor blacklist, so you may easily add those to whitelist/blacklist."
 }

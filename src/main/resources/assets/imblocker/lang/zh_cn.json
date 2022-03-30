@@ -5,5 +5,7 @@
   "key.imblocker.screenBlacklist": "该列表中的GUI屏幕会禁用输入法",
   "key.imblocker.screenWhitelist": "该列表中的GUI屏幕会激活输入法",
   "key.imblocker.inputBlacklist": "该列表中的输入框会禁用输入法",
-  "key.imblocker.inputWhitelist": "该列表中的输入框会激活输入法"
+  "key.imblocker.inputWhitelist": "该列表中的输入框会激活输入法",
+  "key.imblocker.enableScreenRecovering": "激活Screen记录，可能导致卡顿",
+  "key.imblocker.recoveredScreens": "这里列出所有显示过的未加入黑白名单的Screen，方便编辑黑白名单"
 }

@@ -12,8 +12,9 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 //apply plugin: 'maven-publish'
 
-version = '3.0'
+version = '3.0.1'
 group = 'io.github.reserveword' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+//noinspection GroovyUnusedAssignment
 archivesBaseName = 'imblocker-1.16.5'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
@@ -100,6 +101,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            //noinspection GroovyAssignabilityCheck
             args '--mod', 'imblocker', '--all', '--output', file('src/generated/resources/')
 
             mods {
@@ -123,13 +125,16 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
     }
+    maven {
+        url = "https://www.cursemaven.com"
+    }
 }
 
 dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.16.5-36.1.0'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.2.20'
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
@@ -143,6 +148,7 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.16.5:7.6.1.75:api")
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.5:7.6.1.75")
+    runtimeOnly fg.deobf('curse.maven:configured-457570:3546348')
 
     // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
     // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
@@ -169,6 +175,7 @@ processResources {
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
+    //noinspection GroovyAssignabilityCheck
     manifest {
         attributes([
             "Specification-Title": "IMBlocker",
@@ -205,6 +212,7 @@ jar {
 //    }
 //}
 
+//noinspection GroovyAssignabilityCheck
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }

@@ -46,7 +46,11 @@ public class IMCheckState {
                     return;
                 } else {
                     screenLock = false;
+                    if (s != null) {
+                        Config.checkScreen(s.getClass());
+                    }
                 }
+                IMManager.syncState(); // make it consistent
             } else if (screenLock) {
                 return;
             }
@@ -94,7 +98,7 @@ public class IMCheckState {
     }
 
     public static boolean checkInList(Object o, Collection<Class<?>> list) {
-        if (o != null) {
+        if (o != null && list != null) {
             for (Class<?> c:list) {
                 if (c.isInstance(o)) {
                     return true;

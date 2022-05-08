@@ -3,6 +3,7 @@ package io.github.reserveword.imblocker;
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
 import net.minecraft.client.gui.screens.inventory.SignEditScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -36,9 +37,14 @@ public class Config {
 
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> recoveredScreens;
 
-        public final Predicate<Object> checkClassForName = s -> {
+        public final Predicate<Object> checkClassForName = str -> {
             try {
-                Class.forName((String) s);
+                String s = (String) str;
+                if (s.contains(":")) {
+                    String[] ss = s.split(":");
+                    s = ss[ss.length - 1];
+                }
+                Class.forName(s);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -98,6 +104,10 @@ public class Config {
         Collection<Class<?>> collection = new ArrayList<>();
         for (String s : cfg.get()) {
             try {
+                if (s.contains(":")) {
+                    String[] ss = s.split(":");
+                    s = ss[ss.length - 1];
+                }
                 collection.add(Class.forName(s));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();

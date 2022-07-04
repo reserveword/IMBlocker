@@ -1,12 +1,17 @@
 package io.github.reserveword.imblocker;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.IScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.TickEvent;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.WeakHashMap;
@@ -57,8 +62,38 @@ public class IMCheckState {
     }
 
     // process SPECIAL rules
+    private static final MethodHandle getDefaultInputFieldText;
+    static {
+        MethodHandle getDefaultInputFieldText_tmp;
+        try {
+            MethodHandles.Lookup lookup = MethodHandles.lookup();
+            //noinspection JavaLangInvokeHandleSignature
+            getDefaultInputFieldText_tmp = lookup.findVirtual(ChatScreen.class, "getDefaultInputFieldText", MethodType.methodType(String.class));
+        } catch (java.lang.NoSuchMethodException | java.lang.IllegalAccessException e) {
+            getDefaultInputFieldText_tmp = null;
+            IMBlocker.LOGGER.warn("ChatScreen command hook failed:", e);
+        }
+        getDefaultInputFieldText = getDefaultInputFieldText_tmp;
+    }
+
     private static void checkSpecial(TickEvent.ClientTickEvent cte, int countdown) {
-        // no rules for now
+        if (getDefaultInputFieldText == null) return;
+        Screen s = Minecraft.getInstance().currentScreen;
+        if (s instanceof ChatScreen) try {
+            String text = (String) getDefaultInputFieldText.invoke(s);
+            if (text.startsWith("/")) {
+                IMBlocker.LOGGER.debug("Specially disabled IME for command input");
+                state.remove(IMState.SPECIAL);
+                state.add(IMState.SPECIAL_MASK);
+            }
+            else {
+                state.remove(IMState.SPECIAL_MASK);
+            }
+        } catch (Throwable e) {
+            IMBlocker.LOGGER.warn("ChatScreen hook running exception:", e);
+        } else {
+            state.remove(IMState.SPECIAL_MASK);
+        }
     }
 
     // process TICK rules
@@ -125,7 +160,7 @@ public class IMCheckState {
                 state.remove(IMState.NON_PRINTABLE);
             } else if (state.contains(IMState.NON_PRINTABLE_CHALLENGE_PENDING)) {
                 state.add(IMState.NON_PRINTABLE_CHALLENGE);
-                IMBlocker.LOGGER.info("inject");
+                IMBlocker.LOGGER.debug("inject");
                 Screen s = Minecraft.getInstance().currentScreen;
                 if (s != null) {
                     s.charTyped(nonPrintable, 0);
@@ -142,7 +177,7 @@ public class IMCheckState {
         {
             state.remove(IMState.NON_PRINTABLE_CHALLENGE);
             state.add(IMState.NON_PRINTABLE);
-            IMBlocker.LOGGER.info("captured");
+            IMBlocker.LOGGER.debug("captured");
         }
     }
 
@@ -161,7 +196,6 @@ public class IMCheckState {
     }
 
     public static void mouseEvent(GuiScreenEvent.MouseInputEvent mie) {
-        IMBlocker.LOGGER.info("mouse_event");
         state.add(IMState.NON_PRINTABLE_CHALLENGE_PENDING);
     }
 

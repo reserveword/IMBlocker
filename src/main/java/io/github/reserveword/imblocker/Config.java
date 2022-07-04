@@ -69,7 +69,9 @@ public class Config {
                     .translation("key.imblocker.screenWhitelist")
                     .defineList("screenWhitelist", Arrays.asList(
                             EditBookScreen.class.getName(),
-                            EditSignScreen.class.getName()
+                            EditSignScreen.class.getName(),
+                            "journeymap.client.ui.waypoint.WaypointEditor",
+                            "com.ldtteam.blockout.BOScreen"
                     ), checkClassForName);
 
             inputBlacklist = builder

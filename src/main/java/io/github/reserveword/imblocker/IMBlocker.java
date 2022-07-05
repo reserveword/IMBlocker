@@ -1,11 +1,11 @@
 package io.github.reserveword.imblocker;
 
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,6 +28,10 @@ public class IMBlocker {
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent cte) {
             IMCheckState.clientTick(cte);
+        }
+        @SubscribeEvent
+        public static void onMouseClick(GuiScreenEvent.MouseInputEvent mie) {
+            IMCheckState.mouseEvent(mie);
         }
     }
 

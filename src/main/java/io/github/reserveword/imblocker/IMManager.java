@@ -74,6 +74,17 @@ public class IMManager {
         }
     }
 
+    public static void makeState(boolean on) {
+        if (state == on) return;
+        if (on) {
+            makeOnImp();
+            state = true;
+        } else {
+            makeOffImp();
+            state = false;
+        }
+    }
+
     public static void syncState() {
         WinDef.HWND hwnd = u.GetForegroundWindow();
         WinNT.HANDLE himc = ImmGetContext(hwnd);

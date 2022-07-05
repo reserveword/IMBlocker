@@ -36,6 +36,8 @@ public class Config {
 
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> recoveredScreens;
 
+        public final ForgeConfigSpec.ConfigValue<Boolean> useExperimental;
+
         public final Predicate<Object> checkClassForName = str -> {
             try {
                 String s = (String) str;
@@ -67,7 +69,9 @@ public class Config {
                     .translation("key.imblocker.screenWhitelist")
                     .defineList("screenWhitelist", Arrays.asList(
                             EditBookScreen.class.getName(),
-                            EditSignScreen.class.getName()
+                            EditSignScreen.class.getName(),
+                            "journeymap.client.ui.waypoint.WaypointEditor",
+                            "com.ldtteam.blockout.BOScreen"
                     ), checkClassForName);
 
             inputBlacklist = builder
@@ -90,6 +94,11 @@ public class Config {
                             "so you may easily add those to whitelist/blacklist.")
                     .translation("key.imblocker.recoveredScreens")
                     .defineList("recoveredScreens", Collections.emptyList(), s -> true);
+
+            useExperimental = builder
+                    .comment("Disable this and let me know if input or control is messed up")
+                    .translation("key.imblocker.useExperimental")
+                    .define("useExperimental", true);
         }
     }
 

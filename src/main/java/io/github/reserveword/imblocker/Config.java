@@ -38,20 +38,8 @@ public class Config {
 
         public final ForgeConfigSpec.ConfigValue<Boolean> useExperimental;
 
-        public final Predicate<Object> checkClassForName = str -> {
-            try {
-                String s = (String) str;
-                if (s.contains(":")) {
-                    String[] ss = s.split(":");
-                    s = ss[ss.length - 1];
-                }
-                Class.forName(s);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-            return true;
-        };
+        public final Predicate<Object> checkClassForName = str -> (str instanceof String) &&
+                ((String) str).matches("^([\\p{L}_][\\p{L}\\p{N}_]*:)?([\\p{L}_$][\\p{L}\\p{N}_$]*\\.)*[\\p{L}_$][\\p{L}\\p{N}_$]*$");
 
         Client(ForgeConfigSpec.Builder builder) {
             checkInterval = builder
@@ -118,7 +106,7 @@ public class Config {
                 }
                 collection.add(Class.forName(s));
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                IMBlocker.LOGGER.warn("Class {} not found, ignored.", s);
             }
         }
         IMBlocker.LOGGER.info("imblocker bakelist {} result {}", name, collection);

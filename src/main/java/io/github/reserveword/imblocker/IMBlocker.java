@@ -31,7 +31,11 @@ public class IMBlocker {
             IMCheckState.clientTick(cte);
         }
         @SubscribeEvent
-        public static void onMouseClick(ScreenEvent.MouseInputEvent mie) {
+        public static void onMouseClick(ScreenEvent.MouseButtonPressed mie) {
+            IMCheckState.mouseEvent(mie);
+        }
+        @SubscribeEvent
+        public static void onMouseClick(ScreenEvent.MouseButtonReleased mie) {
             IMCheckState.mouseEvent(mie);
         }
     }

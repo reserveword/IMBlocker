@@ -15,7 +15,7 @@ apply plugin: 'eclipse'
 version = '3.1'
 group = 'io.github.reserveword' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 //noinspection GroovyUnusedAssignment
-archivesBaseName = 'imblocker-1.18.1'
+archivesBaseName = 'imblocker-1.19'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
@@ -132,7 +132,7 @@ dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.18.1-39.0.79'
+    minecraft 'net.minecraftforge:forge:1.19-41.0.100'
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
@@ -143,10 +143,10 @@ dependencies {
     // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
 
     // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-1.18.1:9.2.1.69:api")
+    compileOnly fg.deobf("mezz.jei:jei-1.19-forge-api:11.0.0.225")
     // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.1:9.2.1.69")
-    runtimeOnly fg.deobf('curse.maven:configured-457570:3559398')
+    runtimeOnly fg.deobf("mezz.jei:jei-1.19-forge:11.0.0.225")
+    runtimeOnly fg.deobf('curse.maven:configured-457570:3872190')
 
     // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
     // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'

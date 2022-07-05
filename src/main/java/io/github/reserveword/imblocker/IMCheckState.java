@@ -196,7 +196,7 @@ public class IMCheckState {
         else count = Config.CLIENT.checkInterval.get();
     }
 
-    public static void mouseEvent(ScreenEvent.MouseInputEvent mie) {
+    public static void mouseEvent(ScreenEvent mie) {
         state.add(IMState.NON_PRINTABLE_CHALLENGE_PENDING);
     }
 

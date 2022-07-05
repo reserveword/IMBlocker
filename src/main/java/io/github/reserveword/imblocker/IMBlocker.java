@@ -1,5 +1,6 @@
 package io.github.reserveword.imblocker;
 
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -29,6 +30,10 @@ public class IMBlocker {
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent cte) {
             IMCheckState.clientTick(cte);
+        }
+        @SubscribeEvent
+        public static void onMouseClick(GuiScreenEvent.MouseInputEvent mie) {
+            IMCheckState.mouseEvent(mie);
         }
     }
 

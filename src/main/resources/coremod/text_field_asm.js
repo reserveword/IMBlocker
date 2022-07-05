@@ -24,8 +24,8 @@ function initializeCoreMod() {
                 il.add(new VarInsnNode(Opcodes.ALOAD, 0))
                 il.add(new MethodInsnNode(
                     Opcodes.INVOKEVIRTUAL,
-                    'net/minecraft/client/gui/widget/TextFieldWidget',
-                    ASMAPI.mapMethod('func_212955_f'),
+                    'net/minecraft/client/gui/components/EditBox',
+                    ASMAPI.mapMethod('m_94204_'),
                     '()Z',
                     false
                 ))
@@ -43,8 +43,8 @@ function initializeCoreMod() {
         'char_typed_asm': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraft.client.gui.widget.TextFieldWidget',
-                'methodName': 'func_231042_a_',
+                'class': 'net.minecraft.client.gui.components.EditBox',
+                'methodName': 'm_5534_',
                 'methodDesc': '(CI)Z'
             },
             'transformer': function (method) {
@@ -54,8 +54,8 @@ function initializeCoreMod() {
                 il.add(new VarInsnNode(Opcodes.ALOAD, 0))
                 il.add(new MethodInsnNode(
                     Opcodes.INVOKEVIRTUAL,
-                    'net/minecraft/client/gui/widget/TextFieldWidget',
-                    ASMAPI.mapMethod('func_212955_f'),
+                    'net/minecraft/client/gui/components/EditBox',
+                    ASMAPI.mapMethod('m_94204_'),
                     '()Z',
                     false
                 ))

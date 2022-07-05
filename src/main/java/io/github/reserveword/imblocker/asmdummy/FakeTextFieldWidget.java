@@ -1,9 +1,9 @@
 package io.github.reserveword.imblocker.asmdummy;
 
 import io.github.reserveword.imblocker.IMCheckState;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.util.SharedConstants;
 import net.minecraft.network.chat.Component;
 
 /**
@@ -20,18 +20,18 @@ public class FakeTextFieldWidget extends EditBox {
 
     @Override
     public void m_94120_() {
-        IMCheckState.captureTick(this, this.canWrite());
+        IMCheckState.captureTick(this, this.m_94204_()); // canWrite
         ++this.cursorCounter;
     }
 
     @Override
-    public boolean charTyped(char codePoint, int modifiers) {
-        IMCheckState.captureNonPrintable(this, codePoint, this.canWrite());
-        if (!this.canWrite()) {
+    public boolean m_5534_(char codePoint, int modifiers) { // charTyped
+        IMCheckState.captureNonPrintable(this, codePoint, this.m_94204_());
+        if (!this.m_94204_()) {
             return false;
-        } else if (SharedConstants.isAllowedCharacter(codePoint)) {
+        } else if (SharedConstants.m_136188_(codePoint)) {
             if (this.isEnabled) {
-                this.writeText(Character.toString(codePoint));
+                this.m_94164_(Character.toString(codePoint));
             }
 
             return true;

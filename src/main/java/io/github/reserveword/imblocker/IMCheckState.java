@@ -99,6 +99,25 @@ public class IMCheckState {
     // process TICK rules
     private enum InputClassRule { NOT_LISTED, WHITELIST, BLACKLIST }
     private static final WeakHashMap<Object, InputClassRule> lastInput = new WeakHashMap<>();
+    private static InputClassRule checkInputClass(Object input) {
+        if (!lastInput.containsKey(input)) {
+            IMBlocker.LOGGER.debug("input box {} ticking", input);
+            if (checkInList(input, Config.inputWhitelist)) {
+                IMBlocker.LOGGER.debug("found whitelisted input");
+                state.remove(IMState.TICK);
+                lastInput.put(input, InputClassRule.WHITELIST);
+                return InputClassRule.WHITELIST;
+            } else if (checkInList(input, Config.inputBlacklist)) {
+                IMBlocker.LOGGER.debug("found blacklisted input");
+                state.remove(IMState.TICK);
+                lastInput.put(input, InputClassRule.BLACKLIST);
+                return InputClassRule.BLACKLIST;
+            } else {
+                lastInput.put(input, InputClassRule.NOT_LISTED);
+                return InputClassRule.NOT_LISTED;
+            }
+        } else return lastInput.get(input);
+    }
 
     public static boolean checkInList(Object o, Collection<Class<?>> list) {
         if (o != null && list != null) {
@@ -124,26 +143,7 @@ public class IMCheckState {
     }
 
     public static void captureTick(Object input, boolean canWrite) {
-        // canWrite
-        if (!canWrite) {
-            return;
-        }
-        // input box whitelist/blacklist
-        if (!lastInput.containsKey(input)) {
-            IMBlocker.LOGGER.debug("input box {} ticking", input);
-            if (checkInList(input, Config.inputWhitelist)) {
-                IMBlocker.LOGGER.debug("found whitelisted input");
-                state.remove(IMState.TICK);
-                lastInput.put(input, InputClassRule.WHITELIST);
-            } else if (checkInList(input, Config.inputBlacklist)) {
-                IMBlocker.LOGGER.debug("found blacklisted input");
-                state.remove(IMState.TICK);
-                lastInput.put(input, InputClassRule.BLACKLIST);
-            } else {
-                lastInput.put(input, InputClassRule.NOT_LISTED);
-            }
-        } else if (lastInput.get(input) != InputClassRule.BLACKLIST) {
-            // tick check
+        if (canWrite && checkInputClass(input) != InputClassRule.BLACKLIST) {
             state.add(IMState.TICK);
             state.remove(IMState.TICK_CHALLENGE);
         }
@@ -173,7 +173,10 @@ public class IMCheckState {
     }
 
     public static void captureNonPrintable(Object tfw, char ch, boolean canWrite) {
-        if (Config.CLIENT.useExperimental.get() && ch == nonPrintable && canWrite)
+        if (Config.CLIENT.useExperimental.get()
+                && checkInputClass(tfw) == InputClassRule.BLACKLIST
+                && ch == nonPrintable
+                && canWrite)
         {
             state.remove(IMState.NON_PRINTABLE_CHALLENGE);
             state.add(IMState.NON_PRINTABLE);

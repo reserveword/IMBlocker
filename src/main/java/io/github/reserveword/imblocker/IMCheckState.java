@@ -35,12 +35,14 @@ public class IMCheckState {
 
     // process SCREEN_LIST rules
     // notice that nonPrintable rule triggers at screen change, here.
+    // notice that special rule triggers at screen change, here too.
     private static WeakReference<Screen> lastScreen = new WeakReference<>(null);
     private static void checkScreenList(TickEvent.ClientTickEvent cte, int countdown) {
         Screen s = Minecraft.m_91087_().f_91080_;
         if (s != lastScreen.get()) {
             IMBlocker.LOGGER.debug("screen changed to {}", s);
-            state.add(IMState.NON_PRINTABLE_CHALLENGE_PENDING);
+            state.add(IMState.NON_PRINTABLE_CHALLENGE_PENDING); // nonPrintable
+            checkSpecialScreenChange(s); // special
             lastScreen = new WeakReference<>(s);
             if (checkInList(s, Config.screenWhitelist)) {
                 IMBlocker.LOGGER.debug("found whitelisted screen");
@@ -74,9 +76,9 @@ public class IMCheckState {
         getDefaultInputFieldText = getDefaultInputFieldText_tmp;
     }
 
-    private static void checkSpecial(TickEvent.ClientTickEvent cte, int countdown) {
+    private static void checkSpecial(TickEvent.ClientTickEvent cte, int countdown) { }
+    private static void checkSpecialScreenChange(Screen s) {
         if (getDefaultInputFieldText == null) return;
-        Screen s = Minecraft.m_91087_().f_91080_;
         if (s instanceof ChatScreen) try {
             String text = (String) getDefaultInputFieldText.invoke(s);
             if (text.startsWith("/")) {
@@ -172,7 +174,7 @@ public class IMCheckState {
 
     public static void captureNonPrintable(Object tfw, char ch, boolean canWrite) {
         if (Config.CLIENT.useExperimental.get()
-                && checkInputClass(tfw) == InputClassRule.BLACKLIST
+                && checkInputClass(tfw) != InputClassRule.BLACKLIST
                 && ch == nonPrintable
                 && canWrite)
         {

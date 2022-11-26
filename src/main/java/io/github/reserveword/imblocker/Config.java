@@ -38,6 +38,8 @@ public class Config {
 
         public final ForgeConfigSpec.ConfigValue<Boolean> useExperimental;
 
+        public final ForgeConfigSpec.ConfigValue<Boolean> checkCommandChat;
+
         public final Predicate<Object> checkClassForName = str -> (str instanceof String) &&
                 ((String) str).matches("^([\\p{L}_][\\p{L}\\p{N}_]*:)?([\\p{L}_$][\\p{L}\\p{N}_$]*\\.)*[\\p{L}_$][\\p{L}\\p{N}_$]*$");
 
@@ -87,6 +89,11 @@ public class Config {
                     .comment("Disable this and let me know if input or control is messed up")
                     .translation("key.imblocker.useExperimental")
                     .define("useExperimental", true);
+
+            checkCommandChat = builder
+                    .comment("Disable IME when typing commands")
+                    .translation("key.imblocker.checkCommandChat")
+                    .define("checkCommandChat", true);
         }
     }
 

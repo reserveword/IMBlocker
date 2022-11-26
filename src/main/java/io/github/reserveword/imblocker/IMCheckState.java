@@ -83,7 +83,7 @@ public class IMCheckState {
         if (getDefaultInputFieldText == null) return;
         if (s instanceof ChatScreen) try {
             String text = (String) getDefaultInputFieldText.invoke(s);
-            if (text.startsWith("/")) {
+            if (text.startsWith("/") && Config.CLIENT.checkCommandChat.get()) {
                 IMBlocker.LOGGER.debug("Specially disabled IME for command input");
                 state.remove(IMState.SPECIAL);
                 state.add(IMState.SPECIAL_MASK);

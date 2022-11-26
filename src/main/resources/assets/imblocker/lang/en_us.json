@@ -8,5 +8,6 @@
   "key.imblocker.inputWhitelist": "Matched input box would enable your IME",
   "key.imblocker.enableScreenRecovering": "Do we output recoveredScreens? because it may cause lag",
   "key.imblocker.recoveredScreens": "Here lists all Screens that is not in whitelist nor blacklist, so you may easily add those to whitelist/blacklist.",
-  "key.imblocker.useExperimental": "simulate inputting non-printable characters occasionally to detect active input box. Disable this and let me know if input or control is messed up."
+  "key.imblocker.useExperimental": "simulate inputting non-printable characters occasionally to detect active input box. Disable this and let me know if input or control is messed up.",
+  "key.imblocker.checkCommandChat": "Disable IME when typing commands"
 }

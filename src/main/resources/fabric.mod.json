@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${description}",
+  "authors": [
+    "${author}"
+  ],
+  "contributors": [
+  ],
+  "contact": {
+    "email": "${email}",
+    "homepage": "${mod_url}",
+    "issues": "${issues_url}",
+    "sources": "${mod_url}"
+  },
+  "license": "${license}",
+  "icon": "${mod_logo}",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "io.github.reserveword.imblocker.IMBlockerFabric"
+    ],
+    "modmenu": [
+      "io.github.reserveword.imblocker.Config"
+    ]
+  },
+  "mixins": [
+    "imblocker.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "fabric": "*",
+    "minecraft": "~1.20",
+    "java": ">=17"
+  },
+  "suggests": {}
+}

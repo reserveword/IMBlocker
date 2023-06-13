@@ -1,17 +1,15 @@
 package io.github.reserveword.imblocker;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.gui.screen.IScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.WeakHashMap;
@@ -38,9 +36,9 @@ public class IMCheckState {
     // process SCREEN_LIST rules
     // notice that nonPrintable rule triggers at screen change, here.
     // notice that special rule triggers at screen change, here too.
-    private static WeakReference<IScreen> lastScreen = new WeakReference<>(null);
+    private static WeakReference<Screen> lastScreen = new WeakReference<>(null);
     private static void checkScreenList(TickEvent.ClientTickEvent cte, int countdown) {
-        Screen s = Minecraft.getInstance().currentScreen;
+        Screen s = Minecraft.m_91087_().f_91080_;
         if (s != lastScreen.get()) {
             IMBlocker.LOGGER.debug("screen changed to {}", s);
             state.add(IMState.NON_PRINTABLE_CHALLENGE_PENDING); // nonPrintable
@@ -163,9 +161,9 @@ public class IMCheckState {
             } else if (state.contains(IMState.NON_PRINTABLE_CHALLENGE_PENDING)) {
                 state.add(IMState.NON_PRINTABLE_CHALLENGE);
                 IMBlocker.LOGGER.debug("inject");
-                Screen s = Minecraft.getInstance().currentScreen;
+                Screen s = Minecraft.m_91087_().f_91080_;
                 if (s != null) {
-                    s.charTyped(nonPrintable, 0);
+                    s.m_5534_(nonPrintable, 0); // charTyped
                 }
                 state.remove(IMState.NON_PRINTABLE_CHALLENGE_PENDING);
             }
@@ -200,7 +198,7 @@ public class IMCheckState {
         else count = Config.CLIENT.checkInterval.get();
     }
 
-    public static void mouseEvent(GuiScreenEvent.MouseInputEvent mie) {
+    public static void mouseEvent(ScreenEvent mie) {
         state.add(IMState.NON_PRINTABLE_CHALLENGE_PENDING);
     }
 

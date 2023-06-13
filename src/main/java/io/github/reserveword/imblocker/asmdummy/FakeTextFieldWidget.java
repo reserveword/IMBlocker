@@ -1,37 +1,37 @@
 package io.github.reserveword.imblocker.asmdummy;
 
 import io.github.reserveword.imblocker.IMCheckState;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.util.SharedConstants;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.SharedConstants;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.Component;
 
 /**
- * We use this dummy class to help us decide how we modify TextFieldWidget.charTyped
+ * We use this dummy class to help us decide how we modify EditBox.tick
  */
-public class FakeTextFieldWidget extends TextFieldWidget {
+public class FakeTextFieldWidget extends EditBox {
 
     private int cursorCounter;
     private boolean isEnabled;
 
-    public FakeTextFieldWidget(FontRenderer fontRenderer, int x, int y, int width, int height, ITextComponent title) {
+    public FakeTextFieldWidget(Font fontRenderer, int x, int y, int width, int height, Component title) {
         super(fontRenderer, x, y, width, height, title);
     }
 
     @Override
-    public void tick() {
-        IMCheckState.captureTick(this, this.canWrite());
+    public void m_94120_() {
+        IMCheckState.captureTick(this, this.m_94204_()); // canWrite
         ++this.cursorCounter;
     }
 
     @Override
-    public boolean charTyped(char codePoint, int modifiers) {
-        IMCheckState.captureNonPrintable(this, codePoint, this.canWrite());
-        if (!this.canWrite()) {
+    public boolean m_5534_(char codePoint, int modifiers) { // charTyped
+        IMCheckState.captureNonPrintable(this, codePoint, this.m_94204_());
+        if (!this.m_94204_()) {
             return false;
-        } else if (SharedConstants.isAllowedCharacter(codePoint)) {
+        } else if (SharedConstants.m_136188_(codePoint)) {
             if (this.isEnabled) {
-                this.writeText(Character.toString(codePoint));
+                this.m_94164_(Character.toString(codePoint));
             }
 
             return true;

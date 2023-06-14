@@ -17,12 +17,63 @@ import java.util.function.Predicate;
 @Mod.EventBusSubscriber
 public class Config {
 
+    public static Collection<Class<?>> getScreenBlacklist() {
+        return screenBlacklist;
+    }
+
+    public static void setScreenBlacklist(Collection<Class<?>> screenBlacklist) {
+        Config.screenBlacklist = screenBlacklist;
+    }
+
+    public static Collection<Class<?>> getScreenWhitelist() {
+        return screenWhitelist;
+    }
+
+    public static void setScreenWhitelist(Collection<Class<?>> screenWhitelist) {
+        Config.screenWhitelist = screenWhitelist;
+    }
+
+    public static Collection<Class<?>> getInputBlacklist() {
+        return inputBlacklist;
+    }
+
+    public static void setInputBlacklist(Collection<Class<?>> inputBlacklist) {
+        Config.inputBlacklist = inputBlacklist;
+    }
+
+    public static Collection<Class<?>> getInputWhitelist() {
+        return inputWhitelist;
+    }
+
+    public static void setInputWhitelist(Collection<Class<?>> inputWhitelist) {
+        Config.inputWhitelist = inputWhitelist;
+    }
+
+    public static ForgeConfigSpec.ConfigValue<Integer> getCheckInterval() {
+        return CLIENT.checkInterval;
+    }
+
+    public static ForgeConfigSpec.ConfigValue<Boolean> getEnableScreenRecovering() {
+        return CLIENT.enableScreenRecovering;
+    }
+
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> getRecoveredScreens() {
+        return CLIENT.recoveredScreens;
+    }
+
+    public static ForgeConfigSpec.ConfigValue<Boolean> getUseExperimental() {
+        return CLIENT.useExperimental;
+    }
+
+    public static ForgeConfigSpec.ConfigValue<Boolean> getCheckCommandChat() {
+        return CLIENT.checkCommandChat;
+    }
     /**
      * Client specific configuration - only loaded clientside from forge-client.toml
      */
     public static class Client {
 
-        public final ForgeConfigSpec.ConfigValue<Integer> checkInterval;
+        private final ForgeConfigSpec.ConfigValue<Integer> checkInterval;
 
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> screenWhitelist;
 
@@ -32,13 +83,13 @@ public class Config {
 
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> inputBlacklist;
 
-        public final ForgeConfigSpec.ConfigValue<Boolean> enableScreenRecovering;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableScreenRecovering;
 
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> recoveredScreens;
+        private final ForgeConfigSpec.ConfigValue<List<? extends String>> recoveredScreens;
 
-        public final ForgeConfigSpec.ConfigValue<Boolean> useExperimental;
+        private final ForgeConfigSpec.ConfigValue<Boolean> useExperimental;
 
-        public final ForgeConfigSpec.ConfigValue<Boolean> checkCommandChat;
+        private final ForgeConfigSpec.ConfigValue<Boolean> checkCommandChat;
 
         public final Predicate<Object> checkClassForName = str -> (str instanceof String) &&
                 ((String) str).matches("^([\\p{L}_][\\p{L}\\p{N}_]*:)?([\\p{L}_$][\\p{L}\\p{N}_$]*\\.)*[\\p{L}_$][\\p{L}\\p{N}_$]*$");
@@ -97,10 +148,10 @@ public class Config {
         }
     }
 
-    public static Collection<Class<?>> screenBlacklist;
-    public static Collection<Class<?>> screenWhitelist;
-    public static Collection<Class<?>> inputBlacklist;
-    public static Collection<Class<?>> inputWhitelist;
+    private static Collection<Class<?>> screenBlacklist;
+    private static Collection<Class<?>> screenWhitelist;
+    private static Collection<Class<?>> inputBlacklist;
+    private static Collection<Class<?>> inputWhitelist;
     private final static Set<Class<?>> recoveredScreens = new HashSet<>();
     private static Thread screenSaveThread = null;
     private static Collection<Class<?>> bakeList(ForgeConfigSpec.ConfigValue<List<? extends String>> cfg, String name) {
@@ -121,7 +172,7 @@ public class Config {
     }
 
     public static void checkScreen(Class<? extends Screen> cls) {
-        if (!CLIENT.enableScreenRecovering.get() || recoveredScreens.contains(cls)) {
+        if (!getEnableScreenRecovering().get() || recoveredScreens.contains(cls)) {
             return;
         } else {
             recoveredScreens.add(cls);
@@ -157,7 +208,7 @@ public class Config {
                     IMBlocker.LOGGER.warn("modid {}, mod {}, class {}, domain {}, source {}",
                             modid, modobj, modcls, pd, cs);
                     IMBlocker.LOGGER.error("enableScreenRecovering disabled.");
-                    CLIENT.enableScreenRecovering.set(false);
+                    getEnableScreenRecovering().set(false);
                 }
             });
         });
@@ -169,14 +220,14 @@ public class Config {
     }
 
     public static void reload() {
-        screenWhitelist = bakeList(CLIENT.screenWhitelist, "screenWhitelist");
-        screenBlacklist = bakeList(CLIENT.screenBlacklist, "screenBlacklist");
-        inputWhitelist = bakeList(CLIENT.inputWhitelist, "inputWhitelist");
-        inputBlacklist = bakeList(CLIENT.inputBlacklist, "inputBlacklist");
+        setScreenWhitelist(bakeList(CLIENT.screenWhitelist, "screenWhitelist"));
+        setScreenBlacklist(bakeList(CLIENT.screenBlacklist, "screenBlacklist"));
+        setInputWhitelist(bakeList(CLIENT.inputWhitelist, "inputWhitelist"));
+        setInputBlacklist(bakeList(CLIENT.inputBlacklist, "inputBlacklist"));
     }
 
     public static void dump() {
-        dumpSet(CLIENT.recoveredScreens, recoveredScreens, "recoveredScreens");
+        dumpSet(getRecoveredScreens(), recoveredScreens, "recoveredScreens");
     }
 
     static final ForgeConfigSpec clientSpec;

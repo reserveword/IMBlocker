@@ -44,11 +44,11 @@ public class IMCheckState {
             state.add(IMState.NON_PRINTABLE_CHALLENGE_PENDING); // nonPrintable
             checkSpecialScreenChange(s); // special
             lastScreen = new WeakReference<>(s);
-            if (checkInList(s, Config.screenWhitelist)) {
+            if (checkInList(s, Config.getScreenWhitelist())) {
                 IMBlocker.LOGGER.debug("found whitelisted screen");
                 state.add(IMState.SCREEN_LIST);
                 state.add(IMState.SCREEN_LIST_MASK);
-            } else if (checkInList(s, Config.screenBlacklist)) {
+            } else if (checkInList(s, Config.getScreenBlacklist())) {
                 IMBlocker.LOGGER.debug("found blacklisted screen");
                 state.remove(IMState.SCREEN_LIST);
                 state.add(IMState.SCREEN_LIST_MASK);
@@ -81,7 +81,7 @@ public class IMCheckState {
         if (getDefaultInputFieldText == null) return;
         if (s instanceof ChatScreen) try {
             String text = (String) getDefaultInputFieldText.invoke(s);
-            if (text.startsWith("/") && Config.CLIENT.checkCommandChat.get()) {
+            if (text.startsWith("/") && Config.getCheckCommandChat().get()) {
                 IMBlocker.LOGGER.debug("Specially disabled IME for command input");
                 state.remove(IMState.SPECIAL);
                 state.add(IMState.SPECIAL_MASK);
@@ -102,12 +102,12 @@ public class IMCheckState {
     private static InputClassRule checkInputClass(Object input) {
         if (!lastInput.containsKey(input)) {
             IMBlocker.LOGGER.debug("input box {} ticking", input);
-            if (checkInList(input, Config.inputWhitelist)) {
+            if (checkInList(input, Config.getInputWhitelist())) {
                 IMBlocker.LOGGER.debug("found whitelisted input");
                 state.remove(IMState.TICK);
                 lastInput.put(input, InputClassRule.WHITELIST);
                 return InputClassRule.WHITELIST;
-            } else if (checkInList(input, Config.inputBlacklist)) {
+            } else if (checkInList(input, Config.getInputBlacklist())) {
                 IMBlocker.LOGGER.debug("found blacklisted input");
                 state.remove(IMState.TICK);
                 lastInput.put(input, InputClassRule.BLACKLIST);
@@ -153,7 +153,7 @@ public class IMCheckState {
     private static final char nonPrintable = '\0';
 
     private static void checkNonPrintable(TickEvent.ClientTickEvent cte, int countdown) {
-        if (Config.CLIENT.useExperimental.get() && cte.phase == TickEvent.Phase.START)
+        if (Config.getUseExperimental().get() && cte.phase == TickEvent.Phase.START)
         {
             if (state.contains(IMState.NON_PRINTABLE_CHALLENGE)) {
                 state.remove(IMState.NON_PRINTABLE_CHALLENGE);
@@ -173,7 +173,7 @@ public class IMCheckState {
     }
 
     public static void captureNonPrintable(Object tfw, char ch, boolean canWrite) {
-        if (Config.CLIENT.useExperimental.get()
+        if (Config.getUseExperimental().get()
                 && checkInputClass(tfw) != InputClassRule.BLACKLIST
                 && ch == nonPrintable
                 && canWrite)
@@ -185,7 +185,7 @@ public class IMCheckState {
     }
 
     // connect rules above
-    private static int count = Config.CLIENT.checkInterval.get();
+    private static int count = Config.getCheckInterval().get();
     public static void clientTick(TickEvent.ClientTickEvent cte) {
         if (cte.phase != TickEvent.Phase.START) return;
         checkScreenList(cte, count);
@@ -195,7 +195,7 @@ public class IMCheckState {
         syncState();
         // check interval
         if (count > 0) count --;
-        else count = Config.CLIENT.checkInterval.get();
+        else count = Config.getCheckInterval().get();
     }
 
     public static void mouseEvent(ScreenEvent mie) {

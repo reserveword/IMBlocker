@@ -1,6 +1,5 @@
 package io.github.reserveword.imblocker;
 
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -11,7 +10,6 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lwjgl.glfw.GLFW;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(IMBlocker.MODID)
@@ -23,7 +21,7 @@ public class IMBlocker {
     public IMBlocker() {
         // Register ourselves for server and other game events we are interested in
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onConfigLoadReload);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.clientSpec);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
     }
 
     @Mod.EventBusSubscriber
@@ -45,6 +43,6 @@ public class IMBlocker {
     @SubscribeEvent
     public void onConfigLoadReload(ModConfigEvent e) {
         LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading)?"re":"");
-        Config.reload();
+        Config.INSTANCE.reload();
     }
 }

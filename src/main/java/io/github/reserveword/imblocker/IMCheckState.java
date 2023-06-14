@@ -44,18 +44,18 @@ public class IMCheckState {
             state.add(IMState.NON_PRINTABLE_CHALLENGE_PENDING); // nonPrintable
             checkSpecialScreenChange(s); // special
             lastScreen = new WeakReference<>(s);
-            if (Config.inScreenWhitelist(s.getClass())) {
+            if (Config.INSTANCE.inScreenWhitelist(s.getClass())) {
                 IMBlocker.LOGGER.debug("found whitelisted screen");
                 state.add(IMState.SCREEN_LIST);
                 state.add(IMState.SCREEN_LIST_MASK);
-            } else if (Config.inScreenBlacklist(s.getClass())) {
+            } else if (Config.INSTANCE.inScreenBlacklist(s.getClass())) {
                 IMBlocker.LOGGER.debug("found blacklisted screen");
                 state.remove(IMState.SCREEN_LIST);
                 state.add(IMState.SCREEN_LIST_MASK);
             } else {
                 state.remove(IMState.SCREEN_LIST_MASK);
                 if (s != null) {
-                    Config.checkScreen(s.getClass());
+                    Config.INSTANCE.checkScreen(s.getClass());
                 }
             }
         }
@@ -81,7 +81,7 @@ public class IMCheckState {
         if (getDefaultInputFieldText == null) return;
         if (s instanceof ChatScreen) try {
             String text = (String) getDefaultInputFieldText.invoke(s);
-            if (text.startsWith("/") && Config.getCheckCommandChat().get()) {
+            if (text.startsWith("/") && Config.INSTANCE.getCheckCommandChat()) {
                 IMBlocker.LOGGER.debug("Specially disabled IME for command input");
                 state.remove(IMState.SPECIAL);
                 state.add(IMState.SPECIAL_MASK);
@@ -102,12 +102,12 @@ public class IMCheckState {
     private static InputClassRule checkInputClass(Object input) {
         if (!lastInput.containsKey(input)) {
             IMBlocker.LOGGER.debug("input box {} ticking", input);
-            if (Config.inInputWhitelist(input.getClass())) {
+            if (Config.INSTANCE.inInputWhitelist(input.getClass())) {
                 IMBlocker.LOGGER.debug("found whitelisted input");
                 state.remove(IMState.TICK);
                 lastInput.put(input, InputClassRule.WHITELIST);
                 return InputClassRule.WHITELIST;
-            } else if (Config.inInputBlacklist(input.getClass())) {
+            } else if (Config.INSTANCE.inInputBlacklist(input.getClass())) {
                 IMBlocker.LOGGER.debug("found blacklisted input");
                 state.remove(IMState.TICK);
                 lastInput.put(input, InputClassRule.BLACKLIST);
@@ -142,7 +142,7 @@ public class IMCheckState {
     private static final char nonPrintable = '\0';
 
     private static void checkNonPrintable(TickEvent.ClientTickEvent cte, int countdown) {
-        if (Config.getUseExperimental().get() && cte.phase == TickEvent.Phase.START)
+        if (Config.INSTANCE.getUseExperimental() && cte.phase == TickEvent.Phase.START)
         {
             if (state.contains(IMState.NON_PRINTABLE_CHALLENGE)) {
                 state.remove(IMState.NON_PRINTABLE_CHALLENGE);
@@ -162,7 +162,7 @@ public class IMCheckState {
     }
 
     public static void captureNonPrintable(Object tfw, char ch, boolean canWrite) {
-        if (Config.getUseExperimental().get()
+        if (Config.INSTANCE.getUseExperimental()
                 && checkInputClass(tfw) != InputClassRule.BLACKLIST
                 && ch == nonPrintable
                 && canWrite)
@@ -174,7 +174,7 @@ public class IMCheckState {
     }
 
     // connect rules above
-    private static int count = Config.getCheckInterval().get();
+    private static int count = Config.INSTANCE.getCheckInterval();
     public static void clientTick(TickEvent.ClientTickEvent cte) {
         if (cte.phase != TickEvent.Phase.START) return;
         checkScreenList(cte, count);
@@ -184,7 +184,7 @@ public class IMCheckState {
         syncState();
         // check interval
         if (count > 0) count --;
-        else count = Config.getCheckInterval().get();
+        else count = Config.INSTANCE.getCheckInterval();
     }
 
     public static void mouseEvent(ScreenEvent mie) {

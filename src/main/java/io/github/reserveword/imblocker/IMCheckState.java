@@ -44,11 +44,11 @@ public class IMCheckState {
             state.add(IMState.NON_PRINTABLE_CHALLENGE_PENDING); // nonPrintable
             checkSpecialScreenChange(s); // special
             lastScreen = new WeakReference<>(s);
-            if (checkInList(s, Config.getScreenWhitelist())) {
+            if (Config.inScreenWhitelist(s.getClass())) {
                 IMBlocker.LOGGER.debug("found whitelisted screen");
                 state.add(IMState.SCREEN_LIST);
                 state.add(IMState.SCREEN_LIST_MASK);
-            } else if (checkInList(s, Config.getScreenBlacklist())) {
+            } else if (Config.inScreenBlacklist(s.getClass())) {
                 IMBlocker.LOGGER.debug("found blacklisted screen");
                 state.remove(IMState.SCREEN_LIST);
                 state.add(IMState.SCREEN_LIST_MASK);
@@ -102,12 +102,12 @@ public class IMCheckState {
     private static InputClassRule checkInputClass(Object input) {
         if (!lastInput.containsKey(input)) {
             IMBlocker.LOGGER.debug("input box {} ticking", input);
-            if (checkInList(input, Config.getInputWhitelist())) {
+            if (Config.inInputWhitelist(input.getClass())) {
                 IMBlocker.LOGGER.debug("found whitelisted input");
                 state.remove(IMState.TICK);
                 lastInput.put(input, InputClassRule.WHITELIST);
                 return InputClassRule.WHITELIST;
-            } else if (checkInList(input, Config.getInputBlacklist())) {
+            } else if (Config.inInputBlacklist(input.getClass())) {
                 IMBlocker.LOGGER.debug("found blacklisted input");
                 state.remove(IMState.TICK);
                 lastInput.put(input, InputClassRule.BLACKLIST);
@@ -117,17 +117,6 @@ public class IMCheckState {
                 return InputClassRule.NOT_LISTED;
             }
         } else return lastInput.get(input);
-    }
-
-    public static boolean checkInList(Object o, Collection<Class<?>> list) {
-        if (o != null && list != null) {
-            for (Class<?> c:list) {
-                if (c.isInstance(o)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     private static void checkTick(TickEvent.ClientTickEvent cte, int countdown) {

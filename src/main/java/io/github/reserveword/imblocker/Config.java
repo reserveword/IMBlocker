@@ -17,36 +17,20 @@ import java.util.function.Predicate;
 @Mod.EventBusSubscriber
 public class Config {
 
-    public static Collection<Class<?>> getScreenBlacklist() {
-        return screenBlacklist;
+    public static boolean inScreenBlacklist(Class<?> cls) {
+        return screenBlacklist.contains(cls);
     }
 
-    public static void setScreenBlacklist(Collection<Class<?>> screenBlacklist) {
-        Config.screenBlacklist = screenBlacklist;
+    public static boolean inScreenWhitelist(Class<?> cls) {
+        return screenWhitelist.contains(cls);
     }
 
-    public static Collection<Class<?>> getScreenWhitelist() {
-        return screenWhitelist;
+    public static boolean inInputBlacklist(Class<?> cls) {
+        return inputBlacklist.contains(cls);
     }
 
-    public static void setScreenWhitelist(Collection<Class<?>> screenWhitelist) {
-        Config.screenWhitelist = screenWhitelist;
-    }
-
-    public static Collection<Class<?>> getInputBlacklist() {
-        return inputBlacklist;
-    }
-
-    public static void setInputBlacklist(Collection<Class<?>> inputBlacklist) {
-        Config.inputBlacklist = inputBlacklist;
-    }
-
-    public static Collection<Class<?>> getInputWhitelist() {
-        return inputWhitelist;
-    }
-
-    public static void setInputWhitelist(Collection<Class<?>> inputWhitelist) {
-        Config.inputWhitelist = inputWhitelist;
+    public static boolean inInputWhitelist(Class<?> cls) {
+        return inputWhitelist.contains(cls);
     }
 
     public static ForgeConfigSpec.ConfigValue<Integer> getCheckInterval() {
@@ -148,27 +132,27 @@ public class Config {
         }
     }
 
-    private static Collection<Class<?>> screenBlacklist;
-    private static Collection<Class<?>> screenWhitelist;
-    private static Collection<Class<?>> inputBlacklist;
-    private static Collection<Class<?>> inputWhitelist;
+    private static Set<Class<?>> screenBlacklist;
+    private static Set<Class<?>> screenWhitelist;
+    private static Set<Class<?>> inputBlacklist;
+    private static Set<Class<?>> inputWhitelist;
     private final static Set<Class<?>> recoveredScreens = new HashSet<>();
     private static Thread screenSaveThread = null;
-    private static Collection<Class<?>> bakeList(ForgeConfigSpec.ConfigValue<List<? extends String>> cfg, String name) {
-        Collection<Class<?>> collection = new ArrayList<>();
+    private static Set<Class<?>> bakeList(ForgeConfigSpec.ConfigValue<List<? extends String>> cfg, String name) {
+        Set<Class<?>> clsSet = new HashSet<>();
         for (String s : cfg.get()) {
             try {
                 if (s.contains(":")) {
                     String[] ss = s.split(":");
                     s = ss[ss.length - 1];
                 }
-                collection.add(Class.forName(s));
+                clsSet.add(Class.forName(s));
             } catch (ClassNotFoundException e) {
                 IMBlocker.LOGGER.warn("Class {} not found, ignored.", s);
             }
         }
-        IMBlocker.LOGGER.info("imblocker bakelist {} result {}", name, collection);
-        return Collections.unmodifiableCollection(collection);
+        IMBlocker.LOGGER.info("imblocker bakelist {} result {}", name, clsSet);
+        return clsSet;
     }
 
     public static void checkScreen(Class<? extends Screen> cls) {
@@ -220,10 +204,10 @@ public class Config {
     }
 
     public static void reload() {
-        setScreenWhitelist(bakeList(CLIENT.screenWhitelist, "screenWhitelist"));
-        setScreenBlacklist(bakeList(CLIENT.screenBlacklist, "screenBlacklist"));
-        setInputWhitelist(bakeList(CLIENT.inputWhitelist, "inputWhitelist"));
-        setInputBlacklist(bakeList(CLIENT.inputBlacklist, "inputBlacklist"));
+        screenWhitelist = bakeList(CLIENT.screenWhitelist, "screenWhitelist");
+        screenBlacklist = bakeList(CLIENT.screenBlacklist, "screenBlacklist");
+        inputWhitelist = bakeList(CLIENT.inputWhitelist, "inputWhitelist");
+        inputBlacklist = bakeList(CLIENT.inputBlacklist, "inputBlacklist");
     }
 
     public static void dump() {

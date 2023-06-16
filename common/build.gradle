@@ -1,0 +1,47 @@
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'java'
+}
+
+dependencies {
+    implementation 'net.java.dev.jna:jna:5.12.1'
+    implementation 'net.java.dev.jna:jna-platform:5.12.1'
+    implementation 'org.apache.logging.log4j:log4j-api:2.19.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.19.0'
+    implementation 'org.apache.logging.log4j:log4j-slf4j2-impl:2.19.0'
+}
+
+// gradle.properties
+def all_properties = [
+        minecraft_version   : minecraft_version,
+        mod_id              : mod_id,
+        mod_name            : mod_name,
+        mod_version         : mod_version,
+        mod_logo            : mod_logo,
+        mod_url             : mod_url,
+        issues_url          : issues_url,
+        maven_group         : maven_group,
+        license             : license,
+        credits             : credits,
+        author              : author,
+        email               : email,
+        description         : mod_description,
+        fabric_version      : fabric_version,
+        yarn_mappings       : yarn_mappings,
+        loader_version      : loader_version,
+        forge_version       : forge_version,
+        loader_version_range: loader_version_range,
+        mapping_channel     : mapping_channel,
+        mapping_version     : mapping_version
+]
+
+project.processResources {
+    inputs.properties all_properties
+
+    filesMatching('pack.mcmeta') {
+        expand all_properties
+    }
+}
+
+buildDir = rootProject.buildDir

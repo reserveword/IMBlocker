@@ -8,16 +8,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod(IMBlocker.MODID)
+@Mod(Common.MODID)
 public class IMBlocker {
-    public static final String MODID = "imblocker";
-    // Directly reference a log4j logger.
-    static final Logger LOGGER = LogManager.getLogger();
-
     public IMBlocker() {
         // Register ourselves for server and other game events we are interested in
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onConfigLoadReload);
@@ -28,21 +22,23 @@ public class IMBlocker {
     public static class RegistryEvents {
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent cte) {
-            IMCheckState.clientTick(cte);
+            if (cte.phase == TickEvent.Phase.START) {
+                IMCheckState.clientTick(new ForgeScreenInfo());
+            }
         }
         @SubscribeEvent
         public static void onMouseClick(ScreenEvent.MouseButtonPressed mie) {
-            IMCheckState.mouseEvent(mie);
+            IMCheckState.mouseEvent();
         }
         @SubscribeEvent
         public static void onMouseClick(ScreenEvent.MouseButtonReleased mie) {
-            IMCheckState.mouseEvent(mie);
+            IMCheckState.mouseEvent();
         }
     }
 
     @SubscribeEvent
     public void onConfigLoadReload(ModConfigEvent e) {
-        LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading)?"re":"");
-        Config.INSTANCE.reload();
+        Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading)?"re":"");
+        ForgeConfig.reload();
     }
 }

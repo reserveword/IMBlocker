@@ -1,13 +1,17 @@
 package io.github.reserveword.imblocker;
 
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
 import net.minecraft.client.gui.screens.inventory.SignEditScreen;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Mod.EventBusSubscriber
 public class ForgeConfig extends Config {
@@ -58,7 +62,7 @@ public class ForgeConfig extends Config {
     }
 
     @Override
-    public void checkScreen(Class<? extends Screen> cls) {
+    public void checkScreen(Class<?> cls) {
         if (getEnableScreenRecovering() && !recoveredScreens.contains(cls)) {
             recoveredScreens.add(cls);
             List<String> screens = new ArrayList<>(CLIENT.recoveredScreens.get());
@@ -67,8 +71,35 @@ public class ForgeConfig extends Config {
         }
     }
 
-    @Override
-    public void reload() {
+    public String getClassName(Class<?> cls) {
+        CodeSource source = cls.getProtectionDomain().getCodeSource();
+        if (source == null || cls.getName().startsWith("net.minecraft.")) {
+            return "minecraft" + ":" + cls.getName();
+        }
+        URL loc = source.getLocation();
+        AtomicReference<String> name = new AtomicReference<>("UNKNOWN_SCREEN");
+        ModList.get().forEachModContainer((modid, mod) -> {
+            try {
+                if (!"minecraft".equals(modid) && !"imblocker".equals(modid) && loc.equals(mod.getMod().getClass()
+                        .getProtectionDomain().getCodeSource().getLocation())) {
+                    name.set(modid + ":" + cls.getName());
+                }
+            } catch (NullPointerException npe) {
+                Common.LOGGER.error("something is null when grabbing mod jar:");
+                Object modobj = mod.getMod();
+                Class<?> modcls = modobj != null ? modobj.getClass() : null;
+                ProtectionDomain pd = modcls != null ? modcls.getProtectionDomain() : null;
+                CodeSource cs = pd != null ? pd.getCodeSource() : null;
+                Common.LOGGER.warn("modid {}, mod {}, class {}, domain {}, source {}",
+                        modid, modobj, modcls, pd, cs);
+                Common.LOGGER.error("enableScreenRecovering disabled.");
+                setEnableScreenRecovering(false);
+            }
+        });
+        return name.get();
+    }
+
+    public static void reload() {
         screenWhitelist = bakeList(CLIENT.screenWhitelist, "screenWhitelist");
         screenBlacklist = bakeList(CLIENT.screenBlacklist, "screenBlacklist");
         inputWhitelist = bakeList(CLIENT.inputWhitelist, "inputWhitelist");
@@ -167,10 +198,10 @@ public class ForgeConfig extends Config {
                 }
                 clsSet.add(Class.forName(s));
             } catch (ClassNotFoundException e) {
-                IMBlocker.LOGGER.warn("Class {} not found, ignored.", s);
+                Common.LOGGER.warn("Class {} not found, ignored.", s);
             }
         }
-        IMBlocker.LOGGER.info("imblocker bakelist {} result {}", name, clsSet);
+        Common.LOGGER.info("imblocker bakelist {} result {}", name, clsSet);
         return clsSet;
     }
 

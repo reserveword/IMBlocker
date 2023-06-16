@@ -1,16 +1,6 @@
 package io.github.reserveword.imblocker;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.ChatScreen;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.event.TickEvent;
-
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.lang.ref.WeakReference;
-import java.util.Collection;
 import java.util.EnumSet;
 import java.util.WeakHashMap;
 
@@ -36,53 +26,38 @@ public class IMCheckState {
     // process SCREEN_LIST rules
     // notice that nonPrintable rule triggers at screen change, here.
     // notice that special rule triggers at screen change, here too.
-    private static WeakReference<Screen> lastScreen = new WeakReference<>(null);
-    private static void checkScreenList(TickEvent.ClientTickEvent cte, int countdown) {
-        Screen s = Minecraft.m_91087_().f_91080_;
-        if (s != lastScreen.get()) {
-            IMBlocker.LOGGER.debug("screen changed to {}", s);
+    private static WeakReference<Object> lastScreen = new WeakReference<>(null);
+    private static void checkScreenList(ScreenInfo screen) {
+        if (screen.get() != lastScreen.get()) {
+            Common.LOGGER.debug("screen changed to {}", screen.get());
             state.add(IMState.NON_PRINTABLE_CHALLENGE_PENDING); // nonPrintable
-            checkSpecialScreenChange(s); // special
-            lastScreen = new WeakReference<>(s);
-            if (Config.INSTANCE.inScreenWhitelist(s.getClass())) {
-                IMBlocker.LOGGER.debug("found whitelisted screen");
+            checkSpecialScreenChange(screen); // special
+            lastScreen = new WeakReference<>(screen.get());
+            if (Config.INSTANCE.inScreenWhitelist(screen.type())) {
+                Common.LOGGER.debug("found whitelisted screen");
                 state.add(IMState.SCREEN_LIST);
                 state.add(IMState.SCREEN_LIST_MASK);
-            } else if (Config.INSTANCE.inScreenBlacklist(s.getClass())) {
-                IMBlocker.LOGGER.debug("found blacklisted screen");
+            } else if (Config.INSTANCE.inScreenBlacklist(screen.type())) {
+                Common.LOGGER.debug("found blacklisted screen");
                 state.remove(IMState.SCREEN_LIST);
                 state.add(IMState.SCREEN_LIST_MASK);
             } else {
                 state.remove(IMState.SCREEN_LIST_MASK);
-                if (s != null) {
-                    Config.INSTANCE.checkScreen(s.getClass());
+                if (screen.get() != null) {
+                    Config.INSTANCE.checkScreen(screen.type());
                 }
             }
         }
     }
 
     // process SPECIAL rules
-    private static final MethodHandle getDefaultInputFieldText;
-    static {
-        MethodHandle getDefaultInputFieldText_tmp;
-        try {
-            MethodHandles.Lookup lookup = MethodHandles.lookup();
-            //noinspection JavaLangInvokeHandleSignature
-            getDefaultInputFieldText_tmp = lookup.findVirtual(ChatScreen.class, "getDefaultInputFieldText", MethodType.methodType(String.class));
-        } catch (java.lang.NoSuchMethodException | java.lang.IllegalAccessException e) {
-            getDefaultInputFieldText_tmp = null;
-            IMBlocker.LOGGER.warn("ChatScreen command hook failed:", e);
-        }
-        getDefaultInputFieldText = getDefaultInputFieldText_tmp;
-    }
+    private static void checkSpecial() { }
 
-    private static void checkSpecial(TickEvent.ClientTickEvent cte, int countdown) { }
-    private static void checkSpecialScreenChange(Screen s) {
-        if (getDefaultInputFieldText == null) return;
-        if (s instanceof ChatScreen) try {
-            String text = (String) getDefaultInputFieldText.invoke(s);
+    private static void checkSpecialScreenChange(ScreenInfo screen) {
+        if (screen.isChatScreen()) try {
+            String text = screen.defaultText();
             if (text.startsWith("/") && Config.INSTANCE.getCheckCommandChat()) {
-                IMBlocker.LOGGER.debug("Specially disabled IME for command input");
+                Common.LOGGER.debug("Specially disabled IME for command input");
                 state.remove(IMState.SPECIAL);
                 state.add(IMState.SPECIAL_MASK);
             }
@@ -90,7 +65,7 @@ public class IMCheckState {
                 state.remove(IMState.SPECIAL_MASK);
             }
         } catch (Throwable e) {
-            IMBlocker.LOGGER.warn("ChatScreen hook running exception:", e);
+            Common.LOGGER.warn("ChatScreen hook running exception:", e);
         } else {
             state.remove(IMState.SPECIAL_MASK);
         }
@@ -101,14 +76,14 @@ public class IMCheckState {
     private static final WeakHashMap<Object, InputClassRule> lastInput = new WeakHashMap<>();
     private static InputClassRule checkInputClass(Object input) {
         if (!lastInput.containsKey(input)) {
-            IMBlocker.LOGGER.debug("input box {} ticking", input);
+            Common.LOGGER.debug("input box {} ticking", input);
             if (Config.INSTANCE.inInputWhitelist(input.getClass())) {
-                IMBlocker.LOGGER.debug("found whitelisted input");
+                Common.LOGGER.debug("found whitelisted input");
                 state.remove(IMState.TICK);
                 lastInput.put(input, InputClassRule.WHITELIST);
                 return InputClassRule.WHITELIST;
             } else if (Config.INSTANCE.inInputBlacklist(input.getClass())) {
-                IMBlocker.LOGGER.debug("found blacklisted input");
+                Common.LOGGER.debug("found blacklisted input");
                 state.remove(IMState.TICK);
                 lastInput.put(input, InputClassRule.BLACKLIST);
                 return InputClassRule.BLACKLIST;
@@ -119,15 +94,13 @@ public class IMCheckState {
         } else return lastInput.get(input);
     }
 
-    private static void checkTick(TickEvent.ClientTickEvent cte, int countdown) {
-        if (cte.phase == TickEvent.Phase.START) {
-            if (state.contains(IMState.TICK_CHALLENGE)) {
-                IMBlocker.LOGGER.debug("test failed, im off");
-                state.remove(IMState.TICK_CHALLENGE);
-                state.remove(IMState.TICK);
-            } else if (state.contains(IMState.TICK)) {
-                state.add(IMState.TICK_CHALLENGE);
-            }
+    private static void checkTick() {
+        if (state.contains(IMState.TICK_CHALLENGE)) {
+            Common.LOGGER.debug("test failed, im off");
+            state.remove(IMState.TICK_CHALLENGE);
+            state.remove(IMState.TICK);
+        } else if (state.contains(IMState.TICK)) {
+            state.add(IMState.TICK_CHALLENGE);
         }
     }
 
@@ -139,20 +112,19 @@ public class IMCheckState {
     }
 
     // process NON_PRINTABLE rules
-    private static final char nonPrintable = '\0';
+    public static final char nonPrintable = '\0';
 
-    private static void checkNonPrintable(TickEvent.ClientTickEvent cte, int countdown) {
-        if (Config.INSTANCE.getUseExperimental() && cte.phase == TickEvent.Phase.START)
+    private static void checkNonPrintable(ScreenInfo screen) {
+        if (Config.INSTANCE.getUseExperimental())
         {
             if (state.contains(IMState.NON_PRINTABLE_CHALLENGE)) {
                 state.remove(IMState.NON_PRINTABLE_CHALLENGE);
                 state.remove(IMState.NON_PRINTABLE);
             } else if (state.contains(IMState.NON_PRINTABLE_CHALLENGE_PENDING)) {
                 state.add(IMState.NON_PRINTABLE_CHALLENGE);
-                IMBlocker.LOGGER.debug("inject");
-                Screen s = Minecraft.m_91087_().f_91080_;
-                if (s != null) {
-                    s.m_5534_(nonPrintable, 0); // charTyped
+                Common.LOGGER.debug("inject");
+                if (screen.get() != null) {
+                    screen.charTyped(nonPrintable, 0); // charTyped
                 }
                 state.remove(IMState.NON_PRINTABLE_CHALLENGE_PENDING);
             }
@@ -169,26 +141,32 @@ public class IMCheckState {
         {
             state.remove(IMState.NON_PRINTABLE_CHALLENGE);
             state.add(IMState.NON_PRINTABLE);
-            IMBlocker.LOGGER.debug("captured");
+            Common.LOGGER.debug("captured");
         }
     }
 
     // connect rules above
     private static int count = Config.INSTANCE.getCheckInterval();
-    public static void clientTick(TickEvent.ClientTickEvent cte) {
-        if (cte.phase != TickEvent.Phase.START) return;
-        checkScreenList(cte, count);
-        checkSpecial(cte, count);
-        checkTick(cte, count);
-        checkNonPrintable(cte, count);
+    public static void clientTick(ScreenInfo screen) {
+        checkScreenList(screen);
+        checkSpecial();
+        checkTick();
+        checkNonPrintable(screen);
         syncState();
         // check interval
         if (count > 0) count --;
         else count = Config.INSTANCE.getCheckInterval();
     }
 
-    public static void mouseEvent(ScreenEvent mie) {
+    public static void mouseEvent() {
         state.add(IMState.NON_PRINTABLE_CHALLENGE_PENDING);
     }
 
+    public interface ScreenInfo {
+        Object get();
+        boolean isChatScreen();
+        Class<?> type();
+        String defaultText() throws Throwable;
+        void charTyped(char codePoint, int modifiers);
+    }
 }

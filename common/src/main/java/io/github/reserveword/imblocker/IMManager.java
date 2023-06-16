@@ -89,7 +89,7 @@ public class IMManager {
         WinDef.HWND hwnd = u.GetForegroundWindow();
         WinNT.HANDLE himc = ImmGetContext(hwnd);
         if ((himc == null) == state) {
-            IMBlocker.LOGGER.warn("IM state inconsistent! state={}, im={}", state, himc != null);
+            Common.LOGGER.warn("IM state inconsistent! state={}, im={}", state, himc != null);
             toggle();
         }
     }

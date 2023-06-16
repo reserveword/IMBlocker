@@ -1,0 +1,91 @@
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'fabric-loom' version '1.2-SNAPSHOT'
+}
+
+loom {
+    splitEnvironmentSourceSets()
+
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+
+}
+
+dependencies {
+    // To change the versions see the gradle.properties file
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${loader_version}"
+
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+
+    modApi "com.terraformersmc:modmenu:${modmenu_version}"
+    modApi "me.shedaniel.cloth:cloth-config-fabric:${clothconfig_version}" exclude group: "net.fabricmc.fabric-api"
+
+    implementation project(':common')
+}
+
+java {
+    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+    // if it is present.
+    // If you remove this line, sources will not be generated.
+    withSourcesJar()
+
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+// gradle.properties
+def all_properties = [
+        minecraft_version   : minecraft_version,
+        mod_id              : mod_id,
+        mod_name            : mod_name,
+        mod_version         : mod_version,
+        mod_logo            : mod_logo,
+        mod_url             : mod_url,
+        issues_url          : issues_url,
+        maven_group         : maven_group,
+        license             : license,
+        credits             : credits,
+        author              : author,
+        email               : email,
+        description         : mod_description,
+        fabric_version      : fabric_version,
+        yarn_mappings       : yarn_mappings,
+        loader_version      : loader_version,
+        forge_version       : forge_version,
+        loader_version_range: loader_version_range,
+        mapping_channel     : mapping_channel,
+        mapping_version     : mapping_version
+]
+
+project.processClientResources {
+    inputs.properties all_properties
+
+    filesMatching('fabric.mod.json') {
+        expand all_properties
+    }
+}
+
+project.jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : mod_id,
+                "Specification-Vendor"    : author,
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : rootProject.name,
+                "Implementation-Version"  : mod_version,
+                "Implementation-Vendor"   : author,
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+    dependsOn ':forge:reobfJar'
+}
+
+buildDir = rootProject.buildDir

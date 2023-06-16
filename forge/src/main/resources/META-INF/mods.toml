@@ -29,4 +29,5 @@ credits="${credits}" #optional
 # A text field displayed in the mod UI
 authors="${author}" #optional
 # The description text for the mod (multi line!) (#mandatory)
-description="${description}"
+description='''Blocks Input Methods when you're not using it.
+在你不打字的时候自动关闭输入法'''

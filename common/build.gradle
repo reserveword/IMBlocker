@@ -43,33 +43,3 @@ project.processResources {
         expand all_properties
     }
 }
-//
-//tasks.register('feedbackClass', Copy) {
-//    dependsOn ":${name}:jar"
-//    from (zipTree(new File(buildDir, "libs/${name}.jar"))) {
-//        include '**/*.class'
-//        exclude {
-//            ! new File(buildDir, 'classes/java/main/' + it.entry.name).exists()
-//        }
-//    }
-//    into new File(rootProject.buildDir, 'classes/java/main')
-//}
-//
-//tasks.register('feedbackResource', Copy) {
-//    dependsOn ":${name}:jar"
-//    from (zipTree(new File(buildDir, "libs/${name}.jar"))) {
-//        exclude '**/*.class'
-//        exclude {
-//            ! new File(buildDir, 'resources/main/' + it.entry.name).exists()
-//        }
-//    }
-//    into new File(rootProject.buildDir, 'resources/main')
-//}
-//
-//tasks.register('feedback') {
-//    dependsOn(":${name}:feedbackClass")
-//    dependsOn(":${name}:feedbackResource")
-//}
-
-
-//buildDir = rootProject.buildDir

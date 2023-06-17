@@ -108,16 +108,4 @@ project.jar {
     }
     exclude 'io/github/reserveword/imblocker/asmdummy'
 }
-
-//tasks.register('feedback', Copy) {
-//    dependsOn ':forge:reobfJar'
-//    from (zipTree(new File(buildDir, 'libs/forge.jar'))) {
-//        include '**/*.class'
-//        exclude {
-//            ! new File(buildDir, 'classes/java/main/' + it.entry.name).exists()
-//        }
-//    }
-//    into new File(rootProject.buildDir, 'classes/java/main')
-//}
-
-//buildDir = rootProject.buildDir
+ct.buildDir

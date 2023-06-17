@@ -61,25 +61,12 @@ allprojects {
         dependsOn("feedbackClass")
         dependsOn("feedbackResource")
     }
-    logger.info("registered for {}", name)
-//    buildDir = rootProject.buildDir
-}
-
-if (flavor == '' && flavor == 'release') {
-    flavor = minecraft_version
-}
-def finalName = "${mod_id}_${flavor}_${mod_version}.jar"
-
-sourceSets {
-    main {}
-    client {}
 }
 
 project.jar {
     dependsOn ':common:feedback'
     dependsOn ':forge:feedback'
     dependsOn ':fabric:feedback'
-//    dependsOn ':fabric:feedbackClient'
     manifest {
         attributes([
                 "Specification-Title"     : mod_id,
@@ -92,18 +79,4 @@ project.jar {
         ])
     }
     exclude 'io/github/reserveword/imblocker/asmdummy'
-}
-
-tasks.register('ultimate', Copy) {
-    dependsOn ':common:feedback'
-    dependsOn ':forge:feedback'
-    dependsOn ':fabric:feedback'
-//    dependsOn ':fabric:feedbackClient'
-    from 'build/classes/java/main'
-    from 'build/classes/java/client'
-    from 'build/resources/main'
-    from 'build/resources/client'
-    into 'build/ultimate'
-//    include 'fabric.jar'
-//    rename { "${mod_id}_${flavor}_${mod_version}.jar" }
 }

@@ -26,7 +26,7 @@ public class ForgeScreenInfo implements IMCheckState.ScreenInfo {
 
     @Override
     public Class<?> type() {
-        return screen.getClass();
+        return screen == null ? null : screen.getClass();
     }
 
     @Override

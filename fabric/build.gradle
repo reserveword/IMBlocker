@@ -74,6 +74,7 @@ project.processClientResources {
 }
 
 project.jar {
+    finalizedBy('remapJar')
     manifest {
         attributes([
                 "Specification-Title"     : mod_id,
@@ -85,7 +86,35 @@ project.jar {
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
-    dependsOn ':forge:reobfJar'
+    exclude 'io/github/reserveword/imblocker/asmdummy'
 }
 
-buildDir = rootProject.buildDir
+//tasks.register('feedback', Copy) {
+//    dependsOn ':fabric:remapJar'
+//    from (zipTree(new File(buildDir, "libs/${name}.jar"))) {
+//        include '**/*.class'
+//        exclude {
+//            ! new File(buildDir, 'classes/java/main/' + it.entry.name).exists()
+//        }
+//    }
+//    into new File(rootProject.buildDir, 'classes/java/main')
+//}
+//
+//tasks.register('feedbackClient', Copy) {
+//    dependsOn ':fabric:remapJar'
+//    from (zipTree(new File(buildDir, 'libs/fabric.jar'))) {
+//        include '**/*.class'
+//        exclude {
+//            ! new File(buildDir, 'classes/java/client/' + it.entry.name).exists()
+//        }
+//    }
+//    into new File(rootProject.buildDir, 'classes/java/client')
+//}
+
+//project.compileClientJava {
+//    mustRunAfter ':forge:compileJava'
+//    mustRunAfter ':forge:processResources'
+//    mustRunAfter ':forge:feedback'
+//}
+
+//buildDir = rootProject.buildDir

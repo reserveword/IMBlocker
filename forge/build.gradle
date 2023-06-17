@@ -94,8 +94,7 @@ project.processResources {
 
 // Example for how to get properties into the manifest for reading at runtime.
 project.jar {
-    dependsOn ':fabric:processResources'
-    dependsOn ':fabric:compileJava'
+    finalizedBy 'reobfJar'
     manifest {
         attributes([
                 "Specification-Title"     : mod_id,
@@ -110,6 +109,15 @@ project.jar {
     exclude 'io/github/reserveword/imblocker/asmdummy'
 }
 
-project.jar.finalizedBy('reobfJar')
+//tasks.register('feedback', Copy) {
+//    dependsOn ':forge:reobfJar'
+//    from (zipTree(new File(buildDir, 'libs/forge.jar'))) {
+//        include '**/*.class'
+//        exclude {
+//            ! new File(buildDir, 'classes/java/main/' + it.entry.name).exists()
+//        }
+//    }
+//    into new File(rootProject.buildDir, 'classes/java/main')
+//}
 
-buildDir = rootProject.buildDir
+//buildDir = rootProject.buildDir

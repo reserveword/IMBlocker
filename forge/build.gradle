@@ -60,38 +60,6 @@ dependencies {
     implementation project(':common')
 }
 
-// gradle.properties
-def all_properties = [
-        minecraft_version   : minecraft_version,
-        mod_id              : mod_id,
-        mod_name            : mod_name,
-        mod_version         : mod_version,
-        mod_logo            : mod_logo,
-        mod_url             : mod_url,
-        issues_url          : issues_url,
-        maven_group         : maven_group,
-        license             : license,
-        credits             : credits,
-        author              : author,
-        email               : email,
-        description         : mod_description,
-        fabric_version      : fabric_version,
-        yarn_mappings       : yarn_mappings,
-        loader_version      : loader_version,
-        forge_version       : forge_version,
-        loader_version_range: loader_version_range,
-        mapping_channel     : mapping_channel,
-        mapping_version     : mapping_version
-]
-
-project.processResources {
-    inputs.properties all_properties
-
-    filesMatching('META-INF/mods.toml') {
-        expand all_properties
-    }
-}
-
 // Example for how to get properties into the manifest for reading at runtime.
 project.jar {
     finalizedBy 'reobfJar'
@@ -108,4 +76,3 @@ project.jar {
     }
     exclude 'io/github/reserveword/imblocker/asmdummy'
 }
-ct.buildDir

@@ -41,38 +41,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-// gradle.properties
-def all_properties = [
-        minecraft_version   : minecraft_version,
-        mod_id              : mod_id,
-        mod_name            : mod_name,
-        mod_version         : mod_version,
-        mod_logo            : mod_logo,
-        mod_url             : mod_url,
-        issues_url          : issues_url,
-        maven_group         : maven_group,
-        license             : license,
-        credits             : credits,
-        author              : author,
-        email               : email,
-        description         : mod_description,
-        fabric_version      : fabric_version,
-        yarn_mappings       : yarn_mappings,
-        loader_version      : loader_version,
-        forge_version       : forge_version,
-        loader_version_range: loader_version_range,
-        mapping_channel     : mapping_channel,
-        mapping_version     : mapping_version
-]
-
-project.processClientResources {
-    inputs.properties all_properties
-
-    filesMatching('fabric.mod.json') {
-        expand all_properties
-    }
-}
-
 project.jar {
     finalizedBy('remapJar')
     manifest {

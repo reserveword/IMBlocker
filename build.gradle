@@ -33,6 +33,37 @@ allprojects {
         }
     }
 
+    def all_properties = [
+            minecraft_version   : minecraft_version,
+            mod_id              : mod_id,
+            mod_name            : mod_name,
+            mod_version         : mod_version,
+            mod_logo            : mod_logo,
+            mod_url             : mod_url,
+            issues_url          : issues_url,
+            maven_group         : maven_group,
+            license             : license,
+            credits             : credits,
+            author              : author,
+            email               : email,
+            description         : mod_description,
+            fabric_version      : fabric_version,
+            yarn_mappings       : yarn_mappings,
+            loader_version      : loader_version,
+            forge_version       : forge_version,
+            loader_version_range: loader_version_range,
+            mapping_channel     : mapping_channel,
+            mapping_version     : mapping_version
+    ]
+
+    tasks.withType(ProcessResources).configureEach {
+        inputs.properties all_properties
+
+        filesMatching(['META-INF/mods.toml', 'fabric.mod.json', 'pack.mcmeta']) {
+            expand all_properties
+        }
+    }
+
     tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
     }
@@ -41,7 +72,7 @@ allprojects {
         dependsOn "jar"
         mustRunAfter ":forge:reobfJar"
         mustRunAfter ":fabric:remapJar"
-        from (zipTree(new File(buildDir, "libs/${project.name }.jar"))) {
+        from (zipTree(new File(buildDir, "libs/${project.name}.jar"))) {
             include '**/*.class'
         }
         into new File(rootProject.buildDir, 'classes/java/main')

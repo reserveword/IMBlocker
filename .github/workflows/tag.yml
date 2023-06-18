@@ -22,44 +22,45 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Get branch name
-        id: branch-name
-        uses: tj-actions/branch-names@v7
+    - name: Get branch name
+      id: branch-name
+      uses: tj-actions/branch-names@v7
 
-      - name: 检查环境变量
-        run: env
+    - name: 检查环境变量
+      run: env
 
-      - name: 签出存储库
-        uses: actions/checkout@v3
-        with:
-          submodules: true
+    - name: 签出存储库
+      uses: actions/checkout@v3
+      with:
+        submodules: true
 
-      - name: 设置 Java
-        uses: actions/setup-java@v2
-        with:
-          java-version: ${{env.JAVA_VERSION}}
+    - name: 设置 Java
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'temurin'
+        java-version: ${{env.JAVA_VERSION}}
 
-      - name: 构建
-        run: ./gradlew :jar
+    - name: 构建
+      run: ./gradlew :jar
 
-      - name: 发布（CurseForge/Modrinth/Github）
-        uses: Kir-Antipov/mc-publish@v3.3
-        with:
-          curseforge-id: 483760
-          curseforge-token: "${{env.CURSEFORGE_TOKEN}}"
+    - name: 发布（CurseForge/Modrinth/Github）
+      uses: Kir-Antipov/mc-publish@v3.3
+      with:
+        curseforge-id: 483760
+        curseforge-token: "${{env.CURSEFORGE_TOKEN}}"
 
-          modrinth-id: WMDesFsZ
-          modrinth-featured: true
-          modrinth-token: "${{env.MODRINTH_TOKEN}}"
+        modrinth-id: WMDesFsZ
+        modrinth-featured: true
+        modrinth-token: "${{env.MODRINTH_TOKEN}}"
 
-          github-tag: "v${{env.VERSION}}"
-          github-token: "${{env.GITHUB_TOKEN}}"
+        github-tag: "v${{env.VERSION}}"
+        github-token: "${{env.GITHUB_TOKEN}}"
 
-          name: "${{env.RELEASE_NAME}}"
-          version: "${{env.VERSION}}"
-          version-type: release
-          changelog-file: CHANGELOG.md
+        name: "${{env.RELEASE_NAME}}"
+        version: "${{env.VERSION}}"
+        version-type: release
+        changelog-file: CHANGELOG.md
 
-          loaders: fabric, forge
-          game-versions: "${{ steps.branch-name.outputs.current_branch }}"
-          java: "${{env.JAVA_VERSION}}"
+        loaders: fabric, forge
+        game-versions: "${{ steps.branch-name.outputs.current_branch }}"
+        java: "${{env.JAVA_VERSION}}"

@@ -42,16 +42,6 @@ public class ForgeConfig extends Config {
     }
 
     @Override
-    public Boolean getEnableScreenRecovering() {
-        return CLIENT.enableScreenRecovering.get();
-    }
-
-    @Override
-    public void setEnableScreenRecovering(Boolean value) {
-        CLIENT.enableScreenRecovering.set(value);
-    }
-
-    @Override
     public Boolean getUseExperimental() {
         return CLIENT.useExperimental.get();
     }
@@ -63,7 +53,7 @@ public class ForgeConfig extends Config {
 
     @Override
     public void checkScreen(Class<?> cls) {
-        if (getEnableScreenRecovering() && !recoveredScreens.contains(cls)) {
+        if (CLIENT.enableScreenRecovering.get() && !recoveredScreens.contains(cls)) {
             recoveredScreens.add(cls);
             List<String> screens = new ArrayList<>(CLIENT.recoveredScreens.get());
             screens.add(getClassName(cls));
@@ -93,7 +83,7 @@ public class ForgeConfig extends Config {
                 Common.LOGGER.warn("modid {}, mod {}, class {}, domain {}, source {}",
                         modid, modobj, modcls, pd, cs);
                 Common.LOGGER.error("enableScreenRecovering disabled.");
-                setEnableScreenRecovering(false);
+                CLIENT.enableScreenRecovering.set(false);
             }
         });
         return name.get();

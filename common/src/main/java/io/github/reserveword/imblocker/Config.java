@@ -28,14 +28,6 @@ public abstract class Config {
         return 2;
     }
 
-    public Boolean getEnableScreenRecovering() {
-        return false;
-    }
-
-    public void setEnableScreenRecovering(Boolean value) {
-
-    }
-
     public Boolean getUseExperimental() {
         return true;
     }

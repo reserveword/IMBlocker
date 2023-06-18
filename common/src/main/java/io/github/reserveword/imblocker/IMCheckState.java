@@ -150,7 +150,7 @@ public class IMCheckState {
     public static void clientTick(ScreenInfo screen) {
         checkScreenList(screen);
         checkSpecial();
-        checkTick();
+        if (count == 0) checkTick();
         checkNonPrintable(screen);
         syncState();
         // check interval

@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MouseMixin {
     @Final
     @Shadow
-    private final MinecraftClient client = null;
+    private MinecraftClient client;
 
     @Inject(method = "onMouseButton(JIII)V", at = @At("HEAD"))
     private void checkScreenOnMouseButton(long window, int button, int action, int mods, CallbackInfo ci) {
@@ -22,14 +22,4 @@ public abstract class MouseMixin {
             IMCheckState.mouseEvent();
         }
     }
-//    @Inject(method = "method_1611([ZLnet/minecraft/client/gui/screen/Screen;DDI)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;mouseReleased(DDI)Z", shift = At.Shift.AFTER))
-//    private static void afterMouseReleasedEvent(boolean[] resultHack, Screen screen, double mouseX, double mouseY, int button, CallbackInfo ci) {
-//
-//    }
-//
-//    // private synthetic method_1605([ZDDI)V
-//    @Inject(method = "method_1605([ZLnet/minecraft/client/gui/screen/Screen;DDI)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;mouseReleased(DDI)Z", shift = At.Shift.AFTER))
-//    private static void afterMouseReleasedEvent(boolean[] resultHack, Screen screen, double mouseX, double mouseY, int button, CallbackInfo ci) {
-//
-//    }
 }

@@ -28,6 +28,11 @@ dependencies {
     modApi "com.terraformersmc:modmenu:${modmenu_version}"
     modApi "me.shedaniel.cloth:cloth-config-fabric:${clothconfig_version}" exclude group: "net.fabricmc.fabric-api"
 
+    // REI API for Fabric
+    modApi "me.shedaniel:RoughlyEnoughItems-api-fabric:$rei_version"
+    modApi "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:$rei_version"
+
+    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:$rei_version"
     implementation project(':common')
 }
 

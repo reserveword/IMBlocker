@@ -24,9 +24,6 @@ public class IMBlockerFabric implements ClientModInitializer {
         ClientTickEvents.START_CLIENT_TICK.register(tick -> {
             IMCheckState.clientTick(new FabricScreenInfo());
         });
-        // TODO mouse click event
-        // it needs to register for every screen INSTANCE so let's just mixin instead
-        // ScreenMouseEvents.afterMouseClick()
     }
 
     private boolean hasMod(String modid) {

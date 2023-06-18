@@ -37,6 +37,6 @@
   },
   "suggests": {
     "modmenu": "*",
-    "cloth-api": "*"
+    "cloth-config": "*"
   }
 }

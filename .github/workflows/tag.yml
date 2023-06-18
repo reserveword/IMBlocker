@@ -49,14 +49,11 @@ jobs:
           curseforge-token: "${{env.CURSEFORGE_TOKEN}}"
 
           modrinth-id: WMDesFsZ
-          modrinth-featured: true
           modrinth-token: "${{env.MODRINTH_TOKEN}}"
 
-          github-tag: "${{ env.GIT_TAG_NAME }}"
           github-token: "${{env.GITHUB_TOKEN}}"
 
           name: "IMBlocker-${{env.GIT_TAG_NAME}}"
-          version: "${{ env.GIT_TAG_NAME }}"
           version-type: release
           changelog-file: CHANGELOG.md
 

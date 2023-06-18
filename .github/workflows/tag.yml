@@ -10,9 +10,9 @@ env:
   JAVA_VERSION: 17
   VERSION: ${{ github.ref }}
   RELEASE_NAME: IMBlocker-${{ github.ref }}
-#   MODRINTH_TOKEN: ${{ secrets.PUBLISH_MODRINTH_TOKEN }}
-#   CURSEFORGE_TOKEN: ${{ secrets.PUBLISH_CURSEFORGE_TOKEN }}
-#   GITHUB_TOKEN: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
+  MODRINTH_TOKEN: ${{ secrets.PUBLISH_MODRINTH_TOKEN }}
+  CURSEFORGE_TOKEN: ${{ secrets.PUBLISH_CURSEFORGE_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
 
 permissions:
   contents: write

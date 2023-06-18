@@ -8,8 +8,8 @@ on:
 env:
   #   MINECRAFT_VERSION: ${{basename(github.ref)}}
   JAVA_VERSION: 17
-  VERSION: ${{ basename(github.ref) }}
-  RELEASE_NAME: IMBlocker-${{ basename(github.ref) }}
+  VERSION: ${{ github.ref }}
+  RELEASE_NAME: IMBlocker-${{ github.ref }}
 #   MODRINTH_TOKEN: ${{ secrets.PUBLISH_MODRINTH_TOKEN }}
 #   CURSEFORGE_TOKEN: ${{ secrets.PUBLISH_CURSEFORGE_TOKEN }}
 #   GITHUB_TOKEN: ${{ secrets.PUBLISH_GITHUB_TOKEN }}

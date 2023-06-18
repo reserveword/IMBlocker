@@ -7,8 +7,8 @@ on:
 
 env:
   JAVA_VERSION: 17
-  VERSION: ${{ github.ref }}
-  RELEASE_NAME: IMBlocker-${{ github.ref }}
+  VERSION: ${{ github.ref/refs\/tags\// }}
+  RELEASE_NAME: IMBlocker-${{ github.ref/refs\/tags\// }}
   MODRINTH_TOKEN: ${{ secrets.PUBLISH_MODRINTH_TOKEN }}
   CURSEFORGE_TOKEN: ${{ secrets.PUBLISH_CURSEFORGE_TOKEN }}
   GITHUB_TOKEN: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
@@ -52,11 +52,11 @@ jobs:
         modrinth-featured: true
         modrinth-token: "${{env.MODRINTH_TOKEN}}"
 
-        github-tag: "${{ github.ref }}"
+        github-tag: "${{ env.VERSION }}"
         github-token: "${{env.GITHUB_TOKEN}}"
 
         name: "${{env.RELEASE_NAME}}"
-        version: "${{ github.ref }}"
+        version: "${{ env.VERSION }}"
         version-type: release
         changelog-file: CHANGELOG.md
 

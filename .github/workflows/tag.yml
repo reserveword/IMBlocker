@@ -1,1 +1,6 @@
 name: Publish on tag
+
+on:
+  push:
+    tags:
+    - '*'

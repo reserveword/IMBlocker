@@ -6,7 +6,6 @@ on:
       - '*'
 
 env:
-  #   MINECRAFT_VERSION: ${{basename(github.ref)}}
   JAVA_VERSION: 17
   VERSION: ${{ github.ref }}
   RELEASE_NAME: IMBlocker-${{ github.ref }}
@@ -53,11 +52,11 @@ jobs:
         modrinth-featured: true
         modrinth-token: "${{env.MODRINTH_TOKEN}}"
 
-        github-tag: "v${{env.VERSION}}"
+        github-tag: "${{ github.ref }}"
         github-token: "${{env.GITHUB_TOKEN}}"
 
         name: "${{env.RELEASE_NAME}}"
-        version: "${{env.VERSION}}"
+        version: "${{ github.ref }}"
         version-type: release
         changelog-file: CHANGELOG.md
 

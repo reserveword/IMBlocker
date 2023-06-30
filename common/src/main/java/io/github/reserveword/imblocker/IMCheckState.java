@@ -124,7 +124,11 @@ public class IMCheckState {
                 state.add(IMState.NON_PRINTABLE_CHALLENGE);
                 Common.LOGGER.debug("inject");
                 if (screen.get() != null) {
-                    screen.charTyped(nonPrintable, 0); // charTyped
+                    try {
+                        screen.charTyped(nonPrintable, 0); // charTyped
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 state.remove(IMState.NON_PRINTABLE_CHALLENGE_PENDING);
             }

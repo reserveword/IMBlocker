@@ -10,7 +10,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.CodeSource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 @me.shedaniel.autoconfig.annotation.Config(name = Common.MODID)
@@ -25,8 +27,6 @@ public class FabricConfig extends Config implements ModMenuApi, ConfigData {
     boolean useExperimental = true;
     boolean checkCommandChat = true;
 
-    private static final Map<Class<?>, String> classCache = new HashMap<>();
-
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return parent -> AutoConfig.getConfigScreen(FabricConfig.class, parent).get();
@@ -34,17 +34,12 @@ public class FabricConfig extends Config implements ModMenuApi, ConfigData {
 
     @Override
     public void validatePostLoad() {
-        for (Collection<String> list: Arrays.asList(screenBlacklist, screenWhitelist, inputBlacklist, inputWhitelist)) {
-            for (String cls: list) {
-                String className = cls;
-                try {
-                    if (cls.contains(":")) {
-                        String[] ss = cls.split(":");
-                        cls = ss[ss.length - 1];
-                    }
-                    classCache.put(Class.forName(cls), className);
-                } catch (ClassNotFoundException e) {
-                    Common.LOGGER.warn("Class {} not found, ignored.", cls);
+        for (List<String> list: Arrays.asList(screenBlacklist, screenWhitelist, inputBlacklist, inputWhitelist)) {
+            for (int i = 0; i < list.size(); i++) {
+                String cls = list.get(i);
+                if (cls.contains(":")) {
+                    String[] ss = cls.split(":");
+                    list.set(i, ss[ss.length - 1]);
                 }
             }
         }
@@ -52,22 +47,22 @@ public class FabricConfig extends Config implements ModMenuApi, ConfigData {
 
     @Override
     public boolean inScreenBlacklist(Class<?> cls) {
-        return screenBlacklist.contains(classCache.get(cls));
+        return screenBlacklist.contains(cls == null ? null : cls.getName());
     }
 
     @Override
     public boolean inScreenWhitelist(Class<?> cls) {
-        return screenWhitelist.contains(classCache.get(cls));
+        return screenWhitelist.contains(cls == null ? null : cls.getName());
     }
 
     @Override
     public boolean inInputBlacklist(Class<?> cls) {
-        return inputBlacklist.contains(classCache.get(cls));
+        return inputBlacklist.contains(cls == null ? null : cls.getName());
     }
 
     @Override
     public boolean inInputWhitelist(Class<?> cls) {
-        return inputWhitelist.contains(classCache.get(cls));
+        return inputWhitelist.contains(cls == null ? null : cls.getName());
     }
 
     @Override

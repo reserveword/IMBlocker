@@ -17,6 +17,9 @@ public class IMBlockerFabric implements ClientModInitializer {
             Config.INSTANCE = new Config() {
                 @Override
                 public boolean inScreenWhitelist(Class<?> cls) {
+                    if (cls == null) {
+                        return false;
+                    }
                     return FabricCommon.defaultScreenWhitelist.contains(cls.getName());
                 }
             };

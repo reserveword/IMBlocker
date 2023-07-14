@@ -1,1 +1,1 @@
-修复fabric不能热更新配置的问题；添加原版悬挂告示牌支持
+修复fabric没有cloth-config时一个判空错误

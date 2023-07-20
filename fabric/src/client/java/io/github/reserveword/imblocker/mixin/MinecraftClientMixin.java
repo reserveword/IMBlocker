@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
-    @Inject(method = "onWindowFocusChanged(Z)V", at = @At("HEAD"))
+    @Inject(method = "onWindowFocusChanged", at = @At("HEAD"))
     public void syncIMState(CallbackInfo ci) {
         IMManager.syncState();
     }

@@ -1,1 +1,2 @@
-修复fabric没有cloth-config时一个判空错误
+为fabric添加更多mod自己写的文本框（fabric就是喜欢自己造轮子啊）
+产出jar文件添加版本

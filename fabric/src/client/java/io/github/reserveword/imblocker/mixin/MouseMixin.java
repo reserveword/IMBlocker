@@ -16,7 +16,7 @@ public abstract class MouseMixin {
     @Shadow
     private MinecraftClient client;
 
-    @Inject(method = "onMouseButton(JIII)V", at = @At("HEAD"))
+    @Inject(method = "onMouseButton", at = @At("HEAD"))
     private void checkScreenOnMouseButton(long window, int button, int action, int mods, CallbackInfo ci) {
         if (client.currentScreen != null) {
             IMCheckState.mouseEvent();

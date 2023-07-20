@@ -137,7 +137,7 @@ public class IMCheckState {
         }
     }
 
-    public static void captureNonPrintable(Object tfw, char ch, boolean canWrite) {
+    public static boolean captureNonPrintable(Object tfw, char ch, boolean canWrite) {
         if (Config.INSTANCE.getUseExperimental()
                 && checkInputClass(tfw) != InputClassRule.BLACKLIST
                 && ch == nonPrintable
@@ -146,7 +146,9 @@ public class IMCheckState {
             state.remove(IMState.NON_PRINTABLE_CHALLENGE);
             state.add(IMState.NON_PRINTABLE);
             Common.LOGGER.debug("captured");
+            return true;
         }
+        return false;
     }
 
     // connect rules above

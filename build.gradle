@@ -6,30 +6,51 @@ plugins {
 
 allprojects {
     repositories {
+        maven {
+            name = "Modrinth"
+            url = "https://api.modrinth.com/maven"
+            content {
+                includeGroup "maven.modrinth"
+            }
+        }
+        maven {
+            url = "https://www.cursemaven.com"
+            content {
+                includeGroup "curse.maven"
+            }
+        }
+        maven {
+            name = "CottonMC"
+            url = "https://server.bbkr.space/artifactory/libs-release"
+            content {
+                includeGroup "io.github.cottonmc"
+            }
+        }
+        maven {
+            url "https://maven.shedaniel.me/"
+            content {
+                includeGroupAndSubgroups "me.shedaniel"
+                includeGroup "dev.architectury"
+            }
+        }
+        maven {
+            url = "https://maven.terraformersmc.com"
+            content {
+                includeGroup "com.terraformersmc"
+            }
+        }
         mavenCentral()
         maven {
-            // location of the maven that hosts JEI files before January 2023
             name = "Progwml6's maven"
             url = "https://dvs1.progwml6.com/files/maven/"
         }
         maven {
-            // location of the maven that hosts JEI files since January 2023
             name = "Jared's maven"
             url = "https://maven.blamejared.com/"
         }
         maven {
-            // location of a maven mirror for JEI files, as a fallback
             name = "ModMaven"
             url = "https://modmaven.dev"
-        }
-        maven {
-            url = "https://www.cursemaven.com"
-        }
-        maven {
-            url = "https://maven.terraformersmc.com"
-        }
-        maven {
-            url "https://maven.shedaniel.me/"
         }
     }
 
@@ -93,6 +114,8 @@ allprojects {
         dependsOn("feedbackResource")
     }
 }
+
+archivesBaseName "${rootProject.name}_${mod_version}+${minecraft_version}"
 
 project.jar {
     dependsOn ':common:feedback'

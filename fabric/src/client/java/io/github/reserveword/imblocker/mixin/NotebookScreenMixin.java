@@ -1,6 +1,6 @@
 package io.github.reserveword.imblocker.mixin;
 
-import com.june.notebook.NotebookScreen;
+import com.june.notebook.screens.menuScreen;
 import io.github.reserveword.imblocker.IMCheckState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Pseudo
-@Mixin(NotebookScreen.class)
+@Mixin(menuScreen.class)
 public abstract class NotebookScreenMixin {
     @Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
     public void charTypedCallback(char codePoint, int modifiers, CallbackInfoReturnable<Boolean> cir) {

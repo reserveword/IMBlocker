@@ -63,7 +63,7 @@ function initializeCoreMod() {
                     Opcodes.INVOKESTATIC,
                     'io/github/reserveword/imblocker/IMCheckState',
                     'captureNonPrintable',
-                    '(Ljava/lang/Object;CZ)V',
+                    '(Ljava/lang/Object;CZ)Z',
                     false
                 ))
                 method.instructions.insert(il)
@@ -129,7 +129,7 @@ function initializeCoreMod() {
                     Opcodes.INVOKESTATIC,
                     'io/github/reserveword/imblocker/IMCheckState',
                     'captureNonPrintable',
-                    '(Ljava/lang/Object;CZ)V',
+                    '(Ljava/lang/Object;CZ)Z',
                     false
                 ))
                 method.instructions.insert(il)

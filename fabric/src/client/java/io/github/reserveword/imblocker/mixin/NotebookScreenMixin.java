@@ -1,6 +1,6 @@
 package io.github.reserveword.imblocker.mixin;
 
-import com.june.notebook.screens.menuScreen;
+import com.jwg.notebook.screens.menuScreen;
 import io.github.reserveword.imblocker.IMCheckState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;

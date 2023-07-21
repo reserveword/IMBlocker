@@ -1,7 +1,6 @@
 package io.github.reserveword.imblocker;
 
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
-import net.minecraft.client.gui.screens.inventory.HangingSignEditScreen;
 import net.minecraft.client.gui.screens.inventory.SignEditScreen;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModList;
@@ -11,12 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.net.URL;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Mod.EventBusSubscriber
@@ -142,7 +136,6 @@ public class ForgeConfig extends Config {
                     .defineList("screenWhitelist", Arrays.asList(
                             BookEditScreen.class.getName(),
                             SignEditScreen.class.getName(),
-                            HangingSignEditScreen.class.getName(),
                             "journeymap.client.ui.waypoint.WaypointEditor",
                             "com.ldtteam.blockout.BOScreen"
                     ), checkClassForName);

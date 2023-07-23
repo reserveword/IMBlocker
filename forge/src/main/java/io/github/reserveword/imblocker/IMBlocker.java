@@ -1,12 +1,11 @@
 package io.github.reserveword.imblocker;
 
-import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -18,6 +17,12 @@ public class IMBlocker {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
     }
 
+    @SubscribeEvent
+    public void onConfigLoadReload(ModConfig.ModConfigEvent e) {
+        Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfig.Reloading)?"re":"");
+        ForgeConfig.reload();
+    }
+
     @Mod.EventBusSubscriber
     public static class RegistryEvents {
         @SubscribeEvent
@@ -27,14 +32,8 @@ public class IMBlocker {
             }
         }
         @SubscribeEvent
-        public static void onMouseClick(ScreenEvent.MouseInputEvent mie) {
+        public static void onMouseClick(GuiScreenEvent.MouseInputEvent mie) {
             IMCheckState.mouseEvent();
         }
-    }
-
-    @SubscribeEvent
-    public void onConfigLoadReload(ModConfigEvent e) {
-        Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading)?"re":"");
-        ForgeConfig.reload();
     }
 }

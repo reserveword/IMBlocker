@@ -1,8 +1,8 @@
 package io.github.reserveword.imblocker;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.ChatScreen;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.gui.screen.Screen;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -11,7 +11,7 @@ import java.lang.invoke.MethodType;
 public class ForgeScreenInfo implements IMCheckState.ScreenInfo {
     private final Screen screen;
     public ForgeScreenInfo() {
-        screen = Minecraft.m_91087_().f_91080_;
+        screen = Minecraft.getInstance().currentScreen;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ForgeScreenInfo implements IMCheckState.ScreenInfo {
 
     @Override
     public void charTyped(char codePoint, int modifiers) {
-        screen.m_5534_(codePoint, modifiers);
+        screen.charTyped(codePoint, modifiers);
     }
 
     private static final MethodHandle getDefaultInputFieldText;

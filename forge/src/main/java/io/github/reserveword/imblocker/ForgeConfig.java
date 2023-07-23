@@ -1,7 +1,7 @@
 package io.github.reserveword.imblocker;
 
-import net.minecraft.client.gui.screens.inventory.BookEditScreen;
-import net.minecraft.client.gui.screens.inventory.SignEditScreen;
+import net.minecraft.client.gui.screen.EditBookScreen;
+import net.minecraft.client.gui.screen.EditSignScreen;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -134,8 +134,8 @@ public class ForgeConfig extends Config {
                     .comment("Matched screens would enable your IME")
                     .translation("key.imblocker.screenWhitelist")
                     .defineList("screenWhitelist", Arrays.asList(
-                            BookEditScreen.class.getName(),
-                            SignEditScreen.class.getName(),
+                            EditBookScreen.class.getName(),
+                            EditSignScreen.class.getName(),
                             "journeymap.client.ui.waypoint.WaypointEditor",
                             "com.ldtteam.blockout.BOScreen"
                     ), checkClassForName);

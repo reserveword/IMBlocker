@@ -9,7 +9,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.Minecraft',
-                'methodName': 'm_7440_',
+                'methodName': 'func_213228_a',
                 'methodDesc': '(Z)V'
             },
             'transformer': function (method) {

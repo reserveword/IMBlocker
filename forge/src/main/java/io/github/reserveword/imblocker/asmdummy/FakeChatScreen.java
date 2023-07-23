@@ -1,11 +1,12 @@
 package io.github.reserveword.imblocker.asmdummy;
 
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
+
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.text.ITextComponent;
 
 @SuppressWarnings("ALL")
 public class FakeChatScreen extends Screen {
-    protected FakeChatScreen(Component titleIn) {
+    protected FakeChatScreen(ITextComponent titleIn) {
         super(titleIn);
     }
     private String defaultInputFieldText = ""; // f_95576_

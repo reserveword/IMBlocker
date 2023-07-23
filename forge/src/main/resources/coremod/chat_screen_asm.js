@@ -10,7 +10,7 @@ function initializeCoreMod() {
         'chat_screen_asm': {
             'target': {
                 'type': 'CLASS',
-                'name': 'net.minecraft.client.gui.screens.ChatScreen',
+                'name': 'net.minecraft.client.gui.screen.ChatScreen',
             },
             'transformer': function (node) {
                 var method = new MethodNode(
@@ -25,8 +25,8 @@ function initializeCoreMod() {
                 il.add(new VarInsnNode(Opcodes.ALOAD, 0))
                 il.add(new FieldInsnNode(
                     Opcodes.GETFIELD,
-                    'net/minecraft/client/gui/screens/ChatScreen',
-                    ASMAPI.mapField('f_95576_'),
+                    'net/minecraft/client/gui/screen/ChatScreen',
+                    ASMAPI.mapField('field_146409_v'),
                     'Ljava/lang/String;'
                 ))
                 il.add(new InsnNode(Opcodes.ARETURN))

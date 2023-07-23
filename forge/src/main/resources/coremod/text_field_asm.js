@@ -14,8 +14,8 @@ function initializeCoreMod() {
         'text_field_asm': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraft.client.gui.components.EditBox',
-                'methodName': 'm_94120_',
+                'class': 'net.minecraft.client.gui.widget.TextFieldWidget',
+                'methodName': 'func_146178_a',
                 'methodDesc': '()V'
             },
             'transformer': function (method) {
@@ -24,8 +24,8 @@ function initializeCoreMod() {
                 il.add(new VarInsnNode(Opcodes.ALOAD, 0))
                 il.add(new MethodInsnNode(
                     Opcodes.INVOKEVIRTUAL,
-                    'net/minecraft/client/gui/components/EditBox',
-                    ASMAPI.mapMethod('m_94204_'),
+                    'net/minecraft/client/gui/widget/TextFieldWidget',
+                    ASMAPI.mapMethod('func_212955_f'),
                     '()Z',
                     false
                 ))
@@ -43,8 +43,8 @@ function initializeCoreMod() {
         'char_typed_asm': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraft.client.gui.components.EditBox',
-                'methodName': 'm_5534_',
+                'class': 'net.minecraft.client.gui.widget.TextFieldWidget',
+                'methodName': 'func_231042_a_',
                 'methodDesc': '(CI)Z'
             },
             'transformer': function (method) {
@@ -54,8 +54,8 @@ function initializeCoreMod() {
                 il.add(new VarInsnNode(Opcodes.ALOAD, 0))
                 il.add(new MethodInsnNode(
                     Opcodes.INVOKEVIRTUAL,
-                    'net/minecraft/client/gui/components/EditBox',
-                    ASMAPI.mapMethod('m_94204_'),
+                    'net/minecraft/client/gui/widget/TextFieldWidget',
+                    ASMAPI.mapMethod('func_212955_f'),
                     '()Z',
                     false
                 ))
@@ -63,7 +63,7 @@ function initializeCoreMod() {
                     Opcodes.INVOKESTATIC,
                     'io/github/reserveword/imblocker/IMCheckState',
                     'captureNonPrintable',
-                    '(Ljava/lang/Object;CZ)Z',
+                    '(Ljava/lang/Object;CZ)V',
                     false
                 ))
                 method.instructions.insert(il)
@@ -129,7 +129,7 @@ function initializeCoreMod() {
                     Opcodes.INVOKESTATIC,
                     'io/github/reserveword/imblocker/IMCheckState',
                     'captureNonPrintable',
-                    '(Ljava/lang/Object;CZ)Z',
+                    '(Ljava/lang/Object;CZ)V',
                     false
                 ))
                 method.instructions.insert(il)

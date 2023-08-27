@@ -49,5 +49,5 @@ jobs:
           changelog-file: CHANGELOG.md
 
           loaders: fabric, forge
-          game-versions: 1.20
+          game-versions: 1.18.2
           java: ${{ env.JAVA_VERSION }}

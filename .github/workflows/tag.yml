@@ -48,6 +48,8 @@ jobs:
           version-type: release
           changelog-file: CHANGELOG.md
 
-          loaders: fabric, forge
+          loaders: |
+            fabric
+            forge
           game-versions: '1.18.2'
           java: ${{ env.JAVA_VERSION }}

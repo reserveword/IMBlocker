@@ -23,4 +23,9 @@ public abstract class TextFieldMixin {
     public void charTypedCallback(char codePoint, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         IMCheckState.captureNonPrintable(this, codePoint, this.isActive());
     }
+
+    @Inject(method = "onClick", at = @At("HEAD"))
+    public void onClickCallback(double mouseX, double mouseY, CallbackInfo ci) {
+        IMCheckState.captureClick(this::isActive);
+    }
 }

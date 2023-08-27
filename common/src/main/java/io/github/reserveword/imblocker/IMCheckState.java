@@ -1,17 +1,14 @@
 package io.github.reserveword.imblocker;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.WeakHashMap;
+import java.util.function.BooleanSupplier;
 
 public class IMCheckState {
-    private enum IMState {
-        SCREEN_LIST, SPECIAL, TICK, NON_PRINTABLE,
-        SCREEN_LIST_MASK, SPECIAL_MASK,
-        SPECIAL_CHALLENGE, TICK_CHALLENGE, NON_PRINTABLE_CHALLENGE,
-        NON_PRINTABLE_CHALLENGE_PENDING;
-        public static final EnumSet<IMState> NONE = EnumSet.noneOf(IMState.class);
-    }
+    // process CLICK rules
+    private static final ArrayList<BooleanSupplier> actives = new ArrayList<>();
     private static final EnumSet<IMState> state = EnumSet.copyOf(IMState.NONE);
 
     // check overall state
@@ -19,7 +16,9 @@ public class IMCheckState {
         boolean im;
         if (state.contains(IMState.SCREEN_LIST_MASK)) im = state.contains(IMState.SCREEN_LIST);
         else if (state.contains(IMState.SPECIAL_MASK)) im = state.contains(IMState.SPECIAL);
-        else im = (state.contains(IMState.TICK) || state.contains(IMState.NON_PRINTABLE));
+        else im = (state.contains(IMState.TICK) ||
+                   state.contains(IMState.NON_PRINTABLE) ||
+                   state.contains(IMState.CLICK));
         IMManager.makeState(im);
     }
 
@@ -151,21 +150,46 @@ public class IMCheckState {
         return false;
     }
 
-    // connect rules above
-    private static int count = Config.INSTANCE.getCheckInterval();
+    public static void checkClick() {
+        for (BooleanSupplier active: actives) {
+            if (active.getAsBoolean()) {
+                state.add(IMState.CLICK);
+                break;
+            }
+        }
+        actives.clear();
+    }
+
+    public static void captureClick(BooleanSupplier active) {
+        actives.add(active);
+    }
+
     public static void clientTick(ScreenInfo screen) {
         checkScreenList(screen);
         checkSpecial();
         if (count == 0) checkTick();
         checkNonPrintable(screen);
+        checkClick();
         syncState();
         // check interval
         if (count > 0) count --;
         else count = Config.INSTANCE.getCheckInterval();
     }
 
+    // connect rules above
+    private static int count = Config.INSTANCE.getCheckInterval();
+
     public static void mouseEvent() {
         state.add(IMState.NON_PRINTABLE_CHALLENGE_PENDING);
+        state.remove(IMState.CLICK);
+    }
+
+    private enum IMState {
+        SCREEN_LIST, SPECIAL, TICK, NON_PRINTABLE, CLICK,
+        SCREEN_LIST_MASK, SPECIAL_MASK,
+        TICK_CHALLENGE, NON_PRINTABLE_CHALLENGE,
+        NON_PRINTABLE_CHALLENGE_PENDING;
+        public static final EnumSet<IMState> NONE = EnumSet.noneOf(IMState.class);
     }
 
     public interface ScreenInfo {

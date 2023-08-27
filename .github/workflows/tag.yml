@@ -44,10 +44,12 @@ jobs:
 
           github-token: ${{ env.GITHUB_TOKEN }}
 
-          name: IMBlocker-${{ env.GITHUB_REF_NAME }}
+          name: IMBlocker-${{ github.ref_name }}
           version-type: release
           changelog-file: CHANGELOG.md
 
-          loaders: fabric, forge
+          loaders: |
+            fabric
+            forge
           game-versions: '1.19.4'
           java: ${{ env.JAVA_VERSION }}

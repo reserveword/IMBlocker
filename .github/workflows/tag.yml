@@ -16,18 +16,9 @@ permissions:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Get tag name
-        uses: olegtarasov/get-tag@v2.1.2
-      - name: Get branch name
-        id: branch-name
-        uses: tj-actions/branch-names@v7
-
-      - name: 检查环境变量
-        run: env
-
       - name: 签出存储库
         uses: actions/checkout@v3
         with:
@@ -37,7 +28,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: ${{env.JAVA_VERSION}}
+          java-version: ${{ env.JAVA_VERSION }}
 
       - name: 构建
         run: ./gradlew :jar
@@ -46,17 +37,17 @@ jobs:
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           curseforge-id: 483760
-          curseforge-token: "${{env.CURSEFORGE_TOKEN}}"
+          curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
 
           modrinth-id: WMDesFsZ
-          modrinth-token: "${{env.MODRINTH_TOKEN}}"
+          modrinth-token: ${{ env.MODRINTH_TOKEN }}
 
-          github-token: "${{env.GITHUB_TOKEN}}"
+          github-token: ${{ env.GITHUB_TOKEN }}
 
-          name: "IMBlocker-${{env.GIT_TAG_NAME}}"
+          name: IMBlocker-${{ env.GITHUB_REF_NAME }}
           version-type: release
           changelog-file: CHANGELOG.md
 
           loaders: fabric, forge
-          game-versions: "${{ steps.branch-name.outputs.current_branch }}"
-          java: "${{env.JAVA_VERSION}}"
+          game-versions: 1.20
+          java: ${{ env.JAVA_VERSION }}

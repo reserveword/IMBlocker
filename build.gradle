@@ -37,13 +37,10 @@ allprojects {
             url = "https://maven.terraformersmc.com"
             content {
                 includeGroup "com.terraformersmc"
+                includeGroup "dev.emi"
             }
         }
         mavenCentral()
-        maven {
-            name = "Progwml6's maven"
-            url = "https://dvs1.progwml6.com/files/maven/"
-        }
         maven {
             name = "Jared's maven"
             url = "https://maven.blamejared.com/"

@@ -1,5 +1,6 @@
 package io.github.reserveword.imblocker.mixin;
 
+import io.github.reserveword.imblocker.Config;
 import io.github.reserveword.imblocker.IMCheckState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
@@ -18,7 +19,7 @@ public abstract class MouseMixin {
 
     @Inject(method = "onMouseButton", at = @At("HEAD"))
     private void checkScreenOnMouseButton(long window, int button, int action, int mods, CallbackInfo ci) {
-        if (client.currentScreen != null) {
+        if (client.currentScreen != null && !Config.INSTANCE.inScreenBlacklist(client.currentScreen.getClass())) {
             IMCheckState.mouseEvent();
         }
     }

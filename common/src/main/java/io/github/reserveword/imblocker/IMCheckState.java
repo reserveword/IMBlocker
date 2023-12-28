@@ -20,7 +20,7 @@ public class IMCheckState {
         if (state.contains(IMState.SCREEN_LIST_MASK)) im = state.contains(IMState.SCREEN_LIST);
         else if (state.contains(IMState.SPECIAL_MASK)) im = state.contains(IMState.SPECIAL);
         else im = (state.contains(IMState.TICK) || state.contains(IMState.NON_PRINTABLE));
-        IMManager.makeState(im);
+        IMManager.setState(im);
     }
 
     // process SCREEN_LIST rules

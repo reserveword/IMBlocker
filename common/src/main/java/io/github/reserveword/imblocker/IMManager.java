@@ -1,106 +1,50 @@
 package io.github.reserveword.imblocker;
 
-import com.sun.jna.Native;
-import com.sun.jna.platform.win32.User32;
-import com.sun.jna.platform.win32.WinDef;
-import com.sun.jna.platform.win32.WinNT;
+import com.sun.jna.Platform;
 
-public class IMManager {
+public final class IMManager {
+    public sealed interface PlatformIMManager permits IMManagerMac, IMManagerWindows {
 
-    private static native WinNT.HANDLE ImmGetContext(WinDef.HWND hwnd);
+        PlatformIMManager INSTANCE = getInstance();
 
-    private static native WinNT.HANDLE ImmAssociateContext(WinDef.HWND hwnd, WinNT.HANDLE himc);
-
-    private static native boolean ImmReleaseContext(WinDef.HWND hwnd, WinNT.HANDLE himc);
-
-    private static native WinNT.HANDLE ImmCreateContext();
-
-    private static native boolean ImmDestroyContext(WinNT.HANDLE himc);
-
-    static {
-        Native.register("imm32");
-    }
-
-    private static final User32 u = User32.INSTANCE;
-
-    private static boolean state = true;
-
-    private static void makeOnImp() {
-        WinDef.HWND hwnd = u.GetForegroundWindow();
-        WinNT.HANDLE himc = ImmGetContext(hwnd);
-        if (himc == null) {
-            himc = ImmCreateContext();
-            ImmAssociateContext(hwnd, himc);
+        private static PlatformIMManager getInstance() {
+            if (Platform.isWindows())
+                return new IMManagerWindows();
+            if (Platform.isMac())
+                return new IMManagerMac();
+            throw new UnsupportedOperationException("Unsupported platform");
         }
-        ImmReleaseContext(hwnd, himc);
-    }
 
-    private static void makeOffImp() {
-        WinDef.HWND hwnd = u.GetForegroundWindow();
-        WinNT.HANDLE himc = ImmAssociateContext(hwnd, null);
-        if (himc != null) {
-            ImmDestroyContext(himc);
-        }
-        ImmReleaseContext(hwnd, himc);
-    }
 
-    private static boolean toggleImp() {
-        WinDef.HWND hwnd = u.GetForegroundWindow();
-        WinNT.HANDLE himc = ImmGetContext(hwnd);
-        if (himc == null) {
-            himc = ImmCreateContext();
-            ImmAssociateContext(hwnd, himc);
-            ImmReleaseContext(hwnd, himc);
-            return true;
-        } else {
-            himc = ImmAssociateContext(hwnd, null);
-            ImmDestroyContext(himc);
-            ImmReleaseContext(hwnd, himc);
-            return false;
-        }
+        void makeOn();
+
+        void makeOff();
+
+        void setState(boolean on);
+
+        void syncState();
+
+        boolean getState();
+
     }
 
     public static void makeOn() {
-        if (!state) {
-            makeOnImp();
-            state = true;
-        }
+        PlatformIMManager.INSTANCE.makeOn();
     }
 
     public static void makeOff() {
-        if (state) {
-            makeOffImp();
-            state = false;
-        }
+        PlatformIMManager.INSTANCE.makeOff();
     }
 
-    public static void makeState(boolean on) {
-        if (state == on) return;
-        if (on) {
-            makeOnImp();
-            state = true;
-        } else {
-            makeOffImp();
-            state = false;
-        }
+    public static void setState(boolean on) {
+        PlatformIMManager.INSTANCE.setState(on);
     }
 
     public static void syncState() {
-        WinDef.HWND hwnd = u.GetForegroundWindow();
-        WinNT.HANDLE himc = ImmGetContext(hwnd);
-        if ((himc == null) == state) {
-            Common.LOGGER.warn("IM state inconsistent! state={}, im={}", state, himc != null);
-            toggle();
-        }
+        PlatformIMManager.INSTANCE.syncState();
     }
 
-    public static boolean getState() {
-        return state;
-    }
-
-    @SuppressWarnings("UnusedReturnValue")
-    public static boolean toggle() {
-        state = toggleImp();
-        return state;
+    boolean getState() {
+        return PlatformIMManager.INSTANCE.getState();
     }
 }

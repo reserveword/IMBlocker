@@ -1,5 +1,5 @@
 {
-  "key.imblocker.checkInterval": "每多少tick检查一次文本框",
+  "key.imblocker.checkIntervalMilli": "每多少毫秒检查一次文本框",
   "key.imblocker.screenBlacklist": "该列表中的GUI屏幕会禁用输入法",
   "key.imblocker.screenWhitelist": "该列表中的GUI屏幕会激活输入法",
   "key.imblocker.inputBlacklist": "该列表中的输入框会禁用输入法",
@@ -8,7 +8,7 @@
   "key.imblocker.recoveredScreens": "列出显示过的GUI屏幕，方便编辑黑白名单",
   "key.imblocker.useExperimental": "使用不可打印字符判别输入框，如有问题请关闭并咨询作者",
   "key.imblocker.checkCommandChat": "输入命令时关闭输入法",
-  "text.autoconfig.imblocker.option.checkInterval": "每多少tick检查一次文本框",
+  "text.autoconfig.imblocker.option.checkIntervalMilli": "每多少tick检查一次文本框",
   "text.autoconfig.imblocker.option.screenBlacklist": "该列表中的GUI屏幕会禁用输入法",
   "text.autoconfig.imblocker.option.screenWhitelist": "该列表中的GUI屏幕会激活输入法",
   "text.autoconfig.imblocker.option.inputBlacklist": "该列表中的输入框会禁用输入法",

@@ -68,10 +68,7 @@ allprojects {
             fabric_version      : fabric_version,
             yarn_mappings       : yarn_mappings,
             loader_version      : loader_version,
-            forge_version       : forge_version,
             loader_version_range: loader_version_range,
-            mapping_channel     : mapping_channel,
-            mapping_version     : mapping_version
     ]
 
     tasks.withType(ProcessResources).configureEach {
@@ -88,22 +85,20 @@ allprojects {
 
     tasks.register('feedbackClass', Copy) {
         dependsOn "jar"
-        mustRunAfter ":forge:reobfJar"
         mustRunAfter ":fabric:remapJar"
-        from (zipTree(new File(buildDir, "libs/${project.name}.jar"))) {
+        from (zipTree(layout.buildDirectory.file("libs/${project.name}.jar"))) {
             include '**/*.class'
         }
-        into new File(rootProject.buildDir, 'classes/java/main')
+        into rootProject.layout.buildDirectory.file('classes/java/main')
     }
 
     tasks.register('feedbackResource', Copy) {
         dependsOn "jar"
-        mustRunAfter ":forge:reobfJar"
         mustRunAfter ":fabric:remapJar"
-        from (zipTree(new File(buildDir, "libs/${project.name}.jar"))) {
+        from (zipTree(layout.buildDirectory.file("libs/${project.name}.jar"))) {
             exclude '**/*.class'
         }
-        into new File(rootProject.buildDir, 'resources/main')
+        into rootProject.layout.buildDirectory.file('resources/main')
     }
 
     tasks.register('feedback') {
@@ -112,7 +107,7 @@ allprojects {
     }
 }
 
-archivesBaseName "${rootProject.name}_${mod_version}+${minecraft_version}"
+base.archivesName = "${rootProject.name}_${mod_version}+${minecraft_version}"
 
 project.jar {
     dependsOn ':common:feedback'

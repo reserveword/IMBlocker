@@ -1,7 +1,7 @@
 {
   "required": false,
   "minVersion": "0.8",
-  "package": "io.github.reserveword.imblocker.mixin.fabric",
+  "package": "io.github.reserveword.imblocker.mixin.forge",
   "compatibilityLevel": "JAVA_17",
   "client": [
     "ChatScreenMixin",

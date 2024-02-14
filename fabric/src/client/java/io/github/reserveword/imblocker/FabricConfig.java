@@ -17,14 +17,14 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @me.shedaniel.autoconfig.annotation.Config(name = Common.MODID)
 public class FabricConfig extends Config implements ModMenuApi, ConfigData {
-    int checkInterval = 2;
+    int checkIntervalMilli = 100;
     ArrayList<String> screenBlacklist = new ArrayList<>(FabricCommon.defaultScreenBlacklist);
     ArrayList<String> screenWhitelist = new ArrayList<>(FabricCommon.defaultScreenWhitelist);
     ArrayList<String> inputBlacklist = new ArrayList<>();
     ArrayList<String> inputWhitelist = new ArrayList<>();
     boolean enableScreenRecovering = false;
     ArrayList<String> recoveredScreens = new ArrayList<>();
-    boolean useExperimental = true;
+    boolean useExperimental = false;
     boolean checkCommandChat = true;
 
     @Override
@@ -67,7 +67,7 @@ public class FabricConfig extends Config implements ModMenuApi, ConfigData {
 
     @Override
     public Integer getCheckInterval() {
-        return checkInterval;
+        return checkIntervalMilli;
     }
 
     @Override

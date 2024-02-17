@@ -14,10 +14,10 @@ public abstract class TextFieldMixin {
     @Shadow
     public abstract boolean isActive();
 
-    @Inject(method = "tick", at = @At("HEAD"))
+/*    @Inject(method = "tick", at = @At("HEAD"))
     public void tickCallback(CallbackInfo ci) {
         IMCheckState.captureTick(this, this.isActive());
-    }
+    }*/
 
     @Inject(method = "charTyped", at = @At("HEAD"))
     public void charTypedCallback(char codePoint, int modifiers, CallbackInfoReturnable<Boolean> cir) {

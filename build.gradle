@@ -115,7 +115,7 @@ allprojects {
     }
 }
 
-archivesBaseName "${rootProject.name}_${mod_version}+${minecraft_version}"
+setArchivesBaseName "${rootProject.name}_${mod_version}+${minecraft_version}"
 
 project.jar {
     dependsOn ':common:feedback'

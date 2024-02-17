@@ -18,11 +18,11 @@ public class FakeTextFieldWidget extends EditBox {
         super(fontRenderer, x, y, width, height, title);
     }
 
-    @Override
-    public void m_94120_() {
-        IMCheckState.captureTick(this, this.m_94204_()); // canWrite
-        ++this.cursorCounter;
-    }
+//    @Override
+//    public void m_94120_() {
+//        IMCheckState.captureTick(this, this.m_94204_()); // canWrite
+//        ++this.cursorCounter;
+//    }
 
     @Override
     public boolean m_5534_(char codePoint, int modifiers) { // charTyped

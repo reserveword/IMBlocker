@@ -23,7 +23,7 @@ public class IMManager {
 
     private static final User32 u = User32.INSTANCE;
 
-    private static boolean state = true;
+    private static boolean state = false;
 
     private static void makeOnImp() {
         WinDef.HWND hwnd = u.GetForegroundWindow();
@@ -60,28 +60,14 @@ public class IMManager {
         }
     }
 
-    public static void makeOn() {
-        if (!state) {
-            makeOnImp();
-            state = true;
-        }
-    }
-
-    public static void makeOff() {
-        if (state) {
-            makeOffImp();
-            state = false;
-        }
-    }
-
     public static void makeState(boolean on) {
-        if (state == on) return;
-        if (on) {
-            makeOnImp();
-            state = true;
-        } else {
-            makeOffImp();
-            state = false;
+    	boolean state = ImmGetContext(u.GetForegroundWindow()) != null;
+        if (state != on) {
+	        if (on) {
+	            makeOnImp();
+	        } else {
+	            makeOffImp();
+	        }
         }
     }
 

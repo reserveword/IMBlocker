@@ -13,6 +13,7 @@
     "MouseMixin",
     "NotebookScreenMixin",
     "ReiTextFieldMixin",
+    "EmiSearchWidgetMixin",
     "ReplayModTextFieldMixin",
     "TextFieldMixin"
   ],

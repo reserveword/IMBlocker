@@ -1,35 +1,35 @@
 package io.github.reserveword.imblocker.mixin;
 
-import io.github.reserveword.imblocker.IMCheckState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import io.github.reserveword.imblocker.FocusableWidgetAccessor;
+import io.github.reserveword.imblocker.IMCheckState;
 
 @Pseudo
 @Mixin(targets = {
         "me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget",
         "me.shedaniel.rei.gui.widget.TextFieldWidget"
 }, remap = false)
-public abstract class ReiTextFieldMixin {
+public abstract class ReiTextFieldMixin implements FocusableWidgetAccessor {
     @Shadow
     protected boolean editable;
-    @Shadow
-    public abstract boolean isVisible();
-    @Shadow
-    public abstract boolean isFocused();
-
-    @Inject(method = "tick", at = @At("HEAD"))
-    public void tickCallback(CallbackInfo ci) {
-        boolean active = this.isVisible() && this.isFocused() && this.editable;
-        IMCheckState.captureTick(this, active);
+    
+    @Override
+    public boolean isWidgetEditable() {
+    	return editable;
     }
-
-    @Inject(method = "charTyped", at = @At("HEAD"))
-    public void charTypedCallback(char codePoint, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        IMCheckState.captureNonPrintable(this, codePoint, this.editable);
+    
+    @Inject(method = "setFocused", at = @At("TAIL"))
+    public void focusChanged(boolean isFocused, CallbackInfo ci) {
+    	if(isFocused) {
+    		IMCheckState.focusGained(this);
+    	}else {
+    		IMCheckState.focusLost(this);
+    	}
     }
 }

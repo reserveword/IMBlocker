@@ -5,6 +5,10 @@ plugins {
 }
 
 allprojects {
+	base {
+		archivesName = project.archives_base_name
+	}
+
     repositories {
         maven {
             name = "Modrinth"
@@ -112,7 +116,7 @@ allprojects {
     }
 }
 
-archivesBaseName "${rootProject.name}_${mod_version}+${minecraft_version}"
+//archivesBaseName "${rootProject.name}_${mod_version}+${minecraft_version}"
 
 project.jar {
     dependsOn ':common:feedback'

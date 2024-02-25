@@ -1,5 +1,5 @@
 {
-  "key.imblocker.checkInterval" : "Per how many ticks do we check text field once? Make sure checkDelay is an exact multiple of this.",
+  "key.imblocker.checkIntervalMilli" : "Per how many ms do we check text field once?",
   "key.imblocker.screenBlacklist": "Matched screen would disable your IME",
   "key.imblocker.screenWhitelist": "Matched screen would enable your IME",
   "key.imblocker.inputBlacklist": "Matched input box would disable your IME",
@@ -8,7 +8,7 @@
   "key.imblocker.recoveredScreens": "Here lists all Screens that is not in whitelist nor blacklist, so you may easily add those to whitelist/blacklist.",
   "key.imblocker.useExperimental": "simulate inputting non-printable characters occasionally to detect active input box. Disable this and let me know if input or control is messed up.",
   "key.imblocker.checkCommandChat": "Disable IME when typing commands",
-  "text.autoconfig.imblocker.option.checkInterval" : "Per how many ticks do we check text field once? Make sure checkDelay is an exact multiple of this.",
+  "text.autoconfig.imblocker.option.checkIntervalMilli" : "Per how many ticks do we check text field once? Make sure checkDelay is an exact multiple of this.",
   "text.autoconfig.imblocker.option.screenBlacklist": "Matched screen would disable your IME",
   "text.autoconfig.imblocker.option.screenWhitelist": "Matched screen would enable your IME",
   "text.autoconfig.imblocker.option.inputBlacklist": "Matched input box would disable your IME",

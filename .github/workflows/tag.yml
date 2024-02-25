@@ -50,6 +50,6 @@ jobs:
 
           loaders: |
             fabric
-            forge
-          game-versions: '1.20'
+            neoforge
+          game-versions: '1.20.4'
           java: ${{ env.JAVA_VERSION }}

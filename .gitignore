@@ -21,5 +21,6 @@ build
 eclipse
 
 # Files from Forge MDK
+/forge/run/
 /forge/runs/
 /fabric/run/

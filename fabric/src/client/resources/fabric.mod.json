@@ -30,9 +30,9 @@
     "imblocker.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=${loader_version}",
+    "fabricloader": "*",
     "fabric-api": "*",
-    "minecraft": "~${minecraft_version}",
+    "minecraft": "*",
     "java": ">=17"
   },
   "suggests": {

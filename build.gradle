@@ -85,6 +85,7 @@ allprojects {
 
     tasks.register('feedbackClass', Copy) {
         dependsOn "jar"
+        mustRunAfter ":forge:reobfJar"
         mustRunAfter ":fabric:remapJar"
         from (zipTree(layout.buildDirectory.file("libs/${project.name}.jar"))) {
             include '**/*.class'
@@ -94,6 +95,7 @@ allprojects {
 
     tasks.register('feedbackResource', Copy) {
         dependsOn "jar"
+        mustRunAfter ":forge:reobfJar"
         mustRunAfter ":fabric:remapJar"
         from (zipTree(layout.buildDirectory.file("libs/${project.name}.jar"))) {
             exclude '**/*.class'

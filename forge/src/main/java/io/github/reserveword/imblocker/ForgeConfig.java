@@ -1,18 +1,24 @@
 package io.github.reserveword.imblocker;
 
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
-import net.minecraft.client.gui.screens.inventory.HangingSignEditScreen;
 import net.minecraft.client.gui.screens.inventory.SignEditScreen;
-import net.neoforged.fml.ModList;
-import net.neoforged.neoforge.common.ModConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.net.URL;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
+@Mod.EventBusSubscriber
 public class ForgeConfig extends Config {
 
     @Override
@@ -35,7 +41,7 @@ public class ForgeConfig extends Config {
         return inputWhitelist.contains(cls);
     }
 
-    public static final ModConfigSpec clientSpec;
+    public static final ForgeConfigSpec clientSpec;
 
     @Override
     public Boolean getUseExperimental() {
@@ -93,7 +99,7 @@ public class ForgeConfig extends Config {
     }
 
     static {
-        final Pair<Client, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(ForgeConfig.Client::new);
+        final Pair<Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ForgeConfig.Client::new);
         clientSpec = specPair.getRight();
         CLIENT = specPair.getLeft();
         Config.INSTANCE = new ForgeConfig();
@@ -105,7 +111,7 @@ public class ForgeConfig extends Config {
     private static Set<Class<?>> inputWhitelist;
     private final static Set<Class<?>> recoveredScreens = new HashSet<>();
 
-    private static Set<Class<?>> bakeList(ModConfigSpec.ConfigValue<List<? extends String>> cfg, String name) {
+    private static Set<Class<?>> bakeList(ForgeConfigSpec.ConfigValue<List<? extends String>> cfg, String name) {
         Set<Class<?>> clsSet = new HashSet<>();
         for (String s : cfg.get()) {
             try {
@@ -133,20 +139,20 @@ public class ForgeConfig extends Config {
      */
     public static class Client {
 
-        public final ModConfigSpec.ConfigValue<List<? extends String>> screenWhitelist;
-        public final ModConfigSpec.ConfigValue<List<? extends String>> screenBlacklist;
-        public final ModConfigSpec.ConfigValue<List<? extends String>> inputWhitelist;
-        public final ModConfigSpec.ConfigValue<List<? extends String>> inputBlacklist;
-        private final ModConfigSpec.ConfigValue<Integer> checkIntervalMilli;
-        private final ModConfigSpec.ConfigValue<Boolean> enableScreenRecovering;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> screenWhitelist;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> screenBlacklist;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> inputWhitelist;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> inputBlacklist;
+        private final ForgeConfigSpec.ConfigValue<Integer> checkIntervalMilli;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableScreenRecovering;
 
-        private final ModConfigSpec.ConfigValue<List<? extends String>> recoveredScreens;
+        private final ForgeConfigSpec.ConfigValue<List<? extends String>> recoveredScreens;
 
-        private final ModConfigSpec.ConfigValue<Boolean> useExperimental;
+        private final ForgeConfigSpec.ConfigValue<Boolean> useExperimental;
 
-        private final ModConfigSpec.ConfigValue<Boolean> checkCommandChat;
+        private final ForgeConfigSpec.ConfigValue<Boolean> checkCommandChat;
 
-        Client(ModConfigSpec.Builder builder) {
+        Client(ForgeConfigSpec.Builder builder) {
             checkIntervalMilli = builder
                     .comment("Check once every several milliseconds")
                     .translation("key.imblocker.checkIntervalMilli")
@@ -163,7 +169,7 @@ public class ForgeConfig extends Config {
                     .defineList("screenWhitelist", Arrays.asList(
                             BookEditScreen.class.getName(),
                             SignEditScreen.class.getName(),
-                            HangingSignEditScreen.class.getName(),
+                            "net.minecraft.client.gui.screens.inventory.HangingSignEditScreen",
                             "journeymap.client.ui.waypoint.WaypointEditor",
                             "com.ldtteam.blockout.BOScreen"
                     ), checkClassForName);

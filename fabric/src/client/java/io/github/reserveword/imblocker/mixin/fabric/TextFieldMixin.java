@@ -14,7 +14,7 @@ public abstract class TextFieldMixin {
     @Shadow
     public abstract boolean isActive();
 
-    @Inject(method = "renderWidget", at = @At("HEAD"))
+    @Inject(method = {"tick", "renderButton"}, at = @At("HEAD"))
     public void tickCallback(CallbackInfo ci) {
         IMCheckState.captureTick(this, this.isActive());
     }
@@ -24,8 +24,8 @@ public abstract class TextFieldMixin {
         IMCheckState.captureNonPrintable(this, codePoint, this.isActive());
     }
 
-    @Inject(method = "onClick", at = @At("HEAD"))
-    public void onClickCallback(double mouseX, double mouseY, CallbackInfo ci) {
+    @Inject(method = "mouseClicked", at = @At("HEAD"))
+    public void onClickCallback(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
         IMCheckState.captureClick(this::isActive);
     }
 }

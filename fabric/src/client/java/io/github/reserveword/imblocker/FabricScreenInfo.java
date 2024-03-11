@@ -1,6 +1,6 @@
 package io.github.reserveword.imblocker;
 
-import io.github.reserveword.imblocker.mixin.ChatScreenMixin;
+import io.github.reserveword.imblocker.mixin.fabric.ChatScreenMixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -8,7 +8,7 @@ import net.minecraft.client.gui.screen.Screen;
 public class FabricScreenInfo implements IMCheckState.ScreenInfo {
     private final Screen screen;
     public FabricScreenInfo() {
-        screen = MinecraftClient.getInstance().currentScreen;;
+        screen = MinecraftClient.getInstance().currentScreen;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class FabricScreenInfo implements IMCheckState.ScreenInfo {
     }
 
     @Override
-    public String defaultText() throws Throwable {
+    public String defaultText() {
         return ((ChatScreenMixin) screen).getOriginalText();
     }
 

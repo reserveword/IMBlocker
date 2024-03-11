@@ -1,7 +1,7 @@
 plugins {
     id 'eclipse'
     id 'idea'
-    id 'fabric-loom' version '1.5-SNAPSHOT'
+    id 'fabric-loom' version '1.2-SNAPSHOT'
 }
 
 loom {
@@ -33,7 +33,7 @@ dependencies {
     // none
 
     // run time test
-    modRuntimeOnly "dev.emi:emi-fabric:$emi_version"
+    modRuntimeOnly "dev.emi:emi:$emi_version"
     modRuntimeOnly "maven.modrinth:replaymod:$replaymod_version"
     modRuntimeOnly "maven.modrinth:voxelmap-updated:$voxelmap_version"
     modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:$rei_version"

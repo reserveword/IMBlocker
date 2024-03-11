@@ -14,7 +14,7 @@ public abstract class TextFieldMixin {
     @Shadow
     public abstract boolean canConsumeInput();
 
-    @Inject(method = {"tick", "renderWidget"}, at = @At("HEAD"))
+    @Inject(method = {"tick", "renderButton"}, at = @At("HEAD"))
     public void tickCallback(CallbackInfo ci) {
         IMCheckState.captureTick(this, this.canConsumeInput());
     }

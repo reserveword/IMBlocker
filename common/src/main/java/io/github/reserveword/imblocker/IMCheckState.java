@@ -19,7 +19,7 @@ public class IMCheckState {
         else im = (state.contains(IMState.TICK) ||
                    state.contains(IMState.NON_PRINTABLE) ||
                    state.contains(IMState.CLICK));
-        IMManager.makeState(im);
+        IMManager.setState(im);
     }
 
     // process SCREEN_LIST rules

@@ -34,7 +34,7 @@ dependencies {
 
     // run time test
     modRuntimeOnly "dev.emi:emi-fabric:$emi_version"
-    modRuntimeOnly "maven.modrinth:replaymod:$replaymod_version"
+    // modRuntimeOnly "maven.modrinth:replaymod:$replaymod_version"
     modRuntimeOnly "maven.modrinth:voxelmap-updated:$voxelmap_version"
     modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:$rei_version"
 
@@ -47,8 +47,8 @@ java {
     // If you remove this line, sources will not be generated.
     withSourcesJar()
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 project.jar {

@@ -100,6 +100,7 @@ public class IMCheckState {
             state.remove(IMState.TICK);
         } else if (state.contains(IMState.TICK)) {
             state.add(IMState.TICK_CHALLENGE);
+            scheduleTickCheck();
         }
     }
 

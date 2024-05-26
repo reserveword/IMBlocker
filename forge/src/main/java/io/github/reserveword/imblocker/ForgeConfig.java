@@ -7,10 +7,16 @@ import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.CodeSource;
-import java.security.ProtectionDomain;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ForgeConfig extends Config {
@@ -64,22 +70,23 @@ public class ForgeConfig extends Config {
         }
         URL loc = source.getLocation();
         AtomicReference<String> name = new AtomicReference<>("UNKNOWN_SCREEN");
-        ModList.get().forEachModContainer((modid, mod) -> {
+        ModList.get().forEachModFile(mod -> {
             try {
-                if (!"minecraft".equals(modid) && !"imblocker".equals(modid) && loc == mod.getMod().getClass()
-                        .getProtectionDomain().getCodeSource().getLocation()) {
+                String modid = mod.getModInfos().get(0).getModId();
+                if (!"minecraft".equals(modid) && !"imblocker".equals(modid) && Objects.equals(loc,
+                        mod.getFilePath().toUri().toURL())) {
                     name.set(modid + ":" + cls.getName());
                 }
             } catch (NullPointerException npe) {
+                String modid = mod.getModInfos().get(0).getModId();
                 Common.LOGGER.error("something is null when grabbing mod jar:");
-                Object modobj = mod.getMod();
-                Class<?> modcls = modobj != null ? modobj.getClass() : null;
-                ProtectionDomain pd = modcls != null ? modcls.getProtectionDomain() : null;
-                CodeSource cs = pd != null ? pd.getCodeSource() : null;
-                Common.LOGGER.warn("modid {}, mod {}, class {}, domain {}, source {}",
-                        modid, modobj, modcls, pd, cs);
+                Common.LOGGER.warn("modid {}, file {}", modid, mod.getFileName());
                 Common.LOGGER.error("enableScreenRecovering disabled.");
                 CLIENT.enableScreenRecovering.set(false);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            } catch (IndexOutOfBoundsException e) {
+                // do nothing
             }
         });
         return name.get();

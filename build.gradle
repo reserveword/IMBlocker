@@ -74,13 +74,14 @@ allprojects {
     tasks.withType(ProcessResources).configureEach {
         inputs.properties all_properties
 
-        filesMatching(['META-INF/mods.toml', 'fabric.mod.json', 'pack.mcmeta']) {
+        filesMatching(['META-INF/neoforge.mods.toml', 'fabric.mod.json', 'pack.mcmeta']) {
             expand all_properties
         }
     }
 
     tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+        options.release = 21
     }
 
     tasks.register('feedbackClass', Copy) {

@@ -1,7 +1,7 @@
 plugins {
     id 'eclipse'
     id 'idea'
-    id 'fabric-loom' version '1.5-SNAPSHOT'
+    id 'fabric-loom' version "$loom_version"
 }
 
 loom {

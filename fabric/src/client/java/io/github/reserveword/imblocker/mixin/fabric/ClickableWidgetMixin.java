@@ -1,7 +1,7 @@
 package io.github.reserveword.imblocker.mixin.fabric;
 
-import io.github.reserveword.imblocker.Common;
-import io.github.reserveword.imblocker.IMCheckState;
+import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.IMCheckState;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;

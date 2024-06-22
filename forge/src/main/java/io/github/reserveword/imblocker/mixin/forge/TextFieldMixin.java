@@ -1,6 +1,6 @@
 package io.github.reserveword.imblocker.mixin.forge;
 
-import io.github.reserveword.imblocker.IMCheckState;
+import io.github.reserveword.imblocker.common.IMCheckState;
 import net.minecraft.client.gui.components.EditBox;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

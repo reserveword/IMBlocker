@@ -1,11 +1,11 @@
-package io.github.reserveword.imblocker;
+package io.github.reserveword.imblocker.common;
 
+import ca.weblite.objc.Runtime;
 import ca.weblite.objc.RuntimeUtils;
 import com.sun.jna.Callback;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
-import ca.weblite.objc.Runtime;
 
 final class IMManagerMac implements IMManager.PlatformIMManager {
     private static boolean state = false;

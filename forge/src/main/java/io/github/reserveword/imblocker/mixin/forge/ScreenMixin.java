@@ -1,6 +1,6 @@
 package io.github.reserveword.imblocker.mixin.forge;
 
-import io.github.reserveword.imblocker.IMCheckState;
+import io.github.reserveword.imblocker.common.IMCheckState;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import org.spongepowered.asm.mixin.Mixin;

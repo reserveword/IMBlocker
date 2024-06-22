@@ -1,6 +1,6 @@
 package io.github.reserveword.imblocker.mixin.fabric;
 
-import io.github.reserveword.imblocker.IMManager;
+import io.github.reserveword.imblocker.common.IMManager;
 import net.minecraft.client.MinecraftClient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

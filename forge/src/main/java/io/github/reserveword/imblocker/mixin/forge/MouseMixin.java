@@ -1,7 +1,7 @@
 package io.github.reserveword.imblocker.mixin.forge;
 
-import io.github.reserveword.imblocker.Config;
-import io.github.reserveword.imblocker.IMCheckState;
+import io.github.reserveword.imblocker.common.Config;
+import io.github.reserveword.imblocker.common.IMCheckState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import org.spongepowered.asm.mixin.Final;

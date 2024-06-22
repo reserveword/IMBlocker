@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker;
+package io.github.reserveword.imblocker.common;
 
 import com.sun.jna.Native;
 import com.sun.jna.platform.win32.User32;

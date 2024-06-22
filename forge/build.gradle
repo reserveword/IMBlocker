@@ -4,28 +4,22 @@ plugins {
     id 'net.neoforged.gradle.userdev' version "$neogradle_version"
 }
 
-// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
-
-sourceSets {
-    main {
-        resources.srcDir project(':common').layout.projectDirectory.dir('src/main/resources')
-    }
-    common
-}
 
 runs {
     client {
         systemProperty 'forge.logging.markers', 'REGISTRIES'
-
         systemProperty 'forge.logging.console.level', 'debug'
-
-        systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
-
+        systemProperty 'forge.enabledGameTestNamespaces', mod_id
         modSource sourceSets.main
-        modSource sourceSets.common
+
+        dependencies {
+            runtime project(":common")
+        }
     }
 }
+
+sourceSets.main.resources { srcDir project(':common').layout.projectDirectory.dir('src/main/resources') }
 
 configurations {
     runtimeClasspath.extendsFrom localRuntime
@@ -36,12 +30,3 @@ dependencies {
 
     implementation project(':common')
 }
-
-tasks.register('feedbackCommonClass', Copy) {
-    dependsOn ':common:build'
-    shouldRunAfter ':forge:neoFormStripServer'
-    from project(':common').layout.buildDirectory.dir('classes/java/main')
-    into project.layout.buildDirectory.dir('classes/java/common')
-}
-
-tasks.withType(JavaCompile).configureEach { dependsOn 'feedbackCommonClass' }

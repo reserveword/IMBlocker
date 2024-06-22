@@ -1,6 +1,5 @@
 package io.github.reserveword.imblocker.mixin.forge;
 
-import io.github.reserveword.imblocker.common.Config;
 import io.github.reserveword.imblocker.rules.ChatRule;
 import io.github.reserveword.imblocker.rules.FocusRule;
 import io.github.reserveword.imblocker.rules.ScreenListRule;
@@ -17,12 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MinecraftClientMixin {
     @Inject(method = "setScreen", at = @At("HEAD"))
     public void onScreenChanged(Screen screen, CallbackInfo ci) {
-        ScreenListRule.isWhiteListScreenShowing = isScreenInWhiteList(screen);
+        ScreenListRule.checkScreen(screen);
         FocusRule.focusedInputWidget = null;
         ChatRule.isChatScreenShowing = screen instanceof ChatScreen;
-    }
-
-    private boolean isScreenInWhiteList(Screen screen) {
-        return screen != null && Config.INSTANCE != null && Config.INSTANCE.inScreenWhitelist(screen.getClass());
     }
 }

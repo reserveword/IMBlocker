@@ -27,7 +27,6 @@ public abstract class Config {
         return false;
     }
 
-    public Boolean getUseExperimental() {
-        return true;
+    public void recoverScreen(Class<?> cls) {
     }
 }

@@ -8,19 +8,8 @@ dependencies {
     compileOnly 'net.java.dev.jna:jna:5.12.1'
     compileOnly 'net.java.dev.jna:jna-platform:5.12.1'
     compileOnly 'org.apache.logging.log4j:log4j-api:2.19.0'
-    compileOnly 'org.apache.logging.log4j:log4j-core:2.19.0'
-    compileOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.19.0'
     compileOnly 'ca.weblite:java-objc-bridge:1.1'
-}
 
-java {
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.
-    // If you remove this line, sources will not be generated.
-    withSourcesJar()
-
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
 }
 
 project.processResources {

@@ -4,26 +4,27 @@ import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.Config;
 
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
+import net.minecraft.client.gui.screens.inventory.HangingSignEditScreen;
 import net.minecraft.client.gui.screens.inventory.SignEditScreen;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.CodeSource;
-import java.security.ProtectionDomain;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
-@Mod.EventBusSubscriber
 public class ForgeConfig extends Config {
 
-    public static final ForgeConfigSpec clientSpec;
+    public static final ModConfigSpec clientSpec;
     public static final ForgeConfig.Client CLIENT;
     private final static Set<Class<?>> recoveredScreens = new HashSet<>();
     private static Set<Class<?>> screenBlacklist;
@@ -32,7 +33,7 @@ public class ForgeConfig extends Config {
     private static Set<Class<?>> inputWhitelist;
 
     static {
-        final Pair<Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ForgeConfig.Client::new);
+        final Pair<Client, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(ForgeConfig.Client::new);
         clientSpec = specPair.getRight();
         CLIENT = specPair.getLeft();
         Config.INSTANCE = new ForgeConfig();
@@ -48,7 +49,7 @@ public class ForgeConfig extends Config {
         inputBlacklist = bakeList(CLIENT.inputBlacklist, "inputBlacklist");
     }
 
-    private static Set<Class<?>> bakeList(ForgeConfigSpec.ConfigValue<List<? extends String>> cfg, String name) {
+    private static Set<Class<?>> bakeList(ModConfigSpec.ConfigValue<List<? extends String>> cfg, String name) {
         Set<Class<?>> clsSet = new HashSet<>();
         for (String s: cfg.get()) {
             try {
@@ -88,8 +89,12 @@ public class ForgeConfig extends Config {
     }
 
     @Override
-    public Boolean getUseExperimental() {
-        return CLIENT.useExperimental.get();
+    public void recoverScreen(Class<?> cls) {
+        if (!CLIENT.enableScreenRecovering.get() || recoveredScreens.contains(cls)) return;
+        recoveredScreens.add(cls);
+        List<String> screens = new ArrayList<>(CLIENT.recoveredScreens.get());
+        screens.add(getClassName(cls));
+        CLIENT.recoveredScreens.set(screens);
     }
 
     public String getClassName(Class<?> cls) {
@@ -99,22 +104,23 @@ public class ForgeConfig extends Config {
         }
         URL loc = source.getLocation();
         AtomicReference<String> name = new AtomicReference<>("UNKNOWN_SCREEN");
-        ModList.get().forEachModContainer((modid, mod) -> {
+        ModList.get().forEachModFile(mod -> {
             try {
-                if (!"minecraft".equals(modid) && !"imblocker".equals(modid) && loc == mod.getMod().getClass()
-                                                                                               .getProtectionDomain().getCodeSource().getLocation()) {
+                String modid = mod.getModInfos().get(0).getModId();
+                if (!"minecraft".equals(modid) && !"imblocker".equals(modid) && Objects.equals(loc,
+                        mod.getFilePath().toUri().toURL())) {
                     name.set(modid + ":" + cls.getName());
                 }
             } catch (NullPointerException npe) {
+                String modid = mod.getModInfos().get(0).getModId();
                 Common.LOGGER.error("something is null when grabbing mod jar:");
-                Object modobj = mod.getMod();
-                Class<?> modcls = modobj != null ? modobj.getClass() : null;
-                ProtectionDomain pd = modcls != null ? modcls.getProtectionDomain() : null;
-                CodeSource cs = pd != null ? pd.getCodeSource() : null;
-                Common.LOGGER.warn("modid {}, mod {}, class {}, domain {}, source {}",
-                        modid, modobj, modcls, pd, cs);
+                Common.LOGGER.warn("modid {}, file {}", modid, mod.getFileName());
                 Common.LOGGER.error("enableScreenRecovering disabled.");
                 CLIENT.enableScreenRecovering.set(false);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            } catch (IndexOutOfBoundsException e) {
+                // do nothing
             }
         });
         return name.get();
@@ -125,20 +131,20 @@ public class ForgeConfig extends Config {
      */
     public static class Client {
 
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> screenWhitelist;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> screenBlacklist;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> inputWhitelist;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> inputBlacklist;
-        private final ForgeConfigSpec.ConfigValue<Integer> checkIntervalMilli;
-        private final ForgeConfigSpec.ConfigValue<Boolean> enableScreenRecovering;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> screenWhitelist;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> screenBlacklist;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> inputWhitelist;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> inputBlacklist;
+        private final ModConfigSpec.ConfigValue<Integer> checkIntervalMilli;
+        private final ModConfigSpec.ConfigValue<Boolean> enableScreenRecovering;
 
-        private final ForgeConfigSpec.ConfigValue<List<? extends String>> recoveredScreens;
+        private final ModConfigSpec.ConfigValue<List<? extends String>> recoveredScreens;
 
-        private final ForgeConfigSpec.ConfigValue<Boolean> useExperimental;
+        private final ModConfigSpec.ConfigValue<Boolean> useExperimental;
 
-        private final ForgeConfigSpec.ConfigValue<Boolean> checkCommandChat;
+        private final ModConfigSpec.ConfigValue<Boolean> checkCommandChat;
 
-        Client(ForgeConfigSpec.Builder builder) {
+        Client(ModConfigSpec.Builder builder) {
             checkIntervalMilli = builder
                                          .comment("Check once every several milliseconds")
                                          .translation("key.imblocker.checkIntervalMilli")
@@ -155,7 +161,7 @@ public class ForgeConfig extends Config {
                                       .defineList("screenWhitelist", Arrays.asList(
                                               BookEditScreen.class.getName(),
                                               SignEditScreen.class.getName(),
-                                              "net.minecraft.client.gui.screens.inventory.HangingSignEditScreen",
+                                              HangingSignEditScreen.class.getName(),
                                               "journeymap.client.ui.waypoint.WaypointEditor",
                                               "com.ldtteam.blockout.BOScreen"
                                       ), checkClassForName);

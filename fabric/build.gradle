@@ -1,7 +1,7 @@
 plugins {
     id 'eclipse'
     id 'idea'
-    id 'fabric-loom' version '1.4-SNAPSHOT'
+    id 'fabric-loom' version "$loom_version"
 }
 
 loom {
@@ -54,8 +54,8 @@ java {
     // If you remove this line, sources will not be generated.
     withSourcesJar()
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 project.jar {
@@ -71,5 +71,4 @@ project.jar {
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
-    exclude 'io/github/reserveword/imblocker/asmdummy'
 }

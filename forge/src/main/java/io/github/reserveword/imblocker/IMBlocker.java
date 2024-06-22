@@ -3,41 +3,37 @@ package io.github.reserveword.imblocker;
 import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.rules.Rules;
 
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 
-// The value here should match an entry in the META-INF/mods.toml file
+// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(Common.MODID)
 public class IMBlocker {
-    public IMBlocker() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onConfigLoadReload);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
-    }
-
-    public IMBlocker(FMLJavaModLoadingContext context) {
+    public IMBlocker(ModContainer container) {
         // Register ourselves for server and other game events we are interested in
-        context.getModEventBus().addListener(this::onConfigLoadReload);
-        context.registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
+        container.registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
     }
 
-    @SubscribeEvent
-    public void onConfigLoadReload(ModConfigEvent e) {
-        Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading) ? "re" : "");
-        ForgeConfig.reload();
-    }
-
-    @Mod.EventBusSubscriber
-    public static class RegistryEvents {
+    @EventBusSubscriber(Dist.CLIENT)
+    public static class ForgeEvents {
         @SubscribeEvent
-        public static void onClientTick(TickEvent.ClientTickEvent cte) {
-            if (cte.phase == TickEvent.Phase.START) {
-                Rules.apply();
-            }
+        public static void onClientTick(ClientTickEvent.Pre cte) {
+            Rules.apply();
+        }
+    }
+
+    @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+    public static class ModEvents {
+        @SubscribeEvent
+        public static void onConfigLoadReload(ModConfigEvent e) {
+            Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading)?"re":"");
+            ForgeConfig.reload();
         }
     }
 }

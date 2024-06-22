@@ -29,7 +29,7 @@ public abstract class Config {
     }
 
     public Boolean getUseExperimental() {
-        return true;
+        return false;
     }
 
     public Boolean getCheckCommandChat() {

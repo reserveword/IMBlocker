@@ -106,6 +106,13 @@ allprojects {
         dependsOn("feedbackClass")
         dependsOn("feedbackResource")
     }
+
+    idea {
+        module {
+            downloadSources = true
+            downloadJavadoc = true
+        }
+    }
 }
 
 base.archivesName = "${rootProject.name}_${mod_version}+${minecraft_version}"

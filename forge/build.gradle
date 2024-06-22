@@ -8,7 +8,9 @@ plugins {
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 sourceSets {
-    main
+    main {
+        resources.srcDir project(':common').layout.projectDirectory.dir('src/main/resources')
+    }
     common
 }
 
@@ -25,6 +27,10 @@ runs {
     }
 }
 
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
@@ -38,4 +44,4 @@ tasks.register('feedbackCommonClass', Copy) {
     into project.layout.buildDirectory.dir('classes/java/common')
 }
 
-project.runClient.dependsOn 'feedbackCommonClass'
+tasks.withType(JavaCompile).configureEach { dependsOn 'feedbackCommonClass' }

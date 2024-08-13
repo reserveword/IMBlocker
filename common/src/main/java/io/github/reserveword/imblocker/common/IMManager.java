@@ -3,7 +3,7 @@ package io.github.reserveword.imblocker.common;
 import com.sun.jna.Platform;
 
 public final class IMManager {
-    public sealed interface PlatformIMManager permits IMManagerMac, IMManagerWindows {
+    public sealed interface PlatformIMManager permits IMManagerMac, IMManagerStub, IMManagerWindows {
 
         PlatformIMManager INSTANCE = getInstance();
 
@@ -12,7 +12,8 @@ public final class IMManager {
                 return new IMManagerWindows();
             if (Platform.isMac())
                 return new IMManagerMac();
-            throw new UnsupportedOperationException("Unsupported platform");
+            Common.LOGGER.warn("Unsupported platform,using stub");
+            return new IMManagerStub();
         }
 
 

@@ -13,6 +13,9 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 
 @Mixin(TextFieldWidget.class)
 public abstract class TextFieldMixin implements FocusableWidgetAccessor {
+	@Shadow
+	private String text;
+	
     @Shadow
     public abstract boolean isActive();
     
@@ -24,6 +27,11 @@ public abstract class TextFieldMixin implements FocusableWidgetAccessor {
     	return isEditable();
     }
 
+    @Override
+    public String getText() {
+    	return text;
+    }
+    
     /*
     @Inject(method = "tick", at = @At("HEAD"))
     public void tickCallback(CallbackInfo ci) {

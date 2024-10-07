@@ -1,6 +1,7 @@
 package io.github.reserveword.imblocker;
 
 import com.sun.jna.Native;
+import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinNT;
@@ -16,6 +17,8 @@ public class IMManager {
     private static native WinNT.HANDLE ImmCreateContext();
 
     private static native boolean ImmDestroyContext(WinNT.HANDLE himc);
+    
+    private static native boolean ImmSetConversionStatus(WinNT.HANDLE himc, int fdwConversion, int fdwSentence);
 
     static {
         Native.register("imm32");
@@ -69,6 +72,15 @@ public class IMManager {
 	            makeOffImp();
 	        }
         }
+    }
+    
+    public static void makeImmOnState(boolean isEN) {
+        WinDef.HWND hwnd = u.GetForegroundWindow();
+        WinNT.HANDLE himc = ImmGetContext(hwnd);
+        if(himc != null) {
+        	ImmSetConversionStatus(himc, isEN ? 0 : 1, 0);
+        }
+        ImmReleaseContext(hwnd, himc);
     }
 
     public static void syncState() {

@@ -14,11 +14,22 @@ public class IMCheckState {
     public static FocusableWidgetAccessor focusedInputWidget = null;
     
     public static boolean isWhiteListScreenShowing = false;
+    
+    public static boolean isChatScreenShowing = false;
+    public static ChatState chatState = ChatState.NONE;
+    
+    private static Runnable deferredOp = null;
 
     // check overall state
     private static void syncState() {
-        IMManager.makeState((focusedInputWidget != null && focusedInputWidget.isWidgetEditable()) ||
-        		isWhiteListScreenShowing);
+        if(deferredOp != null) {
+        	deferredOp.run();
+        	deferredOp = null;
+        }
+        
+        IMManager.makeState((focusedInputWidget != null && focusedInputWidget.isWidgetEditable()) 
+        		|| isWhiteListScreenShowing);
+        updateChatState();
     }
     
     public static void focusGained(FocusableWidgetAccessor widget) {
@@ -30,6 +41,16 @@ public class IMCheckState {
     		focusedInputWidget = null;
     	}
     }
+    
+    private static void updateChatState() {
+    	ChatState currentChatState = !isChatScreenShowing ? ChatState.NONE :
+    			(focusedInputWidget.getText().trim().startsWith("/") ? 
+    					ChatState.COMMAND : ChatState.CHAT);
+    	if(currentChatState != ChatState.NONE && chatState != currentChatState) {
+			deferredOp = () -> IMManager.makeImmOnState(currentChatState == ChatState.COMMAND);
+    	}
+    	chatState = currentChatState;
+	}
 
     // process SCREEN_LIST rules
     // notice that nonPrintable rule triggers at screen change, here.
@@ -199,6 +220,10 @@ public class IMCheckState {
         TICK_CHALLENGE, NON_PRINTABLE_CHALLENGE,
         NON_PRINTABLE_CHALLENGE_PENDING;
         public static final EnumSet<IMState> NONE = EnumSet.noneOf(IMState.class);
+    }
+    
+    private enum ChatState {
+    	NONE, CHAT, COMMAND
     }
 
     public interface ScreenInfo {

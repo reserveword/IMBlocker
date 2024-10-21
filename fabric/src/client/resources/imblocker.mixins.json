@@ -15,6 +15,7 @@
     "ReiTextFieldMixin",
     "EmiSearchWidgetMixin",
     "ReplayModTextFieldMixin",
+    "ImGuiMixin",
     "TextFieldMixin"
   ],
   "injectors": {

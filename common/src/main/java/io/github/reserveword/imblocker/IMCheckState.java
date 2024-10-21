@@ -13,7 +13,8 @@ public class IMCheckState {
     
     public static FocusableWidgetAccessor focusedInputWidget = null;
     
-    public static boolean imguiFocused = false;
+    private static boolean axiomGuiCaptureKeyboard = false;
+    private static boolean axiomGuiTextFieldFocused = false;
     
     public static boolean isWhiteListScreenShowing = false;
     
@@ -29,8 +30,14 @@ public class IMCheckState {
         	deferredOp = null;
         }
         
-        IMManager.makeState((focusedInputWidget != null && focusedInputWidget.isWidgetEditable()) 
-        		|| isWhiteListScreenShowing || imguiFocused);
+        boolean state;
+        if(axiomGuiCaptureKeyboard) {
+        	state = axiomGuiTextFieldFocused;
+        }else {
+        	state = (focusedInputWidget != null && focusedInputWidget.isWidgetEditable()) 
+            		|| isWhiteListScreenShowing;
+        }
+        IMManager.makeState(state);
         updateChatState();
     }
     
@@ -45,13 +52,22 @@ public class IMCheckState {
     }
     
     private static void updateChatState() {
-    	ChatState currentChatState = !isChatScreenShowing || imguiFocused ? ChatState.NONE :
+    	ChatState currentChatState = !isChatScreenShowing || axiomGuiCaptureKeyboard ? ChatState.NONE :
     			(focusedInputWidget.getText().trim().startsWith("/") ? ChatState.COMMAND : ChatState.CHAT);
     	if(currentChatState != ChatState.NONE && chatState != currentChatState) {
+    		//Executing at the same tick as imstate change will nullify this operation, thus move to next tick.
 			deferredOp = () -> IMManager.makeImmOnState(currentChatState == ChatState.COMMAND);
     	}
     	chatState = currentChatState;
 	}
+    
+    private static void checkAxiomGuiState() {
+    	AxiomGuiAccessor axiomGuiAccessor = AxiomGuiAccessor.instance;
+    	if(axiomGuiAccessor != null) {
+	    	axiomGuiCaptureKeyboard = axiomGuiAccessor.isCaptureKeyboard();
+			axiomGuiTextFieldFocused = axiomGuiAccessor.isTextFieldFocused();
+    	}
+    }
 
     // process SCREEN_LIST rules
     // notice that nonPrintable rule triggers at screen change, here.
@@ -196,11 +212,12 @@ public class IMCheckState {
     }
 
     public static void clientTick(ScreenInfo screen) {
-        checkScreenList(screen);
+        /*checkScreenList(screen);
         checkSpecial();
         if (count == 0) checkTick();
         checkNonPrintable(screen);
-        checkClick();
+        checkClick();*/
+    	checkAxiomGuiState();
         syncState();
         // check interval
         if (count > 0) count --;

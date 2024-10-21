@@ -13,6 +13,8 @@ public class IMCheckState {
     
     public static FocusableWidgetAccessor focusedInputWidget = null;
     
+    public static boolean imguiFocused = false;
+    
     public static boolean isWhiteListScreenShowing = false;
     
     public static boolean isChatScreenShowing = false;
@@ -28,7 +30,7 @@ public class IMCheckState {
         }
         
         IMManager.makeState((focusedInputWidget != null && focusedInputWidget.isWidgetEditable()) 
-        		|| isWhiteListScreenShowing);
+        		|| isWhiteListScreenShowing || imguiFocused);
         updateChatState();
     }
     
@@ -43,9 +45,8 @@ public class IMCheckState {
     }
     
     private static void updateChatState() {
-    	ChatState currentChatState = !isChatScreenShowing ? ChatState.NONE :
-    			(focusedInputWidget.getText().trim().startsWith("/") ? 
-    					ChatState.COMMAND : ChatState.CHAT);
+    	ChatState currentChatState = !isChatScreenShowing || imguiFocused ? ChatState.NONE :
+    			(focusedInputWidget.getText().trim().startsWith("/") ? ChatState.COMMAND : ChatState.CHAT);
     	if(currentChatState != ChatState.NONE && chatState != currentChatState) {
 			deferredOp = () -> IMManager.makeImmOnState(currentChatState == ChatState.COMMAND);
     	}

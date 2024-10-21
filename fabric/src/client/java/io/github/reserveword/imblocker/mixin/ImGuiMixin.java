@@ -9,13 +9,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import imgui.callback.ImGuiInputTextCallback;
 import imgui.internal.ImGui;
 import imgui.type.ImString;
-import io.github.reserveword.imblocker.FocusableWidgetAccessor;
 import io.github.reserveword.imblocker.IMCheckState;
 
 @Pseudo
 @Mixin(targets = "imgui.ImGui")
 public abstract class ImGuiMixin {
-	private static FocusableWidgetAccessor imguiAccessor =  () -> true;
 	private static boolean hasFocusedWidget = false;
 	
 	@Inject(method = "preInputText(ZLjava/lang/String;Ljava/lang/String;Limgui/type/ImString;"
@@ -25,9 +23,9 @@ public abstract class ImGuiMixin {
 		boolean wantTextInput = ImGui.getIO().getWantTextInput();
 		if(hasFocusedWidget != wantTextInput) {
 			if(wantTextInput) {
-				IMCheckState.focusGained(imguiAccessor);
+				IMCheckState.imguiFocused = true;
 			}else {
-				IMCheckState.focusLost(imguiAccessor);
+				IMCheckState.imguiFocused = false;
 			}
 			hasFocusedWidget = wantTextInput;
 		}

@@ -1,12 +1,13 @@
-package io.github.reserveword.imblocker.mixin;
+package io.github.reserveword.imblocker.fabric.mixin;
 
-import io.github.reserveword.imblocker.IMCheckState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import io.github.reserveword.imblocker.common.IMCheckState;
 
 @Mixin(targets = "meteordevelopment.meteorclient.gui.widgets.input.WTextBox", remap = false)
 @Pseudo

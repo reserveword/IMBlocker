@@ -1,9 +1,10 @@
-package io.github.reserveword.imblocker.mixin;
+package io.github.reserveword.imblocker.fabric.mixin;
 
 import io.github.cottonmc.cotton.gui.widget.WTextField;
 import io.github.cottonmc.cotton.gui.widget.data.InputResult;
-import io.github.reserveword.imblocker.FocusableWidgetAccessor;
-import io.github.reserveword.imblocker.IMCheckState;
+import io.github.reserveword.imblocker.common.FocusableWidgetAccessor;
+import io.github.reserveword.imblocker.common.IMCheckState;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Unique;

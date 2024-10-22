@@ -1,6 +1,6 @@
 package io.github.reserveword.imblocker.asmdummy;
 
-import io.github.reserveword.imblocker.IMCheckState;
+import io.github.reserveword.imblocker.common.IMCheckState;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;

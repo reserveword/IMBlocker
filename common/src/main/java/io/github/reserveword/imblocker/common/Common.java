@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker;
+package io.github.reserveword.imblocker.common;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

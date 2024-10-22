@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker;
+package io.github.reserveword.imblocker.common;
 
 public abstract class AxiomGuiAccessor {
 	public static AxiomGuiAccessor instance;

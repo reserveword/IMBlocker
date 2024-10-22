@@ -1,5 +1,7 @@
 package io.github.reserveword.imblocker;
 
+import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.IMCheckState;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

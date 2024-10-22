@@ -1,6 +1,6 @@
 package io.github.reserveword.imblocker.asmdummy;
 
-import io.github.reserveword.imblocker.IMCheckState;
+import io.github.reserveword.imblocker.common.IMCheckState;
 
 public class FakeFTBLibTextBox {
     public static class FakeSubClass extends FakeFTBLibTextBox {

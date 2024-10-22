@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker;
+package io.github.reserveword.imblocker.common;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class IMCheckState {
         	state = (focusedInputWidget != null && focusedInputWidget.isWidgetEditable()) 
             		|| isWhiteListScreenShowing;
         }
-        IMManager.makeState(state);
+        IMManager.setState(state);
         updateChatState();
     }
     
@@ -56,7 +56,7 @@ public class IMCheckState {
     			(focusedInputWidget.getText().trim().startsWith("/") ? ChatState.COMMAND : ChatState.CHAT);
     	if(currentChatState != ChatState.NONE && chatState != currentChatState) {
     		//Executing at the same tick as imstate change will nullify this operation, thus move to next tick.
-			deferredOp = () -> IMManager.makeImmOnState(currentChatState == ChatState.COMMAND);
+			deferredOp = () -> IMManager.setImmOnState(currentChatState == ChatState.COMMAND);
     	}
     	chatState = currentChatState;
 	}

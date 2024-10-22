@@ -1,12 +1,11 @@
-package io.github.reserveword.imblocker;
+package io.github.reserveword.imblocker.common;
 
 import com.sun.jna.Native;
-import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinNT;
 
-public class IMManager {
+final class IMManagerWindows implements IMManager.PlatformIMManager {
 
     private static native WinNT.HANDLE ImmGetContext(WinDef.HWND hwnd);
 
@@ -63,7 +62,8 @@ public class IMManager {
         }
     }
 
-    public static void makeState(boolean on) {
+    @Override
+    public void setState(boolean on) {
     	boolean state = ImmGetContext(u.GetForegroundWindow()) != null;
         if (state != on) {
 	        if (on) {
@@ -74,7 +74,8 @@ public class IMManager {
         }
     }
     
-    public static void makeImmOnState(boolean isEN) {
+    @Override
+    public void setImmOnState(boolean isEN) {
         WinDef.HWND hwnd = u.GetForegroundWindow();
         WinNT.HANDLE himc = ImmGetContext(hwnd);
         if(himc != null) {
@@ -83,7 +84,8 @@ public class IMManager {
         ImmReleaseContext(hwnd, himc);
     }
 
-    public static void syncState() {
+    @Override
+    public void syncState() {
         WinDef.HWND hwnd = u.GetForegroundWindow();
         WinNT.HANDLE himc = ImmGetContext(hwnd);
         if ((himc == null) == state) {
@@ -92,12 +94,12 @@ public class IMManager {
         }
     }
 
-    public static boolean getState() {
+    @Override
+    public boolean getState() {
         return state;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public static boolean toggle() {
+    public boolean toggle() {
         state = toggleImp();
         return state;
     }

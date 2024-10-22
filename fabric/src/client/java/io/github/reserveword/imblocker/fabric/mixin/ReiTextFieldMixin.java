@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker.mixin;
+package io.github.reserveword.imblocker.fabric.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.reserveword.imblocker.FocusableWidgetAccessor;
-import io.github.reserveword.imblocker.IMCheckState;
+import io.github.reserveword.imblocker.common.FocusableWidgetAccessor;
+import io.github.reserveword.imblocker.common.IMCheckState;
 
 @Pseudo
 @Mixin(targets = {

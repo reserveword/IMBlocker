@@ -8,6 +8,9 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 
+import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.IMCheckState;
+
 public class ForgeScreenInfo implements IMCheckState.ScreenInfo {
     private final Screen screen;
     public ForgeScreenInfo() {

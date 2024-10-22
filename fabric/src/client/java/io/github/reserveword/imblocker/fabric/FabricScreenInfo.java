@@ -1,6 +1,7 @@
-package io.github.reserveword.imblocker;
+package io.github.reserveword.imblocker.fabric;
 
-import io.github.reserveword.imblocker.mixin.ChatScreenMixin;
+import io.github.reserveword.imblocker.common.IMCheckState;
+import io.github.reserveword.imblocker.fabric.mixin.ChatScreenMixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;

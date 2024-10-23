@@ -5,11 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "ChatScreenMixin",
-    "ClickableWidgetMixin",
     "MinecraftClientMixin",
-    "MouseMixin",
-    "ParentElementMixin",
-    "ScreenMixin",
     "TextFieldMixin"
   ],
   "injectors": {

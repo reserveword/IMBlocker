@@ -25,7 +25,7 @@ public class IMBlocker {
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent cte) {
             if (cte.phase == TickEvent.Phase.START) {
-                IMCheckState.clientTick(new ForgeScreenInfo());
+                IMCheckState.clientTick();
             }
         }
         @SubscribeEvent

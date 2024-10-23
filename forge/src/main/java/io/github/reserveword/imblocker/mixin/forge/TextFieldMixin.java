@@ -47,6 +47,7 @@ public abstract class TextFieldMixin implements FocusableWidgetAccessor {
 	
 	@Inject(method = "m_93692_", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused) {
+		System.out.println("Focus Changed");
 		if(isFocused) {
     		IMCheckState.focusGained(this);
     	}else {

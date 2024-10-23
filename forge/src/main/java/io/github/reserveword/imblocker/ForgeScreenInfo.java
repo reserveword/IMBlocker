@@ -13,8 +13,9 @@ import io.github.reserveword.imblocker.common.IMCheckState;
 
 public class ForgeScreenInfo implements IMCheckState.ScreenInfo {
     private final Screen screen;
+    
     public ForgeScreenInfo() {
-        screen = Minecraft.m_91087_().f_91080_;
+        screen = null;//Minecraft.m_91087_().f_91080_;
     }
 
     @Override

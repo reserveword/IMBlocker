@@ -27,7 +27,7 @@ public class IMBlockerFabric implements ClientModInitializer {
             };
         }
         ClientTickEvents.START_CLIENT_TICK.register(tick -> {
-            IMCheckState.clientTick(new FabricScreenInfo());
+            IMCheckState.clientTick();
         });
     }
 

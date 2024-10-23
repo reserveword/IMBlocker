@@ -6,7 +6,7 @@ plugins {
 
 allprojects {
 	base {
-		archivesName = project.archives_base_name
+		archivesName = "${rootProject.name}_${mod_version}+${minecraft_version}"
 	}
 
     repositories {

@@ -215,7 +215,7 @@ public class IMCheckState {
     private static long nextCheck = System.currentTimeMillis() + Config.INSTANCE.getCheckInterval();
     private static boolean scheduled = false;
 
-    public static void clientTick(ScreenInfo screen) {
+    public static void clientTick(/*ScreenInfo screen*/) {
         /*checkScreenList(screen);
         checkSpecial();
         long now = System.currentTimeMillis();

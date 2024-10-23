@@ -1,7 +1,6 @@
 package io.github.reserveword.imblocker;
 
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
-import net.minecraft.client.gui.screens.inventory.HangingSignEditScreen;
 import net.minecraft.client.gui.screens.inventory.SignEditScreen;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModList;
@@ -45,10 +44,7 @@ public class ForgeConfig extends Config {
         return inputWhitelist.contains(cls);
     }
 
-    @Override
-    public Integer getCheckInterval() {
-        return CLIENT.checkInterval.get();
-    }
+    public static final ForgeConfigSpec clientSpec;
 
     @Override
     public Boolean getUseExperimental() {
@@ -79,8 +75,8 @@ public class ForgeConfig extends Config {
         AtomicReference<String> name = new AtomicReference<>("UNKNOWN_SCREEN");
         ModList.get().forEachModContainer((modid, mod) -> {
             try {
-                if (!"minecraft".equals(modid) && !"imblocker".equals(modid) && loc.equals(mod.getMod().getClass()
-                        .getProtectionDomain().getCodeSource().getLocation())) {
+                if (!"minecraft".equals(modid) && !"imblocker".equals(modid) && loc == mod.getMod().getClass()
+                        .getProtectionDomain().getCodeSource().getLocation()) {
                     name.set(modid + ":" + cls.getName());
                 }
             } catch (NullPointerException npe) {
@@ -105,21 +101,52 @@ public class ForgeConfig extends Config {
         inputBlacklist = bakeList(CLIENT.inputBlacklist, "inputBlacklist");
     }
 
+    static {
+        final Pair<Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ForgeConfig.Client::new);
+        clientSpec = specPair.getRight();
+        CLIENT = specPair.getLeft();
+        Config.INSTANCE = new ForgeConfig();
+    }
+
+    private static Set<Class<?>> screenBlacklist;
+    private static Set<Class<?>> screenWhitelist;
+    private static Set<Class<?>> inputBlacklist;
+    private static Set<Class<?>> inputWhitelist;
+    private final static Set<Class<?>> recoveredScreens = new HashSet<>();
+
+    private static Set<Class<?>> bakeList(ForgeConfigSpec.ConfigValue<List<? extends String>> cfg, String name) {
+        Set<Class<?>> clsSet = new HashSet<>();
+        for (String s : cfg.get()) {
+            try {
+                if (s.contains(":")) {
+                    String[] ss = s.split(":");
+                    s = ss[ss.length - 1];
+                }
+                clsSet.add(Class.forName(s));
+            } catch (ClassNotFoundException e) {
+                Common.LOGGER.warn("Class {} not found, ignored.", s);
+            }
+        }
+        Common.LOGGER.info("imblocker bakelist {} result {}", name, clsSet);
+        return clsSet;
+    }
+
+    @Override
+    public Integer getCheckInterval() {
+        return CLIENT.checkIntervalMilli.get();
+    }
+    public static final ForgeConfig.Client CLIENT;
+
     /**
      * Client specific configuration - only loaded clientside from forge-client.toml
      */
     public static class Client {
 
-        private final ForgeConfigSpec.ConfigValue<Integer> checkInterval;
-
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> screenWhitelist;
-
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> screenBlacklist;
-
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> inputWhitelist;
-
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> inputBlacklist;
-
+        private final ForgeConfigSpec.ConfigValue<Integer> checkIntervalMilli;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableScreenRecovering;
 
         private final ForgeConfigSpec.ConfigValue<List<? extends String>> recoveredScreens;
@@ -129,10 +156,10 @@ public class ForgeConfig extends Config {
         private final ForgeConfigSpec.ConfigValue<Boolean> checkCommandChat;
 
         Client(ForgeConfigSpec.Builder builder) {
-            checkInterval = builder
-                    .comment("Checking every tick is not efficient, how about check once every several tick?")
-                    .translation("key.imblocker.checkInterval")
-                    .defineInRange("checkInterval", 2, 1, Integer.MAX_VALUE);
+            checkIntervalMilli = builder
+                    .comment("Check once every several milliseconds")
+                    .translation("key.imblocker.checkIntervalMilli")
+                    .defineInRange("checkIntervalMilli", 100, 1, Integer.MAX_VALUE);
 
             screenBlacklist = builder
                     .comment("Matched screens would disable your IME")
@@ -145,7 +172,7 @@ public class ForgeConfig extends Config {
                     .defineList("screenWhitelist", Arrays.asList(
                             BookEditScreen.class.getName(),
                             SignEditScreen.class.getName(),
-                            HangingSignEditScreen.class.getName(),
+                            "net.minecraft.client.gui.screens.inventory.HangingSignEditScreen",
                             "journeymap.client.ui.waypoint.WaypointEditor",
                             "com.ldtteam.blockout.BOScreen"
                     ), checkClassForName);
@@ -174,44 +201,13 @@ public class ForgeConfig extends Config {
             useExperimental = builder
                     .comment("Disable this and let me know if input or control is messed up")
                     .translation("key.imblocker.useExperimental")
-                    .define("useExperimental", true);
+                    .define("useExperimental", false);
 
             checkCommandChat = builder
                     .comment("Disable IME when typing commands")
                     .translation("key.imblocker.checkCommandChat")
                     .define("checkCommandChat", true);
         }
-    }
-
-    private static Set<Class<?>> screenBlacklist;
-    private static Set<Class<?>> screenWhitelist;
-    private static Set<Class<?>> inputBlacklist;
-    private static Set<Class<?>> inputWhitelist;
-    private final static Set<Class<?>> recoveredScreens = new HashSet<>();
-    private static Set<Class<?>> bakeList(ForgeConfigSpec.ConfigValue<List<? extends String>> cfg, String name) {
-        Set<Class<?>> clsSet = new HashSet<>();
-        for (String s : cfg.get()) {
-            try {
-                if (s.contains(":")) {
-                    String[] ss = s.split(":");
-                    s = ss[ss.length - 1];
-                }
-                clsSet.add(Class.forName(s));
-            } catch (ClassNotFoundException e) {
-                Common.LOGGER.warn("Class {} not found, ignored.", s);
-            }
-        }
-        Common.LOGGER.info("imblocker bakelist {} result {}", name, clsSet);
-        return clsSet;
-    }
-
-    public static final ForgeConfigSpec clientSpec;
-    public static final ForgeConfig.Client CLIENT;
-    static {
-        final Pair<Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ForgeConfig.Client::new);
-        clientSpec = specPair.getRight();
-        CLIENT = specPair.getLeft();
-        Config.INSTANCE = new ForgeConfig();
     }
 
     private ForgeConfig() {}

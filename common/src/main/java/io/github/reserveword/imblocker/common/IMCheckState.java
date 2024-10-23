@@ -173,7 +173,7 @@ public class IMCheckState {
                     try {
                         screen.charTyped(nonPrintable, 0); // charTyped
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Common.LOGGER.error("checkNonPrintable charTyped error:", e);
                     }
                 }
                 state.remove(IMState.NON_PRINTABLE_CHALLENGE_PENDING);
@@ -211,21 +211,28 @@ public class IMCheckState {
         actives.add(active);
     }
 
+    // connect rules above
+    private static long nextCheck = System.currentTimeMillis() + Config.INSTANCE.getCheckInterval();
+    private static boolean scheduled = false;
+
     public static void clientTick(ScreenInfo screen) {
         /*checkScreenList(screen);
         checkSpecial();
-        if (count == 0) checkTick();
+        long now = System.currentTimeMillis();
+        if (nextCheck < now && (scheduled || screen.get() == null)) {
+            nextCheck = now + Config.INSTANCE.getCheckInterval();
+            scheduled = false;
+            checkTick();
+        }
         checkNonPrintable(screen);
         checkClick();*/
     	checkAxiomGuiState();
         syncState();
-        // check interval
-        if (count > 0) count --;
-        else count = Config.INSTANCE.getCheckInterval();
     }
 
-    // connect rules above
-    private static int count = Config.INSTANCE.getCheckInterval();
+    public static void scheduleTickCheck() {
+        scheduled = true;
+    }
 
     public static void mouseEvent() {
         state.add(IMState.NON_PRINTABLE_CHALLENGE_PENDING);

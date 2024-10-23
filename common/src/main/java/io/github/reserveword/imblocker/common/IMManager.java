@@ -26,6 +26,10 @@ public final class IMManager {
 		INSTANCE.setImmOnState(isEN);
 	}
 	
+	public static void syncState() {
+		INSTANCE.syncState();
+	}
+	
 	public static boolean getState() {
 		return INSTANCE.getState();
 	}

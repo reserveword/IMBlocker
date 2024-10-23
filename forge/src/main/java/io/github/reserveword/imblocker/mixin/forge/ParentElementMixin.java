@@ -1,15 +1,16 @@
 package io.github.reserveword.imblocker.mixin.forge;
 
-import io.github.reserveword.imblocker.Common;
-import io.github.reserveword.imblocker.IMCheckState;
-import net.minecraft.client.gui.components.events.ContainerEventHandler;
-import net.minecraft.client.gui.components.events.GuiEventListener;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Implements;
 import org.spongepowered.asm.mixin.Interface;
 import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+
+import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.IMCheckState;
+import net.minecraft.client.gui.components.events.ContainerEventHandler;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 
 @Mixin(ContainerEventHandler.class)
 @Implements(@Interface(iface = ContainerEventHandler.class, prefix = "ceh$"))

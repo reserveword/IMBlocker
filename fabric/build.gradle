@@ -39,10 +39,9 @@ dependencies {
     modLocalRuntime "maven.modrinth:voxelmap-updated:$voxelmap_version"
     modCompileOnlyApi "dev.emi:emi-fabric:$emi_version"
     modLocalRuntime "dev.emi:emi-fabric:$emi_version"
+    compileOnly "io.github.spair:imgui-java-app:$imgui_version"
     // modRuntimeOnly "curse.maven:ftbquest-$ftbquest_version"
     modCompileOnly "io.github.cottonmc:LibGui:$cottonlibgui_version"
-    
-    implementation files('lib/Axiom-4.1.1-for-MC1.20.1.jar')
 
     implementation project(':common')
 }

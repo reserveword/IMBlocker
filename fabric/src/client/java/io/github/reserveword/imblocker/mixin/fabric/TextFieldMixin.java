@@ -16,15 +16,15 @@ public abstract class TextFieldMixin implements FocusableWidgetAccessor {
 	@Shadow
 	private String text;
 	
+	@Shadow
+	private boolean editable;
+	
     @Shadow
     public abstract boolean isActive();
     
-    @Shadow
-    public abstract boolean isEditable();
-    
     @Override
     public boolean isWidgetEditable() {
-    	return isEditable();
+    	return editable;
     }
 
     @Override

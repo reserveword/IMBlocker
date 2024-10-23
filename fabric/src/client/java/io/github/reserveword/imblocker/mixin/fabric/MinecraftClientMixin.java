@@ -11,6 +11,8 @@ import io.github.reserveword.imblocker.common.IMCheckState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.AbstractSignEditScreen;
+import net.minecraft.client.gui.screen.ingame.BookEditScreen;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
@@ -31,6 +33,7 @@ public abstract class MinecraftClientMixin {
     }
     
     private boolean isScreenInWhiteList(Screen screen) {
-    	return screen != null && Config.INSTANCE.inScreenWhitelist(screen.getClass());
+//    	return screen != null && Config.INSTANCE.inScreenWhitelist(screen.getClass());
+    	return screen instanceof AbstractSignEditScreen || screen instanceof BookEditScreen;
     }
 }

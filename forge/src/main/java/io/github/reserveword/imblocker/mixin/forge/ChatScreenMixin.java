@@ -6,6 +6,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(ChatScreen.class)
 public interface ChatScreenMixin {
-    @Accessor("initial")
+    @Accessor("f_95576_")
     String getOriginalText();
 }

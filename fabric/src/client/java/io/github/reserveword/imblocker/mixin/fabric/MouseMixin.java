@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker.fabric.mixin;
+package io.github.reserveword.imblocker.mixin.fabric;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;

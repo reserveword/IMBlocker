@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker.fabric;
+package io.github.reserveword.imblocker;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;

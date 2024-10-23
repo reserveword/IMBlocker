@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker.fabric;
+package io.github.reserveword.imblocker;
 
 import io.github.reserveword.imblocker.common.Config;
 import io.github.reserveword.imblocker.common.IMCheckState;

@@ -20,10 +20,10 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "io.github.reserveword.imblocker.fabric.IMBlockerFabric"
+      "io.github.reserveword.imblocker.IMBlockerFabric"
     ],
     "modmenu": [
-      "io.github.reserveword.imblocker.fabric.FabricConfig"
+      "io.github.reserveword.imblocker.FabricConfig"
     ]
   },
   "mixins": [

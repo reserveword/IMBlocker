@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker.fabric.mixin;
+package io.github.reserveword.imblocker.mixin.fabric;
 
 import dev.ftb.mods.ftblibrary.ui.TextBox;
 import dev.ftb.mods.ftblibrary.ui.Widget;

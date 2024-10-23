@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker.fabric;
+package io.github.reserveword.imblocker;
 
 import net.minecraft.client.gui.screen.ingame.BookEditScreen;
 import net.minecraft.client.gui.screen.ingame.HangingSignEditScreen;

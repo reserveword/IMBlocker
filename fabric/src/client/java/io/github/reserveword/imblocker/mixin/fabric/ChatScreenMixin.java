@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker.fabric.mixin;
+package io.github.reserveword.imblocker.mixin.fabric;
 
 import net.minecraft.client.gui.screen.ChatScreen;
 import org.spongepowered.asm.mixin.Mixin;

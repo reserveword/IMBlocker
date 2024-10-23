@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker.fabric.mixin;
+package io.github.reserveword.imblocker.mixin.fabric;
 
 import io.github.cottonmc.cotton.gui.widget.WTextField;
 import io.github.cottonmc.cotton.gui.widget.data.InputResult;

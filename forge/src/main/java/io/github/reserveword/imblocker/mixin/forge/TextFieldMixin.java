@@ -4,6 +4,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.FocusableWidgetAccessor;
 import io.github.reserveword.imblocker.common.IMCheckState;
@@ -12,19 +13,19 @@ import net.minecraft.client.gui.components.EditBox;
 @Mixin(EditBox.class)
 public abstract class TextFieldMixin implements FocusableWidgetAccessor {
 	@Shadow
-	private String f_94093_;
+	private String value;
 	
 	@Shadow
-	private boolean f_94098_;
+	private boolean isEditable;
 	
 	@Override
 	public boolean isWidgetEditable() {
-		return f_94098_;
+		return isEditable;
 	}
 	
 	@Override
 	public String getText() {
-		return f_94093_;
+		return value;
 	}
 	
     /*@Shadow
@@ -45,9 +46,9 @@ public abstract class TextFieldMixin implements FocusableWidgetAccessor {
         IMCheckState.captureClick(this::canConsumeInput);
     }*/
 	
-	@Inject(method = "m_93692_", at = @At("TAIL"))
-	public void focusChanged(boolean isFocused) {
-		System.out.println("Focus Changed");
+	@Inject(method = "setFocused", at = @At("TAIL"))
+	public void focusChanged(boolean isFocused, CallbackInfo ci) {
+		System.out.println(this + " focus changed to " + isFocused);
 		if(isFocused) {
     		IMCheckState.focusGained(this);
     	}else {

@@ -2,10 +2,8 @@ package io.github.reserveword.imblocker;
 
 import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.IMCheckState;
-import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -14,10 +12,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Common.MODID)
 public class IMBlocker {
-    public IMBlocker() {
+    public IMBlocker(FMLJavaModLoadingContext context) {
         // Register ourselves for server and other game events we are interested in
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onConfigLoadReload);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
+        context.getModEventBus().addListener(this::onConfigLoadReload);
+        context.registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
     }
 
     @Mod.EventBusSubscriber
@@ -28,14 +26,14 @@ public class IMBlocker {
                 IMCheckState.clientTick();
             }
         }
-        @SubscribeEvent
+        /*@SubscribeEvent
         public static void onMouseClick(ScreenEvent.MouseButtonPressed mie) {
             IMCheckState.mouseEvent();
         }
         @SubscribeEvent
         public static void onMouseClick(ScreenEvent.MouseButtonReleased mie) {
             IMCheckState.mouseEvent();
-        }
+        }*/
     }
 
     @SubscribeEvent

@@ -18,7 +18,7 @@ public abstract class MinecraftClientMixin {
         IMManager.syncState();
     }*/
     
-    @Inject(method = "m_91152_", at = @At("HEAD"))
+    @Inject(method = "setScreen", at = @At("HEAD"))
     public void onScreenChanged(Screen screen, CallbackInfo ci) {
     	IMCheckState.isWhiteListScreenShowing = isScreenInWhiteList(screen);
     	IMCheckState.focusedInputWidget = null;

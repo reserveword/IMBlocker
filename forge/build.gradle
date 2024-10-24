@@ -65,8 +65,8 @@ dependencies {
 
 mixin {
     // MixinGradle Settings
-    add sourceSets.main, 'META-INF/imblocker.mixins.refmap.json'
-    config 'META-INF/imblocker.mixins.json'
+    add sourceSets.main, 'imblocker-forge.mixins.refmap.json'
+    config 'imblocker-forge.mixins.json'
 }
 
 project.jar {

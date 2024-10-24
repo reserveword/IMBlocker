@@ -9,7 +9,7 @@ import net.minecraft.client.gui.screen.Screen;
 public class FabricScreenInfo implements IMCheckState.ScreenInfo {
     private final Screen screen;
     public FabricScreenInfo() {
-        screen = MinecraftClient.getInstance().currentScreen;;
+        screen = MinecraftClient.getInstance().currentScreen;
     }
 
     @Override

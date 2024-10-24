@@ -132,6 +132,7 @@ project.jar {
     dependsOn ':fabric:feedback'
     manifest {
         attributes([
+        		"MixinConfigs": "imblocker-forge.mixins.json",
                 "Specification-Title"     : mod_id,
                 "Specification-Vendor"    : author,
                 "Specification-Version"   : "1", // We are version 1 of ourselves

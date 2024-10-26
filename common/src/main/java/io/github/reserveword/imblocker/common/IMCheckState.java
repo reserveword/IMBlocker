@@ -21,13 +21,14 @@ public class IMCheckState {
     public static boolean isChatScreenShowing = false;
     public static ChatState chatState = ChatState.NONE;
     
-    private static Runnable deferredOp = null;
+    public static long lastIMStateChangeTimestamp;
+    private static Runnable setConversionState = null;
 
     // check overall state
     private static void syncState() {
-        if(deferredOp != null) {
-        	deferredOp.run();
-        	deferredOp = null;
+        if(conversionStateCdDone() && setConversionState != null) {
+        	setConversionState.run();
+        	setConversionState = null;
         }
         
         boolean state;
@@ -39,6 +40,14 @@ public class IMCheckState {
         }
         IMManager.setState(state);
         updateChatState();
+    }
+    
+    public static void cancelSetConversionState() {
+    	setConversionState = null;
+    }
+    
+    private static boolean conversionStateCdDone() {
+    	return System.currentTimeMillis() - lastIMStateChangeTimestamp > 50;
     }
     
     public static void focusChanged(FocusableWidgetAccessor widget, boolean isFocused) {
@@ -65,8 +74,8 @@ public class IMCheckState {
     	ChatState currentChatState = !isChatScreenShowing || axiomGuiCaptureKeyboard ? ChatState.NONE :
     			(focusedInputWidget.getText().trim().startsWith("/") ? ChatState.COMMAND : ChatState.CHAT);
     	if(currentChatState != ChatState.NONE && chatState != currentChatState) {
-    		//Executing at the same tick as imstate change will nullify this operation, thus move to next tick.
-			deferredOp = () -> IMManager.setImmOnState(currentChatState == ChatState.COMMAND);
+    		//Executing at the same time as imstate change will nullify this operation, thus move to 50ms later.
+			setConversionState = () -> IMManager.setImmOnState(currentChatState == ChatState.COMMAND);
     	}
     	chatState = currentChatState;
 	}

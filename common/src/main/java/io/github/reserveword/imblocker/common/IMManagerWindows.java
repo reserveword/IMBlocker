@@ -66,11 +66,14 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     public void setState(boolean on) {
     	boolean state = ImmGetContext(u.GetForegroundWindow()) != null;
         if (state != on) {
+        	IMCheckState.lastIMStateChangeTimestamp = System.currentTimeMillis();
 	        if (on) {
 	            makeOnImp();
 	        } else {
 	            makeOffImp();
+	            IMCheckState.cancelSetConversionState();
 	        }
+	        IMManagerWindows.state = on;
         }
     }
     

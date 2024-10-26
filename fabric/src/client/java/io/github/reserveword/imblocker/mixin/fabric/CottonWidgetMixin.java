@@ -2,7 +2,6 @@ package io.github.reserveword.imblocker.mixin.fabric;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -18,7 +17,7 @@ public abstract class CottonWidgetMixin implements FocusableWidgetAccessor {
     
     @Override
     public boolean isWidgetEditable() {
-    	return (getClass().equals(WTextField.class)) && ((CottonTextFieldMixin) this).isEditable();
+    	return (getClass().equals(WTextField.class)) && ((WTextField)(Object) this).isEditable();
     }
 
     /*

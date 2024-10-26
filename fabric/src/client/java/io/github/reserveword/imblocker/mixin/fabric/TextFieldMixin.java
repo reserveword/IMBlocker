@@ -5,7 +5,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import io.github.reserveword.imblocker.common.FocusableWidgetAccessor;
 import io.github.reserveword.imblocker.common.IMCheckState;
@@ -49,7 +48,7 @@ public abstract class TextFieldMixin implements FocusableWidgetAccessor {
     }
     */
     
-    @Inject(method = "setFocused", at = @At("TAIL"))
+    @Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
     public void focusChanged(boolean isFocused, CallbackInfo ci) {
     	if(isFocused) {
     		IMCheckState.focusGained(this);

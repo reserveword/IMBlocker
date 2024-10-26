@@ -6,7 +6,6 @@
   "client": [
     "ChatScreenMixin",
     "CottonWidgetMixin",
-    "CottonTextFieldMixin",
     "FtbTextFieldMixin",
     "MeteorTextFieldMixin",
     "MinecraftClientMixin",

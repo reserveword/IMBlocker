@@ -24,7 +24,7 @@ public abstract class ReiTextFieldMixin implements FocusableWidgetAccessor {
     	return editable;
     }
     
-    @Inject(method = "setFocused", at = @At("TAIL"))
+    @Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
     public void focusChanged(boolean isFocused, CallbackInfo ci) {
     	if(isFocused) {
     		IMCheckState.focusGained(this);

@@ -41,6 +41,14 @@ public class IMCheckState {
         updateChatState();
     }
     
+    public static void focusChanged(FocusableWidgetAccessor widget, boolean isFocused) {
+    	if(isFocused) {
+    		focusGained(widget);
+    	}else {
+    		focusLost(widget);
+    	}
+    }
+    
     public static void focusGained(FocusableWidgetAccessor widget) {
     	focusedInputWidget = widget;
     	syncState();

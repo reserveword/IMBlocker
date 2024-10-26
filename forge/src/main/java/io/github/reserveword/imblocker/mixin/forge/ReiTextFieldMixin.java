@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker.mixin.fabric;
+package io.github.reserveword.imblocker.mixin.forge;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -13,19 +13,18 @@ import io.github.reserveword.imblocker.common.IMCheckState;
 @Pseudo
 @Mixin(targets = {
         "me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget",
-        "me.shedaniel.rei.gui.widget.TextFieldWidget"
-}, remap = false)
+        "me.shedaniel.rei.gui.widget.TextFieldWidget"})
 public abstract class ReiTextFieldMixin implements FocusableWidgetAccessor {
-    @Shadow
-    protected boolean editable;
-    
-    @Override
-    public boolean isWidgetEditable() {
-    	return editable;
-    }
-    
-    @Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
-    public void focusChanged(boolean isFocused, CallbackInfo ci) {
-    	IMCheckState.focusChanged(this, isFocused);
-    }
+	@Shadow
+	private boolean editable;
+	
+	@Override
+	public boolean isWidgetEditable() {
+		return editable;
+	}
+	
+	@Inject(method = {"setFocused", "m_93692_"}, at = @At("TAIL"))
+	public void focusChanged(boolean isFocused, CallbackInfo ci) {
+		IMCheckState.focusChanged(this, isFocused);
+	}
 }

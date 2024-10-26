@@ -20,10 +20,6 @@ public abstract class MeteorTextFieldMixin implements FocusableWidgetAccessor {
     
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		if(isFocused) {
-			IMCheckState.focusGained(this);
-		}else {
-			IMCheckState.focusLost(this);
-		}
+		IMCheckState.focusChanged(this, isFocused);
 	}
 }

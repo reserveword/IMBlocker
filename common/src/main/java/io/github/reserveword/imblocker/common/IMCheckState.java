@@ -43,11 +43,13 @@ public class IMCheckState {
     
     public static void focusGained(FocusableWidgetAccessor widget) {
     	focusedInputWidget = widget;
+    	syncState();
     }
     
     public static void focusLost(FocusableWidgetAccessor widget) {
     	if(focusedInputWidget == widget) {
     		focusedInputWidget = null;
+    		syncState();
     	}
     }
     

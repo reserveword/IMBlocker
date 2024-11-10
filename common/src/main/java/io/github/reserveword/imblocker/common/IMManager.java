@@ -5,7 +5,7 @@ import com.sun.jna.Platform;
 public final class IMManager {
 	private static final PlatformIMManager INSTANCE;
 	
-	public sealed interface PlatformIMManager permits IMManagerWindows, IMManagerMac, IMManagerStub {
+	public sealed interface PlatformIMManager permits IMManagerWindows, IMManagerMac, IMManagerLinux, IMManagerStub {
 		
 		void setState(boolean on);
 		
@@ -39,6 +39,8 @@ public final class IMManager {
 			INSTANCE = new IMManagerWindows();
 		}else if(Platform.isMac()) {
 			INSTANCE = new IMManagerMac();
+		}else if(Platform.isLinux()) {
+			INSTANCE = new IMManagerLinux();
 		}else {
 			Common.LOGGER.warn("Unsupported platform, using stub");
 			INSTANCE = new IMManagerStub();

@@ -59,6 +59,8 @@ public class ForgeConfig extends Config {
                 clsSet.add(Class.forName(s));
             } catch (ClassNotFoundException e) {
                 Common.LOGGER.warn("Class {} not found, ignored.", s);
+            } catch (Throwable e) {
+                Common.LOGGER.warn(e);
             }
         }
         Common.LOGGER.info("imblocker bakelist {} result {}", name, clsSet);

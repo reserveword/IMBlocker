@@ -35,7 +35,7 @@ final class IMManagerMac implements IMManager.PlatformIMManager {
     }
 
     @Override
-    public void setImmOnState(boolean isEN) {
+    public void setEnglishState(boolean english) {
 
     }
 

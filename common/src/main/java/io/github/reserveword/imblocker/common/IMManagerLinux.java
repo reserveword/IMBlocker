@@ -9,7 +9,7 @@ final class IMManagerLinux implements IMManager.PlatformIMManager {
     private LinuxIMFramework imFramework = LinuxIMFramework.IBUS;
 
     @Override
-    public void setImmOnState(boolean isEN) {
+    public void setEnglishState(boolean english) {
 
     }
 

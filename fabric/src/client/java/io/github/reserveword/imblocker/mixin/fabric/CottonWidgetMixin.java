@@ -1,7 +1,7 @@
 package io.github.reserveword.imblocker.mixin.fabric;
 
 import io.github.reserveword.imblocker.common.FocusableWidgetAccessor;
-import io.github.reserveword.imblocker.common.IMCheckState;
+import io.github.reserveword.imblocker.rules.FocusRule;
 
 import io.github.cottonmc.cotton.gui.widget.WTextField;
 import io.github.cottonmc.cotton.gui.widget.WWidget;
@@ -22,11 +22,11 @@ public abstract class CottonWidgetMixin implements FocusableWidgetAccessor {
 
     @Inject(method = "onFocusGained", at = @At("HEAD"))
     public void onFocusGained(CallbackInfo ci) {
-        IMCheckState.focusGained(this);
+        FocusRule.focusGained(this);
     }
 
     @Inject(method = "onFocusLost", at = @At("HEAD"))
     public void onFocusLost(CallbackInfo ci) {
-        IMCheckState.focusLost(this);
+        FocusRule.focusLost(this);
     }
 }

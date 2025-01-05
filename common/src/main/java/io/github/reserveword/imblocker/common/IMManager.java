@@ -21,8 +21,8 @@ public final class IMManager {
     private IMManager() {
     }
 
-    public static void setImmOnState(boolean isEN) {
-        INSTANCE.setImmOnState(isEN);
+    public static void setEnglish(boolean english) {
+        INSTANCE.setEnglishState(english);
     }
 
     public static void syncState() {
@@ -39,7 +39,7 @@ public final class IMManager {
 
     public sealed interface PlatformIMManager permits IMManagerWindows, IMManagerMac, IMManagerLinux, IMManagerStub {
 
-        void setImmOnState(boolean isEN);
+        void setEnglishState(boolean english);
 
         void syncState();
 

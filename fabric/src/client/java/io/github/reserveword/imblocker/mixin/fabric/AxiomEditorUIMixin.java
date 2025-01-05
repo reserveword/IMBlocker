@@ -1,6 +1,6 @@
 package io.github.reserveword.imblocker.mixin.fabric;
 
-import io.github.reserveword.imblocker.common.AxiomGuiAccessor;
+import io.github.reserveword.imblocker.rules.AxiomGuiRule;
 
 import imgui.ImGuiIO;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,16 +18,6 @@ public abstract class AxiomEditorUIMixin {
 
     @Inject(method = "init", at = @At("TAIL"))
     private static void loadImGui(CallbackInfo ci) {
-        AxiomGuiAccessor.instance = new AxiomGuiAccessor() {
-            @Override
-            public boolean isTextFieldFocused() {
-                return imGuiIO.getWantTextInput();
-            }
-
-            @Override
-            public boolean isCaptureKeyboard() {
-                return imGuiIO.getWantCaptureKeyboard();
-            }
-        };
+        AxiomGuiRule.imGuiIO = imGuiIO;
     }
 }

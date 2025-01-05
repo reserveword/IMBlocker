@@ -4,7 +4,7 @@ final class IMManagerStub implements IMManager.PlatformIMManager {
     private static boolean state = true;
 
     @Override
-    public void setImmOnState(boolean isEN) {
+    public void setEnglishState(boolean english) {
     }
 
     @Override

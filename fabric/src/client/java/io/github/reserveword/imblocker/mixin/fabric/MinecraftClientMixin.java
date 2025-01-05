@@ -1,6 +1,9 @@
 package io.github.reserveword.imblocker.mixin.fabric;
 
-import io.github.reserveword.imblocker.common.IMCheckState;
+import io.github.reserveword.imblocker.common.IMManager;
+import io.github.reserveword.imblocker.rules.ChatRule;
+import io.github.reserveword.imblocker.rules.FocusRule;
+import io.github.reserveword.imblocker.rules.ScreenListRule;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -17,18 +20,17 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "onWindowFocusChanged", at = @At("HEAD"))
     public void syncIMState(CallbackInfo ci) {
         System.out.println("Window focus changed.");
-//        IMManager.syncState();
+        IMManager.syncState();
     }
 
     @Inject(method = "setScreen", at = @At("HEAD"))
     public void onScreenChanged(Screen screen, CallbackInfo ci) {
-        IMCheckState.isWhiteListScreenShowing = isScreenInWhiteList(screen);
-        IMCheckState.focusedInputWidget = null;
-        IMCheckState.isChatScreenShowing = screen instanceof ChatScreen;
+        ScreenListRule.isWhiteListScreenShowing = isScreenInWhiteList(screen);
+        FocusRule.focusedInputWidget = null;
+        ChatRule.isChatScreenShowing = screen instanceof ChatScreen;
     }
 
     private boolean isScreenInWhiteList(Screen screen) {
-//    	return screen != null && Config.INSTANCE.inScreenWhitelist(screen.getClass());
         return screen instanceof AbstractSignEditScreen || screen instanceof BookEditScreen;
     }
 }

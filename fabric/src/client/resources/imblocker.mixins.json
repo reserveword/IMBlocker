@@ -10,8 +10,6 @@
     "FtbTextFieldMixin",
     "MeteorTextFieldMixin",
     "MinecraftClientMixin",
-    "MouseMixin",
-    "NotebookScreenMixin",
     "ReiTextFieldMixin",
     "ReplayModTextFieldMixin",
     "RSOAbstractFrameMixin",

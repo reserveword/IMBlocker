@@ -1,7 +1,8 @@
 package io.github.reserveword.imblocker;
 
 import io.github.reserveword.imblocker.common.Config;
-import io.github.reserveword.imblocker.common.IMCheckState;
+import io.github.reserveword.imblocker.rules.AxiomGuiRule;
+import io.github.reserveword.imblocker.rules.Rules;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
@@ -28,8 +29,9 @@ public class IMBlockerFabric implements ClientModInitializer {
             };
         }
         ClientTickEvents.START_CLIENT_TICK.register(tick -> {
-            IMCheckState.clientTick();
+            Rules.apply();
         });
+        Rules.register(new AxiomGuiRule());
     }
 
     private boolean hasMod(String modid) {

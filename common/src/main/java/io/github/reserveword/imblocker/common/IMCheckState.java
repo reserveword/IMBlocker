@@ -1,144 +1,86 @@
 package io.github.reserveword.imblocker.common;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.WeakHashMap;
-import java.util.function.BooleanSupplier;
 
 public class IMCheckState {
-    // process CLICK rules
-    private static final ArrayList<BooleanSupplier> actives = new ArrayList<>();
+    // process NON_PRINTABLE rules
+    public static final char nonPrintable = '\0';
     private static final EnumSet<IMState> state = EnumSet.copyOf(IMState.NONE);
-    
+    private static final WeakHashMap<Object, InputClassRule> lastInput = new WeakHashMap<>();
     public static FocusableWidgetAccessor focusedInputWidget = null;
-    
-    private static boolean axiomGuiCaptureKeyboard = false;
-    private static boolean axiomGuiTextFieldFocused = false;
-    
     public static boolean isWhiteListScreenShowing = false;
-    
     public static boolean isChatScreenShowing = false;
     public static ChatState chatState = ChatState.NONE;
-    
     public static long lastIMStateChangeTimestamp;
+    private static boolean axiomGuiCaptureKeyboard = false;
+    private static boolean axiomGuiTextFieldFocused = false;
     private static Runnable setConversionState = null;
 
     // check overall state
     private static void syncState() {
-        if(conversionStateCdDone() && setConversionState != null) {
-        	setConversionState.run();
-        	setConversionState = null;
+        if (conversionStateCdDone() && setConversionState != null) {
+            setConversionState.run();
+            setConversionState = null;
         }
-        
+
         boolean state;
-        if(axiomGuiCaptureKeyboard) {
-        	state = axiomGuiTextFieldFocused;
-        }else {
-        	state = (focusedInputWidget != null && focusedInputWidget.isWidgetEditable()) 
-            		|| isWhiteListScreenShowing;
+        if (axiomGuiCaptureKeyboard) {
+            state = axiomGuiTextFieldFocused;
+        } else {
+            state = (focusedInputWidget != null && focusedInputWidget.isWidgetEditable())
+                    || isWhiteListScreenShowing;
         }
         IMManager.setState(state);
         updateChatState();
     }
-    
+
     public static void cancelSetConversionState() {
-    	setConversionState = null;
+        setConversionState = null;
     }
-    
+
     private static boolean conversionStateCdDone() {
-    	return System.currentTimeMillis() - lastIMStateChangeTimestamp > 50;
+        return System.currentTimeMillis() - lastIMStateChangeTimestamp > 50;
     }
-    
+
     public static void focusChanged(FocusableWidgetAccessor widget, boolean isFocused) {
-    	if(isFocused) {
-    		focusGained(widget);
-    	}else {
-    		focusLost(widget);
-    	}
-    }
-    
-    public static void focusGained(FocusableWidgetAccessor widget) {
-    	focusedInputWidget = widget;
-    	syncState();
-    }
-    
-    public static void focusLost(FocusableWidgetAccessor widget) {
-    	if(focusedInputWidget == widget) {
-    		focusedInputWidget = null;
-    		syncState();
-    	}
-    }
-    
-    private static void updateChatState() {
-    	ChatState currentChatState = !isChatScreenShowing || axiomGuiCaptureKeyboard ? ChatState.NONE :
-    			(focusedInputWidget.getText().trim().startsWith("/") ? ChatState.COMMAND : ChatState.CHAT);
-    	if(currentChatState != ChatState.NONE && chatState != currentChatState) {
-    		//Executing at the same time as imstate change will nullify this operation, thus move to 50ms later.
-			setConversionState = () -> IMManager.setImmOnState(currentChatState == ChatState.COMMAND);
-    	}
-    	chatState = currentChatState;
-	}
-    
-    private static void checkAxiomGuiState() {
-    	AxiomGuiAccessor axiomGuiAccessor = AxiomGuiAccessor.instance;
-    	if(axiomGuiAccessor != null) {
-	    	axiomGuiCaptureKeyboard = axiomGuiAccessor.isCaptureKeyboard();
-			axiomGuiTextFieldFocused = axiomGuiAccessor.isTextFieldFocused();
-    	}
-    }
-
-    // process SCREEN_LIST rules
-    // notice that nonPrintable rule triggers at screen change, here.
-    // notice that special rule triggers at screen change, here too.
-    private static WeakReference<Object> lastScreen = new WeakReference<>(null);
-    private static void checkScreenList(ScreenInfo screen) {
-        if (screen.get() != lastScreen.get()) {
-            Common.LOGGER.debug("screen changed to {}", screen.get());
-            state.add(IMState.NON_PRINTABLE_CHALLENGE_PENDING); // nonPrintable
-            checkSpecialScreenChange(screen); // special
-            lastScreen = new WeakReference<>(screen.get());
-            if (Config.INSTANCE.inScreenWhitelist(screen.type())) {
-                Common.LOGGER.debug("found whitelisted screen");
-                state.add(IMState.SCREEN_LIST);
-                state.add(IMState.SCREEN_LIST_MASK);
-            } else if (Config.INSTANCE.inScreenBlacklist(screen.type())) {
-                Common.LOGGER.debug("found blacklisted screen");
-                state.remove(IMState.SCREEN_LIST);
-                state.add(IMState.SCREEN_LIST_MASK);
-            } else {
-                state.remove(IMState.SCREEN_LIST_MASK);
-                if (screen.get() != null) {
-                    Config.INSTANCE.checkScreen(screen.type());
-                }
-            }
-        }
-    }
-
-    // process SPECIAL rules
-    private static void checkSpecial() { }
-
-    private static void checkSpecialScreenChange(ScreenInfo screen) {
-        if (screen.isChatScreen()) try {
-            String text = screen.defaultText();
-            if (text.startsWith("/") && Config.INSTANCE.getCheckCommandChat()) {
-                Common.LOGGER.debug("Specially disabled IME for command input");
-                state.remove(IMState.SPECIAL);
-                state.add(IMState.SPECIAL_MASK);
-            }
-            else {
-                state.remove(IMState.SPECIAL_MASK);
-            }
-        } catch (Throwable e) {
-            Common.LOGGER.warn("ChatScreen hook running exception:", e);
+        if (isFocused) {
+            focusGained(widget);
         } else {
-            state.remove(IMState.SPECIAL_MASK);
+            focusLost(widget);
         }
     }
 
-    // process TICK rules
-    private enum InputClassRule { NOT_LISTED, WHITELIST, BLACKLIST }
-    private static final WeakHashMap<Object, InputClassRule> lastInput = new WeakHashMap<>();
+    public static void focusGained(FocusableWidgetAccessor widget) {
+        focusedInputWidget = widget;
+        syncState();
+    }
+
+    public static void focusLost(FocusableWidgetAccessor widget) {
+        if (focusedInputWidget == widget) {
+            focusedInputWidget = null;
+            syncState();
+        }
+    }
+
+    private static void updateChatState() {
+        ChatState currentChatState = !isChatScreenShowing || axiomGuiCaptureKeyboard ? ChatState.NONE :
+                                             (focusedInputWidget.getText().trim().startsWith("/") ? ChatState.COMMAND : ChatState.CHAT);
+        if (currentChatState != ChatState.NONE && chatState != currentChatState) {
+            // Executing at the same time as imstate change will nullify this operation, thus move to 50ms later.
+            setConversionState = () -> IMManager.setImmOnState(currentChatState == ChatState.COMMAND);
+        }
+        chatState = currentChatState;
+    }
+
+    private static void checkAxiomGuiState() {
+        AxiomGuiAccessor axiomGuiAccessor = AxiomGuiAccessor.instance;
+        if (axiomGuiAccessor != null) {
+            axiomGuiCaptureKeyboard = axiomGuiAccessor.isCaptureKeyboard();
+            axiomGuiTextFieldFocused = axiomGuiAccessor.isTextFieldFocused();
+        }
+    }
+
     private static InputClassRule checkInputClass(Object input) {
         if (!lastInput.containsKey(input)) {
             Common.LOGGER.debug("input box {} ticking", input);
@@ -159,55 +101,12 @@ public class IMCheckState {
         } else return lastInput.get(input);
     }
 
-    private static void checkTick() {
-        if (state.contains(IMState.TICK_CHALLENGE)) {
-            Common.LOGGER.debug("test failed, im off");
-            state.remove(IMState.TICK_CHALLENGE);
-            state.remove(IMState.TICK);
-        } else if (state.contains(IMState.TICK)) {
-            state.add(IMState.TICK_CHALLENGE);
-        }
-    }
-
-    public static void captureTick(Object input, boolean canWrite) {
-        if (canWrite && checkInputClass(input) != InputClassRule.BLACKLIST) {
-            state.add(IMState.TICK);
-            state.remove(IMState.TICK_CHALLENGE);
-        }
-    }
-
-    // process NON_PRINTABLE rules
-    public static final char nonPrintable = '\0';
-
-    private static void checkNonPrintable(ScreenInfo screen) {
-        if (Config.INSTANCE.getUseExperimental())
-        {
-            if (state.contains(IMState.NON_PRINTABLE_CHALLENGE)) {
-                state.remove(IMState.NON_PRINTABLE_CHALLENGE);
-                state.remove(IMState.NON_PRINTABLE);
-            } else if (state.contains(IMState.NON_PRINTABLE_CHALLENGE_PENDING)) {
-                state.add(IMState.NON_PRINTABLE_CHALLENGE);
-                Common.LOGGER.debug("inject");
-                if (screen.get() != null) {
-                    try {
-                        screen.charTyped(nonPrintable, 0); // charTyped
-                    } catch (Exception e) {
-                        Common.LOGGER.error("checkNonPrintable charTyped error:", e);
-                    }
-                }
-                state.remove(IMState.NON_PRINTABLE_CHALLENGE_PENDING);
-            }
-        } else {
-            state.remove(IMState.NON_PRINTABLE);
-        }
-    }
-
     public static boolean captureNonPrintable(Object tfw, char ch, boolean canWrite) {
         if (Config.INSTANCE.getUseExperimental()
-                && checkInputClass(tfw) != InputClassRule.BLACKLIST
-                && ch == nonPrintable
-                && canWrite)
-        {
+            && checkInputClass(tfw) != InputClassRule.BLACKLIST
+            && ch == nonPrintable
+            && canWrite
+        ) {
             state.remove(IMState.NON_PRINTABLE_CHALLENGE);
             state.add(IMState.NON_PRINTABLE);
             Common.LOGGER.debug("captured");
@@ -216,41 +115,9 @@ public class IMCheckState {
         return false;
     }
 
-    public static void checkClick() {
-        for (BooleanSupplier active: actives) {
-            if (active.getAsBoolean()) {
-                state.add(IMState.CLICK);
-                break;
-            }
-        }
-        actives.clear();
-    }
-
-    public static void captureClick(BooleanSupplier active) {
-        actives.add(active);
-    }
-
-    // connect rules above
-    private static long nextCheck = System.currentTimeMillis() + Config.INSTANCE.getCheckInterval();
-    private static boolean scheduled = false;
-
-    public static void clientTick(/*ScreenInfo screen*/) {
-        /*checkScreenList(screen);
-        checkSpecial();
-        long now = System.currentTimeMillis();
-        if (nextCheck < now && (scheduled || screen.get() == null)) {
-            nextCheck = now + Config.INSTANCE.getCheckInterval();
-            scheduled = false;
-            checkTick();
-        }
-        checkNonPrintable(screen);
-        checkClick();*/
-    	checkAxiomGuiState();
+    public static void clientTick() {
+        checkAxiomGuiState();
         syncState();
-    }
-
-    public static void scheduleTickCheck() {
-        scheduled = true;
     }
 
     public static void mouseEvent() {
@@ -258,23 +125,19 @@ public class IMCheckState {
         state.remove(IMState.CLICK);
     }
 
+    // process TICK rules
+    private enum InputClassRule {NOT_LISTED, WHITELIST, BLACKLIST}
+
     private enum IMState {
-        SCREEN_LIST, SPECIAL, TICK, NON_PRINTABLE, CLICK,
-        SCREEN_LIST_MASK, SPECIAL_MASK,
-        TICK_CHALLENGE, NON_PRINTABLE_CHALLENGE,
+        TICK,
+        NON_PRINTABLE,
+        CLICK,
+        NON_PRINTABLE_CHALLENGE,
         NON_PRINTABLE_CHALLENGE_PENDING;
         public static final EnumSet<IMState> NONE = EnumSet.noneOf(IMState.class);
     }
-    
-    private enum ChatState {
-    	NONE, CHAT, COMMAND
-    }
 
-    public interface ScreenInfo {
-        Object get();
-        boolean isChatScreen();
-        Class<?> type();
-        String defaultText() throws Throwable;
-        void charTyped(char codePoint, int modifiers);
+    private enum ChatState {
+        NONE, CHAT, COMMAND
     }
 }

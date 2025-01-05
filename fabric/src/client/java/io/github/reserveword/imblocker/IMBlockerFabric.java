@@ -2,6 +2,7 @@ package io.github.reserveword.imblocker;
 
 import io.github.reserveword.imblocker.common.Config;
 import io.github.reserveword.imblocker.common.IMCheckState;
+
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;

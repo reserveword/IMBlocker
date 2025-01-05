@@ -7,6 +7,13 @@ import com.sun.jna.platform.win32.WinNT;
 
 final class IMManagerWindows implements IMManager.PlatformIMManager {
 
+    private static final User32 u = User32.INSTANCE;
+    private static boolean state = false;
+
+    static {
+        Native.register("imm32");
+    }
+
     private static native WinNT.HANDLE ImmGetContext(WinDef.HWND hwnd);
 
     private static native WinNT.HANDLE ImmAssociateContext(WinDef.HWND hwnd, WinNT.HANDLE himc);
@@ -16,16 +23,8 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     private static native WinNT.HANDLE ImmCreateContext();
 
     private static native boolean ImmDestroyContext(WinNT.HANDLE himc);
-    
+
     private static native boolean ImmSetConversionStatus(WinNT.HANDLE himc, int fdwConversion, int fdwSentence);
-
-    static {
-        Native.register("imm32");
-    }
-
-    private static final User32 u = User32.INSTANCE;
-
-    private static boolean state = false;
 
     private static void makeOnImp() {
         WinDef.HWND hwnd = u.GetForegroundWindow();
@@ -63,26 +62,11 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     }
 
     @Override
-    public void setState(boolean on) {
-    	boolean state = ImmGetContext(u.GetForegroundWindow()) != null;
-        if (state != on) {
-        	IMCheckState.lastIMStateChangeTimestamp = System.currentTimeMillis();
-	        if (on) {
-	            makeOnImp();
-	        } else {
-	            makeOffImp();
-	            IMCheckState.cancelSetConversionState();
-	        }
-	        IMManagerWindows.state = on;
-        }
-    }
-    
-    @Override
     public void setImmOnState(boolean isEN) {
         WinDef.HWND hwnd = u.GetForegroundWindow();
         WinNT.HANDLE himc = ImmGetContext(hwnd);
-        if(himc != null) {
-        	ImmSetConversionStatus(himc, isEN ? 0 : 1, 0);
+        if (himc != null) {
+            ImmSetConversionStatus(himc, isEN ? 0 : 1, 0);
         }
         ImmReleaseContext(hwnd, himc);
     }
@@ -100,6 +84,21 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     @Override
     public boolean getState() {
         return state;
+    }
+
+    @Override
+    public void setState(boolean on) {
+        boolean state = ImmGetContext(u.GetForegroundWindow()) != null;
+        if (state != on) {
+            IMCheckState.lastIMStateChangeTimestamp = System.currentTimeMillis();
+            if (on) {
+                makeOnImp();
+            } else {
+                makeOffImp();
+                IMCheckState.cancelSetConversionState();
+            }
+            IMManagerWindows.state = on;
+        }
     }
 
     public boolean toggle() {

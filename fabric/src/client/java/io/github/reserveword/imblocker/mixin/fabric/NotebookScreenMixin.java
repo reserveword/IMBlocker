@@ -1,9 +1,8 @@
 package io.github.reserveword.imblocker.mixin.fabric;
 
-import com.june.notebook.screens.menuScreen;
-
 import io.github.reserveword.imblocker.common.IMCheckState;
 
+import com.june.notebook.screens.menuScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;

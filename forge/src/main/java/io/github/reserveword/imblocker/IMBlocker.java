@@ -2,6 +2,7 @@ package io.github.reserveword.imblocker;
 
 import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.IMCheckState;
+
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -18,6 +19,12 @@ public class IMBlocker {
         context.registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
     }
 
+    @SubscribeEvent
+    public void onConfigLoadReload(ModConfigEvent e) {
+        Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading) ? "re" : "");
+        ForgeConfig.reload();
+    }
+
     @Mod.EventBusSubscriber
     public static class RegistryEvents {
         @SubscribeEvent
@@ -26,19 +33,5 @@ public class IMBlocker {
                 IMCheckState.clientTick();
             }
         }
-        /*@SubscribeEvent
-        public static void onMouseClick(ScreenEvent.MouseButtonPressed mie) {
-            IMCheckState.mouseEvent();
-        }
-        @SubscribeEvent
-        public static void onMouseClick(ScreenEvent.MouseButtonReleased mie) {
-            IMCheckState.mouseEvent();
-        }*/
-    }
-
-    @SubscribeEvent
-    public void onConfigLoadReload(ModConfigEvent e) {
-        Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading)?"re":"");
-        ForgeConfig.reload();
     }
 }

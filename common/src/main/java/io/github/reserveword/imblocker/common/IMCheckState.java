@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker;
+package io.github.reserveword.imblocker.common;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -10,16 +10,82 @@ public class IMCheckState {
     // process CLICK rules
     private static final ArrayList<BooleanSupplier> actives = new ArrayList<>();
     private static final EnumSet<IMState> state = EnumSet.copyOf(IMState.NONE);
+    
+    public static FocusableWidgetAccessor focusedInputWidget = null;
+    
+    private static boolean axiomGuiCaptureKeyboard = false;
+    private static boolean axiomGuiTextFieldFocused = false;
+    
+    public static boolean isWhiteListScreenShowing = false;
+    
+    public static boolean isChatScreenShowing = false;
+    public static ChatState chatState = ChatState.NONE;
+    
+    public static long lastIMStateChangeTimestamp;
+    private static Runnable setConversionState = null;
 
     // check overall state
     private static void syncState() {
-        boolean im;
-        if (state.contains(IMState.SCREEN_LIST_MASK)) im = state.contains(IMState.SCREEN_LIST);
-        else if (state.contains(IMState.SPECIAL_MASK)) im = state.contains(IMState.SPECIAL);
-        else im = (state.contains(IMState.TICK) ||
-                   state.contains(IMState.NON_PRINTABLE) ||
-                   state.contains(IMState.CLICK));
-        IMManager.makeState(im);
+        if(conversionStateCdDone() && setConversionState != null) {
+        	setConversionState.run();
+        	setConversionState = null;
+        }
+        
+        boolean state;
+        if(axiomGuiCaptureKeyboard) {
+        	state = axiomGuiTextFieldFocused;
+        }else {
+        	state = (focusedInputWidget != null && focusedInputWidget.isWidgetEditable()) 
+            		|| isWhiteListScreenShowing;
+        }
+        IMManager.setState(state);
+        updateChatState();
+    }
+    
+    public static void cancelSetConversionState() {
+    	setConversionState = null;
+    }
+    
+    private static boolean conversionStateCdDone() {
+    	return System.currentTimeMillis() - lastIMStateChangeTimestamp > 50;
+    }
+    
+    public static void focusChanged(FocusableWidgetAccessor widget, boolean isFocused) {
+    	if(isFocused) {
+    		focusGained(widget);
+    	}else {
+    		focusLost(widget);
+    	}
+    }
+    
+    public static void focusGained(FocusableWidgetAccessor widget) {
+    	focusedInputWidget = widget;
+    	syncState();
+    }
+    
+    public static void focusLost(FocusableWidgetAccessor widget) {
+    	if(focusedInputWidget == widget) {
+    		focusedInputWidget = null;
+    		syncState();
+    	}
+    }
+    
+    private static void updateChatState() {
+    	ChatState currentChatState = !isChatScreenShowing || axiomGuiCaptureKeyboard ? ChatState.NONE :
+    			(focusedInputWidget.getText().trim().startsWith("/") ? ChatState.COMMAND : ChatState.CHAT);
+    	if(currentChatState != ChatState.NONE && chatState != currentChatState) {
+    		//Executing at the same time as imstate change will nullify this operation, thus move to 50ms later.
+			setConversionState = () -> IMManager.setImmOnState(currentChatState == ChatState.COMMAND);
+    	}
+    	chatState = currentChatState;
+	}
+    
+    private static void checkAxiomGuiState() {
+    	AxiomGuiAccessor axiomGuiAccessor = AxiomGuiAccessor.instance;
+    	if(axiomGuiAccessor != null) {
+	    	axiomGuiCaptureKeyboard = axiomGuiAccessor.isCaptureKeyboard();
+			axiomGuiTextFieldFocused = axiomGuiAccessor.isTextFieldFocused();
+    	}
     }
 
     // process SCREEN_LIST rules
@@ -168,8 +234,8 @@ public class IMCheckState {
     private static long nextCheck = System.currentTimeMillis() + Config.INSTANCE.getCheckInterval();
     private static boolean scheduled = false;
 
-    public static void clientTick(ScreenInfo screen) {
-        checkScreenList(screen);
+    public static void clientTick(/*ScreenInfo screen*/) {
+        /*checkScreenList(screen);
         checkSpecial();
         long now = System.currentTimeMillis();
         if (nextCheck < now && (scheduled || screen.get() == null)) {
@@ -178,7 +244,8 @@ public class IMCheckState {
             checkTick();
         }
         checkNonPrintable(screen);
-        checkClick();
+        checkClick();*/
+    	checkAxiomGuiState();
         syncState();
     }
 
@@ -197,6 +264,10 @@ public class IMCheckState {
         TICK_CHALLENGE, NON_PRINTABLE_CHALLENGE,
         NON_PRINTABLE_CHALLENGE_PENDING;
         public static final EnumSet<IMState> NONE = EnumSet.noneOf(IMState.class);
+    }
+    
+    private enum ChatState {
+    	NONE, CHAT, COMMAND
     }
 
     public interface ScreenInfo {

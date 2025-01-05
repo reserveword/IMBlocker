@@ -5,11 +5,18 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "ChatScreenMixin",
-    "ClickableWidgetMixin",
+    "CottonWidgetMixin",
+    "FtbTextFieldMixin",
+    "MeteorTextFieldMixin",
     "MinecraftClientMixin",
     "MouseMixin",
-    "ParentElementMixin",
-    "ScreenMixin",
+    "NotebookScreenMixin",
+    "ReiTextFieldMixin",
+    "EmiSearchWidgetMixin",
+    "ReplayModTextFieldMixin",
+    "AxiomEditorUIMixin",
+    "SodiumSearchFieldMixin",
+    "RSOAbstractFrameMixin",
     "TextFieldMixin"
   ],
   "injectors": {

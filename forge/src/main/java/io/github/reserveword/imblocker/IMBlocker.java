@@ -1,37 +1,44 @@
 package io.github.reserveword.imblocker;
 
-import net.minecraftforge.api.distmarker.Dist;
+import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.IMCheckState;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Common.MODID)
 public class IMBlocker {
-    public IMBlocker() {
+    public IMBlocker(FMLJavaModLoadingContext context) {
         // Register ourselves for server and other game events we are interested in
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
+        context.getModEventBus().addListener(this::onConfigLoadReload);
+        context.registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
     }
 
-    @Mod.EventBusSubscriber(Dist.CLIENT)
-    public static class ForgeEvents {
+    @Mod.EventBusSubscriber
+    public static class RegistryEvents {
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent cte) {
             if (cte.phase == TickEvent.Phase.START) {
-                IMCheckState.clientTick(new ForgeScreenInfo());
+                IMCheckState.clientTick();
             }
         }
+        /*@SubscribeEvent
+        public static void onMouseClick(ScreenEvent.MouseButtonPressed mie) {
+            IMCheckState.mouseEvent();
+        }
+        @SubscribeEvent
+        public static void onMouseClick(ScreenEvent.MouseButtonReleased mie) {
+            IMCheckState.mouseEvent();
+        }*/
     }
 
-    @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class ModEvents {
-        @SubscribeEvent
-        public static void onConfigLoadReload(ModConfigEvent e) {
-            Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading)?"re":"");
-            ForgeConfig.reload();
-        }
+    @SubscribeEvent
+    public void onConfigLoadReload(ModConfigEvent e) {
+        Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading)?"re":"");
+        ForgeConfig.reload();
     }
 }

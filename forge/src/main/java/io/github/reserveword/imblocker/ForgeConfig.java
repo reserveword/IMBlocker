@@ -7,6 +7,9 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.tuple.Pair;
 
+import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.Config;
+
 import java.net.URL;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;

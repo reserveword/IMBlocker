@@ -1,14 +1,19 @@
 package io.github.reserveword.imblocker;
 
-import io.github.reserveword.imblocker.mixin.forge.ChatScreenMixin;
-import net.minecraft.client.Minecraft;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+
+import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.IMCheckState;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
 
 public class ForgeScreenInfo implements IMCheckState.ScreenInfo {
     private final Screen screen;
+    
     public ForgeScreenInfo() {
-        screen = Minecraft.getInstance().screen;
+        screen = null;//Minecraft.m_91087_().f_91080_;
     }
 
     @Override
@@ -27,12 +32,26 @@ public class ForgeScreenInfo implements IMCheckState.ScreenInfo {
     }
 
     @Override
-    public String defaultText() {
-        return ((ChatScreenMixin) screen).getOriginalText();
+    public String defaultText() throws Throwable {
+        return (String) getDefaultInputFieldText.invoke(screen);
     }
 
     @Override
     public void charTyped(char codePoint, int modifiers) {
         screen.charTyped(codePoint, modifiers);
+    }
+
+    private static final MethodHandle getDefaultInputFieldText;
+    static {
+        MethodHandle getDefaultInputFieldText_tmp;
+        try {
+            MethodHandles.Lookup lookup = MethodHandles.lookup();
+            //noinspection JavaLangInvokeHandleSignature
+            getDefaultInputFieldText_tmp = lookup.findVirtual(ChatScreen.class, "getDefaultInputFieldText", MethodType.methodType(String.class));
+        } catch (java.lang.NoSuchMethodException | java.lang.IllegalAccessException e) {
+            getDefaultInputFieldText_tmp = null;
+            Common.LOGGER.warn("ChatScreen command hook failed:", e);
+        }
+        getDefaultInputFieldText = getDefaultInputFieldText_tmp;
     }
 }

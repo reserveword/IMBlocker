@@ -52,21 +52,24 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    minecraft fg.deobf("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    
+    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
+    compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
 
     implementation project(':common')
 }
 
 mixin {
     // MixinGradle Settings
-    add sourceSets.main, 'META-INF/imblocker.mixins.refmap.json'
-    config 'META-INF/imblocker.mixins.json'
+    add sourceSets.main, 'imblocker-forge.mixins.refmap.json'
+    config 'imblocker-forge.mixins.json'
 }
 
 project.jar {

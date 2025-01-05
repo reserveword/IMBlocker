@@ -2,6 +2,7 @@ modLoader="javafml"
 loaderVersion="${loader_version_range}"
 issueTrackerURL="${issues_url}"
 license="${license}"
+
 [[mods]]
 modId="${mod_id}"
 version="${mod_version}"
@@ -12,5 +13,3 @@ credits="${credits}"
 authors="${author}"
 description='''Blocks Input Methods when you're not using it.
 在你不打字的时候自动关闭输入法'''
-[[mixins]]
-config = "META-INF/imblocker.mixins.json"

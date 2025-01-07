@@ -51,7 +51,7 @@ public class FabricConfig extends Config implements ModMenuApi, ConfigData {
 
     @Override
     public boolean inScreenWhitelist(Class<?> cls) {
-        return screenWhitelist.contains(cls == null ? null : cls.getName());
+        return cls != null && screenWhitelist.contains(cls.getName());
     }
 
     @Override

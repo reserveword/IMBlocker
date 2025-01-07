@@ -74,7 +74,7 @@ allprojects {
     tasks.withType(ProcessResources).configureEach {
         inputs.properties all_properties
 
-        filesMatching(['META-INF/neoforge.mods.toml', 'META-INF/mods.toml', 'fabric.mod.json', 'pack.mcmeta']) {
+        filesMatching(['META-INF/neoforge.mods.toml', 'fabric.mod.json', 'pack.mcmeta']) {
             expand all_properties
         }
     }
@@ -123,7 +123,6 @@ project.jar {
     dependsOn ':fabric:feedback'
     manifest {
         attributes([
-        		"MixinConfigs": "imblocker-forge.mixins.json",
                 "Specification-Title"     : mod_id,
                 "Specification-Vendor"    : author,
                 "Specification-Version"   : "1", // We are version 1 of ourselves
@@ -133,5 +132,4 @@ project.jar {
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
-    exclude 'io/github/reserveword/imblocker/asmdummy'
 }

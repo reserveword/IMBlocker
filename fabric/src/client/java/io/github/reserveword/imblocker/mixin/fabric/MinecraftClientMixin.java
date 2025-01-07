@@ -1,6 +1,5 @@
 package io.github.reserveword.imblocker.mixin.fabric;
 
-import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.rules.ChatRule;
 import io.github.reserveword.imblocker.rules.FocusRule;
@@ -18,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MinecraftClientMixin {
     @Inject(method = "onWindowFocusChanged", at = @At("HEAD"))
     public void syncIMState(CallbackInfo ci) {
-        Common.LOGGER.info("Window focus changed.");
         IMManager.syncState();
     }
 

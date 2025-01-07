@@ -74,7 +74,7 @@ public class ForgeConfig extends Config {
 
     @Override
     public boolean inScreenWhitelist(Class<?> cls) {
-        return screenWhitelist.contains(cls);
+        return screenWhitelist != null && screenWhitelist.contains(cls);
     }
 
     @Override

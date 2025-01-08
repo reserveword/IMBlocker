@@ -39,7 +39,7 @@ public final class IMManager {
 
     public sealed interface PlatformIMManager permits IMManagerWindows, IMManagerMac, IMManagerLinux, IMManagerStub {
 
-        void setEnglishState(boolean english);
+        void setEnglishState(Boolean english);
 
         void syncState();
 

@@ -10,7 +10,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     private static final User32 u = User32.INSTANCE;
     private static boolean state = true;
     public static long cooldown = System.currentTimeMillis();
-    private static boolean eng = false;
+    private static Boolean eng = null;
 
     static {
         Native.register("imm32");
@@ -29,8 +29,8 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     private static native boolean ImmSetConversionStatus(WinNT.HANDLE himc, int fdwConversion, int fdwSentence);
 
     @Override
-    public void setEnglishState(boolean english) {
-        if (english == eng) return;
+    public void setEnglishState(Boolean english) {
+        if (english.equals(eng)) return;
         if (System.currentTimeMillis() - cooldown < 50) return;
         WinDef.HWND hwnd = u.GetActiveWindow();
         WinNT.HANDLE himc = ImmGetContext(hwnd);
@@ -67,6 +67,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
                 WinNT.HANDLE himc = ImmAssociateContext(hwnd, null);
                 ImmDestroyContext(himc);
             }
+            eng = null;
             IMManagerWindows.state = on;
         }
     }

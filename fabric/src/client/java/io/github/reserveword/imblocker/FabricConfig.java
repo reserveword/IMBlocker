@@ -1,10 +1,10 @@
 package io.github.reserveword.imblocker;
 
-import com.terraformersmc.modmenu.api.ConfigScreenFactory;
-import com.terraformersmc.modmenu.api.ModMenuApi;
-
 import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.Config;
+
+import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import net.fabricmc.loader.api.FabricLoader;
@@ -69,25 +69,8 @@ public class FabricConfig extends Config implements ModMenuApi, ConfigData {
     }
 
     @Override
-    public Integer getCheckInterval() {
-        return checkIntervalMilli;
-    }
-
-    @Override
     public Boolean getUseExperimental() {
         return useExperimental;
-    }
-
-    @Override
-    public Boolean getCheckCommandChat() {
-        return checkCommandChat;
-    }
-
-    @Override
-    public void checkScreen(Class<?> cls) {
-        if (enableScreenRecovering) {
-            recoveredScreens.add(getClassName(cls));
-        }
     }
 
     public String getClassName(Class<?> cls) {
@@ -105,8 +88,10 @@ public class FabricConfig extends Config implements ModMenuApi, ConfigData {
             FabricLoader.getInstance().getAllMods().forEach(mod -> {
                 String modid = mod.getMetadata().getId();
                 try {
-                    if (!"minecraft".equals(modid) && !"imblocker".equals(modid) &&
-                            mod.getRootPaths().stream().anyMatch(path -> path.toUri().equals(loc))) {
+                    if (!"minecraft".equals(modid)
+                        && !"imblocker".equals(modid)
+                        && mod.getRootPaths().stream().anyMatch(path -> path.toUri().equals(loc))
+                    ) {
                         name.set(modid + ":" + cls.getName());
                     }
                 } catch (NullPointerException npe) {

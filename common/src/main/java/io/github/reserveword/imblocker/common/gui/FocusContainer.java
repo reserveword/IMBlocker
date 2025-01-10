@@ -1,49 +1,64 @@
 package io.github.reserveword.imblocker.common.gui;
 
+import io.github.reserveword.imblocker.common.IMManager;
+
 public enum FocusContainer {
-	MINECRAFT, IMGUI;
+	MINECRAFT(true), IMGUI(false);
 	
+	private boolean isFocused;
 	private FocusableWidget focusedWidget;
+	
+	private FocusContainer(boolean defaultFocusState) {
+		isFocused = defaultFocusState;
+	}
 	
 	public FocusableWidget getFocusedWidget() {
 		return focusedWidget;
 	}
 	
 	public void requestFocus(FocusableWidget toFocus) {
-		if(this.focusedWidget != toFocus) {
-			this.focusedWidget = toFocus;
-			FocusManager.requestUpdateIMState(this);
+		if(focusedWidget != toFocus) {
+			if(focusedWidget != toFocus && focusedWidget != null) {
+				focusedWidget.lostFocus();
+			}
+			
+			focusedWidget = toFocus;
+			
+			if(isFocused) {
+				focusedWidget.deliverFocus();
+			}
 		}
 	}
 	
-	public void removeFocus(FocusableWidget toCancel) {
-		if(this.focusedWidget == toCancel) {
-			this.focusedWidget = null;
-			FocusManager.requestUpdateIMState(this);
+	public void removeFocus(FocusableWidget toRemove) {
+		if(focusedWidget == toRemove) {
+			toRemove.lostFocus();
+			focusedWidget = null;
+			if(isFocused) {
+				IMManager.setState(false);
+			}
 		}
 	}
 	
 	public void cancelFocus() {
-		removeFocus(focusedWidget);
-	}
-	
-	public void requestUpdateIMState(FocusableWidget requestWidget) {
-		if(focusedWidget == requestWidget) {
-			FocusManager.requestUpdateIMState(this);
+		if(focusedWidget != null) {
+			removeFocus(focusedWidget);
 		}
 	}
 	
-	public boolean getPreferredIMState() {
-		return focusedWidget != null ? focusedWidget.isWidgetEditable() : false;
-	}
-	
-	public void requestUpdateEnglishState(FocusableWidget requestWidget) {
-		if(focusedWidget == requestWidget) {
-			FocusManager.requestUpdateEnglishState(this);
+	public void deliverFocus() {
+		isFocused = true;
+		if(focusedWidget != null) {
+			focusedWidget.deliverFocus();
+		}else {
+			IMManager.setState(false);
 		}
 	}
 	
-	public boolean getPreferredEnglishState() {
-		return focusedWidget != null ? focusedWidget.getPreferredEnglishState() : true;
+	public void lostFocus() {
+		isFocused = false;
+		if(focusedWidget != null) {
+			focusedWidget.lostFocus();
+		}
 	}
 }

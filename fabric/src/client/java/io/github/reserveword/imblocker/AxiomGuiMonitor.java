@@ -18,7 +18,7 @@ public class AxiomGuiMonitor {
 			
 			if(axiomGuiCaptureKeyboard != isAxiomGuiFocused) {
 				axiomGuiCaptureKeyboard = isAxiomGuiFocused;
-				FocusManager.setFocusedContainer(isAxiomGuiFocused ? 
+				FocusManager.requestFocus(isAxiomGuiFocused ? 
 						FocusContainer.IMGUI : FocusContainer.MINECRAFT);
 			}
 			

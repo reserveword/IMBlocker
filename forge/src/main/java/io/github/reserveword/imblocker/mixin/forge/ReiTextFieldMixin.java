@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 
 @Pseudo
@@ -16,6 +17,10 @@ import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
 	@Shadow
 	private boolean editable;
+	
+	private boolean isTrulyFocused = false;
+    public void setTrulyFocused(boolean isTrulyFocused) { this.isTrulyFocused = isTrulyFocused; }
+    public boolean isTrulyFocused() { return isTrulyFocused; }
 	
 	@Override
 	public boolean isWidgetEditable() {
@@ -29,6 +34,11 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
 	
 	@Inject(method = {"setEditable", "setIsEditable"}, at = @At("TAIL"))
     public void updateIMState(boolean editable, CallbackInfo ci) {
-    	getFocusContainer().requestUpdateIMState(this);
+		if(this.editable != editable) {
+    		this.editable = editable;
+    		if(isTrulyFocused) {
+    			IMManager.updateIMState(editable, getPreferredEnglishState());
+    		}
+    	}
     }
 }

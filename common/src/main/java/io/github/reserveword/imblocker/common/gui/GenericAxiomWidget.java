@@ -1,6 +1,7 @@
 package io.github.reserveword.imblocker.common.gui;
 
 public class GenericAxiomWidget implements FocusableWidget {
+	
 	private static final GenericAxiomWidget INSTANCE = new GenericAxiomWidget();
 	
 	@Override

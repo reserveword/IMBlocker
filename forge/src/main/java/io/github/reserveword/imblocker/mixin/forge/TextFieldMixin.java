@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import net.minecraft.client.gui.components.EditBox;
 
@@ -16,6 +17,10 @@ public abstract class TextFieldMixin implements MinecraftFocusableWidget {
 	private boolean isEditable;
 
 	private boolean preferredEnglishState = false;
+	
+	private boolean isTrulyFocused = false;
+    public void setTrulyFocused(boolean isTrulyFocused) { this.isTrulyFocused = isTrulyFocused; }
+    public boolean isTrulyFocused() { return isTrulyFocused; }
 	
 	@Override
 	public boolean isWidgetEditable() {
@@ -30,15 +35,19 @@ public abstract class TextFieldMixin implements MinecraftFocusableWidget {
 	@Inject(method = "setEditable", at = @At("HEAD"))
     public void updateIMState(boolean editable, CallbackInfo ci) {
 		if(this.isEditable != editable) {
-			this.isEditable = editable;
-			getFocusContainer().requestUpdateIMState(this);
-		}
+    		this.isEditable = editable;
+    		if(isTrulyFocused) {
+    			IMManager.updateIMState(editable, preferredEnglishState);
+    		}
+    	}
     }
 	
 	public void setPreferredEnglishState(boolean state) {
-    	if(preferredEnglishState != state) {
+		if(preferredEnglishState != state) {
     		preferredEnglishState = state;
-    		getFocusContainer().requestUpdateEnglishState(this);
+    		if(isTrulyFocused && isEditable) {
+    			IMManager.setEnglishState(preferredEnglishState);
+    		}
     	}
     }
     

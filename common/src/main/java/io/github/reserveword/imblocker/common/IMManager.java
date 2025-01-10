@@ -14,6 +14,13 @@ public final class IMManager {
 	
 	private IMManager() {}
 	
+	public static void updateIMState(boolean state, boolean englishState) {
+		INSTANCE.setState(state);
+		if(state) {
+			INSTANCE.setEnglishState(englishState);
+		}
+	}
+	
 	public static void setState(boolean on) {
 		INSTANCE.setState(on);
 	}

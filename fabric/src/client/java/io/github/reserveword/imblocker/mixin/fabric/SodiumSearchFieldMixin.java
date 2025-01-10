@@ -13,8 +13,9 @@ import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 @Mixin(targets = "me.flashyreese.mods.reeses_sodium_options."
 		+ "client.gui.frame.components.SearchTextFieldComponent", remap = false)
 public abstract class SodiumSearchFieldMixin implements MinecraftFocusableWidget {
+	
 	@Shadow
-	protected boolean editable; 
+	protected boolean editable;
 	
 	@Override
 	public boolean isWidgetEditable() {

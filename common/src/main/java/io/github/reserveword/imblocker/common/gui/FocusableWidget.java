@@ -8,7 +8,7 @@ public interface FocusableWidget {
 	
 	default void deliverFocus() {
 		setTrulyFocused(true);
-		IMManager.updateIMState(isWidgetEditable(), getPreferredEnglishState());
+		updateIMState();
 	}
 	
 	default void lostFocus() {
@@ -16,6 +16,19 @@ public interface FocusableWidget {
 	}
 	
 	default void setTrulyFocused(boolean isTrulyFocused) {}
+	
+	default void updateIMState() {
+		IMManager.setState(isWidgetEditable());
+		if(isWidgetEditable()) {
+			IMManager.setEnglishState(getPreferredEnglishState());
+		}
+	}
+	
+	default void updateEnglishState() {
+		if(isWidgetEditable()) {
+			IMManager.setEnglishState(getPreferredEnglishState());
+		}
+	}
 	
 	public abstract boolean isWidgetEditable();
 	

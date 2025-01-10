@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 
 @Pseudo
@@ -37,7 +36,7 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
 		if(this.editable != editable) {
     		this.editable = editable;
     		if(isTrulyFocused) {
-    			IMManager.updateIMState(editable, getPreferredEnglishState());
+    			updateIMState();
     		}
     	}
     }

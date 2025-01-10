@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import net.minecraft.client.gui.components.EditBox;
 
@@ -37,16 +36,17 @@ public abstract class TextFieldMixin implements MinecraftFocusableWidget {
 		if(this.isEditable != editable) {
     		this.isEditable = editable;
     		if(isTrulyFocused) {
-    			IMManager.updateIMState(editable, preferredEnglishState);
+    			updateIMState();
     		}
     	}
     }
 	
+	@Override
 	public void setPreferredEnglishState(boolean state) {
 		if(preferredEnglishState != state) {
     		preferredEnglishState = state;
-    		if(isTrulyFocused && isEditable) {
-    			IMManager.setEnglishState(preferredEnglishState);
+    		if(isTrulyFocused) {
+    			updateEnglishState();
     		}
     	}
     }

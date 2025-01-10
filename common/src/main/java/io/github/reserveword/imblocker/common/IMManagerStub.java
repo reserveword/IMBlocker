@@ -11,13 +11,5 @@ final class IMManagerStub implements IMManager.PlatformIMManager {
     }
     
     @Override
-    public void setImmOnState(boolean isEN) {}
-
-    @Override
-    public void syncState() {}
-
-    @Override
-    public boolean getState() {
-        return state;
-    }
+    public void setEnglishState(boolean isEN) {}
 }

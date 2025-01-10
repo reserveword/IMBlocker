@@ -9,8 +9,6 @@
     "FtbTextFieldMixin",
     "MeteorTextFieldMixin",
     "MinecraftClientMixin",
-    "MouseMixin",
-    "NotebookScreenMixin",
     "ReiTextFieldMixin",
     "EmiSearchWidgetMixin",
     "ReplayModTextFieldMixin",

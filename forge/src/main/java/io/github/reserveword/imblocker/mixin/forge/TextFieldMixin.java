@@ -6,48 +6,43 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.reserveword.imblocker.common.FocusableWidgetAccessor;
-import io.github.reserveword.imblocker.common.IMCheckState;
+import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import net.minecraft.client.gui.components.EditBox;
 
 @Mixin(EditBox.class)
-public abstract class TextFieldMixin implements FocusableWidgetAccessor {
+public abstract class TextFieldMixin implements MinecraftFocusableWidget {
 	@Shadow
 	private String value;
 	
 	@Shadow
 	private boolean isEditable;
+
+	private boolean preferredEnglishState = false;
 	
 	@Override
 	public boolean isWidgetEditable() {
 		return isEditable;
 	}
 	
-	@Override
-	public String getText() {
-		return value;
-	}
-	
-    /*@Shadow
-    public abstract boolean canConsumeInput();
-
-    @Inject(method = {"tick", "renderWidget"}, at = @At("HEAD"))
-    public void tickCallback(CallbackInfo ci) {
-        IMCheckState.captureTick(this, this.canConsumeInput());
-    }
-
-    @Inject(method = "charTyped", at = @At("HEAD"))
-    public void charTypedCallback(char codePoint, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        IMCheckState.captureNonPrintable(this, codePoint, this.canConsumeInput());
-    }
-
-    @Inject(method = "mouseClicked", at = @At("HEAD"))
-    public void onClickCallback(double p_94125_, double p_94126_, int p_94127_, CallbackInfoReturnable<Boolean> cir) {
-        IMCheckState.captureClick(this::canConsumeInput);
-    }*/
-	
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		IMCheckState.focusChanged(this, isFocused);
+		onFocusChanged(isFocused);
 	}
+	
+	@Inject(method = "setEditable", at = @At("TAIL"))
+    public void updateIMState(boolean editable, CallbackInfo ci) {
+    	getFocusContainer().requestUpdateIMState(this);
+    }
+	
+	public void setPreferredEnglishState(boolean state) {
+    	if(preferredEnglishState != state) {
+    		preferredEnglishState = state;
+    		getFocusContainer().requestUpdateEnglishState(this);
+    	}
+    }
+    
+    @Override
+    public boolean getPreferredEnglishState() {
+    	return preferredEnglishState;
+    }
 }

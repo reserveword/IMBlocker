@@ -18,18 +18,8 @@ final class IMManagerLinux implements IMManager.PlatformIMManager {
 	}
 
 	@Override
-	public void setImmOnState(boolean isEN) {
+	public void setEnglishState(boolean isEN) {
 		
-	}
-
-	@Override
-	public void syncState() {
-		
-	}
-
-	@Override
-	public boolean getState() {
-		return state;
 	}
 	
 	private void checkIMFramework() {

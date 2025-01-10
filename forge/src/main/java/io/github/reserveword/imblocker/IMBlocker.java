@@ -1,7 +1,7 @@
 package io.github.reserveword.imblocker;
 
 import io.github.reserveword.imblocker.common.Common;
-import io.github.reserveword.imblocker.common.IMCheckState;
+import io.github.reserveword.imblocker.common.SetConversionStateExecutor;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,7 +23,7 @@ public class IMBlocker {
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent cte) {
             if (cte.phase == TickEvent.Phase.START) {
-                IMCheckState.clientTick();
+                SetConversionStateExecutor.tick();
             }
         }
         /*@SubscribeEvent

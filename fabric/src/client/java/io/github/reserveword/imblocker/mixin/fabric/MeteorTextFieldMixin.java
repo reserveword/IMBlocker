@@ -6,12 +6,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.reserveword.imblocker.common.FocusableWidgetAccessor;
-import io.github.reserveword.imblocker.common.IMCheckState;
+import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 
 @Mixin(targets = "meteordevelopment.meteorclient.gui.widgets.input.WTextBox", remap = false)
 @Pseudo
-public abstract class MeteorTextFieldMixin implements FocusableWidgetAccessor {
+public abstract class MeteorTextFieldMixin implements MinecraftFocusableWidget {
 	
 	@Override
 	public boolean isWidgetEditable() {
@@ -20,6 +19,6 @@ public abstract class MeteorTextFieldMixin implements FocusableWidgetAccessor {
     
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		IMCheckState.focusChanged(this, isFocused);
+		onFocusChanged(isFocused);
 	}
 }

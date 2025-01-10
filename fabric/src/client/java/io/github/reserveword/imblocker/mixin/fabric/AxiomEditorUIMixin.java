@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import imgui.ImGuiIO;
-import io.github.reserveword.imblocker.common.AxiomGuiAccessor;
+import io.github.reserveword.imblocker.common.gui.AxiomGuiAccessor;
 
 @Pseudo
 @Mixin(targets = "com.moulberry.axiom.editor.EditorUI", remap = false)

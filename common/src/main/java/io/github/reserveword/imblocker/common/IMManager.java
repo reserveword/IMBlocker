@@ -9,11 +9,7 @@ public final class IMManager {
 		
 		void setState(boolean on);
 		
-		void setImmOnState(boolean isEN);
-		
-		void syncState();
-		
-		boolean getState();
+		void setEnglishState(boolean isEN);
 	}
 	
 	private IMManager() {}
@@ -22,16 +18,8 @@ public final class IMManager {
 		INSTANCE.setState(on);
 	}
 	
-	public static void setImmOnState(boolean isEN) {
-		INSTANCE.setImmOnState(isEN);
-	}
-	
-	public static void syncState() {
-		INSTANCE.syncState();
-	}
-	
-	public static boolean getState() {
-		return INSTANCE.getState();
+	public static void setEnglishState(boolean isEN) {
+		INSTANCE.setEnglishState(isEN);
 	}
 	
 	static {

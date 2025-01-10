@@ -1,7 +1,7 @@
 package io.github.reserveword.imblocker;
 
 import io.github.reserveword.imblocker.common.Config;
-import io.github.reserveword.imblocker.common.IMCheckState;
+import io.github.reserveword.imblocker.common.SetConversionStateExecutor;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
@@ -26,8 +26,10 @@ public class IMBlockerFabric implements ClientModInitializer {
                 }
             };
         }
+        
         ClientTickEvents.START_CLIENT_TICK.register(tick -> {
-            IMCheckState.clientTick();
+            SetConversionStateExecutor.tick();
+            AxiomGuiMonitor.tick();
         });
     }
 

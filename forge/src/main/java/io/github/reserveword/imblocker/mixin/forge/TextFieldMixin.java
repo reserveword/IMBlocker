@@ -11,8 +11,6 @@ import net.minecraft.client.gui.components.EditBox;
 
 @Mixin(EditBox.class)
 public abstract class TextFieldMixin implements MinecraftFocusableWidget {
-	@Shadow
-	private String value;
 	
 	@Shadow
 	private boolean isEditable;
@@ -29,9 +27,12 @@ public abstract class TextFieldMixin implements MinecraftFocusableWidget {
 		onFocusChanged(isFocused);
 	}
 	
-	@Inject(method = "setEditable", at = @At("TAIL"))
+	@Inject(method = "setEditable", at = @At("HEAD"))
     public void updateIMState(boolean editable, CallbackInfo ci) {
-    	getFocusContainer().requestUpdateIMState(this);
+		if(this.isEditable != editable) {
+			this.isEditable = editable;
+			getFocusContainer().requestUpdateIMState(this);
+		}
     }
 	
 	public void setPreferredEnglishState(boolean state) {

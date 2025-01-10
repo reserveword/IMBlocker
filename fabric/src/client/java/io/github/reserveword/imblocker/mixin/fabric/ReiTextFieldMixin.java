@@ -31,6 +31,7 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
     @Inject(method = {"setEditable", "setIsEditable"}, at = @At("HEAD"))
     public void updateIMState(boolean editable, CallbackInfo ci) {
     	if(this.editable != editable) {
+    		this.editable = editable;
     		getFocusContainer().requestUpdateIMState(this);
     	}
     }

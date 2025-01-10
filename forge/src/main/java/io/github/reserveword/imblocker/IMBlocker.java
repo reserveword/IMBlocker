@@ -26,14 +26,6 @@ public class IMBlocker {
                 SetConversionStateExecutor.tick();
             }
         }
-        /*@SubscribeEvent
-        public static void onMouseClick(ScreenEvent.MouseButtonPressed mie) {
-            IMCheckState.mouseEvent();
-        }
-        @SubscribeEvent
-        public static void onMouseClick(ScreenEvent.MouseButtonReleased mie) {
-            IMCheckState.mouseEvent();
-        }*/
     }
 
     @SubscribeEvent

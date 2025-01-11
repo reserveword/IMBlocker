@@ -8,26 +8,18 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import imgui.ImGuiIO;
-import io.github.reserveword.imblocker.common.gui.AxiomGuiAccessor;
+import io.github.reserveword.imblocker.AxiomGuiMonitor;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
 @Pseudo
 @Mixin(targets = "com.moulberry.axiom.editor.EditorUI", remap = false)
 public abstract class AxiomEditorUIMixin {
+	
 	@Shadow
 	public static ImGuiIO imGuiIO;
 	
 	@Inject(method = "init", at = @At("TAIL"))
 	private static void loadImGui(CallbackInfo ci) {
-		AxiomGuiAccessor.instance = new AxiomGuiAccessor() {
-			@Override
-			public boolean isTextFieldFocused() {
-				return imGuiIO.getWantTextInput();
-			}
-			
-			@Override
-			public boolean isCaptureKeyboard() {
-				return imGuiIO.getWantCaptureKeyboard();
-			}
-		};
+		ClientTickEvents.START_CLIENT_TICK.register(new AxiomGuiMonitor(imGuiIO));
 	}
 }

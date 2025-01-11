@@ -7,13 +7,12 @@ public class FocusManager {
 	
 	public static void requestFocus(FocusContainer container) {
 		if(focusedContainer != container) {
-			focusedContainer.lostFocus();
-		}
-		
-		focusedContainer = container;
-		
-		if(isWindowFocused) {
-			focusedContainer.deliverFocus();
+			if(isWindowFocused) {
+				focusedContainer.lostFocus();
+				container.deliverFocus();
+			}
+			
+			focusedContainer = container;
 		}
 	}
 	

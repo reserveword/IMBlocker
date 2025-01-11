@@ -18,15 +18,14 @@ public enum FocusContainer {
 	
 	public void requestFocus(FocusableWidget toFocus) {
 		if(focusedWidget != toFocus) {
-			if(focusedWidget != null) {
-				focusedWidget.lostFocus();
+			if(isFocused) {
+				if(focusedWidget != null) {
+					focusedWidget.lostFocus();
+				}
+				toFocus.deliverFocus();
 			}
 			
 			focusedWidget = toFocus;
-			
-			if(isFocused) {
-				focusedWidget.deliverFocus();
-			}
 		}
 	}
 	

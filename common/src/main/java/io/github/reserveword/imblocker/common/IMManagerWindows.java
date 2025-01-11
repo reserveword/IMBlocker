@@ -20,15 +20,23 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     private static native boolean ImmSetConversionStatus(WinNT.HANDLE himc, int fdwConversion, int fdwSentence);
     
     public static long lastIMStateOnTimestamp = System.currentTimeMillis();
+    
+    private final SetConversionStateThread setConversionStateThread;
+    private boolean preferredEnglishState = false;
 
     static {
         Native.register("imm32");
     }
 
     private static final User32 u = User32.INSTANCE;
+    
+    public IMManagerWindows() {
+		setConversionStateThread = new SetConversionStateThread();
+		setConversionStateThread.start();
+	}
 
     private static void makeOnImp() {
-        WinDef.HWND hwnd = u.GetForegroundWindow();
+        WinDef.HWND hwnd = u.GetActiveWindow();
         WinNT.HANDLE himc = ImmGetContext(hwnd);
         if (himc == null) {
             himc = ImmCreateContext();
@@ -38,7 +46,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     }
 
     private static void makeOffImp() {
-        WinDef.HWND hwnd = u.GetForegroundWindow();
+        WinDef.HWND hwnd = u.GetActiveWindow();
         WinNT.HANDLE himc = ImmAssociateContext(hwnd, null);
         if (himc != null) {
             ImmDestroyContext(himc);
@@ -48,7 +56,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 
     @Override
     public void setState(boolean on) {
-    	boolean state = ImmGetContext(u.GetForegroundWindow()) != null;
+    	boolean state = ImmGetContext(u.GetActiveWindow()) != null;
         if (state != on) {
         	lastIMStateOnTimestamp = System.currentTimeMillis();
 	        if (on) {
@@ -61,15 +69,50 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     
     @Override
     public void setEnglishState(boolean englishState) {
-    	SetConversionStateExecutor.execute(() -> {
-    		if(ImmGetContext(u.GetForegroundWindow()) != null) {
-	        	WinDef.HWND hwnd = u.GetForegroundWindow();
-	            WinNT.HANDLE himc = ImmGetContext(hwnd);
-	            if(himc != null) {
-	            	ImmSetConversionStatus(himc, englishState ? 0 : 1, 0);
-	            }
-	            ImmReleaseContext(hwnd, himc);
-	    	}
-    	});
+    	preferredEnglishState = englishState;
+    	setConversionStateThread.awake();
+    }
+    
+    private class SetConversionStateThread extends Thread {
+    	
+    	@Override
+    	public void run() {
+    		synchronized (this) {
+				while(true) {
+					await(0);
+					
+					while(true) {
+						long cooldown = 60 - (System.currentTimeMillis() - lastIMStateOnTimestamp);
+						if(cooldown <= 0) {
+							MainThreadExecutor.instance.execute(() -> {
+								WinDef.HWND hwnd = u.GetActiveWindow();
+								if(ImmGetContext(hwnd) != null) {
+						            WinNT.HANDLE himc = ImmGetContext(hwnd);
+						            if(himc != null) {
+						            	ImmSetConversionStatus(himc, preferredEnglishState ? 0 : 1, 0);
+						            }
+						            ImmReleaseContext(hwnd, himc);
+						    	}
+							});
+							break;
+						}else {
+							await(cooldown);
+						}
+					}
+				}
+			}
+    	}
+    	
+    	private synchronized void awake() {
+    		notifyAll();
+    	}
+    	
+    	private void await(long milis) {
+    		try {
+				wait(milis);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+    	}
     }
 }

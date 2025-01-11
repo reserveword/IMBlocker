@@ -1,6 +1,7 @@
 package io.github.reserveword.imblocker.mixin.fabric;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,8 +33,8 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
     	onFocusChanged(isFocused);
     }
     
-    @Inject(method = {"setEditable", "setIsEditable"}, at = @At("HEAD"))
-    public void updateIMState(boolean editable, CallbackInfo ci) {
+    @Overwrite(aliases = {"setEditable"})
+    public void setIsEditable(boolean editable) {
     	if(this.editable != editable) {
     		this.editable = editable;
     		if(isTrulyFocused) {

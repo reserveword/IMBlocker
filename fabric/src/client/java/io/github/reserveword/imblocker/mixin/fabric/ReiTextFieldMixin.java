@@ -20,9 +20,6 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
     @Shadow
     protected boolean editable;
     
-    private boolean isTrulyFocused = false;
-    public void setTrulyFocused(boolean isTrulyFocused) { this.isTrulyFocused = isTrulyFocused; }
-    
     @Override
     public boolean isWidgetEditable() {
     	return editable;
@@ -37,7 +34,7 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
     public void setIsEditable(boolean editable) {
     	if(this.editable != editable) {
     		this.editable = editable;
-    		if(isTrulyFocused) {
+    		if(isTrulyFocused()) {
     			updateIMState();
     		}
     	}

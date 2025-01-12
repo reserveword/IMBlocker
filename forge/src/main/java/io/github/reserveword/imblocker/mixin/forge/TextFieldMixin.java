@@ -1,7 +1,6 @@
 package io.github.reserveword.imblocker.mixin.forge;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,9 +17,6 @@ public abstract class TextFieldMixin implements MinecraftFocusableWidget {
 
 	private boolean preferredEnglishState = false;
 	
-	private boolean isTrulyFocused = false;
-    public void setTrulyFocused(boolean isTrulyFocused) { this.isTrulyFocused = isTrulyFocused; }
-	
 	@Override
 	public boolean isWidgetEditable() {
 		return isEditable;
@@ -35,7 +31,7 @@ public abstract class TextFieldMixin implements MinecraftFocusableWidget {
     public void setEditable(boolean editable, CallbackInfo ci) {
 		if(this.isEditable != editable) {
     		this.isEditable = editable;
-    		if(isTrulyFocused) {
+    		if(isTrulyFocused()) {
     			updateIMState();
     		}
     	}
@@ -45,7 +41,7 @@ public abstract class TextFieldMixin implements MinecraftFocusableWidget {
 	public void setPreferredEnglishState(boolean state) {
 		if(preferredEnglishState != state) {
     		preferredEnglishState = state;
-    		if(isTrulyFocused) {
+    		if(isTrulyFocused()) {
     			updateEnglishState();
     		}
     	}

@@ -4,21 +4,19 @@ import io.github.reserveword.imblocker.common.IMManager;
 
 public interface FocusableWidget {
 	
-	FocusableWidget[] focusedWidget = new FocusableWidget[1];
-	
 	FocusContainer getFocusContainer();
 	
 	default void deliverFocus() {
-		focusedWidget[0] = this;
+		FocusManager.setFocusOwner(this);
 		updateIMState();
 	}
 	
 	default void lostFocus() {
-		focusedWidget[0] = null;
+		FocusManager.setFocusOwner(null);
 	}
 	
 	default boolean isTrulyFocused() {
-		return focusedWidget[0] == this;
+		return FocusManager.getFocusOwner() == this;
 	}
 	
 	default void updateIMState() {

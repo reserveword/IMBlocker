@@ -23,8 +23,4 @@ public interface MinecraftFocusableWidget extends FocusableWidget {
 	 }
 	 
 	 default void setPreferredEnglishState(boolean state) {}
-	 
-	 default boolean getPreferredEnglishState() {
-		 return false;
-	 }
 }

@@ -32,7 +32,7 @@ public interface FocusableWidget {
 		}
 	}
 	
-	public abstract boolean isWidgetEditable();
+	boolean isWidgetEditable();
 	
 	default boolean getPreferredEnglishState() {
 		return false;

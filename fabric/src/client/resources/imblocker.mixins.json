@@ -15,7 +15,8 @@
     "ReplayModTextFieldMixin",
     "RSOAbstractFrameMixin",
     "SodiumSearchFieldMixin",
-    "TextFieldMixin"
+    "TextFieldMixin",
+    "AbstractParentElementMixin"
   ],
   "injectors": {
     "defaultRequire": 1

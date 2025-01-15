@@ -70,34 +70,42 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     @Override
     public void setEnglishState(boolean englishState) {
     	preferredEnglishState = englishState;
-    	setConversionStateThread.awake();
+    	if(getConversionStatusCooldown() <= 0) {
+    		syncEnglishState();
+    	}else {
+    		setConversionStateThread.awake();
+    	}
+    }
+    
+    private void syncEnglishState() {
+    	WinDef.HWND hwnd = u.GetActiveWindow();
+		if(ImmGetContext(hwnd) != null) {
+            WinNT.HANDLE himc = ImmGetContext(hwnd);
+            if(himc != null) {
+            	ImmSetConversionStatus(himc, preferredEnglishState ? 0 : 1, 0);
+            }
+            ImmReleaseContext(hwnd, himc);
+    	}
+    }
+    
+    private long getConversionStatusCooldown() {
+    	return 60 - (System.currentTimeMillis() - lastIMStateOnTimestamp);
     }
     
     private class SetConversionStateThread extends Thread {
     	
     	@Override
-    	public void run() {
-    		synchronized (this) {
+    	public synchronized void run() {
+    		while(true) {
+				await(0);
+				
 				while(true) {
-					await(0);
-					
-					while(true) {
-						long cooldown = 60 - (System.currentTimeMillis() - lastIMStateOnTimestamp);
-						if(cooldown <= 0) {
-							MainThreadExecutor.instance.execute(() -> {
-								WinDef.HWND hwnd = u.GetActiveWindow();
-								if(ImmGetContext(hwnd) != null) {
-						            WinNT.HANDLE himc = ImmGetContext(hwnd);
-						            if(himc != null) {
-						            	ImmSetConversionStatus(himc, preferredEnglishState ? 0 : 1, 0);
-						            }
-						            ImmReleaseContext(hwnd, himc);
-						    	}
-							});
-							break;
-						}else {
-							await(cooldown);
-						}
+					long cooldown = getConversionStatusCooldown();
+					if(cooldown <= 0) {
+						MainThreadExecutor.instance.execute(() -> syncEnglishState());
+						break;
+					}else {
+						await(cooldown);
 					}
 				}
 			}

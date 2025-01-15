@@ -14,7 +14,4 @@ public class FabricCommon {
             "net.minecraft.client.gui.screen.ingame.HangingSignEditScreen",
             "journeymap.client.ui.waypoint.WaypointEditor",
             "com.ldtteam.blockout.BOScreen");
-    public static final List<String> defaultScreenBlacklist = List.of(
-            "com.mamiyaotaru.voxelmap.persistent.GuiPersistentMap"
-    );
 }

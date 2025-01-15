@@ -20,15 +20,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @me.shedaniel.autoconfig.annotation.Config(name = Common.MODID)
 public class FabricConfig extends Config implements ModMenuApi, ConfigData {
-    int checkIntervalMilli = 100;
-    ArrayList<String> screenBlacklist = new ArrayList<>(FabricCommon.defaultScreenBlacklist);
     ArrayList<String> screenWhitelist = new ArrayList<>(FabricCommon.defaultScreenWhitelist);
-    ArrayList<String> inputBlacklist = new ArrayList<>();
-    ArrayList<String> inputWhitelist = new ArrayList<>();
     boolean enableScreenRecovering = false;
     ArrayList<String> recoveredScreens = new ArrayList<>();
-    boolean useExperimental = false;
-    boolean checkCommandChat = true;
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
@@ -37,7 +31,7 @@ public class FabricConfig extends Config implements ModMenuApi, ConfigData {
 
     @Override
     public void validatePostLoad() {
-        for (List<String> list: Arrays.asList(screenBlacklist, screenWhitelist, inputBlacklist, inputWhitelist)) {
+        for (List<String> list: Arrays.asList(screenWhitelist)) {
             for (int i = 0; i < list.size(); i++) {
                 String cls = list.get(i);
                 if (cls.contains(":")) {
@@ -49,28 +43,8 @@ public class FabricConfig extends Config implements ModMenuApi, ConfigData {
     }
 
     @Override
-    public boolean inScreenBlacklist(Class<?> cls) {
-        return screenBlacklist.contains(cls == null ? null : cls.getName());
-    }
-
-    @Override
     public boolean inScreenWhitelist(Class<?> cls) {
         return screenWhitelist.contains(cls == null ? null : cls.getName());
-    }
-
-    @Override
-    public boolean inInputBlacklist(Class<?> cls) {
-        return inputBlacklist.contains(cls == null ? null : cls.getName());
-    }
-
-    @Override
-    public boolean inInputWhitelist(Class<?> cls) {
-        return inputWhitelist.contains(cls == null ? null : cls.getName());
-    }
-
-    @Override
-    public Boolean getUseExperimental() {
-        return useExperimental;
     }
 
     public String getClassName(Class<?> cls) {

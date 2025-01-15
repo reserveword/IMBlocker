@@ -1,15 +1,5 @@
 package io.github.reserveword.imblocker;
 
-import io.github.reserveword.imblocker.common.Common;
-import io.github.reserveword.imblocker.common.Config;
-
-import net.minecraft.client.gui.screens.inventory.BookEditScreen;
-import net.minecraft.client.gui.screens.inventory.SignEditScreen;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.net.URL;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
@@ -20,16 +10,23 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.commons.lang3.tuple.Pair;
+
+import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.Config;
+import net.minecraft.client.gui.screens.inventory.BookEditScreen;
+import net.minecraft.client.gui.screens.inventory.SignEditScreen;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.common.Mod;
+
 @Mod.EventBusSubscriber
 public class ForgeConfig extends Config {
 
-    public static final ForgeConfigSpec clientSpec;
+	public static final ForgeConfigSpec clientSpec;
     public static final ForgeConfig.Client CLIENT;
     private final static Set<Class<?>> recoveredScreens = new HashSet<>();
-    private static Set<Class<?>> screenBlacklist;
     private static Set<Class<?>> screenWhitelist;
-    private static Set<Class<?>> inputBlacklist;
-    private static Set<Class<?>> inputWhitelist;
 
     static {
         final Pair<Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ForgeConfig.Client::new);
@@ -43,9 +40,6 @@ public class ForgeConfig extends Config {
 
     public static void reload() {
         screenWhitelist = bakeList(CLIENT.screenWhitelist, "screenWhitelist");
-        screenBlacklist = bakeList(CLIENT.screenBlacklist, "screenBlacklist");
-        inputWhitelist = bakeList(CLIENT.inputWhitelist, "inputWhitelist");
-        inputBlacklist = bakeList(CLIENT.inputBlacklist, "inputBlacklist");
     }
 
     private static Set<Class<?>> bakeList(ForgeConfigSpec.ConfigValue<List<? extends String>> cfg, String name) {
@@ -68,28 +62,8 @@ public class ForgeConfig extends Config {
     }
 
     @Override
-    public boolean inScreenBlacklist(Class<?> cls) {
-        return screenBlacklist.contains(cls);
-    }
-
-    @Override
     public boolean inScreenWhitelist(Class<?> cls) {
         return screenWhitelist != null && screenWhitelist.contains(cls);
-    }
-
-    @Override
-    public boolean inInputBlacklist(Class<?> cls) {
-        return inputBlacklist.contains(cls);
-    }
-
-    @Override
-    public boolean inInputWhitelist(Class<?> cls) {
-        return inputWhitelist.contains(cls);
-    }
-
-    @Override
-    public Boolean getUseExperimental() {
-        return CLIENT.useExperimental.get();
     }
 
     public String getClassName(Class<?> cls) {
@@ -126,29 +100,11 @@ public class ForgeConfig extends Config {
     public static class Client {
 
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> screenWhitelist;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> screenBlacklist;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> inputWhitelist;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> inputBlacklist;
-        private final ForgeConfigSpec.ConfigValue<Integer> checkIntervalMilli;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableScreenRecovering;
 
         private final ForgeConfigSpec.ConfigValue<List<? extends String>> recoveredScreens;
 
-        private final ForgeConfigSpec.ConfigValue<Boolean> useExperimental;
-
-        private final ForgeConfigSpec.ConfigValue<Boolean> checkCommandChat;
-
         Client(ForgeConfigSpec.Builder builder) {
-            checkIntervalMilli = builder
-                                         .comment("Check once every several milliseconds")
-                                         .translation("key.imblocker.checkIntervalMilli")
-                                         .defineInRange("checkIntervalMilli", 100, 1, Integer.MAX_VALUE);
-
-            screenBlacklist = builder
-                                      .comment("Matched screens would disable your IME")
-                                      .translation("key.imblocker.screenBlacklist")
-                                      .defineList("screenBlacklist", Collections.emptyList(), checkClassForName);
-
             screenWhitelist = builder
                                       .comment("Matched screens would enable your IME")
                                       .translation("key.imblocker.screenWhitelist")
@@ -159,17 +115,7 @@ public class ForgeConfig extends Config {
                                               "journeymap.client.ui.waypoint.WaypointEditor",
                                               "com.ldtteam.blockout.BOScreen"
                                       ), checkClassForName);
-
-            inputBlacklist = builder
-                                     .comment("Matched input box would disable your IME")
-                                     .translation("key.imblocker.inputBlacklist")
-                                     .defineList("inputBlacklist", Collections.emptyList(), checkClassForName);
-
-            inputWhitelist = builder
-                                     .comment("Matched input box would enable your IME")
-                                     .translation("key.imblocker.inputWhitelist")
-                                     .defineList("inputWhitelist", Collections.emptyList(), checkClassForName);
-
+            
             enableScreenRecovering = builder
                                              .comment("Do we output recoveredScreens? because it may cause lag")
                                              .translation("key.imblocker.enableScreenRecovering")
@@ -180,16 +126,6 @@ public class ForgeConfig extends Config {
                                                "so you may easily add those to whitelist/blacklist.")
                                        .translation("key.imblocker.recoveredScreens")
                                        .defineList("recoveredScreens", Collections.emptyList(), s -> true);
-
-            useExperimental = builder
-                                      .comment("Disable this and let me know if input or control is messed up")
-                                      .translation("key.imblocker.useExperimental")
-                                      .define("useExperimental", false);
-
-            checkCommandChat = builder
-                                       .comment("Disable IME when typing commands")
-                                       .translation("key.imblocker.checkCommandChat")
-                                       .define("checkCommandChat", true);
         }
     }
 }

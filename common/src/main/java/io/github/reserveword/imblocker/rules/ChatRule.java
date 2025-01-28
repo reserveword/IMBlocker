@@ -12,7 +12,7 @@ public class ChatRule implements Rule {
 
     @Override
     public boolean apply() {
-        if (!isChatScreenShowing) {
+        if (!isChatScreenShowing || FocusRule.focusedInputWidget == null) {
             return false;
         } else if (FocusRule.focusedInputWidget.getText().trim().startsWith("/")) {
             IMManager.setState(true);

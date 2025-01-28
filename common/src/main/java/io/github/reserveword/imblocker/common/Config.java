@@ -29,4 +29,7 @@ public abstract class Config {
 
     public void recoverScreen(Class<?> cls) {
     }
+
+    public void recoverInput(Class<?> cls) {
+    }
 }

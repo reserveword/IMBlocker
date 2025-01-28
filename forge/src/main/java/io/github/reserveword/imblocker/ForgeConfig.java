@@ -47,6 +47,7 @@ public class ForgeConfig extends Config {
         screenBlacklist = bakeList(CLIENT.screenBlacklist, "screenBlacklist");
         inputWhitelist = bakeList(CLIENT.inputWhitelist, "inputWhitelist");
         inputBlacklist = bakeList(CLIENT.inputBlacklist, "inputBlacklist");
+        CLIENT.recoveredScreens.set(new ArrayList<>());
     }
 
     private static Set<Class<?>> bakeList(ModConfigSpec.ConfigValue<List<? extends String>> cfg, String name) {
@@ -93,8 +94,16 @@ public class ForgeConfig extends Config {
         if (!CLIENT.enableScreenRecovering.get() || recoveredScreens.contains(cls)) return;
         recoveredScreens.add(cls);
         List<String> screens = new ArrayList<>(CLIENT.recoveredScreens.get());
-        screens.add(getClassName(cls));
+        String className = getClassName(cls);
+        screens.add(className);
+        Common.LOGGER.info("recovery screen: {}", className);
         CLIENT.recoveredScreens.set(screens);
+    }
+
+    @Override
+    public void recoverInput(Class<?> cls) {
+        if (!CLIENT.enableInputRecovering.get()) return;
+        Common.LOGGER.info("recovery input: {}", cls.getName());
     }
 
     public String getClassName(Class<?> cls) {
@@ -137,6 +146,7 @@ public class ForgeConfig extends Config {
         public final ModConfigSpec.ConfigValue<List<? extends String>> inputBlacklist;
         private final ModConfigSpec.ConfigValue<Integer> checkIntervalMilli;
         private final ModConfigSpec.ConfigValue<Boolean> enableScreenRecovering;
+        private final ModConfigSpec.ConfigValue<Boolean> enableInputRecovering;
 
         private final ModConfigSpec.ConfigValue<List<? extends String>> recoveredScreens;
 
@@ -180,6 +190,10 @@ public class ForgeConfig extends Config {
                                              .comment("Do we output recoveredScreens? because it may cause lag")
                                              .translation("key.imblocker.enableScreenRecovering")
                                              .define("enableScreenRecovering", false);
+            enableInputRecovering = builder
+                                            .comment("Do we output recoveredInputs? because it may cause lag")
+                                            .translation("key.imblocker.enableInputRecovering")
+                                            .define("enableInputRecovering", false);
 
             recoveredScreens = builder
                                        .comment("Here lists all Screens that is not in whitelist nor blacklist, ",

@@ -8,6 +8,9 @@
   	"ChatScreenMixin",
     "MinecraftClientMixin",
     "TextFieldMixin",
+    "AbstractWidgetMixin",
+    "MultiLineEditBoxMixin",
+    "AbstractContainerEventHandlerMixin",
     "EmiSearchWidgetMixin",
     "ReiTextFieldMixin"
   ],

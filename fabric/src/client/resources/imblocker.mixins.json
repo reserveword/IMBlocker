@@ -16,6 +16,8 @@
     "RSOAbstractFrameMixin",
     "SodiumSearchFieldMixin",
     "TextFieldMixin",
+    "ClickableWidgetMixin",
+    "EditBoxWidgetMixin",
     "AbstractParentElementMixin"
   ],
   "injectors": {

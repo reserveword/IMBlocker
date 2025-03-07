@@ -17,5 +17,5 @@ plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
 }
 
-include ':fabric', ':forge', ':common'
+include ':fabric', ':forge-[1.19.4-1.20.4]', ':common'
 rootProject.name = 'IMBlocker'

@@ -60,17 +60,7 @@ java {
 }
 
 project.jar {
-    finalizedBy('remapJar')
-    manifest {
-        attributes([
-                "Specification-Title"     : mod_id,
-                "Specification-Vendor"    : author,
-                "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : rootProject.name,
-                "Implementation-Version"  : mod_version,
-                "Implementation-Vendor"   : author,
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-    exclude 'io/github/reserveword/imblocker/asmdummy'
+	archiveFileName = "${rootProject.name}-${mod_version}-fabric-1.19.4+.jar"
+    from sourceSets.main.output
+    from project(":common").sourceSets.main.output
 }

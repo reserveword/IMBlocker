@@ -11,13 +11,6 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 @Mixin(ClickableWidget.class)
 public abstract class ClickableWidgetMixin implements MinecraftFocusableWidget {
 	
-	@Override
-	public boolean isWidgetEditable() {
-		return false;
-	}
-	
 	@Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
-    public void focusChanged(boolean isFocused, CallbackInfo ci) {
-    	onFocusChanged(isFocused);
-    }
+    public void focusChanged(boolean isFocused, CallbackInfo ci) {}
 }

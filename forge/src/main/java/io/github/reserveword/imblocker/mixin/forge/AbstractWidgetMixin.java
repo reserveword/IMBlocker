@@ -17,7 +17,5 @@ public abstract class AbstractWidgetMixin implements MinecraftFocusableWidget {
 	}
 	
 	@Inject(method = "setFocused", at = @At("TAIL"))
-	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onFocusChanged(isFocused);
-	}
+	public void focusChanged(boolean isFocused, CallbackInfo ci) {}
 }

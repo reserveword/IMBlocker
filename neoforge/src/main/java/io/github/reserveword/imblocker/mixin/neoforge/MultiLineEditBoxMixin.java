@@ -1,6 +1,7 @@
 package io.github.reserveword.imblocker.mixin.neoforge;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.client.gui.components.MultiLineEditBox;
 
@@ -10,5 +11,10 @@ public abstract class MultiLineEditBoxMixin extends AbstractWidgetMixin {
 	@Override
 	public boolean isWidgetEditable() {
 		return true;
+	}
+	
+	@Override
+	public void focusChanged(boolean isFocused, CallbackInfo ci) {
+		onFocusChanged(isFocused);
 	}
 }

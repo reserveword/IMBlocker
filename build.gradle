@@ -81,7 +81,7 @@ allprojects {
     tasks.withType(ProcessResources).configureEach {
         inputs.properties all_properties
 
-        filesMatching(['META-INF/mods.toml', 'fabric.mod.json', 'pack.mcmeta']) {
+        filesMatching(['META-INF/mods.toml', 'fabric.mod.json', 'META-INF/neoforge.mods.toml', 'pack.mcmeta']) {
             expand all_properties
         }
     }

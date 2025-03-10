@@ -16,6 +16,10 @@ loom {
 
 }
 
+base {
+	archivesName = "${rootProject.name}-${mod_version}-fabric-1.19.4+"
+}
+
 dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${minecraft_version}"
@@ -60,7 +64,10 @@ java {
 }
 
 project.jar {
-	archiveFileName = "${rootProject.name}-${mod_version}-fabric-1.19.4+.jar"
+	from("LICENSE") {
+		rename { "${it}_${project.base.archivesName.get()}"}
+	}
+	
     from sourceSets.main.output
     from project(":common").sourceSets.main.output
 }

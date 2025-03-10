@@ -1,11 +1,11 @@
-package io.github.reserveword.imblocker.mixin.forge;
+package io.github.reserveword.imblocker.mixin.neoforge;
 
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import me.shedaniel.rei.api.client.gui.AbstractContainerEventHandler;
+import net.minecraft.client.gui.components.events.AbstractContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 
 @Mixin(AbstractContainerEventHandler.class)

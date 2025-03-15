@@ -1,0 +1,22 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package" : "io.github.reserveword.imblocker.mixin.neoforge",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+  	"ChatScreenMixin",
+    "MinecraftClientMixin",
+    "TextFieldMixin",
+    "AbstractWidgetMixin",
+    "MultiLineEditBoxMixin",
+    "AbstractContainerEventHandlerMixin",
+    "EmiSearchWidgetMixin",
+    "ReiTextFieldMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrite": {
+    "strict": false
+  }
+}

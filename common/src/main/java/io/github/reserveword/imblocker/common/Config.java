@@ -11,23 +11,7 @@ public abstract class Config {
 
     public static Config INSTANCE = null;
 
-    public boolean inScreenBlacklist(Class<?> cls) {
-        return false;
-    }
-
     public boolean inScreenWhitelist(Class<?> cls) {
         return false;
-    }
-
-    public boolean inInputBlacklist(Class<?> cls) {
-        return false;
-    }
-
-    public boolean inInputWhitelist(Class<?> cls) {
-        return false;
-    }
-
-    public Boolean getUseExperimental() {
-        return true;
     }
 }

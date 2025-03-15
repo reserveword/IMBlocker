@@ -1,19 +1,24 @@
 package io.github.reserveword.imblocker;
 
 import io.github.reserveword.imblocker.common.Config;
-import io.github.reserveword.imblocker.rules.AxiomGuiRule;
-import io.github.reserveword.imblocker.rules.Rules;
-
+import io.github.reserveword.imblocker.common.MainThreadExecutor;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.client.MinecraftClient;
 
 public class IMBlockerFabric implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+        MainThreadExecutor.instance = new MainThreadExecutor() {
+			@Override
+			public void execute(Runnable runnable) {
+				MinecraftClient.getInstance().execute(runnable);
+			}
+		};
+		
         if (hasMod("cloth-config") && hasMod("modmenu")) {
             AutoConfig.register(FabricConfig.class, GsonConfigSerializer::new);
             Config.INSTANCE = AutoConfig.getConfigHolder(FabricConfig.class).getConfig();
@@ -28,10 +33,6 @@ public class IMBlockerFabric implements ClientModInitializer {
                 }
             };
         }
-        ClientTickEvents.START_CLIENT_TICK.register(tick -> {
-            Rules.apply();
-        });
-        Rules.register(new AxiomGuiRule());
     }
 
     private boolean hasMod(String modid) {

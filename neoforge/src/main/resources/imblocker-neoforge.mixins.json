@@ -11,7 +11,8 @@
     "MultiLineEditBoxMixin",
     "AbstractContainerEventHandlerMixin",
     "EmiSearchWidgetMixin",
-    "ReiTextFieldMixin"
+    "ReiTextFieldMixin",
+    "FtbTextFieldMixin"
   ],
   "injectors": {
     "defaultRequire": 1

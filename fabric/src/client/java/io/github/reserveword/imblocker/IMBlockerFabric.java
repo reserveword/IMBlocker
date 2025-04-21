@@ -35,7 +35,7 @@ public class IMBlockerFabric implements ClientModInitializer {
                 
                 @Override
                 public ChatCommandInputType getChatCommandInputType() {
-                	return ChatCommandInputType.ENG_STATE;
+                	return ChatCommandInputType.IM_ENG_STATE;
                 }
             };
         }

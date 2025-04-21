@@ -27,7 +27,7 @@ public class FabricConfig extends Config implements ModMenuApi, ConfigData {
     ArrayList<String> recoveredScreens = new ArrayList<>();
     
     @ConfigEntry.Gui.Tooltip
-    ChatCommandInputType chatCommandInputType = ChatCommandInputType.ENG_STATE;
+    ChatCommandInputType chatCommandInputType = ChatCommandInputType.IM_ENG_STATE;
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {

@@ -17,6 +17,6 @@
   "text.autoconfig.imblocker.option.recoveredScreens": "Here lists all Screens that is not in whitelist nor blacklist, so you may easily add those to whitelist/blacklist.",
   "text.autoconfig.imblocker.option.useExperimental": "simulate inputting non-printable characters occasionally to detect active input box. Disable this and let me know if input or control is messed up.",
   "text.autoconfig.imblocker.option.chatCommandInputType": "The method of setting english state when detect command syntax in chat field.",
-  "text.autoconfig.imblocker.tooltip.chatCommandInputType": "Test",
+  "text.autoconfig.imblocker.option.chatCommandInputType.@Tooltip": "If your input method can't auto-switch to English state when using command syntax in chat field, set this option to DISABLE_IM may help, but note that you can only type English when typing command in this mode.",
   "text.autoconfig.imblocker.title": "IMBlocker Config"
 }

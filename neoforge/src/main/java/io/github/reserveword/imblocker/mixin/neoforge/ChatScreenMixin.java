@@ -35,9 +35,8 @@ public class ChatScreenMixin {
     	if(chatState != currentChatState) {
     		boolean engState = currentChatState == ChatState.COMMAND;
     		MinecraftFocusableWidget _chatField = (MinecraftFocusableWidget) input;
-    		System.out.println(Config.INSTANCE.getChatCommandInputType());
     		switch (Config.INSTANCE.getChatCommandInputType()) {
-				case ENG_STATE:
+				case IM_ENG_STATE:
 					_chatField.setPreferredEditState(true);
 		    		break;
 				case DISABLE_IM:

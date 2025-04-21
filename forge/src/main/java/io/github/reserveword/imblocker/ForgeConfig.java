@@ -136,9 +136,11 @@ public class ForgeConfig extends Config {
             		.defineList("recoveredScreens", Collections.emptyList(), s -> true);
             
             chatCommandInputType = builder
-            		.comment("The method of setting english state when detect command syntax in chat field.")
+            		.comment("If your input method can't auto-switch to English state when using command syntax "
+            				+ "in chat field, set this option to DISABLE_IM may help, "
+            				+ "but note that you can only type English when typing command in this mode.")
             		.translation("key.imblocker.chatCommandInputType")
-            		.defineEnum("chatCommandInputType", ChatCommandInputType.ENG_STATE);
+            		.defineEnum("chatCommandInputType", ChatCommandInputType.IM_ENG_STATE);
         }
     }
 }

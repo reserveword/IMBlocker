@@ -1,5 +1,6 @@
 package io.github.reserveword.imblocker;
 
+import io.github.reserveword.imblocker.common.ChatCommandInputType;
 import io.github.reserveword.imblocker.common.Config;
 import io.github.reserveword.imblocker.common.MainThreadExecutor;
 import me.shedaniel.autoconfig.AutoConfig;
@@ -30,6 +31,11 @@ public class IMBlockerFabric implements ClientModInitializer {
                         return false;
                     }
                     return FabricCommon.defaultScreenWhitelist.contains(cls.getName());
+                }
+                
+                @Override
+                public ChatCommandInputType getChatCommandInputType() {
+                	return ChatCommandInputType.ENG_STATE;
                 }
             };
         }

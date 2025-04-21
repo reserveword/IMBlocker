@@ -7,7 +7,7 @@
   "key.imblocker.enableScreenRecovering": "激活GUI屏幕记录，可能导致卡顿",
   "key.imblocker.recoveredScreens": "列出显示过的GUI屏幕，方便编辑黑白名单",
   "key.imblocker.useExperimental": "使用不可打印字符判别输入框，如有问题请关闭并咨询作者",
-  "key.imblocker.checkCommandChat": "输入命令时关闭输入法",
+  "key.imblocker.chatCommandInputType": "聊天框检测到命令格式时自动切换英文状态的方式",
   "text.autoconfig.imblocker.option.checkIntervalMilli": "每多少tick检查一次文本框",
   "text.autoconfig.imblocker.option.screenBlacklist": "该列表中的GUI屏幕会禁用输入法",
   "text.autoconfig.imblocker.option.screenWhitelist": "该列表中的GUI屏幕会激活输入法",
@@ -16,6 +16,7 @@
   "text.autoconfig.imblocker.option.enableScreenRecovering": "激活GUI屏幕记录，可能导致卡顿",
   "text.autoconfig.imblocker.option.recoveredScreens": "列出显示过的GUI屏幕，方便编辑黑白名单",
   "text.autoconfig.imblocker.option.useExperimental": "使用不可打印字符判别输入框，如有问题请关闭并咨询作者",
-  "text.autoconfig.imblocker.option.checkCommandChat": "输入命令时关闭输入法",
+  "text.autoconfig.imblocker.option.chatCommandInputType": "聊天框检测到命令格式时自动切换英文状态的方式",
+  "text.autoconfig.imblocker.tooltip.chatCommandInputType": "测试",
   "text.autoconfig.imblocker.title": "输入法控制配置"
 }

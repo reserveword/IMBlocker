@@ -20,19 +20,23 @@ public interface FocusableWidget {
 	}
 	
 	default void updateIMState() {
-		IMManager.setState(isWidgetEditable());
-		if(isWidgetEditable()) {
+		IMManager.setState(getPreferredState());
+		if(getPreferredState()) {
 			IMManager.setEnglishState(getPreferredEnglishState());
 		}
 	}
 	
 	default void updateEnglishState() {
-		if(isWidgetEditable()) {
+		if(getPreferredState()) {
 			IMManager.setEnglishState(getPreferredEnglishState());
 		}
 	}
 	
 	boolean isWidgetEditable();
+	
+	default boolean getPreferredState() {
+		return isWidgetEditable();
+	}
 	
 	default boolean getPreferredEnglishState() {
 		return false;

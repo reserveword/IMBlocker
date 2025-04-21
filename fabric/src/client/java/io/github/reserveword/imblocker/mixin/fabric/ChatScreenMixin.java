@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import io.github.reserveword.imblocker.common.Config;
 import io.github.reserveword.imblocker.common.gui.ChatState;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -32,7 +33,17 @@ public abstract class ChatScreenMixin {
     	ChatState currentChatState = chatField.getText().trim().startsWith("/") ? 
     			ChatState.COMMAND : ChatState.CHAT;
     	if(chatState != currentChatState) {
-    		((MinecraftFocusableWidget) chatField).setPreferredEnglishState(currentChatState == ChatState.COMMAND);
+    		boolean engState = currentChatState == ChatState.COMMAND;
+    		MinecraftFocusableWidget _chatField = (MinecraftFocusableWidget) chatField;
+    		switch (Config.INSTANCE.getChatCommandInputType()) {
+				case ENG_STATE:
+					_chatField.setPreferredEditState(true);
+		    		break;
+				case DISABLE_IM:
+					_chatField.setPreferredEditState(!engState);
+					break;
+			}
+			_chatField.setPreferredEnglishState(engState);
     		chatState = currentChatState;
     	}
     }

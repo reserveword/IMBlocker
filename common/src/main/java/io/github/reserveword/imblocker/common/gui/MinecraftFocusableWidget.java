@@ -22,5 +22,7 @@ public interface MinecraftFocusableWidget extends FocusableWidget {
 		 getFocusContainer().removeFocus(this);
 	 }
 	 
+	 default void setPreferredEditState(boolean state) {}
+	 
 	 default void setPreferredEnglishState(boolean state) {}
 }

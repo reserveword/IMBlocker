@@ -15,12 +15,19 @@ public abstract class TextFieldMixin implements MinecraftFocusableWidget {
 	@Shadow
 	private boolean isEditable;
 
+	private boolean preferredEditState = true;
+	
 	private boolean preferredEnglishState = false;
 	
 	@Override
 	public boolean isWidgetEditable() {
 		return isEditable;
 	}
+	
+	@Override
+    public boolean getPreferredState() {
+    	return isWidgetEditable() && preferredEditState;
+    }
 	
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
@@ -31,6 +38,16 @@ public abstract class TextFieldMixin implements MinecraftFocusableWidget {
     public void setEditable(boolean editable, CallbackInfo ci) {
 		if(this.isEditable != editable) {
     		this.isEditable = editable;
+    		if(isTrulyFocused()) {
+    			updateIMState();
+    		}
+    	}
+    }
+	
+	@Override
+    public void setPreferredEditState(boolean preferredEditState) {
+    	if(this.preferredEditState != preferredEditState) {
+    		this.preferredEditState = preferredEditState;
     		if(isTrulyFocused()) {
     			updateIMState();
     		}

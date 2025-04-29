@@ -5,6 +5,8 @@ import io.github.reserveword.imblocker.common.IMManager;
 public enum FocusContainer {
 	MINECRAFT(true), IMGUI(false);
 	
+	private double guiScaleFactor = 1.0;
+	
 	private boolean isFocused;
 	private FocusableWidget focusedWidget;
 	
@@ -59,5 +61,13 @@ public enum FocusContainer {
 		if(focusedWidget != null) {
 			focusedWidget.lostFocus();
 		}
+	}
+	
+	public void setGuiScaleFactor(double factor) {
+		this.guiScaleFactor = factor;
+	}
+	
+	public static double getMCGuiScaleFactor() {
+		return MINECRAFT.guiScaleFactor;
 	}
 }

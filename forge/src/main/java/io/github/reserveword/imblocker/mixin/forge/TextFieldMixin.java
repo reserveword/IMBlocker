@@ -6,11 +6,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import net.minecraft.client.gui.components.EditBox;
 
 @Mixin(EditBox.class)
-public abstract class TextFieldMixin implements MinecraftFocusableWidget {
+public abstract class TextFieldMixin extends AbstractWidgetMixin {
 	
 	@Shadow
 	private boolean isEditable;

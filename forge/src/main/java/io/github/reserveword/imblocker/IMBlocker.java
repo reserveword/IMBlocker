@@ -1,7 +1,11 @@
 package io.github.reserveword.imblocker;
 
+import com.mojang.blaze3d.platform.Window;
+
 import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.GameWindowAccessor;
 import io.github.reserveword.imblocker.common.MainThreadExecutor;
+import io.github.reserveword.imblocker.common.gui.Rectangle;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -23,6 +27,15 @@ public class IMBlocker {
 			@Override
 			public void execute(Runnable runnable) {
 				Minecraft.getInstance().execute(runnable);
+			}
+		};
+		
+		GameWindowAccessor.instance = new GameWindowAccessor() {
+			@Override
+			public Rectangle getBounds() {
+				Window gameWindow = Minecraft.getInstance().getWindow();
+				return new Rectangle(gameWindow.getX(), gameWindow.getY(), 
+						gameWindow.getWidth(), gameWindow.getHeight());
 			}
 		};
 

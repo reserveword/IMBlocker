@@ -12,6 +12,7 @@
     "AbstractContainerEventHandlerMixin",
     "EmiSearchWidgetMixin",
     "ReiTextFieldMixin",
+    "FtbWidgetMixin",
     "FtbTextFieldMixin"
   ],
   "injectors": {

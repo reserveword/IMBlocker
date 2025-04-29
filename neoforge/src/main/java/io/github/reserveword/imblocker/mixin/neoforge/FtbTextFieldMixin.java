@@ -6,10 +6,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import dev.ftb.mods.ftblibrary.ui.TextBox;
-import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 
 @Mixin(value = TextBox.class, remap = false)
-public abstract class FtbTextFieldMixin implements MinecraftFocusableWidget {
+public abstract class FtbTextFieldMixin extends FtbWidgetMixin {
     
     @Override
     public boolean isWidgetEditable() {

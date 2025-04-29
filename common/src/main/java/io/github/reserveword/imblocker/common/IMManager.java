@@ -22,6 +22,12 @@ public final class IMManager {
 		INSTANCE.setEnglishState(isEN);
 	}
 	
+	public static void updateCompositionWindowPos() {
+		if(INSTANCE instanceof IMManagerWindows) {
+			((IMManagerWindows) INSTANCE).updateCompositionWindowPos();
+		}
+	}
+	
 	static {
 		if(Platform.isWindows()) {
 			INSTANCE = new IMManagerWindows();

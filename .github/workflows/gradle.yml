@@ -6,62 +6,33 @@ on:
       - '*'
 
 jobs:
-  build_fabric:
+  build:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - loader: fabric
+            java-version: 17
+
+          - loader: forge
+            java-version: 17
+
+          - loader: neoforge
+            java-version: 21
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up JDK 17
+    - name: Set up JDK ${{ matrix.java-version }}
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: 17
-    - name: Build Fabric
-      run: ./gradlew :fabric:build
-    - name: Upload Artifact - Fabric
+        java-version: ${{ matrix.java-version }}
+    - name: Build ${{ matrix.loader }}
+      run: ./gradlew :${{ matrix.loader }}:build
+    - name: Upload Artifact - ${{ matrix.loader }}
       uses: actions/upload-artifact@v4
       with:
         # Artifact name
-        name: imblocker-fabric
+        name: imblocker-${{ matrix.loader }}
         # Directory containing files to upload
-        path: fabric\build\libs\*.jar
-
-  build_forge:
-    runs-on: windows-latest
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: 17
-    - name: Build Forge
-      run: ./gradlew :forge:build
-    - name: Upload Artifact - Forge
-      uses: actions/upload-artifact@v4
-      with:
-        # Artifact name
-        name: imblocker-forge
-        # Directory containing files to upload
-        path: forge\build\libs\*.jar
-
-  build_neoforge:
-    runs-on: windows-latest
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: 21
-    - name: Build Neoforge
-      run: ./gradlew :neoforge:build
-    - name: Upload Artifact - Neoforge
-      uses: actions/upload-artifact@v4
-      with:
-        # Artifact name
-        name: imblocker-neoforge
-        # Directory containing files to upload
-        path: neoforge\build\libs\*.jar
+        path: ${{ matrix.loader }}\build\libs\*.jar

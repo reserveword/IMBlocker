@@ -14,8 +14,22 @@ permissions:
   contents: write
 
 jobs:
-  publish_fabric:
+  publish:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - loader: fabric
+            java-version: 17
+            game-versions: '[1.19.4,)'
+
+          - loader: forge
+            java-version: 17
+            game-versions: '[1.19.4,1.20.4]'
+
+          - loader: neoforge
+            java-version: 21
+            game-versions: '[1.20.6,)'
 
     steps:
       - name: 签出存储库
@@ -27,12 +41,12 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: 17
+          java-version: ${{ matrix.java-version }}
 
       - name: 构建
-        run: ./gradlew :fabric:build
+        run: ./gradlew :${{ matrix.loader }}:build
 
-      - name: 发布Fabric（CurseForge/Modrinth/Github）
+      - name: 发布${{ matrix.loader }}（CurseForge/Modrinth/Github）
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           curseforge-id: 483760
@@ -43,87 +57,11 @@ jobs:
 
           github-token: ${{ env.GITHUB_TOKEN }}
 
-          name: IMBlocker-${{ github.ref_name }}-fabric
+          name: IMBlocker-${{ github.ref_name }}-${{ matrix.loader }}
           version-type: release
           changelog-file: CHANGELOG.md
 
-          loaders: fabric
-          game-versions: '[1.19.4,)'
-          files: fabric/build/libs/*.jar
-          java: 17
-
-  publish_forge:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: 签出存储库
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - name: 设置 Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 17
-
-      - name: 构建
-        run: ./gradlew :forge:build
-
-      - name: 发布Forge（CurseForge/Modrinth/Github）
-        uses: Kir-Antipov/mc-publish@v3.3
-        with:
-          curseforge-id: 483760
-          curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
-
-          modrinth-id: WMDesFsZ
-          modrinth-token: ${{ env.MODRINTH_TOKEN }}
-
-          github-token: ${{ env.GITHUB_TOKEN }}
-
-          name: IMBlocker-${{ github.ref_name }}-forge
-          version-type: release
-          changelog-file: CHANGELOG.md
-
-          loaders: forge
-          game-versions: '[1.19.4,1.20.4]'
-          files: forge/build/libs/*.jar
-          java: 17
-
-  publish_neoforge:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: 签出存储库
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - name: 设置 Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 21
-
-      - name: 构建
-        run: ./gradlew :neoforge:build
-
-      - name: 发布NeoForge（CurseForge/Modrinth/Github）
-        uses: Kir-Antipov/mc-publish@v3.3
-        with:
-          curseforge-id: 483760
-          curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
-
-          modrinth-id: WMDesFsZ
-          modrinth-token: ${{ env.MODRINTH_TOKEN }}
-
-          github-token: ${{ env.GITHUB_TOKEN }}
-
-          name: IMBlocker-${{ github.ref_name }}-neoforge
-          version-type: release
-          changelog-file: CHANGELOG.md
-
-          loaders: neoforge
-          game-versions: '[1.20.6,)'
-          files: neoforge/build/libs/*.jar
-          java: 21
+          loaders: ${{ matrix.loader }}
+          game-versions: ${{ matrix.game-versions }}
+          files: ${{ matrix.loader }}/build/libs/*.jar
+          java: ${{ matrix.java-version }}

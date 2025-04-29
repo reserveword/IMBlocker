@@ -4,6 +4,7 @@
   "package": "io.github.reserveword.imblocker.mixin.fabric",
   "compatibilityLevel": "JAVA_17",
   "client": [
+  	"AbstractCommandBlockScreenMixin",
   	"ChatScreenMixin",
     "AxiomEditorUIMixin",
     "CottonWidgetMixin",

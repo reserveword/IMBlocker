@@ -6,8 +6,7 @@ on:
       - '*'
 
 jobs:
-  build:
-
+  build_fabric:
     runs-on: windows-latest
 
     steps:
@@ -17,12 +16,52 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: 17
-    - name: Build with Gradle
-      run: ./gradlew :jar
-    - name: Upload artifact
+    - name: Build Fabric
+      run: ./gradlew :fabric:build
+    - name: Upload Artifact - Fabric
       uses: actions/upload-artifact@v3
       with:
         # Artifact name
-        name: imblocker
+        name: imblocker-fabric
         # Directory containing files to upload
-        path: build\libs\*.jar
+        path: fabric\build\libs\*.jar
+
+  build_forge:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'temurin'
+        java-version: 17
+    - name: Build Forge
+      run: ./gradlew :forge:build
+    - name: Upload Artifact - Forge
+      uses: actions/upload-artifact@v3
+      with:
+        # Artifact name
+        name: imblocker-forge
+        # Directory containing files to upload
+        path: forge\build\libs\*.jar
+
+  build_neoforge:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 21
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'temurin'
+        java-version: 21
+    - name: Build Neoforge
+      run: ./gradlew :neoforge:build
+    - name: Upload Artifact - Neoforge
+      uses: actions/upload-artifact@v3
+      with:
+        # Artifact name
+        name: imblocker-neoforge
+        # Directory containing files to upload
+        path: neoforge\build\libs\*.jar

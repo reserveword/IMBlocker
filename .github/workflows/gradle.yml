@@ -10,16 +10,16 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up JDK 17
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: 17
     - name: Build Fabric
       run: ./gradlew :fabric:build
     - name: Upload Artifact - Fabric
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         # Artifact name
         name: imblocker-fabric
@@ -30,16 +30,16 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up JDK 17
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: 17
     - name: Build Forge
       run: ./gradlew :forge:build
     - name: Upload Artifact - Forge
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         # Artifact name
         name: imblocker-forge
@@ -50,16 +50,16 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up JDK 21
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: 21
     - name: Build Neoforge
       run: ./gradlew :neoforge:build
     - name: Upload Artifact - Neoforge
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         # Artifact name
         name: imblocker-neoforge

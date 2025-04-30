@@ -32,7 +32,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     
     private static native boolean ImmGetCompositionWindow(WinNT.HANDLE himc, COMPOSITIONFORM cfr);
     
-    private static native boolean ImmSetCompositionWindow(WinNT.HANDLE hime, COMPOSITIONFORM cfr);
+    private static native boolean ImmSetCompositionWindow(WinNT.HANDLE himc, COMPOSITIONFORM cfr);
     
     public static long lastIMStateOnTimestamp = System.currentTimeMillis();
     
@@ -85,7 +85,6 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
         WinNT.HANDLE himc = ImmGetContext(hwnd);
         if(himc != null) {
         	ImmSetConversionStatus(himc, preferredEnglishState ? 0 : 1, 0);
-        	updateCompositionWindowPos(himc);
         }
         ImmReleaseContext(hwnd, himc);
         setConversionStateThread.isScheduled = false;
@@ -106,7 +105,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     
     private void updateCompositionWindowPos(WinNT.HANDLE himc) {
     	FocusableWidget focusedWidget = FocusManager.getFocusOwner();
-    	if(FocusManager.getFocusOwner() != null && !preferredEnglishState) {
+    	if(FocusManager.getFocusOwner() != null) {
     		Point compositionWindowPos = calculateProperCompositionWindowPos(
     				GameWindowAccessor.instance.getBounds(), focusedWidget.getBoundsAbs());
         	COMPOSITIONFORM cfr = new COMPOSITIONFORM();

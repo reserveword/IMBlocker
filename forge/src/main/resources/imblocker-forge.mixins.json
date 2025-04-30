@@ -15,7 +15,8 @@
     "EmiSearchWidgetMixin",
     "ReiTextFieldMixin",
     "FtbWidgetMixin",
-    "FtbTextFieldMixin"
+    "FtbTextFieldMixin",
+    "WindowMixin"
   ],
   "injectors": {
     "defaultRequire": 1

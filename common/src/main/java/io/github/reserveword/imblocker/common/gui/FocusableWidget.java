@@ -24,6 +24,7 @@ public interface FocusableWidget {
 		IMManager.setState(getPreferredState());
 		if(getPreferredState()) {
 			IMManager.setEnglishState(getPreferredEnglishState());
+			IMManager.updateCompositionWindowPos();
 		}
 	}
 	

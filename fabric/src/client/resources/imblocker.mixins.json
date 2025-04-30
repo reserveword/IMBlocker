@@ -21,7 +21,8 @@
     "TextFieldMixin",
     "ClickableWidgetMixin",
     "EditBoxWidgetMixin",
-    "AbstractParentElementMixin"
+    "AbstractParentElementMixin",
+    "WindowMixin"
   ],
   "injectors": {
     "defaultRequire": 1

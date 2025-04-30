@@ -1,14 +1,5 @@
 package io.github.reserveword.imblocker;
 
-import io.github.reserveword.imblocker.common.Common;
-import io.github.reserveword.imblocker.common.Config;
-
-import com.terraformersmc.modmenu.api.ConfigScreenFactory;
-import com.terraformersmc.modmenu.api.ModMenuApi;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigData;
-import net.fabricmc.loader.api.FabricLoader;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -18,11 +9,25 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
+
+import io.github.reserveword.imblocker.common.ChatCommandInputType;
+import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.Config;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import net.fabricmc.loader.api.FabricLoader;
+
 @me.shedaniel.autoconfig.annotation.Config(name = Common.MODID)
 public class FabricConfig extends Config implements ModMenuApi, ConfigData {
     ArrayList<String> screenWhitelist = new ArrayList<>(FabricCommon.defaultScreenWhitelist);
     boolean enableScreenRecovering = false;
     ArrayList<String> recoveredScreens = new ArrayList<>();
+    
+    @ConfigEntry.Gui.Tooltip
+    ChatCommandInputType chatCommandInputType = ChatCommandInputType.IM_ENG_STATE;
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
@@ -45,6 +50,11 @@ public class FabricConfig extends Config implements ModMenuApi, ConfigData {
     @Override
     public boolean inScreenWhitelist(Class<?> cls) {
         return screenWhitelist.contains(cls == null ? null : cls.getName());
+    }
+    
+    @Override
+    public ChatCommandInputType getChatCommandInputType() {
+    	return chatCommandInputType;
     }
 
     public String getClassName(Class<?> cls) {

@@ -4,6 +4,7 @@
   "package" : "io.github.reserveword.imblocker.mixin.neoforge",
   "compatibilityLevel": "JAVA_21",
   "client": [
+  	"AbstractCommandBlockScreenMixin",
   	"ChatScreenMixin",
     "MinecraftClientMixin",
     "TextFieldMixin",
@@ -11,7 +12,10 @@
     "MultiLineEditBoxMixin",
     "AbstractContainerEventHandlerMixin",
     "EmiSearchWidgetMixin",
-    "ReiTextFieldMixin"
+    "ReiTextFieldMixin",
+    "FtbWidgetMixin",
+    "FtbTextFieldMixin",
+    "WindowMixin"
   ],
   "injectors": {
     "defaultRequire": 1

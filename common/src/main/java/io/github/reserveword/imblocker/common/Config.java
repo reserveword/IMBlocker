@@ -14,4 +14,6 @@ public abstract class Config {
     public boolean inScreenWhitelist(Class<?> cls) {
         return false;
     }
+    
+    public abstract ChatCommandInputType getChatCommandInputType();
 }

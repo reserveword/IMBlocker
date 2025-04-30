@@ -7,7 +7,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
+import io.github.reserveword.imblocker.common.gui.Rectangle;
 
 @Pseudo
 @Mixin(targets = {
@@ -17,6 +19,9 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
 	
 	@Shadow
 	private boolean editable;
+
+    @Shadow
+    private me.shedaniel.math.Rectangle bounds;
 	
 	@Override
 	public boolean isWidgetEditable() {
@@ -36,5 +41,11 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
     			updateIMState();
     		}
     	}
+    }
+	
+	@Override
+    public Rectangle getBoundsAbs() {
+    	return new Rectangle(FocusContainer.getMCGuiScaleFactor(), 
+    			bounds.x, bounds.y, bounds.width, bounds.height);
     }
 }

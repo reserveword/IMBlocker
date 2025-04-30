@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker.mixin.fabric;
+package io.github.reserveword.imblocker.mixin.forge;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

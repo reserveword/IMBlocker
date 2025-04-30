@@ -115,7 +115,3 @@ allprojects {
         dependsOn("feedbackResource")
     }
 }
-
-project.jar {
-    
-}

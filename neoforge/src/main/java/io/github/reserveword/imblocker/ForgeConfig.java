@@ -13,9 +13,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import io.github.reserveword.imblocker.common.ChatCommandInputType;
 import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.Config;
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
+import net.minecraft.client.gui.screens.inventory.HangingSignEditScreen;
 import net.minecraft.client.gui.screens.inventory.SignEditScreen;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -64,6 +66,11 @@ public class ForgeConfig extends Config {
     public boolean inScreenWhitelist(Class<?> cls) {
         return screenWhitelist != null && screenWhitelist.contains(cls);
     }
+    
+    @Override
+    public ChatCommandInputType getChatCommandInputType() {
+    	return CLIENT.chatCommandInputType.get();
+    }
 
     public String getClassName(Class<?> cls) {
     	CodeSource source = cls.getProtectionDomain().getCodeSource();
@@ -103,29 +110,38 @@ public class ForgeConfig extends Config {
         private final ModConfigSpec.ConfigValue<Boolean> enableScreenRecovering;
 
         private final ModConfigSpec.ConfigValue<List<? extends String>> recoveredScreens;
+        
+        private final ModConfigSpec.EnumValue<ChatCommandInputType> chatCommandInputType;
 
         Client(ModConfigSpec.Builder builder) {
             screenWhitelist = builder
-                                      .comment("Matched screens would enable your IME")
-                                      .translation("key.imblocker.screenWhitelist")
-                                      .defineList("screenWhitelist", Arrays.asList(
-                                              BookEditScreen.class.getName(),
-                                              SignEditScreen.class.getName(),
-                                              "net.minecraft.client.gui.screens.inventory.HangingSignEditScreen",
-                                              "journeymap.client.ui.waypoint.WaypointEditor",
-                                              "com.ldtteam.blockout.BOScreen"
-                                      ), checkClassForName);
+            		.comment("Matched screens would enable your IME")
+            		.translation("key.imblocker.screenWhitelist")
+            		.defineList("screenWhitelist", Arrays.asList(
+            				BookEditScreen.class.getName(),
+            				SignEditScreen.class.getName(),
+            				HangingSignEditScreen.class.getName(),
+            				"journeymap.client.ui.waypoint.WaypointEditor",
+            				"com.ldtteam.blockout.BOScreen"
+            				), checkClassForName);
             
             enableScreenRecovering = builder
-                                             .comment("Do we output recoveredScreens? because it may cause lag")
-                                             .translation("key.imblocker.enableScreenRecovering")
-                                             .define("enableScreenRecovering", false);
+            		.comment("Do we output recoveredScreens? because it may cause lag")
+            		.translation("key.imblocker.enableScreenRecovering")
+            		.define("enableScreenRecovering", false);
 
             recoveredScreens = builder
-                                       .comment("Here lists all Screens that is not in whitelist nor blacklist, ",
-                                               "so you may easily add those to whitelist/blacklist.")
-                                       .translation("key.imblocker.recoveredScreens")
-                                       .defineList("recoveredScreens", Collections.emptyList(), s -> true);
+            		.comment("Here lists all Screens that is not in whitelist nor blacklist, ",
+            				"so you may easily add those to whitelist/blacklist.")
+            		.translation("key.imblocker.recoveredScreens")
+            		.defineList("recoveredScreens", Collections.emptyList(), s -> true);
+            
+            chatCommandInputType = builder
+            		.comment("If your input method can't auto-switch to English state when using command syntax "
+            				+ "in chat field, set this option to DISABLE_IM may help, "
+            				+ "but note that you can only type English when typing command in this mode.")
+            		.translation("key.imblocker.chatCommandInputType")
+            		.defineEnum("chatCommandInputType", ChatCommandInputType.IM_ENG_STATE);
         }
     }
 }

@@ -4,11 +4,14 @@
   "package": "io.github.reserveword.imblocker.mixin.fabric",
   "compatibilityLevel": "JAVA_17",
   "client": [
+  	"AbstractCommandBlockScreenMixin",
   	"ChatScreenMixin",
     "AxiomEditorUIMixin",
     "CottonWidgetMixin",
     "EmiSearchWidgetMixin",
+    "FtbWidgetMixin",
     "FtbTextFieldMixin",
+    "MeteorWidgetMixin",
     "MeteorTextFieldMixin",
     "MinecraftClientMixin",
     "ReiTextFieldMixin",
@@ -18,7 +21,8 @@
     "TextFieldMixin",
     "ClickableWidgetMixin",
     "EditBoxWidgetMixin",
-    "AbstractParentElementMixin"
+    "AbstractParentElementMixin",
+    "WindowMixin"
   ],
   "injectors": {
     "defaultRequire": 1

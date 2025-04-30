@@ -1,9 +1,14 @@
 package io.github.reserveword.imblocker;
 
+import com.mojang.blaze3d.platform.Window;
+
 import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.GameWindowAccessor;
 import io.github.reserveword.imblocker.common.MainThreadExecutor;
+import io.github.reserveword.imblocker.common.gui.Rectangle;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -12,6 +17,11 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Common.MODID)
 public class IMBlocker {
+	
+	public IMBlocker() {
+		this(FMLJavaModLoadingContext.get());
+	}
+	
     public IMBlocker(FMLJavaModLoadingContext context) {
     	MainThreadExecutor.instance = new MainThreadExecutor() {
 			@Override
@@ -19,10 +29,23 @@ public class IMBlocker {
 				Minecraft.getInstance().execute(runnable);
 			}
 		};
+		
+		GameWindowAccessor.instance = new GameWindowAccessor() {
+			@Override
+			public Rectangle getBounds() {
+				Window gameWindow = Minecraft.getInstance().getWindow();
+				return new Rectangle(gameWindow.getX(), gameWindow.getY(), 
+						gameWindow.getWidth(), gameWindow.getHeight());
+			}
+		};
 
         // Register ourselves for server and other game events we are interested in
         context.getModEventBus().addListener(this::onConfigLoadReload);
-        context.registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
+        try {
+            context.registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
+		} catch (NoSuchMethodError e) {
+			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
+		}
     }
 
     @SubscribeEvent

@@ -5,6 +5,7 @@
   "refmap" : "imblocker-forge.mixins.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "client": [
+  	"AbstractCommandBlockScreenMixin",
   	"ChatScreenMixin",
     "MinecraftClientMixin",
     "TextFieldMixin",
@@ -12,7 +13,10 @@
     "MultiLineEditBoxMixin",
     "AbstractContainerEventHandlerMixin",
     "EmiSearchWidgetMixin",
-    "ReiTextFieldMixin"
+    "ReiTextFieldMixin",
+    "FtbWidgetMixin",
+    "FtbTextFieldMixin",
+    "WindowMixin"
   ],
   "injectors": {
     "defaultRequire": 1

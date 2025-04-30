@@ -17,6 +17,7 @@ import io.github.reserveword.imblocker.common.ChatCommandInputType;
 import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.Config;
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
+import net.minecraft.client.gui.screens.inventory.HangingSignEditScreen;
 import net.minecraft.client.gui.screens.inventory.SignEditScreen;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -119,7 +120,7 @@ public class ForgeConfig extends Config {
             		.defineList("screenWhitelist", Arrays.asList(
             				BookEditScreen.class.getName(),
             				SignEditScreen.class.getName(),
-            				"net.minecraft.client.gui.screens.inventory.HangingSignEditScreen",
+            				HangingSignEditScreen.class.getName(),
             				"journeymap.client.ui.waypoint.WaypointEditor",
             				"com.ldtteam.blockout.BOScreen"
             				), checkClassForName);

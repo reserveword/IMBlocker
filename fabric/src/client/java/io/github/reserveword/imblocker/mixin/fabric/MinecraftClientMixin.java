@@ -6,14 +6,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import io.github.reserveword.imblocker.common.Config;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.GenericWhitelistScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.AbstractSignEditScreen;
-import net.minecraft.client.gui.screen.ingame.BookEditScreen;
 import net.minecraft.client.util.Window;
 
 @Mixin(MinecraftClient.class)
@@ -43,7 +42,6 @@ public abstract class MinecraftClientMixin {
     }
     
     private boolean isScreenInWhiteList(Screen screen) {
-//    	return screen != null && Config.INSTANCE.inScreenWhitelist(screen.getClass());
-    	return screen instanceof AbstractSignEditScreen || screen instanceof BookEditScreen;
+    	return screen != null && Config.INSTANCE.inScreenWhitelist(screen.getClass());
     }
 }

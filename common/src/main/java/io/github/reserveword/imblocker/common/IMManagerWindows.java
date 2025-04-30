@@ -105,7 +105,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     
     private void updateCompositionWindowPos(WinNT.HANDLE himc) {
     	FocusableWidget focusedWidget = FocusManager.getFocusOwner();
-    	if(FocusManager.getFocusOwner() != null) {
+    	if(focusedWidget != null) {
     		Point compositionWindowPos = calculateProperCompositionWindowPos(
     				GameWindowAccessor.instance.getBounds(), focusedWidget.getBoundsAbs());
         	COMPOSITIONFORM cfr = new COMPOSITIONFORM();

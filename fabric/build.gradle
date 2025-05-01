@@ -1,7 +1,7 @@
 plugins {
     id 'eclipse'
     id 'idea'
-    id 'fabric-loom' version "$loom_version"
+    id 'fabric-loom' version '1.8.+'
 }
 
 loom {
@@ -14,6 +14,10 @@ loom {
         }
     }
 
+}
+
+base {
+	archivesName = "${rootProject.name}-${mod_version}-fabric-1.19.4+"
 }
 
 dependencies {
@@ -35,13 +39,13 @@ dependencies {
     // compat
     modCompileOnlyApi "maven.modrinth:replaymod:$replaymod_version"
     modCompileOnlyApi "maven.modrinth:notebook:$notebook_version"
-    modCompileOnly "curse.maven:ftblib-$ftblib_version"
     modLocalRuntime "maven.modrinth:voxelmap-updated:$voxelmap_version"
     modCompileOnlyApi "dev.emi:emi-fabric:$emi_version"
     modLocalRuntime "dev.emi:emi-fabric:$emi_version"
     compileOnly "io.github.spair:imgui-java-app:$imgui_version"
     compileOnly "maven.modrinth:sodium:mc1.19.4-0.4.10"
     compileOnly "maven.modrinth:reeses-sodium-options:mc1.19.4-1.6.3"
+    compileOnly "maven.modrinth:create-fabric:0.5.1-j-build.1631+mc1.20.1"
     // modRuntimeOnly "curse.maven:ftbquest-$ftbquest_version"
     modCompileOnly "io.github.cottonmc:LibGui:$cottonlibgui_version"
 
@@ -54,21 +58,15 @@ java {
     // If you remove this line, sources will not be generated.
     withSourcesJar()
 
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 project.jar {
-    finalizedBy('remapJar')
-    manifest {
-        attributes([
-                "Specification-Title"     : mod_id,
-                "Specification-Vendor"    : author,
-                "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : rootProject.name,
-                "Implementation-Version"  : mod_version,
-                "Implementation-Vendor"   : author,
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
+	from("LICENSE") {
+		rename { "${it}_${project.base.archivesName.get()}"}
+	}
+	
+    from sourceSets.main.output
+    from project(":common").sourceSets.main.output
 }

@@ -1,20 +1,28 @@
-{
+ {
   "required": false,
   "minVersion": "0.8",
-  "package": "io.github.reserveword.imblocker.mixin.fabric",
+  "package": "io.github.reserveword.imblocker.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
+  	"AbstractCommandBlockScreenMixin",
+  	"ChatScreenMixin",
     "AxiomEditorUIMixin",
     "CottonWidgetMixin",
     "EmiSearchWidgetMixin",
+    "FtbWidgetMixin",
     "FtbTextFieldMixin",
+    "MeteorWidgetMixin",
     "MeteorTextFieldMixin",
     "MinecraftClientMixin",
     "ReiTextFieldMixin",
     "ReplayModTextFieldMixin",
     "RSOAbstractFrameMixin",
     "SodiumSearchFieldMixin",
-    "TextFieldMixin"
+    "TextFieldMixin",
+    "ClickableWidgetMixin",
+    "EditBoxWidgetMixin",
+    "AbstractParentElementMixin",
+    "WindowMixin"
   ],
   "injectors": {
     "defaultRequire": 1

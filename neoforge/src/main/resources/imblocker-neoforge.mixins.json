@@ -1,0 +1,26 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package" : "io.github.reserveword.imblocker.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+  	"AbstractCommandBlockScreenMixin",
+  	"ChatScreenMixin",
+    "MinecraftClientMixin",
+    "TextFieldMixin",
+    "AbstractWidgetMixin",
+    "MultiLineEditBoxMixin",
+    "AbstractContainerEventHandlerMixin",
+    "EmiSearchWidgetMixin",
+    "ReiTextFieldMixin",
+    "FtbWidgetMixin",
+    "FtbTextFieldMixin",
+    "WindowMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrite": {
+    "strict": false
+  }
+}

@@ -1,15 +1,7 @@
 package io.github.reserveword.imblocker;
 
-import io.github.reserveword.imblocker.common.Common;
-import io.github.reserveword.imblocker.common.Config;
-
-import com.terraformersmc.modmenu.api.ConfigScreenFactory;
-import com.terraformersmc.modmenu.api.ModMenuApi;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigData;
-import net.fabricmc.loader.api.FabricLoader;
-
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.CodeSource;
 import java.util.ArrayList;
@@ -17,14 +9,25 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
+
+import io.github.reserveword.imblocker.common.ChatCommandInputType;
+import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.Config;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import net.fabricmc.loader.api.FabricLoader;
+
 @me.shedaniel.autoconfig.annotation.Config(name = Common.MODID)
 public class FabricConfig extends Config implements ModMenuApi, ConfigData {
-    ArrayList<String> screenBlacklist = new ArrayList<>(FabricCommon.defaultScreenBlacklist);
     ArrayList<String> screenWhitelist = new ArrayList<>(FabricCommon.defaultScreenWhitelist);
-    ArrayList<String> inputBlacklist = new ArrayList<>();
-    ArrayList<String> inputWhitelist = new ArrayList<>();
     boolean enableScreenRecovering = false;
     ArrayList<String> recoveredScreens = new ArrayList<>();
+    
+    @ConfigEntry.Gui.Tooltip
+    ChatCommandInputType chatCommandInputType = ChatCommandInputType.IM_ENG_STATE;
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
@@ -33,7 +36,7 @@ public class FabricConfig extends Config implements ModMenuApi, ConfigData {
 
     @Override
     public void validatePostLoad() {
-        for (List<String> list: Arrays.asList(screenBlacklist, screenWhitelist, inputBlacklist, inputWhitelist)) {
+        for (List<String> list: Arrays.asList(screenWhitelist)) {
             for (int i = 0; i < list.size(); i++) {
                 String cls = list.get(i);
                 if (cls.contains(":")) {
@@ -45,30 +48,13 @@ public class FabricConfig extends Config implements ModMenuApi, ConfigData {
     }
 
     @Override
-    public boolean inScreenBlacklist(Class<?> cls) {
-        return screenBlacklist.contains(cls == null ? null : cls.getName());
-    }
-
-    @Override
     public boolean inScreenWhitelist(Class<?> cls) {
-        return cls != null && screenWhitelist.contains(cls.getName());
+        return screenWhitelist.contains(cls == null ? null : cls.getName());
     }
-
+    
     @Override
-    public boolean inInputBlacklist(Class<?> cls) {
-        return inputBlacklist.contains(cls == null ? null : cls.getName());
-    }
-
-    @Override
-    public boolean inInputWhitelist(Class<?> cls) {
-        return inputWhitelist.contains(cls == null ? null : cls.getName());
-    }
-
-    @Override
-    public void recoverScreen(Class<?> cls) {
-        if (enableScreenRecovering) {
-            recoveredScreens.add(getClassName(cls));
-        }
+    public ChatCommandInputType getChatCommandInputType() {
+    	return chatCommandInputType;
     }
 
     public String getClassName(Class<?> cls) {
@@ -85,14 +71,20 @@ public class FabricConfig extends Config implements ModMenuApi, ConfigData {
             URI loc = locUrl.toURI();
             FabricLoader.getInstance().getAllMods().forEach(mod -> {
                 String modid = mod.getMetadata().getId();
-                if (!"minecraft".equals(modid)
-                    && !"imblocker".equals(modid)
-                    && mod.getRootPaths().stream().anyMatch(path -> path.toUri().equals(loc))
-                ) {
-                    name.set(modid + ":" + cls.getName());
+                try {
+                    if (!"minecraft".equals(modid)
+                        && !"imblocker".equals(modid)
+                        && mod.getRootPaths().stream().anyMatch(path -> path.toUri().equals(loc))
+                    ) {
+                        name.set(modid + ":" + cls.getName());
+                    }
+                } catch (NullPointerException npe) {
+                    Common.LOGGER.error("something is null when grabbing mod jar: {}", mod.getMetadata().getId());
+                    Common.LOGGER.error("enableScreenRecovering disabled.");
+                    enableScreenRecovering = false;
                 }
             });
-        } catch (Throwable e) {
+        } catch (URISyntaxException e) {
             Common.LOGGER.error(e);
             Common.LOGGER.error("enableScreenRecovering disabled.");
             enableScreenRecovering = false;

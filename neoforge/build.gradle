@@ -1,0 +1,46 @@
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'net.neoforged.gradle.userdev' version '7.0.142'
+}
+
+// Mojang ships Java 21 to end users starting in 1.20.5, so mods should target Java 21.
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+runs {
+    client {
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.console.level', 'debug'
+        systemProperty 'forge.enabledGameTestNamespaces', mod_id
+        modSource sourceSets.main
+
+        dependencies {
+            runtime project(":common")
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+dependencies {
+    implementation "net.neoforged:neoforge:${neo_version}"
+
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    
+	compileOnly "me.shedaniel.cloth:cloth-config-neoforge:${clothconfig_version}"
+    compileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+    compileOnly "dev.emi:emi-neoforge:${emi_version}"
+
+    implementation project(':common')
+}
+
+project.jar {
+	archiveFileName = "${rootProject.name}-${mod_version}-neoforge-1.20.6+.jar"
+    from sourceSets.main.output
+    from project(":common").sourceSets.main.output
+}

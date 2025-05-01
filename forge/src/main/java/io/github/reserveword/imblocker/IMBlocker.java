@@ -3,8 +3,7 @@ package io.github.reserveword.imblocker;
 import com.mojang.blaze3d.platform.Window;
 
 import io.github.reserveword.imblocker.common.Common;
-import io.github.reserveword.imblocker.common.GameWindowAccessor;
-import io.github.reserveword.imblocker.common.MainThreadExecutor;
+import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,19 +22,22 @@ public class IMBlocker {
 	}
 	
     public IMBlocker(FMLJavaModLoadingContext context) {
-    	MainThreadExecutor.instance = new MainThreadExecutor() {
+		MinecraftClientAccessor.instance = new MinecraftClientAccessor() {
 			@Override
 			public void execute(Runnable runnable) {
 				Minecraft.getInstance().execute(runnable);
 			}
-		};
-		
-		GameWindowAccessor.instance = new GameWindowAccessor() {
+			
 			@Override
-			public Rectangle getBounds() {
+			public Rectangle getWindowBounds() {
 				Window gameWindow = Minecraft.getInstance().getWindow();
 				return new Rectangle(gameWindow.getX(), gameWindow.getY(), 
 						gameWindow.getWidth(), gameWindow.getHeight());
+			}
+			
+			@Override
+			public int getStringWidth(String text) {
+				return Minecraft.getInstance().font.width(text);
 			}
 		};
 

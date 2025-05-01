@@ -23,13 +23,13 @@ jobs:
             java-version: 17
             game-versions: '[1.19.4,)'
 
-          #- loader: forge
-          #  java-version: 17
-          #  game-versions: '[1.19.4,1.20.4]'
+          - loader: forge
+            java-version: 17
+            game-versions: '[1.19.4,1.20.4]'
 
-          #- loader: neoforge
-          #  java-version: 21
-          #  game-versions: '[1.20.6,)'
+          - loader: neoforge
+            java-version: 21
+            game-versions: '[1.20.6,)'
 
     steps:
       - name: 签出存储库

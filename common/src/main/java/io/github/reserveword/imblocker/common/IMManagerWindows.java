@@ -107,7 +107,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     	FocusableWidget focusedWidget = FocusManager.getFocusOwner();
     	if(focusedWidget != null) {
     		Point compositionWindowPos = calculateProperCompositionWindowPos(
-    				GameWindowAccessor.instance.getBounds(), focusedWidget.getBoundsAbs());
+    				focusedWidget.getBoundsAbs(), focusedWidget.getCaretPos());
         	COMPOSITIONFORM cfr = new COMPOSITIONFORM();
         	ImmGetCompositionWindow(himc, cfr);
         	cfr.dwStyle = 2; //CFS_POINT
@@ -117,22 +117,8 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     	}
     }
     
-    private Point calculateProperCompositionWindowPos(Rectangle gameWindowBounds, Rectangle inputWidgetBounds) {
-    	int gameWindowNorthBorderY = 0;
-    	int gameWindowSouthBorderY = gameWindowBounds.height();
-    	int inputWidgetNorthBorderY = inputWidgetBounds.y();
-    	int inputWidgetSouthBorderY = inputWidgetBounds.y() + inputWidgetBounds.height();
-    	
-    	int compositionWindowX = inputWidgetBounds.x(), compositionWindowY;
-    	if(gameWindowSouthBorderY - inputWidgetSouthBorderY > 50) {
-    		compositionWindowY = inputWidgetSouthBorderY;
-    	}else if(inputWidgetNorthBorderY - gameWindowNorthBorderY > 100) {
-    		compositionWindowY = inputWidgetNorthBorderY - 100;
-    	}else {
-    		compositionWindowY = inputWidgetNorthBorderY;
-    	}
-    	
-    	return new Point(compositionWindowX, compositionWindowY);
+    private Point calculateProperCompositionWindowPos(Rectangle inputWidgetBounds, Point caretPos) {
+    	return new Point(inputWidgetBounds.x() + caretPos.x(), inputWidgetBounds.y() + caretPos.y());
     }
     
     private class SetConversionStateThread extends Thread {
@@ -147,7 +133,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 				while(true) {
 					long cooldown = getConversionStatusCooldown();
 					if(cooldown <= 0) {
-						MainThreadExecutor.instance.execute(() -> syncEnglishState());
+						MinecraftClientAccessor.instance.execute(() -> syncEnglishState());
 						break;
 					}else {
 						await(cooldown);

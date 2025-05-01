@@ -39,7 +39,6 @@ dependencies {
     // compat
     modCompileOnlyApi "maven.modrinth:replaymod:$replaymod_version"
     modCompileOnlyApi "maven.modrinth:notebook:$notebook_version"
-    modCompileOnly "curse.maven:ftblib-$ftblib_version"
     modLocalRuntime "maven.modrinth:voxelmap-updated:$voxelmap_version"
     modCompileOnlyApi "dev.emi:emi-fabric:$emi_version"
     modLocalRuntime "dev.emi:emi-fabric:$emi_version"

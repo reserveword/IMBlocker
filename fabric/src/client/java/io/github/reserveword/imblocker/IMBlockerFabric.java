@@ -2,8 +2,7 @@ package io.github.reserveword.imblocker;
 
 import io.github.reserveword.imblocker.common.ChatCommandInputType;
 import io.github.reserveword.imblocker.common.Config;
-import io.github.reserveword.imblocker.common.GameWindowAccessor;
-import io.github.reserveword.imblocker.common.MainThreadExecutor;
+import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
@@ -17,19 +16,22 @@ public class IMBlockerFabric implements ClientModInitializer {
 	
     @Override
     public void onInitializeClient() {
-        MainThreadExecutor.instance = new MainThreadExecutor() {
+		MinecraftClientAccessor.instance = new MinecraftClientAccessor() {
 			@Override
 			public void execute(Runnable runnable) {
 				MinecraftClient.getInstance().execute(runnable);
 			}
-		};
-		
-		GameWindowAccessor.instance = new GameWindowAccessor() {
+			
 			@Override
-			public Rectangle getBounds() {
+			public Rectangle getWindowBounds() {
 				Window gameWindow = MinecraftClient.getInstance().getWindow();
 				return new Rectangle(gameWindow.getX(), gameWindow.getY(), 
 						gameWindow.getFramebufferWidth(), gameWindow.getFramebufferHeight());
+			}
+			
+			@Override
+			public int getStringWidth(String text) {
+				return MinecraftClient.getInstance().textRenderer.getWidth(text);
 			}
 		};
 		

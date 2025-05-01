@@ -11,6 +11,14 @@ dependencies {
     compileOnly 'org.apache.logging.log4j:log4j-core:2.19.0'
     compileOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.19.0'
     compileOnly 'ca.weblite:java-objc-bridge:1.1'
+	
+	compileOnly("io.github.llamalad7:mixinextras-common:0.3.5")
+	annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.5")
+	compileOnly("net.fabricmc:sponge-mixin:0.12.5+mixin.0.8.5")
+	
+	compileOnly "me.shedaniel.cloth:cloth-config-forge:${clothconfig_version}"
+    compileOnly "me.shedaniel:RoughlyEnoughItems-forge:${rei_version}"
+	compileOnly "curse.maven:ftblib-$ftblib_version"
 }
 
 java {

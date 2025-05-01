@@ -6,19 +6,19 @@ public interface MinecraftFocusableWidget extends FocusableWidget {
 		return FocusContainer.MINECRAFT;
 	}
 	
-	default void onFocusChanged(boolean isFocused) {
+	default void onMinecraftWidgetFocusChanged(boolean isFocused) {
 		if(isFocused) {
-			onFocusGained();
+			onMinecraftWidgetFocusGained();
 		}else {
-			onFocusLost();
+			onMinecraftWidgetFocusLost();
 		}
 	}
 	
-	 default void onFocusGained() {
+	 default void onMinecraftWidgetFocusGained() {
 		 getFocusContainer().requestFocus(this);
 	 }
 	 
-	 default void onFocusLost() {
+	 default void onMinecraftWidgetFocusLost() {
 		 getFocusContainer().removeFocus(this);
 	 }
 	 

@@ -41,7 +41,7 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin {
     
     @Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
     public void focusChanged(boolean isFocused, CallbackInfo ci) {
-    	onFocusChanged(isFocused);
+    	onMinecraftWidgetFocusChanged(isFocused);
     }
     
     @Inject(method = "onChanged", at = @At("TAIL"))

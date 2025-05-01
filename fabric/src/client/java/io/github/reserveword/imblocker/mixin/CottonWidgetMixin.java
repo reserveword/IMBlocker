@@ -29,12 +29,12 @@ public abstract class CottonWidgetMixin implements MinecraftFocusableWidget {
     
     @Inject(method = "onFocusGained", at = @At("HEAD"))
     public void onFocusGained(CallbackInfo ci) {
-    	onFocusGained();
+    	onMinecraftWidgetFocusGained();
     }
     
     @Inject(method = "onFocusLost", at = @At("HEAD"))
     public void onFocusLost(CallbackInfo ci) {
-    	onFocusLost();
+    	onMinecraftWidgetFocusLost();
     }
     
     @Override

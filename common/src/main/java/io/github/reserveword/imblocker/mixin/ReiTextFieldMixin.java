@@ -42,7 +42,7 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
     
     @Inject(method = {"setFocused", "method_25365", "m_93692_"}, at = @At("TAIL"))
     public void focusChanged(boolean isFocused, CallbackInfo ci) {
-    	onFocusChanged(isFocused);
+    	onMinecraftWidgetFocusChanged(isFocused);
     }
     
     @Inject(method = "setText", at = @At(value = "INVOKE", target = 

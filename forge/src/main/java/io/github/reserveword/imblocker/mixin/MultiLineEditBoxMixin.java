@@ -17,7 +17,7 @@ public abstract class MultiLineEditBoxMixin extends AbstractWidgetMixin {
 	
 	@Override
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onFocusChanged(isFocused);
+		onMinecraftWidgetFocusChanged(isFocused);
 	}
 	
 	@Override

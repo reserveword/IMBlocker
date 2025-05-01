@@ -40,7 +40,7 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin {
 	
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onFocusChanged(isFocused);
+		onMinecraftWidgetFocusChanged(isFocused);
 	}
 	
 	@Inject(method = "onValueChange", at = @At("TAIL"))

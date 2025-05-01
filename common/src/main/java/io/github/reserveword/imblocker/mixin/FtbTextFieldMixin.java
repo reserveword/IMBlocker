@@ -26,7 +26,7 @@ public abstract class FtbTextFieldMixin extends FtbWidgetMixin {
     
     @Inject(method = "setFocused", at = @At("TAIL"))
     public void focusChanged(boolean isFocused, CallbackInfo ci) {
-    	onFocusChanged(isFocused);
+    	onMinecraftWidgetFocusChanged(isFocused);
     }
     
     @Inject(method = "scrollTo", at = @At("TAIL"))

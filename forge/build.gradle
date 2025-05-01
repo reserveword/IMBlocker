@@ -64,8 +64,6 @@ dependencies {
 	compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-default-plugin-forge:$rei_version")
     compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
     compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
-    
-    compileOnly fg.deobf("curse.maven:ftblib-$ftblib_version")
 
     implementation project(':common')
 }

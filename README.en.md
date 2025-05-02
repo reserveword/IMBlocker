@@ -31,7 +31,8 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
     - Some `Screen`s like `BookEditScreen` and `SignEditScreen` directly process key inputs, without generating focus requests
     - We regard these `Screen`s as effective focused widget and make a whitelist for them, manually create focus requests upon open/close
 - Limitations
-    - Widgets without being injected cannot be managed by the focus system of this mod, thus mods with independent GUI implementation may not be able to benefit from this mod. In this case, please report them to #13 for developers.
+    - Widgets without being injected cannot be managed by the focus system of this mod, thus mods with independent GUI implementation may not be able to benefit from this mod. In this case, please report them to [#13](https://github.com/reserveword/IMBlocker/issues/13) for developers.
+    - There's a known bug in GLFW's window management: if the game window is created without focus, focus callbacks will not be triggered on the first time it gains the focus, which may cause input locking. Solution: make the game window lost and gain the focus again.
     - Suggestions and feedbacks are welcomed  
 
 ## Supported Mods with custom GUI framework  

@@ -15,6 +15,7 @@
     "ReiTextFieldMixin",
     "FtbWidgetMixin",
     "FtbTextFieldMixin",
+    "FtbBaseScreenMixin",
     "WindowMixin"
   ],
   "injectors": {

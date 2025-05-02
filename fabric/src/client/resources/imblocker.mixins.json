@@ -11,6 +11,7 @@
     "EmiSearchWidgetMixin",
     "FtbWidgetMixin",
     "FtbTextFieldMixin",
+    "FtbBaseScreenMixin",
     "MeteorWidgetMixin",
     "MeteorTextFieldMixin",
     "MinecraftClientMixin",

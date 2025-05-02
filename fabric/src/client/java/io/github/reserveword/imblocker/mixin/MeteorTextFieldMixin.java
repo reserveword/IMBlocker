@@ -30,13 +30,13 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin {
 		onMinecraftWidgetFocusChanged(isFocused);
 	}
 	
-	@Inject(method = "move", at = @At("TAIL"))
-	public void handlePosChanged(double x, double y, CallbackInfo ci) {
+	@Inject(method = "cursorChanged", at = @At("TAIL"))
+	public void onCursorChanged(CallbackInfo ci) {
 		IMManager.updateCompositionWindowPos();
 	}
 	
-	@Inject(method = "cursorChanged", at = @At("TAIL"))
-	public void onCursorChanged(CallbackInfo ci) {
+	@Inject(method = "move", at = @At("TAIL"))
+	public void handlePosChanged(double x, double y, CallbackInfo ci) {
 		IMManager.updateCompositionWindowPos();
 	}
 	
@@ -47,7 +47,7 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin {
 	
 	@Override
 	public Point getCaretPos() {
-		int caretX = (int) Math.max(getTextWidth(cursor) - textStart + pad(), 0);
+		int caretX = (int) (getTextWidth(cursor) - textStart + pad());
 		return new Point(caretX, 0);
 	}
 }

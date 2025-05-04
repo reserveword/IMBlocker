@@ -22,21 +22,21 @@ import net.minecraft.client.gui.screens.inventory.SignEditScreen;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-public class ForgeConfig extends Config {
+public class NeoForgeConfig extends Config {
 
 	public static final ModConfigSpec clientSpec;
-    public static final ForgeConfig.Client CLIENT;
+    public static final NeoForgeConfig.Client CLIENT;
     private final static Set<Class<?>> recoveredScreens = new HashSet<>();
     private static Set<Class<?>> screenWhitelist;
 
     static {
-        final Pair<Client, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(ForgeConfig.Client::new);
+        final Pair<Client, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(NeoForgeConfig.Client::new);
         clientSpec = specPair.getRight();
         CLIENT = specPair.getLeft();
-        Config.INSTANCE = new ForgeConfig();
+        Config.INSTANCE = new NeoForgeConfig();
     }
 
-    private ForgeConfig() {
+    private NeoForgeConfig() {
     }
 
     public static void reload() {

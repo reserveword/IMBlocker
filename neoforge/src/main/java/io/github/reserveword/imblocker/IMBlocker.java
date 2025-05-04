@@ -42,7 +42,7 @@ public class IMBlocker {
 		};
 
         // Register ourselves for server and other game events we are interested in
-        container.registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
+        container.registerConfig(ModConfig.Type.CLIENT, NeoForgeConfig.clientSpec);
         
         try {
 			@SuppressWarnings("unchecked")
@@ -76,7 +76,7 @@ public class IMBlocker {
         @SubscribeEvent
         public static void onConfigLoadReload(ModConfigEvent e) {
             Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading)?"re":"");
-            ForgeConfig.reload();
+            NeoForgeConfig.reload();
         }
     }
 }

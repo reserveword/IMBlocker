@@ -2,6 +2,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'java'
+	id 'java-library'
 }
 
 dependencies {
@@ -18,7 +19,7 @@ dependencies {
 	
 	compileOnly "me.shedaniel.cloth:cloth-config-forge:${clothconfig_version}"
     compileOnly "me.shedaniel:RoughlyEnoughItems-forge:${rei_version}"
-	compileOnly "curse.maven:ftblib-$ftblib_version"
+	api "curse.maven:ftblib-$ftblib_version"
 }
 
 java {

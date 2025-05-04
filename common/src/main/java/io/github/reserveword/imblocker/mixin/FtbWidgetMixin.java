@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import dev.ftb.mods.ftblibrary.ui.Panel;
 import dev.ftb.mods.ftblibrary.ui.Widget;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
@@ -14,6 +15,8 @@ import io.github.reserveword.imblocker.common.gui.Rectangle;
 
 @Mixin(value = Widget.class, remap = false)
 public abstract class FtbWidgetMixin implements MinecraftFocusableWidget {
+	
+	@Shadow protected Panel parent;
 	
 	@Shadow public abstract int getX();
 	@Shadow public abstract int getY();

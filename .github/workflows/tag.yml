@@ -64,8 +64,6 @@ jobs:
           loaders: ${{ matrix.loader }}
           game-versions: ${{ matrix.game-versions }}
           
-          files: |
-            ${{ matrix.loader }}/build/libs/!(*-@(dev|sources|javadoc)).jar
-            ${{ matrix.loader }}/build/libs/*-@(dev|sources|javadoc).jar
+          files: ${{ matrix.loader }}/build/libs/!(*-@(dev|sources|javadoc)).jar
 
           java: ${{ matrix.java-version }}

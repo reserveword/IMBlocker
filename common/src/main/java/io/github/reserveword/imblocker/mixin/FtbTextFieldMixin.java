@@ -29,6 +29,11 @@ public abstract class FtbTextFieldMixin extends FtbWidgetMixin {
     	onMinecraftWidgetFocusChanged(isFocused);
     }
     
+    @Override
+    public void cancelFocus(CallbackInfo ci) {
+    	onMinecraftWidgetFocusLost();
+    }
+    
     @Inject(method = "scrollTo", at = @At("TAIL"))
     public void onCursorPosChanged(int pos, CallbackInfo ci) {
     	IMManager.updateCompositionWindowPos();

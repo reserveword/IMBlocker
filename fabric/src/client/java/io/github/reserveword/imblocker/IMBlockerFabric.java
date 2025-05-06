@@ -52,6 +52,8 @@ public class IMBlockerFabric implements ClientModInitializer {
                 public ChatCommandInputType getChatCommandInputType() {
                 	return ChatCommandInputType.IM_ENG_STATE;
                 }
+
+				public void recoverScreen(String screenClsName) {}
             };
         }
     }

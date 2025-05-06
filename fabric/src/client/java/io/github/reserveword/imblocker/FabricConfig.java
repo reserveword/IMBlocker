@@ -53,6 +53,18 @@ public class FabricConfig extends Config implements ModMenuApi, ConfigData {
     }
     
     @Override
+    public void recoverScreen(String screenClsName) {
+    	if(!recoveredScreens.contains(screenClsName)) {
+    		recoveredScreens.add(screenClsName);
+    	}
+    }
+    
+    @Override
+    public boolean isScreenRecoveringEnabled() {
+    	return enableScreenRecovering;
+    }
+    
+    @Override
     public ChatCommandInputType getChatCommandInputType() {
     	return chatCommandInputType;
     }

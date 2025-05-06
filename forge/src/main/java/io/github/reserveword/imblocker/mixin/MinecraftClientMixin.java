@@ -35,6 +35,10 @@ public abstract class MinecraftClientMixin {
     
     @Inject(method = "setScreen", at = @At("HEAD"))
     public void onScreenChanged(Screen screen, CallbackInfo ci) {
+    	if(Config.INSTANCE.isScreenRecoveringEnabled() && screen != null) {
+    		Config.INSTANCE.recoverScreen(screen.getClass().getName());
+    	}
+    	
     	if(isScreenInWhiteList(screen)) {
     		FocusContainer.MINECRAFT.requestFocus(GenericWhitelistScreen.getInstance());
     	}else {

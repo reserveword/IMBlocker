@@ -15,5 +15,11 @@ public abstract class Config {
         return false;
     }
     
+    public abstract void recoverScreen(String screenClsName);
+    
+    public boolean isScreenRecoveringEnabled() {
+    	return false;
+    }
+    
     public abstract ChatCommandInputType getChatCommandInputType();
 }

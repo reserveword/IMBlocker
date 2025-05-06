@@ -6,11 +6,14 @@ import java.security.ProtectionDomain;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.lang3.tuple.Pair;
+
+import com.google.common.collect.Lists;
 
 import io.github.reserveword.imblocker.common.ChatCommandInputType;
 import io.github.reserveword.imblocker.common.Common;
@@ -27,7 +30,7 @@ public class ForgeConfig extends Config {
 
 	public static final ForgeConfigSpec clientSpec;
     public static final ForgeConfig.Client CLIENT;
-    private final static Set<Class<?>> recoveredScreens = new HashSet<>();
+    private final static Set<String> recoveredScreens = new LinkedHashSet<>();
     private static Set<Class<?>> screenWhitelist;
 
     static {
@@ -66,6 +69,19 @@ public class ForgeConfig extends Config {
     @Override
     public boolean inScreenWhitelist(Class<?> cls) {
         return screenWhitelist != null && screenWhitelist.contains(cls);
+    }
+    
+    @Override
+    public void recoverScreen(String screenClsName) {
+    	CLIENT.recoveredScreens.get().forEach(recoveredScreens::add);
+    	recoveredScreens.add(screenClsName);
+    	CLIENT.recoveredScreens.set(Lists.newArrayList(recoveredScreens));
+    	recoveredScreens.clear();
+    }
+    
+    @Override
+    public boolean isScreenRecoveringEnabled() {
+    	return CLIENT.enableScreenRecovering.get();
     }
     
     @Override

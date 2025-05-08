@@ -98,9 +98,5 @@ public class IMBlockerFabricMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("RSOAbstractFrameMixin");
 			validMixins.add("SodiumSearchFieldMixin");
 		}
-		
-		if(IMBlockerFabric.hasMod("cotton")) {
-			validMixins.add("CottonWidgetMixin");
-		}
 	}
 }

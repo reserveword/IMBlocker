@@ -1,6 +1,10 @@
 package io.github.reserveword.imblocker;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import io.github.reserveword.imblocker.common.ChatCommandInputType;
+import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.Config;
 import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
@@ -8,11 +12,13 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Window;
+import net.minecraft.util.JsonHelper;
 
 public class IMBlockerFabric implements ClientModInitializer {
+	
+	private static int currentProtocolVersion;
 	
     @Override
     public void onInitializeClient() {
@@ -58,12 +64,21 @@ public class IMBlockerFabric implements ClientModInitializer {
         }
     }
 
-    private boolean hasMod(String modid) {
-        for (ModContainer mod: FabricLoader.getInstance().getAllMods()) {
-            if (modid.equals(mod.getMetadata().getId())) {
-                return true;
-            }
-        }
-        return false;
+    public static boolean hasMod(String modid) {
+        return FabricLoader.getInstance().isModLoaded(modid);
+    }
+    
+    public static boolean isGameVersionReached(int protocolVersion) {
+    	return currentProtocolVersion >= protocolVersion;
+    }
+    
+    static {
+    	try(InputStream is = IMBlockerFabric.class.getResourceAsStream("/version.json");
+    			InputStreamReader isr = new InputStreamReader(is)) {
+    		currentProtocolVersion = JsonHelper.getInt(JsonHelper.deserialize(isr), "protocol_version");
+    	} catch (Exception e) {
+    		Common.LOGGER.warn("Failed to get protocol version!");
+    		currentProtocolVersion = Integer.MAX_VALUE;
+		}
     }
 }

@@ -14,7 +14,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 
 @Mixin(TextFieldWidget.class)
-public abstract class TextFieldMixin extends ClickableWidgetMixin {
+public class TextFieldLegacyMixin extends ClickableWidgetMixin {
 	
 	@Shadow
 	private boolean editable;
@@ -39,8 +39,13 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin {
     	return isWidgetEditable() && preferredEditState;
     }
     
-    @Inject(method = {"setFocused", "method_25365", "method_25363"}, at = @At("TAIL"))
+    @Override
     public void focusChanged(boolean isFocused, CallbackInfo ci) {
+    	onMinecraftWidgetFocusChanged(isFocused);
+    }
+    
+    @Inject(method = "method_25363", at = @At("TAIL"))
+    public void focusBeChanged(boolean isFocused, CallbackInfo ci) {
     	onMinecraftWidgetFocusChanged(isFocused);
     }
     

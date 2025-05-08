@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.Window;
 import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -54,5 +55,9 @@ public class IMBlocker {
     public void onConfigLoadReload(ModConfigEvent e) {
         Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading)?"re":"");
         ForgeConfig.reload();
+    }
+    
+    public static boolean isGameVersionReached(int protocolVersion) {
+    	return SharedConstants.getCurrentVersion().isStable() && SharedConstants.getProtocolVersion() >= protocolVersion;
     }
 }

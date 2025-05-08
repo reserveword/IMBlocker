@@ -18,6 +18,7 @@ import com.google.common.collect.Lists;
 import io.github.reserveword.imblocker.common.ChatCommandInputType;
 import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.Config;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
 import net.minecraft.client.gui.screens.inventory.HangingSignEditScreen;
 import net.minecraft.client.gui.screens.inventory.SignEditScreen;
@@ -130,16 +131,11 @@ public class ForgeConfig extends Config {
         private final ForgeConfigSpec.EnumValue<ChatCommandInputType> chatCommandInputType;
 
         Client(ForgeConfigSpec.Builder builder) {
+        	Minecraft.getInstance().getLaunchedVersion();
             screenWhitelist = builder
             		.comment("Matched screens would enable your IME")
             		.translation("key.imblocker.screenWhitelist")
-            		.defineList("screenWhitelist", Arrays.asList(
-            				BookEditScreen.class.getName(),
-            				SignEditScreen.class.getName(),
-            				HangingSignEditScreen.class.getName(),
-            				"journeymap.client.ui.waypoint.WaypointEditor",
-            				"com.ldtteam.blockout.BOScreen"
-            				), checkClassForName);
+            		.defineList("screenWhitelist", getDefaultScreenWhitelist(), checkClassForName);
             
             enableScreenRecovering = builder
             		.comment("Do we output recoveredScreens? because it may cause lag")
@@ -158,6 +154,20 @@ public class ForgeConfig extends Config {
             				+ "but note that you can only type English when typing command in this mode.")
             		.translation("key.imblocker.chatCommandInputType")
             		.defineEnum("chatCommandInputType", ChatCommandInputType.IM_ENG_STATE);
+        }
+        
+        private List<String> getDefaultScreenWhitelist() {
+        	List<String> defaultScreenWhitelist = Lists.newArrayList(
+        			BookEditScreen.class.getName(),
+        			SignEditScreen.class.getName(),
+        			"journeymap.client.ui.waypoint.WaypointEditor",
+        			"com.ldtteam.blockout.BOScreen");
+        	
+        	if(IMBlocker.isGameVersionReached(761/*1.19.3*/)) {
+        		defaultScreenWhitelist.add(HangingSignEditScreen.class.getName());
+        	}
+        	
+        	return defaultScreenWhitelist;
         }
     }
 }

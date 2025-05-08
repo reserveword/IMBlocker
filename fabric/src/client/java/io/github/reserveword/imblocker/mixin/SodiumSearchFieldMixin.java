@@ -22,7 +22,7 @@ public abstract class SodiumSearchFieldMixin implements MinecraftFocusableWidget
 		return editable; // Always true.
 	}
 	
-	@Inject(method = "method_25365", at = @At("TAIL"))
+	@Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
 		onMinecraftWidgetFocusChanged(isFocused);
 	}

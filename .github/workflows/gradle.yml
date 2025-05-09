@@ -13,7 +13,7 @@ jobs:
         include:
           - loader: fabric
             project: fabric
-            java-version: 17
+            java-version: 16
 
           - loader: forge
             project: forge

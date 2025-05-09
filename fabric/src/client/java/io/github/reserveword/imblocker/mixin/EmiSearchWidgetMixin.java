@@ -9,6 +9,7 @@ import dev.emi.emi.screen.widget.EmiSearchWidget;
 
 @Mixin(value = EmiSearchWidget.class)
 public abstract class EmiSearchWidgetMixin extends TextFieldMixin {
+	
     @Override
     @Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
     public void focusChanged(boolean isFocused, CallbackInfo ci) {

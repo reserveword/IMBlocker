@@ -52,7 +52,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 
     @Override
     public void setState(boolean on) {
-    	WinDef.HWND hwnd = u.GetActiveWindow();
+    	WinDef.HWND hwnd = getActiveWindow();
         WinNT.HANDLE himc = ImmGetContext(hwnd);
         if ((himc != null) != on) {
 	        if (on) {
@@ -81,7 +81,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     }
     
     private void syncEnglishState() {
-    	WinDef.HWND hwnd = u.GetActiveWindow();
+    	WinDef.HWND hwnd = getActiveWindow();
         WinNT.HANDLE himc = ImmGetContext(hwnd);
         if(himc != null) {
         	ImmSetConversionStatus(himc, preferredEnglishState ? 0 : 1, 0);
@@ -95,7 +95,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     }
     
     public void updateCompositionWindowPos() {
-    	WinDef.HWND hwnd = u.GetActiveWindow();
+    	WinDef.HWND hwnd = getActiveWindow();
         WinNT.HANDLE himc = ImmGetContext(hwnd);
         if(himc != null) {
         	updateCompositionWindowPos(himc);
@@ -115,6 +115,14 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
         	cfr.ptCurrentPos.y = compositionWindowPos.y();
         	ImmSetCompositionWindow(himc, cfr);
     	}
+    }
+    
+    private WinDef.HWND getActiveWindow() {
+    	try {
+			return u.GetActiveWindow();
+		} catch (NoSuchMethodError e) {
+			return u.GetForegroundWindow();
+		}
     }
     
     private Point calculateProperCompositionWindowPos(Rectangle inputWidgetBounds, Point caretPos) {

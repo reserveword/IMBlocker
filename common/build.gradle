@@ -1,24 +1,25 @@
 plugins {
-    id 'eclipse'
-    id 'idea'
-    id 'java'
+	id 'eclipse'
+	id 'idea'
+	id 'java'
+	id 'java-library'
 }
 
 dependencies {
-    compileOnly 'net.java.dev.jna:jna:5.12.1'
-    compileOnly 'net.java.dev.jna:jna-platform:5.12.1'
-    compileOnly 'org.apache.logging.log4j:log4j-api:2.19.0'
-    compileOnly 'org.apache.logging.log4j:log4j-core:2.19.0'
-    compileOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.19.0'
-    compileOnly 'ca.weblite:java-objc-bridge:1.1'
+	compileOnly 'net.java.dev.jna:jna:5.12.1'
+	compileOnly 'net.java.dev.jna:jna-platform:5.12.1'
+	compileOnly 'org.apache.logging.log4j:log4j-api:2.19.0'
+	compileOnly 'org.apache.logging.log4j:log4j-core:2.19.0'
+	compileOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.19.0'
+	compileOnly 'ca.weblite:java-objc-bridge:1.1'
 	
 	compileOnly("io.github.llamalad7:mixinextras-common:0.3.5")
 	annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.5")
 	compileOnly("net.fabricmc:sponge-mixin:0.12.5+mixin.0.8.5")
 	
-	compileOnly "me.shedaniel.cloth:cloth-config-forge:${clothconfig_version}"
-    compileOnly "me.shedaniel:RoughlyEnoughItems-forge:${rei_version}"
-	compileOnly "curse.maven:ftblib-$ftblib_version"
+	compileOnly "me.shedaniel.cloth:basic-math:0.6.1"
+	compileOnly "maven.modrinth:rei:${rei_version}"
+	api "curse.maven:ftblib-$ftblib_version"
 }
 
 java {
@@ -27,8 +28,8 @@ java {
     // If you remove this line, sources will not be generated.
     withSourcesJar()
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 project.processResources {

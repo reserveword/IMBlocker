@@ -1,0 +1,25 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package" : "io.github.reserveword.imblocker.mixin",
+  "refmap" : "imblocker-forge.mixins.refmap.json",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+  	"AbstractCommandBlockScreenMixin",
+  	"ChatScreenMixin",
+    "WidgetMixin",
+    "TextFieldMixin",
+    "MinecraftClientMixin",
+    "MainWindowMixin",
+    "FtbBaseScreenMixin",
+    "FtbWidgetMixin",
+    "FtbTextFieldLegacyMixin",
+    "ReiTextFieldMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrite": {
+    "strict": false
+  }
+}

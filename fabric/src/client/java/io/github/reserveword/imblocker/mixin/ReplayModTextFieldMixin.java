@@ -21,6 +21,6 @@ public abstract class ReplayModTextFieldMixin implements MinecraftFocusableWidge
     
     @Inject(method = "onFocusChanged", at = @At("TAIL"))
     public void focusChanged(boolean isFocused, CallbackInfo ci) {
-    	MinecraftFocusableWidget.super.onMinecraftWidgetFocusChanged(isFocused);
+    	onMinecraftWidgetFocusChanged(isFocused);
     }
 }

@@ -3,18 +3,21 @@ package io.github.reserveword.imblocker;
 import java.net.URL;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.collect.Lists;
+
 import io.github.reserveword.imblocker.common.ChatCommandInputType;
 import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.Config;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
 import net.minecraft.client.gui.screens.inventory.HangingSignEditScreen;
 import net.minecraft.client.gui.screens.inventory.SignEditScreen;
@@ -27,7 +30,7 @@ public class ForgeConfig extends Config {
 
 	public static final ForgeConfigSpec clientSpec;
     public static final ForgeConfig.Client CLIENT;
-    private final static Set<Class<?>> recoveredScreens = new HashSet<>();
+    private final static Set<String> recoveredScreens = new LinkedHashSet<>();
     private static Set<Class<?>> screenWhitelist;
 
     static {
@@ -66,6 +69,19 @@ public class ForgeConfig extends Config {
     @Override
     public boolean inScreenWhitelist(Class<?> cls) {
         return screenWhitelist != null && screenWhitelist.contains(cls);
+    }
+    
+    @Override
+    public void recoverScreen(String screenClsName) {
+    	CLIENT.recoveredScreens.get().forEach(recoveredScreens::add);
+    	recoveredScreens.add(screenClsName);
+    	CLIENT.recoveredScreens.set(Lists.newArrayList(recoveredScreens));
+    	recoveredScreens.clear();
+    }
+    
+    @Override
+    public boolean isScreenRecoveringEnabled() {
+    	return CLIENT.enableScreenRecovering.get();
     }
     
     @Override
@@ -114,16 +130,11 @@ public class ForgeConfig extends Config {
         private final ForgeConfigSpec.EnumValue<ChatCommandInputType> chatCommandInputType;
 
         Client(ForgeConfigSpec.Builder builder) {
+        	Minecraft.getInstance().getLaunchedVersion();
             screenWhitelist = builder
             		.comment("Matched screens would enable your IME")
             		.translation("key.imblocker.screenWhitelist")
-            		.defineList("screenWhitelist", Arrays.asList(
-            				BookEditScreen.class.getName(),
-            				SignEditScreen.class.getName(),
-            				HangingSignEditScreen.class.getName(),
-            				"journeymap.client.ui.waypoint.WaypointEditor",
-            				"com.ldtteam.blockout.BOScreen"
-            				), checkClassForName);
+            		.defineList("screenWhitelist", getDefaultScreenWhitelist(), checkClassForName);
             
             enableScreenRecovering = builder
             		.comment("Do we output recoveredScreens? because it may cause lag")
@@ -142,6 +153,20 @@ public class ForgeConfig extends Config {
             				+ "but note that you can only type English when typing command in this mode.")
             		.translation("key.imblocker.chatCommandInputType")
             		.defineEnum("chatCommandInputType", ChatCommandInputType.IM_ENG_STATE);
+        }
+        
+        private List<String> getDefaultScreenWhitelist() {
+        	List<String> defaultScreenWhitelist = Lists.newArrayList(
+        			BookEditScreen.class.getName(),
+        			SignEditScreen.class.getName(),
+        			"journeymap.client.ui.waypoint.WaypointEditor",
+        			"com.ldtteam.blockout.BOScreen");
+        	
+        	if(IMBlocker.isGameVersionReached(761/*1.19.3*/)) {
+        		defaultScreenWhitelist.add(HangingSignEditScreen.class.getName());
+        	}
+        	
+        	return defaultScreenWhitelist;
         }
     }
 }

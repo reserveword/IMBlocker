@@ -19,6 +19,9 @@ public abstract class FtbWidgetMixin implements MinecraftFocusableWidget {
 	@Shadow public abstract int getY();
 	@Shadow public int width;
 	@Shadow public int height;
+	
+	@Inject(method = "onClosed", at = @At("TAIL"))
+	public void cancelFocus(CallbackInfo ci) {}
 
 	@Override
 	public Rectangle getBoundsAbs() {

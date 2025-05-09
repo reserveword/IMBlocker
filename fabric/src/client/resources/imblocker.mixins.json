@@ -6,25 +6,11 @@
   "client": [
   	"AbstractCommandBlockScreenMixin",
   	"ChatScreenMixin",
-    "AxiomEditorUIMixin",
-    "CottonWidgetMixin",
-    "EmiSearchWidgetMixin",
-    "FtbWidgetMixin",
-    "FtbTextFieldMixin",
-    "FtbBaseScreenMixin",
-    "MeteorWidgetMixin",
-    "MeteorTextFieldMixin",
-    "MinecraftClientMixin",
-    "ReiTextFieldMixin",
-    "ReplayModTextFieldMixin",
-    "RSOAbstractFrameMixin",
-    "SodiumSearchFieldMixin",
-    "TextFieldMixin",
-    "ClickableWidgetMixin",
-    "EditBoxWidgetMixin",
-    "AbstractParentElementMixin",
-    "WindowMixin"
+  	"ClickableWidgetMixin",
+  	"MinecraftClientMixin",
+  	"WindowMixin"
   ],
+  "plugin": "io.github.reserveword.imblocker.IMBlockerMixinPlugin",
   "injectors": {
     "defaultRequire": 1
   }

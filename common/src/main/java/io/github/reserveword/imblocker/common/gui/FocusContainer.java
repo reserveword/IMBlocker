@@ -24,10 +24,11 @@ public enum FocusContainer {
 				if(focusedWidget != null) {
 					focusedWidget.lostFocus();
 				}
-				toFocus.deliverFocus();
+				focusedWidget = toFocus;
+				focusedWidget.deliverFocus();
+			}else {
+				focusedWidget = toFocus;
 			}
-			
-			focusedWidget = toFocus;
 		}
 	}
 	

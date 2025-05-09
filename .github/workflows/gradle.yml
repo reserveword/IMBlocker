@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
@@ -42,4 +42,4 @@ jobs:
         # Artifact name
         name: imblocker-${{ matrix.loader }}
         # Directory containing files to upload
-        path: ${{ matrix.project }}\build\libs\*.jar
+        path: ${{ matrix.project }}/build/libs/*.jar

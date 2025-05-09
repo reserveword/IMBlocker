@@ -18,9 +18,8 @@ import io.github.reserveword.imblocker.common.ChatCommandInputType;
 import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.Config;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.inventory.BookEditScreen;
-import net.minecraft.client.gui.screens.inventory.HangingSignEditScreen;
-import net.minecraft.client.gui.screens.inventory.SignEditScreen;
+import net.minecraft.client.gui.screen.EditBookScreen;
+import net.minecraft.client.gui.screen.EditSignScreen;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -157,15 +156,10 @@ public class ForgeConfig extends Config {
         
         private List<String> getDefaultScreenWhitelist() {
         	List<String> defaultScreenWhitelist = Lists.newArrayList(
-        			BookEditScreen.class.getName(),
-        			SignEditScreen.class.getName(),
+        			EditBookScreen.class.getName(),
+        			EditSignScreen.class.getName(),
         			"journeymap.client.ui.waypoint.WaypointEditor",
         			"com.ldtteam.blockout.BOScreen");
-        	
-        	if(IMBlocker.isGameVersionReached(761/*1.19.3*/)) {
-        		defaultScreenWhitelist.add(HangingSignEditScreen.class.getName());
-        	}
-        	
         	return defaultScreenWhitelist;
         }
     }

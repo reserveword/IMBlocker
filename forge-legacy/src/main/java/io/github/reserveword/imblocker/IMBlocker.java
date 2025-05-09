@@ -3,19 +3,18 @@ package io.github.reserveword.imblocker;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import com.mojang.blaze3d.platform.Window;
-
 import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
-import net.minecraft.DetectedVersion;
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.util.JSONUtils;
+import net.minecraft.util.MinecraftVersion;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.fml.config.ModConfig.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -37,7 +36,7 @@ public class IMBlocker {
 			
 			@Override
 			public Rectangle getWindowBounds() {
-				Window gameWindow = Minecraft.getInstance().getWindow();
+				MainWindow gameWindow = Minecraft.getInstance().getWindow();
 				return new Rectangle(gameWindow.getX(), gameWindow.getY(), 
 						gameWindow.getWidth(), gameWindow.getHeight());
 			}
@@ -50,16 +49,12 @@ public class IMBlocker {
 
         // Register ourselves for server and other game events we are interested in
         context.getModEventBus().addListener(this::onConfigLoadReload);
-        try {
-            context.registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
-		} catch (NoSuchMethodError e) {
-			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
-		}
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
     }
 
     @SubscribeEvent
     public void onConfigLoadReload(ModConfigEvent e) {
-        Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading)?"re":"");
+        Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfig.Reloading)?"re":"");
         ForgeConfig.reload();
     }
     
@@ -68,9 +63,9 @@ public class IMBlocker {
     }
     
     static {
-    	try(InputStream is = DetectedVersion.class.getResourceAsStream("/version.json");
+    	try(InputStream is = MinecraftVersion.class.getResourceAsStream("/version.json");
     			InputStreamReader isr = new InputStreamReader(is)) {
-    		currentProtocolVersion = GsonHelper.getAsInt(GsonHelper.parse(isr), "protocol_version");
+    		currentProtocolVersion = JSONUtils.getAsInt(JSONUtils.parse(isr), "protocol_version");
     	} catch (Exception e) {
     		Common.LOGGER.warn("Failed to get protocol version!");
     		e.printStackTrace();

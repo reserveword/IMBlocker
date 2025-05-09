@@ -19,9 +19,9 @@ jobs:
             project: forge
             java-version: 17
 
-          - loader: forge
-            project: forge-legacy
-            java-version: 8
+          #- loader: forge
+          #  project: forge-legacy
+          #  java-version: 8
 
           - loader: neoforge
             project: neoforge

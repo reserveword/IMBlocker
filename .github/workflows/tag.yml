@@ -20,16 +20,24 @@ jobs:
       matrix:
         include:
           - loader: fabric
-            java-version: 17
+            project: fabric
+            java-version: 16
             game-versions: '[1.17,)'
 
           - loader: forge
+            project: forge
             java-version: 17
-            game-versions: '[1.19.4,1.20.4]'
+            game-versions: '[1.17,1.20.4]'
 
-          - loader: neoforge
-            java-version: 21
-            game-versions: '[1.20.6,)'
+          - loader: forge
+            project: forge-legacy
+            java-version: 8
+            game-versions: '1.16.5'
+
+          #- loader: neoforge
+          #  project: neoforge
+          #  java-version: 21
+          #  game-versions: '[1.20.6,)'
 
     steps:
       - name: 签出存储库
@@ -44,7 +52,7 @@ jobs:
           java-version: ${{ matrix.java-version }}
 
       - name: 构建
-        run: ./gradlew :${{ matrix.loader }}:build
+        run: ./gradlew :${{ matrix.project }}:build
 
       - name: 发布${{ matrix.loader }}（CurseForge/Modrinth/Github）
         uses: Kir-Antipov/mc-publish@v3.3
@@ -64,6 +72,6 @@ jobs:
           loaders: ${{ matrix.loader }}
           game-versions: ${{ matrix.game-versions }}
           
-          files: ${{ matrix.loader }}/build/libs/!(*-@(dev|sources|javadoc)).jar
+          files: ${{ matrix.project }}/build/libs/!(*-@(dev|sources|javadoc)).jar
 
           java: ${{ matrix.java-version }}

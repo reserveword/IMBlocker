@@ -20,14 +20,14 @@ final class IMManagerMac implements IMManager.PlatformIMManager {
         // see https://github.com/glfw/glfw/blob/b4c3ef9d0fdf46845f3e81e5d989dab06e71e6c1/src/cocoa_window.m#L571
         // Replacing the method dynamically to determine whether to send text based on state
         // see reference for objc_runtime's dynamic manipulation at https://developer.apple.com/documentation/objectivec/objective-c_runtime
-        var selector = RuntimeUtils.sel("interpretKeyEvents:");
-        var method = Runtime.INSTANCE.class_getInstanceMethod(viewClass, selector);
+        Pointer selector = RuntimeUtils.sel("interpretKeyEvents:");
+        Pointer method = Runtime.INSTANCE.class_getInstanceMethod(viewClass, selector);
         Imp = ObjC.INSTANCE.method_getImplementation(method);
         NewImp = (self, sel, eventArray) -> {
             if (view == null) view = self;
             if (!state) {
-                var textInputContext = RuntimeUtils.cls("NSTextInputContext");
-                var current = RuntimeUtils.msgPointer(textInputContext, "currentInputContext");
+                Pointer textInputContext = RuntimeUtils.cls("NSTextInputContext");
+                Pointer current = RuntimeUtils.msgPointer(textInputContext, "currentInputContext");
                 RuntimeUtils.msg(current, "discardMarkedText");
                 return;
             }

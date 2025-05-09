@@ -21,7 +21,7 @@ jobs:
         include:
           - loader: fabric
             java-version: 17
-            game-versions: '[1.19.4,)'
+            game-versions: '[1.17,)'
 
           - loader: forge
             java-version: 17

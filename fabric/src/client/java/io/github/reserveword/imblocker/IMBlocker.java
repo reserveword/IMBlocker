@@ -16,7 +16,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Window;
 import net.minecraft.util.JsonHelper;
 
-public class IMBlockerFabric implements ClientModInitializer {
+public class IMBlocker implements ClientModInitializer {
 	
 	private static int currentProtocolVersion;
 	
@@ -73,7 +73,7 @@ public class IMBlockerFabric implements ClientModInitializer {
     }
     
     static {
-    	try(InputStream is = IMBlockerFabric.class.getResourceAsStream("/version.json");
+    	try(InputStream is = IMBlocker.class.getResourceAsStream("/version.json");
     			InputStreamReader isr = new InputStreamReader(is)) {
     		currentProtocolVersion = JsonHelper.getInt(JsonHelper.deserialize(isr), "protocol_version");
     	} catch (Exception e) {

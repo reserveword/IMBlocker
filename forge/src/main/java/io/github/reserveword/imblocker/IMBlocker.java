@@ -1,12 +1,15 @@
 package io.github.reserveword.imblocker;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import com.mojang.blaze3d.platform.Window;
 
 import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
-import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.GsonHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -18,6 +21,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod(Common.MODID)
 public class IMBlocker {
 	
+	private static int currentProtocolVersion;
+
 	public IMBlocker() {
 		this(FMLJavaModLoadingContext.get());
 	}
@@ -58,6 +63,16 @@ public class IMBlocker {
     }
     
     public static boolean isGameVersionReached(int protocolVersion) {
-    	return SharedConstants.getCurrentVersion().isStable() && SharedConstants.getProtocolVersion() >= protocolVersion;
+    	return currentProtocolVersion >= protocolVersion;
+    }
+    
+    static {
+    	try(InputStream is = IMBlocker.class.getResourceAsStream("/version.json");
+    			InputStreamReader isr = new InputStreamReader(is)) {
+    		currentProtocolVersion = GsonHelper.getAsInt(GsonHelper.parse(isr), "protocol_version");
+    	} catch (Exception e) {
+    		Common.LOGGER.warn("Failed to get protocol version!");
+    		currentProtocolVersion = Integer.MAX_VALUE;
+		}
     }
 }

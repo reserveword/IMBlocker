@@ -31,10 +31,8 @@ dependencies {
 
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
-    
-	compileOnly "me.shedaniel.cloth:cloth-config-neoforge:${clothconfig_version}"
-    compileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
-    compileOnly "dev.emi:emi-neoforge:${emi_version}"
+	
+	compileOnly "dev.emi:emi-neoforge:${emi_version}"
 
     implementation project(':common')
 }

@@ -1,9 +1,25 @@
 package io.github.reserveword.imblocker.common.gui;
 
-public record Point(int x, int y) {
+public class Point {
 	public static final Point TOP_LEFT = new Point(0, 0);
+	
+	private final int x;
+	private final int y;
 	
 	public Point(double scaleFactor, int x, int y) {
 		this((int) (scaleFactor * x), (int) (scaleFactor * y));
+	}
+
+	public Point(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	public int x() {
+		return x;
+	}
+	
+	public int y() {
+		return y;
 	}
 }

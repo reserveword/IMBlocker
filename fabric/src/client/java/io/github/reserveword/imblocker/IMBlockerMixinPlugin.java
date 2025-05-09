@@ -8,7 +8,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
-public class IMBlockerFabricMixinPlugin implements IMixinConfigPlugin {
+public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 	
 	private static final List<String> validMixins = new ArrayList<>();
 
@@ -48,53 +48,53 @@ public class IMBlockerFabricMixinPlugin implements IMixinConfigPlugin {
 	}
 	
 	static {
-		if(IMBlockerFabric.isGameVersionReached(762/*1.19.4*/)) {
+		if(IMBlocker.isGameVersionReached(762/*1.19.4*/)) {
 			validMixins.add("AbstractParentElementMixin");
 			validMixins.add("TextFieldMixin");
 		}else {
 			validMixins.add("TextFieldLegacyMixin");
 		}
 
-		if(IMBlockerFabric.isGameVersionReached(760/*1.19.1*/)) {
+		if(IMBlocker.isGameVersionReached(760/*1.19.1*/)) {
 			validMixins.add("EditBoxWidgetMixin");
 		}
 		
-		if(IMBlockerFabric.hasMod("axiom")) {
+		if(IMBlocker.hasMod("axiom")) {
 			validMixins.add("AxiomEditorUIMixin");
 		}
 		
-		if(IMBlockerFabric.hasMod("ftblibrary")) {
+		if(IMBlocker.hasMod("ftblibrary")) {
 			validMixins.add("FtbBaseScreenMixin");
 			validMixins.add("FtbWidgetMixin");
-			if(IMBlockerFabric.isGameVersionReached(763/*1.20*/)) {
+			if(IMBlocker.isGameVersionReached(763/*1.20*/)) {
 				validMixins.add("FtbTextFieldMixin");
 			}else {
 				validMixins.add("FtbTextFieldLegacyMixin");
 			}
 		}
 		
-		if(IMBlockerFabric.hasMod("emi")) {
-			if(IMBlockerFabric.isGameVersionReached(762/*1.19.4*/)) {
+		if(IMBlocker.hasMod("emi")) {
+			if(IMBlocker.isGameVersionReached(762/*1.19.4*/)) {
 				validMixins.add("EmiSearchWidgetMixin");
 			}else {
 				validMixins.add("EmiSearchWidgetLegacyMixin");
 			}
 		}
 		
-		if(IMBlockerFabric.hasMod("roughlyenoughitems")) {
+		if(IMBlocker.hasMod("roughlyenoughitems")) {
 			validMixins.add("ReiTextFieldMixin");
 		}
 		
-		if(IMBlockerFabric.hasMod("replaymod")) {
+		if(IMBlocker.hasMod("replaymod")) {
 			validMixins.add("ReplayModTextFieldMixin");
 		}
 		
-		if(IMBlockerFabric.hasMod("meteor-client")) {
+		if(IMBlocker.hasMod("meteor-client")) {
 			validMixins.add("MeteorWidgetMixin");
 			validMixins.add("MeteorTextFieldMixin");
 		}
 		
-		if(IMBlockerFabric.hasMod("reeses-sodium-options")) {
+		if(IMBlocker.hasMod("reeses-sodium-options")) {
 			validMixins.add("RSOAbstractFrameMixin");
 			validMixins.add("SodiumSearchFieldMixin");
 		}

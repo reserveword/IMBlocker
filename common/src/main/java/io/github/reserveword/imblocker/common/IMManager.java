@@ -5,7 +5,7 @@ import com.sun.jna.Platform;
 public final class IMManager {
 	private static final PlatformIMManager INSTANCE;
 	
-	public sealed interface PlatformIMManager permits IMManagerWindows, IMManagerMac, IMManagerLinux, IMManagerStub {
+	public interface PlatformIMManager {
 		
 		void setState(boolean on);
 		

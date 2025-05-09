@@ -18,7 +18,7 @@ public class FabricCommon {
                 "journeymap.client.ui.waypoint.WaypointEditor",
                 "com.ldtteam.blockout.BOScreen");
     	
-    	if(IMBlockerFabric.isGameVersionReached(761/*1.19.3*/)) {
+    	if(IMBlocker.isGameVersionReached(761/*1.19.3*/)) {
     		defaultScreenWhitelist.add(HangingSignEditScreen.class.getName());
     	}
     }

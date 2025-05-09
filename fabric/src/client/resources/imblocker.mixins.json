@@ -10,7 +10,7 @@
   	"MinecraftClientMixin",
   	"WindowMixin"
   ],
-  "plugin": "io.github.reserveword.imblocker.IMBlockerFabricMixinPlugin",
+  "plugin": "io.github.reserveword.imblocker.IMBlockerMixinPlugin",
   "injectors": {
     "defaultRequire": 1
   }

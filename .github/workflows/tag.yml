@@ -54,7 +54,7 @@ jobs:
       - name: 构建
         run: ./gradlew :${{ matrix.project }}:build
 
-      - name: 发布${{ matrix.loader }}（CurseForge/Modrinth/Github）
+      - name: 发布${{ matrix.project }}（CurseForge/Modrinth/Github）
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           curseforge-id: 483760

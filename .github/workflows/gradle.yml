@@ -12,12 +12,19 @@ jobs:
       matrix:
         include:
           - loader: fabric
+            project: fabric
             java-version: 17
 
           - loader: forge
+            project: forge
             java-version: 17
 
+          - loader: forge
+            project: forge-legacy
+            java-version: 8
+
           - loader: neoforge
+            project: neoforge
             java-version: 21
 
     steps:
@@ -28,11 +35,11 @@ jobs:
         distribution: 'temurin'
         java-version: ${{ matrix.java-version }}
     - name: Build ${{ matrix.loader }}
-      run: ./gradlew :${{ matrix.loader }}:build
+      run: ./gradlew :${{ matrix.project }}:build
     - name: Upload Artifact - ${{ matrix.loader }}
       uses: actions/upload-artifact@v4
       with:
         # Artifact name
         name: imblocker-${{ matrix.loader }}
         # Directory containing files to upload
-        path: ${{ matrix.loader }}\build\libs\*.jar
+        path: ${{ matrix.project }}\build\libs\*.jar

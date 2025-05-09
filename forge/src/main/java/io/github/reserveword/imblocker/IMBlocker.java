@@ -8,9 +8,11 @@ import com.mojang.blaze3d.platform.Window;
 import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import net.minecraft.DetectedVersion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.GsonHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -67,11 +69,12 @@ public class IMBlocker {
     }
     
     static {
-    	try(InputStream is = IMBlocker.class.getResourceAsStream("/version.json");
+    	try(InputStream is = DetectedVersion.class.getResourceAsStream("/version.json");
     			InputStreamReader isr = new InputStreamReader(is)) {
     		currentProtocolVersion = GsonHelper.getAsInt(GsonHelper.parse(isr), "protocol_version");
     	} catch (Exception e) {
     		Common.LOGGER.warn("Failed to get protocol version!");
+    		e.printStackTrace();
     		currentProtocolVersion = Integer.MAX_VALUE;
 		}
     }

@@ -55,10 +55,6 @@ dependencies {
     minecraft fg.deobf("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 	
     compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
 
@@ -82,7 +78,7 @@ java {
 }
 
 project.jar {
-	archiveFileName = "${rootProject.name}-${mod_version}-forge+1.19.4-1.20.4.jar"
+	archiveFileName = "${rootProject.name}-${mod_version}-forge+1.17-1.20.4.jar"
     from sourceSets.main.output
     from project(":common").sourceSets.main.output
     manifest {

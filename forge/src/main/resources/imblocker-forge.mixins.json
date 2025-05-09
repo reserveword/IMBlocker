@@ -7,18 +7,14 @@
   "client": [
   	"AbstractCommandBlockScreenMixin",
   	"ChatScreenMixin",
-    "MinecraftClientMixin",
-    "TextFieldMixin",
     "AbstractWidgetMixin",
-    "MultiLineEditBoxMixin",
-    "AbstractContainerEventHandlerMixin",
-    "EmiSearchWidgetMixin",
-    "ReiTextFieldMixin",
-    "FtbWidgetMixin",
-    "FtbTextFieldMixin",
+    "MinecraftClientMixin",
+    "WindowMixin",
     "FtbBaseScreenMixin",
-    "WindowMixin"
+    "FtbWidgetMixin",
+    "ReiTextFieldMixin"
   ],
+  "plugin": "io.github.reserveword.imblocker.IMBlockerMixinPlugin",
   "injectors": {
     "defaultRequire": 1
   },

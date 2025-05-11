@@ -19,7 +19,7 @@ dependencies {
 	
 	compileOnly "me.shedaniel.cloth:basic-math:0.6.1"
 	compileOnly "maven.modrinth:rei:${rei_version}"
-	api "curse.maven:ftblib-$ftblib_version"
+	compileOnlyApi "curse.maven:ftblib-$ftblib_version"
 }
 
 java {

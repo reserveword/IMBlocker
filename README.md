@@ -29,7 +29,7 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
     - 构建焦点管理系统，将各种组件焦点状态的变化按照标准焦点管理规范将实际焦点变化结果映射到全局焦点路径中，并据此调整输入法状态
 - 例外情况
     - 有些GUI屏幕（比如书与笔和告示牌）显示时直接处理输入字符而不产生焦点请求
-    - 我们将这些屏幕（Screen）视为等效焦点组件并放入白名单，显示与关闭时显式产生焦点变化请求
+    - 我们将这些屏幕（Screen）视为等效焦点组件并放入白名单，显示与关闭时显式产生焦点变化请求。如果你需要开启输入法的地方看起来像一个屏幕而非文本框类组件，请尝试使用屏幕记录功能识别并将其添加到白名单
 - 问题
     - 未被注入的文本框组件或白名单屏幕无法被焦点管理系统监听，若某模组拥有自己的组件框架实现本模组可能无法自动为其调整输入法状态，此时请将它们提交到 [#13](https://github.com/reserveword/IMBlocker/issues/13) 供开发者处理
     - GLFW窗口系统在Windows下有一个已知漏洞：如果游戏窗口被创建时未获得焦点则第一次获得焦点不会触发焦点回调，此时可能出现锁键现象。解决方法：使游戏窗口失去再获得一次焦点
@@ -37,13 +37,14 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
 
 ## 已支持的具有自定义GUI实现的模组
 
-Roughly Enough Items  
-EMI  
-Axiom  
-Replay Mod  
-FTB Quests/Team  
-Meteor Client   
-Reese's Sodium Options
+[Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems)  
+[EMI](https://github.com/emilyploszaj/emi)  
+[Axiom](https://axiom.moulberry.com/)  
+[Replay Mod](https://www.replaymod.com/)  
+[FTB Library](https://github.com/FTBTeam/FTB-Library)  
+[Meteor Client](https://www.meteorclient.com/)  
+[LibGui](https://github.com/CottonMC/LibGui)  
+[Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)
 
 ## 致谢
 

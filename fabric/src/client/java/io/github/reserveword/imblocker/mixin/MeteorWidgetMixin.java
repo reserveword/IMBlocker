@@ -22,11 +22,11 @@ public abstract class MeteorWidgetMixin implements MinecraftFocusableWidget {
 	@Shadow
 	public abstract double pad();
 	
+	@Inject(method = "calculateWidgetPositions", at = @At("TAIL"))
+	public void onLayoutWidget(CallbackInfo ci) {}
+	
 	@Override
 	public Rectangle getBoundsAbs() {
 		return new Rectangle((int) x, (int) y, (int) width, (int) height);
 	}
-	
-	@Inject(method = "calculateWidgetPositions", at = @At("TAIL"))
-	public void onLayoutWidget(CallbackInfo ci) {}
 }

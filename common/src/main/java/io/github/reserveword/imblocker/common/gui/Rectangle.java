@@ -19,6 +19,10 @@ public class Rectangle {
 		this.width = width;
 		this.height = height;
 	}
+	
+	public Rectangle derive(double scaleFactor) {
+		return new Rectangle(scaleFactor, x, y, width, height);
+	}
 
 	public int x() {
 		return x;
@@ -34,5 +38,20 @@ public class Rectangle {
 
 	public int height() {
 		return height;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Rectangle) {
+			Rectangle r = (Rectangle) obj;
+			return r.x == x && r.y == y && r.width == width && r.height == height;
+		}else {
+			return false;
+		}
+	}
+	
+	@Override
+	public String toString() {
+		return "[" + x + ", " + y + ", " + width + ", " + height + "]";
 	}
 }

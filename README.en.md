@@ -29,7 +29,7 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
     - Implement the focus management system, which converts all focus requests into actual focus changes and applys them to focus transfer path, then tweaks the input method depends on updated focus state.
 - Exceptions
     - Some `Screen`s like `BookEditScreen` and `SignEditScreen` directly process key inputs, without generating focus requests
-    - We regard these `Screen`s as effective focused widget and make a whitelist for them, manually create focus requests upon open/close
+    - We regard these `Screen`s as effective focused widget and make a whitelist for them, manually create focus requests upon open/close. If an input entry looks like a `Screen` instead of some type of text field, please try to identify it using screen recovering feature and add it to the whitelist.
 - Limitations
     - Widgets without being injected cannot be managed by the focus system of this mod, thus mods with independent GUI implementation may not be able to benefit from this mod. In this case, please report them to [#13](https://github.com/reserveword/IMBlocker/issues/13) for developers.
     - There's a known bug in GLFW's window management: if the game window is created without focus, focus callbacks will not be triggered on the first time it gains the focus, which may cause input locking. Solution: make the game window lost and gain the focus again.
@@ -37,10 +37,11 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
 
 ## Supported Mods with custom GUI framework  
 
-Roughly Enough Items  
-EMI  
-Axiom  
-Replay Mod  
-FTB Quests/Team  
-Meteor Client   
-Reese's Sodium Options
+[Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems)  
+[EMI](https://github.com/emilyploszaj/emi)  
+[Axiom](https://axiom.moulberry.com/)  
+[Replay Mod](https://www.replaymod.com/)  
+[FTB Library](https://github.com/FTBTeam/FTB-Library)  
+[Meteor Client](https://www.meteorclient.com/)  
+[LibGui](https://github.com/CottonMC/LibGui)  
+[Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)

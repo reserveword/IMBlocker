@@ -73,6 +73,11 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			}
 		}
 		
+		if(IMBlocker.hasMod("libgui")) {
+			validMixins.add("LibGuiWidgetMixin");
+			validMixins.add("LibGuiTextFieldMixin");
+		}
+		
 		if(IMBlocker.hasMod("emi")) {
 			if(IMBlocker.isGameVersionReached(762/*1.19.4*/)) {
 				validMixins.add("EmiSearchWidgetMixin");

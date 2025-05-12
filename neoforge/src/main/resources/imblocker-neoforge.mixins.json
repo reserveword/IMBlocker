@@ -16,6 +16,8 @@
     "FtbWidgetMixin",
     "FtbTextFieldMixin",
     "FtbBaseScreenMixin",
+    "RSOAbstractFrameMixin",
+    "SodiumSearchFieldMixin",
     "WindowMixin"
   ],
   "injectors": {

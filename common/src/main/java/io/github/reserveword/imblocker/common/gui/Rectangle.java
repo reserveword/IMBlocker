@@ -49,4 +49,9 @@ public class Rectangle {
 			return false;
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return "[" + x + ", " + y + ", " + width + ", " + height + "]";
+	}
 }

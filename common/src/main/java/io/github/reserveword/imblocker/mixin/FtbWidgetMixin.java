@@ -22,11 +22,6 @@ public abstract class FtbWidgetMixin implements MinecraftFocusableWidget {
 	
 	@Inject(method = "onClosed", at = @At("TAIL"))
 	public void cancelFocus(CallbackInfo ci) {}
-
-	@Override
-	public Rectangle getBoundsAbs() {
-		return new Rectangle(FocusContainer.getMCGuiScaleFactor(), getX(), getY(), width, height);
-	}
 	
 	@Inject(method = "setX", at = @At("TAIL"))
 	public void handleXChanged(int x, CallbackInfo ci) {
@@ -37,4 +32,19 @@ public abstract class FtbWidgetMixin implements MinecraftFocusableWidget {
 	public void handleYChanged(int y, CallbackInfo ci) {
     	IMManager.updateCompositionWindowPos();
     }
+	
+	@Inject(method = "setWidth", at = @At("TAIL"))
+	public void handleWidthChanged(int x, CallbackInfo ci) {
+    	IMManager.updateCompositionWindowPos();
+    }
+	
+	@Inject(method = "setHeight", at = @At("TAIL"))
+	public void handleHeightChanged(int y, CallbackInfo ci) {
+    	IMManager.updateCompositionWindowPos();
+    }
+	
+	@Override
+	public Rectangle getBoundsAbs() {
+		return new Rectangle(FocusContainer.getMCGuiScaleFactor(), getX(), getY(), width, height);
+	}
 }

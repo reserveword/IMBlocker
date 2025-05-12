@@ -8,13 +8,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
+import net.caffeinemc.mods.sodium.client.util.Dim2i;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 
 @Pseudo
 @Mixin(targets = "me.flashyreese.mods.reeses_sodium_options."
@@ -24,6 +24,7 @@ public abstract class SodiumSearchFieldMixin implements MinecraftFocusableWidget
 	@Shadow
 	protected boolean editable;
 	
+	@Shadow protected Dim2i dim;
 	@Shadow protected String text;
 	@Shadow private int firstCharacterIndex;
 	@Shadow private int selectionStart;
@@ -45,20 +46,15 @@ public abstract class SodiumSearchFieldMixin implements MinecraftFocusableWidget
 	
 	@Override
 	public Rectangle getBoundsAbs() {
-		Object dim = ReflectionUtil.getFieldValue(getClass(), this, Object.class, "dim");
-		int x = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "x");
-		int y = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "y");
-		int width = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "width");
-		int height = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "height");
-		return new Rectangle(FocusContainer.getMCGuiScaleFactor(), x, y, width, height);
+		return new Rectangle(FocusContainer.getMCGuiScaleFactor(), dim.x(), dim.y(), dim.width(), dim.height());
 	}
 	
 	@Override
 	public Point getCaretPos() {
-		TextRenderer font = MinecraftClient.getInstance().textRenderer;
+		Font font = Minecraft.getInstance().font;
 		int caretX = 6;
 		try {
-			caretX += font.getWidth(text.substring(firstCharacterIndex, selectionStart));
+			caretX += font.width(text.substring(firstCharacterIndex, selectionStart));
 		} catch (Exception e) {}
 		return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, 5);
 	}

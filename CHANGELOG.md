@@ -1,6 +1,9 @@
-## v5.2.0（[#91](https://github.com/reserveword/IMBlocker/pull/91)）
-大幅增加版本兼容范围（包括兼容的模组）：  
-Fabric -> 1.17+  
-Forge -> 1.16.5, 1.17+  
+NeoForge：修复屏幕记录功能失效的问题  
+Fabric：支持[LibGui](https://github.com/CottonMC/LibGui)  
+Fabric/NeoForge：完全适配Reese's Sodium Options  
 
-兼容性测试难免有疏漏，遇到问题请提交issue
+现在输入法候选框可实时追踪除Axiom外所有已兼容模组的文本光标（Axiom组件非Java实现注入成本较大）    
+若未出现重大漏洞，这是本模组短期内最后一次更新  
+
+### Full Changelog
+https://github.com/LitnhJacuzzi/IMBlocker/compare/f55633c..b2cc830 

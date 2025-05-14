@@ -14,4 +14,14 @@ public class ReflectionUtil {
 			return null;
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static <R> R getFieldValue(Class<?> cls, Object instance, Class<R> retType, Field field) {
+		try {
+			field.setAccessible(true);
+			return (R) field.get(instance);
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }

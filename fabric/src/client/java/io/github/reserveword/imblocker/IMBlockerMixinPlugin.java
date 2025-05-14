@@ -56,6 +56,10 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		}
 
 		if(IMBlocker.isGameVersionReached(760/*1.19.1*/)) {
+			validMixins.add("ScrollableWidgetMixin");
+			validMixins.add("SubstringAccessor");
+			validMixins.add("EditBoxAccessor");
+			validMixins.add("EditBoxMixin");
 			validMixins.add("EditBoxWidgetMixin");
 		}
 		
@@ -64,12 +68,16 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		}
 		
 		if(IMBlocker.hasMod("ftblibrary")) {
-			validMixins.add("FtbBaseScreenMixin");
 			validMixins.add("FtbWidgetMixin");
+			
 			if(IMBlocker.isGameVersionReached(763/*1.20*/)) {
 				validMixins.add("FtbTextFieldMixin");
 			}else {
 				validMixins.add("FtbTextFieldLegacyMixin");
+			}
+			
+			if(IMBlocker.isGameVersionReached(760/*1.19.1*/)) {
+				validMixins.add("FtbMultilineTextBoxMixin");
 			}
 		}
 		

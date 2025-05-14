@@ -1,7 +1,5 @@
 package io.github.reserveword.imblocker.mixin;
 
-import java.lang.reflect.Field;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,6 +11,7 @@ import com.mojang.blaze3d.platform.Window;
 import dev.ftb.mods.ftblibrary.ui.BaseScreen;
 import dev.ftb.mods.ftblibrary.ui.Panel;
 import dev.ftb.mods.ftblibrary.ui.Widget;
+import io.github.reserveword.imblocker.common.ReflectionUtil;
 import net.minecraft.client.Minecraft;
 
 @Mixin(value = BaseScreen.class, remap = false)
@@ -36,32 +35,14 @@ public abstract class FtbBaseScreenMixin {
 	}
 	
 	private int getWidth() {
-		try {
-			Field widthField = Widget.class.getDeclaredField("width");
-			widthField.setAccessible(true);
-			return widthField.getInt(this);
-		} catch (Exception e) {
-			return 0;
-		}
+		return ReflectionUtil.getFieldValue(Widget.class, this, int.class, "width");
 	}
 	
 	private int getHeight() {
-		try {
-			Field widthField = Widget.class.getDeclaredField("height");
-			widthField.setAccessible(true);
-			return widthField.getInt(this);
-		} catch (Exception e) {
-			return 0;
-		}
+		return ReflectionUtil.getFieldValue(Widget.class, this, int.class, "height");
 	}
 	
 	private Panel getParent() {
-		try {
-			Field parentField = Widget.class.getDeclaredField("parent");
-			parentField.setAccessible(true);
-			return (Panel) parentField.get(this);
-		} catch (Exception e) {
-			return null;
-		}
+		return ReflectionUtil.getFieldValue(Widget.class, this, Panel.class, "panel");
 	}
 }

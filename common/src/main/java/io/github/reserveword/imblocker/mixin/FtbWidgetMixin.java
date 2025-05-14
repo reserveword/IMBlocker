@@ -2,10 +2,12 @@ package io.github.reserveword.imblocker.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import dev.ftb.mods.ftblibrary.ui.Panel;
 import dev.ftb.mods.ftblibrary.ui.Widget;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
@@ -15,8 +17,11 @@ import io.github.reserveword.imblocker.common.gui.Rectangle;
 @Mixin(value = Widget.class, remap = false)
 public abstract class FtbWidgetMixin implements MinecraftFocusableWidget {
 	
-	@Shadow public abstract int getX();
-	@Shadow public abstract int getY();
+	@Shadow
+	protected Panel parent;
+	
+	@Shadow public int posX;
+	@Shadow public int posY;
 	@Shadow public int width;
 	@Shadow public int height;
 	
@@ -43,8 +48,30 @@ public abstract class FtbWidgetMixin implements MinecraftFocusableWidget {
     	IMManager.updateCompositionWindowPos();
     }
 	
+	@Unique
+	public int getAbsoluteX() {
+		int x = posX;
+		Panel p = parent;
+		while(p != null) {
+			x += p.posX;
+			p = p.getParent();
+		}
+		return x;
+	}
+	
+	@Unique
+	public int getAbsoluteY() {
+		int y = posY;
+		Panel p = parent;
+		while(p != null) {
+			y += p.posY;
+			p = p.getParent();
+		}
+		return y;
+	}
+	
 	@Override
 	public Rectangle getBoundsAbs() {
-		return new Rectangle(FocusContainer.getMCGuiScaleFactor(), getX(), getY(), width, height);
+		return new Rectangle(FocusContainer.getMCGuiScaleFactor(), getAbsoluteX(), getAbsoluteY(), width, height);
 	}
 }

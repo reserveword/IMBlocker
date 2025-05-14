@@ -14,7 +14,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 
 @Mixin(TextFieldWidget.class)
-public class TextFieldLegacyMixin extends ClickableWidgetMixin {
+public abstract class TextFieldLegacyMixin extends ClickableWidgetMixin {
 	
 	@Shadow
 	private boolean editable;

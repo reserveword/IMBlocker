@@ -10,4 +10,7 @@ public abstract class AbstractScrollWidgetMixin extends AbstractWidgetMixin {
 	
 	@Shadow
 	protected abstract boolean withinContentAreaTopBottom(int top, int bottom);
+	
+	@Shadow
+	protected abstract double scrollAmount();
 }

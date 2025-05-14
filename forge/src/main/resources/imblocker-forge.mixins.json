@@ -10,8 +10,8 @@
     "AbstractWidgetMixin",
     "MinecraftClientMixin",
     "WindowMixin",
-    "FtbBaseScreenMixin",
     "FtbWidgetMixin",
+    "FtbBaseScreenMixin",
     "ReiTextFieldMixin"
   ],
   "plugin": "io.github.reserveword.imblocker.IMBlockerMixinPlugin",

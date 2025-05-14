@@ -12,24 +12,22 @@ import dev.ftb.mods.ftblibrary.ui.BaseScreen;
 import net.minecraft.client.Minecraft;
 
 @Mixin(value = BaseScreen.class, remap = false)
-public abstract class FtbBaseScreenMixin {
+public abstract class FtbBaseScreenMixin extends FtbWidgetMixin {
 	
 	@Shadow
 	private Window screen;
 	
 	@Inject(method = "getX", at = @At("HEAD"), cancellable = true)
 	public void getX(CallbackInfoReturnable<Integer> cir) {
-		if(screen == null && ((BaseScreen) (Object) this).getParent() == null) {
-			cir.setReturnValue((Minecraft.getInstance()
-					.getWindow().getGuiScaledWidth() - ((BaseScreen) (Object) this).getWidth()) / 2);
+		if(screen == null && parent == null) {
+			cir.setReturnValue((Minecraft.getInstance().getWindow().getGuiScaledWidth() - width) / 2);
 		}
 	}
 	
 	@Inject(method = "getY", at = @At("HEAD"), cancellable = true)
 	public void getY(CallbackInfoReturnable<Integer> cir) {
-		if(screen == null && ((BaseScreen) (Object) this).getParent() == null) {
-			cir.setReturnValue((Minecraft.getInstance()
-					.getWindow().getGuiScaledHeight() - ((BaseScreen) (Object) this).getHeight()) / 2);
+		if(screen == null && parent == null) {
+			cir.setReturnValue((Minecraft.getInstance().getWindow().getGuiScaledHeight() - height) / 2);
 		}
 	}
 }

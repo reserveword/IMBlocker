@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import dev.ftb.mods.ftblibrary.ui.MultilineTextBox;
-import dev.ftb.mods.ftblibrary.ui.Panel;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.Point;

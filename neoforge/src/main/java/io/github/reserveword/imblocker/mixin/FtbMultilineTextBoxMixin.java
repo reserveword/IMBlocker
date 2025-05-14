@@ -19,7 +19,7 @@ public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin {
 	
 	@Shadow
 	MultilineTextField textField;
-
+	
 	@Override
 	public boolean isWidgetEditable() {
 		return true;
@@ -46,12 +46,13 @@ public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin {
 	@Override
 	public Point getCaretPos() {
 		int cursorLineIndex = textField.getLineAtCursor();
+		int scrollY = parent != null ? (int) parent.getScrollY() : 0;
 		int lineY = getAbsoluteY() + 4 + cursorLineIndex * 9;
 		if(withinContentArea(lineY, lineY + 9)) {
 			Font font = Minecraft.getInstance().font;
-			int beginIndex = ((MultilineTextFieldMixin) textField).getDisplayLines().get(cursorLineIndex).getBeginIndex();
+			int beginIndex = ((MultilineTextFieldAccessor) textField).getDisplayLines().get(cursorLineIndex).getBeginIndex();
 			int caretX = 4 + font.width(textField.value().substring(beginIndex, textField.cursor()));
-			return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, lineY - getAbsoluteY());
+			return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, lineY - getAbsoluteY() - scrollY);
 		}else {
 			return new Point(FocusContainer.getMCGuiScaleFactor(), 4, (height - 8) / 2);
 		}

@@ -6,10 +6,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.mojang.blaze3d.platform.Window;
-
 import dev.ftb.mods.ftblibrary.ui.BaseScreen;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.Window;
 
 @Mixin(value = BaseScreen.class, remap = false)
 public abstract class FtbBaseScreenMixin extends FtbWidgetMixin {
@@ -20,14 +19,14 @@ public abstract class FtbBaseScreenMixin extends FtbWidgetMixin {
 	@Inject(method = "getX", at = @At("HEAD"), cancellable = true)
 	public void getX(CallbackInfoReturnable<Integer> cir) {
 		if(screen == null && parent == null) {
-			cir.setReturnValue((Minecraft.getInstance().getWindow().getGuiScaledWidth() - width) / 2);
+			cir.setReturnValue((MinecraftClient.getInstance().getWindow().getScaledWidth() - width) / 2);
 		}
 	}
 	
 	@Inject(method = "getY", at = @At("HEAD"), cancellable = true)
 	public void getY(CallbackInfoReturnable<Integer> cir) {
 		if(screen == null && parent == null) {
-			cir.setReturnValue((Minecraft.getInstance().getWindow().getGuiScaledHeight() - height) / 2);
+			cir.setReturnValue((MinecraftClient.getInstance().getWindow().getScaledHeight() - height) / 2);
 		}
 	}
 }

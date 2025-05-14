@@ -69,6 +69,7 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		
 		if(IMBlocker.hasMod("ftblibrary")) {
 			validMixins.add("FtbWidgetMixin");
+			validMixins.add("FtbBaseScreenMixin");
 			
 			if(IMBlocker.isGameVersionReached(763/*1.20*/)) {
 				validMixins.add("FtbTextFieldMixin");

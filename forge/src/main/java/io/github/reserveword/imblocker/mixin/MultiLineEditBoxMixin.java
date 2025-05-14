@@ -39,9 +39,9 @@ public abstract class MultiLineEditBoxMixin extends AbstractScrollWidgetMixin {
 		int cursorLineIndex = textField.getLineAtCursor();
 		int lineY = y() + 4 + cursorLineIndex * 9;
 		if(withinContentAreaTopBottom(lineY, lineY + 9)) {
-			int beginIndex = ((MultilineTextFieldMixin) textField).getDisplayLines().get(cursorLineIndex).getBeginIndex();
+			int beginIndex = ((MultilineTextFieldAccessor) textField).getDisplayLines().get(cursorLineIndex).getBeginIndex();
 			int caretX = 4 + font.width(textField.value().substring(beginIndex, textField.cursor()));
-			return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, lineY - y());
+			return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, lineY - y() - (int) scrollAmount());
 		}else {
 			return new Point(FocusContainer.getMCGuiScaleFactor(), 4, (height - 8) / 2);
 		}

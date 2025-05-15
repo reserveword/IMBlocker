@@ -55,7 +55,7 @@ public abstract class TextFieldMixin extends WidgetMixin {
     }
 	
 	@Overwrite
-    public void setEditable(boolean editable, CallbackInfo ci) {
+    public void setEditable(boolean editable) {
 		if(this.isEditable != editable) {
     		this.isEditable = editable;
     		if(isTrulyFocused()) {

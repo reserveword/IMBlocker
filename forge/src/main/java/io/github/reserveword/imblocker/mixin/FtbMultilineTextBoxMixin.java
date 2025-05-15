@@ -50,7 +50,7 @@ public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin {
 		int lineY = getAbsoluteY() + 4 + cursorLineIndex * 9;
 		if(withinContentArea(lineY, lineY + 9)) {
 			Font font = Minecraft.getInstance().font;
-			int beginIndex = ((MultilineTextFieldAccessor) textField).getDisplayLines().get(cursorLineIndex).getBeginIndex();
+			int beginIndex = ((StringViewAccessor) (Object) textField.getLineView(cursorLineIndex)).getBeginIndex();
 			int caretX = 4 + font.width(textField.value().substring(beginIndex, textField.cursor()));
 			return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, lineY - getAbsoluteY() - scrollY);
 		}else {

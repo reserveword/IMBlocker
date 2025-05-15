@@ -39,7 +39,7 @@ public abstract class EditBoxWidgetMixin extends ScrollableWidgetMixin {
 		int cursorLineIndex = editBox.getCurrentLineIndex();
 		int lineY = y() + 4 + cursorLineIndex * 9;
 		if(isVisible(lineY, lineY + 9)) {
-			int beginIndex = ((EditBoxAccessor) editBox).getLines().get(cursorLineIndex).getBeginIndex();
+			int beginIndex = ((SubstringAccessor) (Object) editBox.getLine(cursorLineIndex)).getBeginIndex();
 			int caretX = 4 + textRenderer.getWidth(editBox.getText().substring(beginIndex, editBox.getCursor()));
 			return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, lineY - y() - (int) getScrollY());
 		}else {

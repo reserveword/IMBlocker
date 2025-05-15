@@ -13,9 +13,7 @@ dependencies {
 	compileOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.19.0'
 	compileOnly 'ca.weblite:java-objc-bridge:1.1'
 	
-	compileOnly("io.github.llamalad7:mixinextras-common:0.3.5")
-	annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.5")
-	compileOnly("net.fabricmc:sponge-mixin:0.12.5+mixin.0.8.5")
+	compileOnly("org.spongepowered:mixin:0.8.5")
 	
 	compileOnly "me.shedaniel.cloth:basic-math:0.6.1"
 	compileOnly "maven.modrinth:rei:${rei_version}"

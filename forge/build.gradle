@@ -62,6 +62,8 @@ dependencies {
 }
 
 mixin {
+    disableTargetValidator = true
+    overwriteErrorLevel = 'warn'
     // MixinGradle Settings
     add sourceSets.main, 'imblocker-forge.mixins.refmap.json'
     config 'imblocker-forge.mixins.json'
@@ -80,9 +82,7 @@ java {
 project.jar {
 	archiveFileName = "${rootProject.name}-${mod_version}-forge+1.17-1.20.4.jar"
     from sourceSets.main.output
-    from (project(":common").sourceSets.main.output) {
-    	exclude '**/FtbWidgetMixin.class'
-    }
+    from project(":common").sourceSets.main.output
     manifest {
         attributes([
         		"MixinConfigs": "imblocker-forge.mixins.json",

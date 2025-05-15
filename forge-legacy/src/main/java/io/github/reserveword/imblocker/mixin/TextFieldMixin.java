@@ -1,6 +1,7 @@
 package io.github.reserveword.imblocker.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -53,7 +54,7 @@ public abstract class TextFieldMixin extends WidgetMixin {
     	IMManager.updateCompositionWindowPos();
     }
 	
-	@Inject(method = "setEditable", at = @At("HEAD"), cancellable = true)
+	@Overwrite
     public void setEditable(boolean editable, CallbackInfo ci) {
 		if(this.isEditable != editable) {
     		this.isEditable = editable;
@@ -61,7 +62,6 @@ public abstract class TextFieldMixin extends WidgetMixin {
     			updateIMState();
     		}
     	}
-		ci.cancel();
     }
 
 	@Override

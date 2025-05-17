@@ -8,13 +8,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.CursorInfo;
+import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 
 @Mixin(TextFieldWidget.class)
-public abstract class TextFieldMixin extends ClickableWidgetMixin {
+public abstract class TextFieldMixin extends ClickableWidgetMixin implements MinecraftTextFieldWidget {
 	
 	@Shadow
 	private boolean editable;
@@ -86,7 +87,11 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin {
     
     @Override
     public Point getCaretPos() {
-    	int caretX = (drawsBackground ? 4 : 0) + textRenderer.getWidth(text.substring(firstCharacterIndex, selectionStart));
-    	return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, (height - 8) / 2);
+    	return getCaretPosImpl();
+    }
+    
+    @Override
+    public CursorInfo getCursorInfo() {
+    	return new CursorInfo(drawsBackground, height, 0/*useless*/, 0/*useless*/, firstCharacterIndex, selectionStart, text);
     }
 }

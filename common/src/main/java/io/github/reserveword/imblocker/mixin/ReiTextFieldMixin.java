@@ -43,12 +43,6 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
     	onMinecraftWidgetFocusChanged(isFocused);
     }
     
-    @Inject(method = "setText", at = @At(value = "INVOKE", target = 
-    		"Lme/shedaniel/rei/impl/client/gui/widget/basewidgets/TextFieldWidget;onChanged(Ljava/lang/String;)V"))
-    public void moveCursorBeforeNotifyChanged(String text, CallbackInfo ci) {
-    	moveCursorToEnd();
-    }
-    
     @Inject(method = "onChanged", at = @At("TAIL"))
     public void onTextChanged(String newText, CallbackInfo ci) {
     	IMManager.updateCompositionWindowPos();
@@ -58,9 +52,6 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
     public void onMoveCursor(int cursor, CallbackInfo ci) {
     	IMManager.updateCompositionWindowPos();
     }
-    
-    @Shadow
-    public abstract void moveCursorToEnd();
     
     @Overwrite(aliases = {"setEditable"})
     public void setIsEditable(boolean editable) {
@@ -80,7 +71,10 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
     
     @Override
     public Point getCaretPos() {
-    	String clippedText = text.substring(firstCharacterIndex, cursorPos);
+    	String clippedText = "";
+    	try {
+        	clippedText = text.substring(firstCharacterIndex, cursorPos);
+		} catch (Exception e) {}
     	int caretX = (hasBorder ? 4 : 0) + MinecraftClientAccessor.instance.getStringWidth(clippedText);
     	return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, (bounds.height - 8) / 2);
     }

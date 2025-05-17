@@ -7,14 +7,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.CursorInfo;
+import io.github.reserveword.imblocker.common.gui.MinecraftMultilineEditBoxWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.EditBox;
 import net.minecraft.client.gui.widget.EditBoxWidget;
 
 @Mixin(EditBoxWidget.class)
-public abstract class EditBoxWidgetMixin extends ScrollableWidgetMixin {
+public abstract class EditBoxWidgetMixin extends ScrollableWidgetMixin implements MinecraftMultilineEditBoxWidget {
 	
 	@Shadow private TextRenderer textRenderer;
 	@Shadow private EditBox editBox;
@@ -41,19 +42,14 @@ public abstract class EditBoxWidgetMixin extends ScrollableWidgetMixin {
 	
 	@Override
 	public Point getCaretPos() {
+		return getCaretPosImpl();
+	}
+	
+	@Override
+	public CursorInfo getCursorInfo() {
 		int cursorLineIndex = editBox.getCurrentLineIndex();
-		int lineY = (int) (4 + cursorLineIndex * 9 - getScrollY());
-		int beginIndex = ((SubstringAccessor) (Object) editBox.getLine(cursorLineIndex)).getBeginIndex();
-		
-		int caretX = 4 + textRenderer.getWidth(editBox.getText().substring(beginIndex, editBox.getCursor()));
-		int caretY;
-		if(lineY < 0) {
-			caretY = 4;
-		}else if(lineY > height) {
-			caretY = height - 4;
-		}else {
-			caretY = lineY;
-		}
-		return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, caretY);
+		return new CursorInfo(true, height, cursorLineIndex, getScrollY(), 
+				((SubstringAccessor) (Object) editBox.getLine(cursorLineIndex)).getBeginIndex(), 
+				editBox.getCursor(), editBox.getText());
 	}
 }

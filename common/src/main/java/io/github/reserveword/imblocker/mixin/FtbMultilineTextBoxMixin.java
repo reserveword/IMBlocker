@@ -1,6 +1,7 @@
 package io.github.reserveword.imblocker.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -30,27 +31,38 @@ public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin {
     	onMinecraftWidgetFocusLost();
     }
 	
+	@Shadow
+	abstract void scrollToCursor(); 
+	
 	@Inject(method = "scrollToCursor", at = @At("TAIL"))
 	public void onCursorChange(CallbackInfo ci) {
+		IMManager.updateCompositionWindowPos();
+	}
+	
+	@Inject(method = "recalculateHeight", at = @At("TAIL"))
+	public void onRecalculateHeight(CallbackInfo ci) {
 		IMManager.updateCompositionWindowPos();
 	}
 	
 	@Override
 	public Point getCaretPos() {
 		FtbMultilineTextFieldAccessor accessor = (FtbMultilineTextFieldAccessor) this;
-		int cursorLineIndex = accessor.getCursorLineIndex(); 
-		int yAbs = getAbsoluteY();
-		int scrollY = parent != null ? (int) parent.getScrollY() : 0;
+		int cursorLineIndex = accessor.getCursorLineIndex();
+		double scrollY = parent != null ? parent.getScrollY() : 0;
 		int visibleHeight = parent != null ? parent.height : height;
-		int lineY = yAbs + 4 + cursorLineIndex * 9;
-		boolean isVisible = lineY + 9 - scrollY >= yAbs && lineY - scrollY <= yAbs + visibleHeight;
-		if(isVisible) {
-			int beginIndex = accessor.getLineBeginIndex(cursorLineIndex);
-			int caretX = 4 + MinecraftClientAccessor.instance.getStringWidth(
-					accessor.getText().substring(beginIndex, accessor.getCursor()));
-			return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, lineY - yAbs - scrollY);
+		int lineY = (int) (4 + cursorLineIndex * 9 - scrollY);
+		int beginIndex = accessor.getLineBeginIndex(cursorLineIndex);
+		
+		int caretX = 4 + MinecraftClientAccessor.instance.getStringWidth(
+				accessor.getText().substring(beginIndex, accessor.getCursor()));
+		int caretY;
+		if(lineY < 0) {
+			caretY = 4;
+		}else if(lineY > visibleHeight) {
+			caretY = visibleHeight - 4;
 		}else {
-			return new Point(FocusContainer.getMCGuiScaleFactor(), 4, (visibleHeight - 8) / 2);
+			caretY = lineY;
 		}
+		return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, caretY);
 	}
 }

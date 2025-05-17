@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.reserveword.imblocker.common.IMManager;
 import net.minecraft.client.gui.widget.ScrollableWidget;
 
 @Mixin(ScrollableWidget.class)
@@ -19,7 +18,5 @@ public abstract class ScrollableWidgetMixin extends ClickableWidgetMixin {
 	protected abstract double getScrollY();
 	
 	@Inject(method = "setScrollY", at = @At("TAIL"))
-	public void onScroll(double scrollY, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
-	}
+	public void onScroll(double scrollY, CallbackInfo ci) {}
 }

@@ -35,15 +35,25 @@ public abstract class MultiLineEditBoxMixin extends AbstractScrollWidgetMixin {
 	}
 	
 	@Override
+	public void onScroll(double scroll, CallbackInfo ci) {
+		IMManager.updateCompositionWindowPos();
+	}
+	
+	@Override
 	public Point getCaretPos() {
 		int cursorLineIndex = textField.getLineAtCursor();
-		int lineY = y() + 4 + cursorLineIndex * 9;
-		if(withinContentAreaTopBottom(lineY, lineY + 9)) {
-			int beginIndex = ((StringViewAccessor) (Object) textField.getLineView(cursorLineIndex)).getBeginIndex();
-			int caretX = 4 + font.width(textField.value().substring(beginIndex, textField.cursor()));
-			return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, lineY - y() - (int) scrollAmount());
+		int lineY = (int) (4 + cursorLineIndex * 9 - scrollAmount());
+		int beginIndex = ((StringViewAccessor) (Object) textField.getLineView(cursorLineIndex)).getBeginIndex();
+		
+		int caretX = 4 + font.width(textField.value().substring(beginIndex, textField.cursor()));
+		int caretY;
+		if(lineY < 0) {
+			caretY = 4;
+		}else if(lineY > height) {
+			caretY = height - 4;
 		}else {
-			return new Point(FocusContainer.getMCGuiScaleFactor(), 4, (height - 8) / 2);
+			caretY = lineY;
 		}
+		return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, caretY);
 	}
 }

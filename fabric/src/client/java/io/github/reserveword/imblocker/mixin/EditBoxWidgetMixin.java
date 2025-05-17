@@ -35,15 +35,25 @@ public abstract class EditBoxWidgetMixin extends ScrollableWidgetMixin {
 	}
 	
 	@Override
+	public void onScroll(double scrollY, CallbackInfo ci) {
+		IMManager.updateCompositionWindowPos();
+	}
+	
+	@Override
 	public Point getCaretPos() {
 		int cursorLineIndex = editBox.getCurrentLineIndex();
-		int lineY = y() + 4 + cursorLineIndex * 9;
-		if(isVisible(lineY, lineY + 9)) {
-			int beginIndex = ((SubstringAccessor) (Object) editBox.getLine(cursorLineIndex)).getBeginIndex();
-			int caretX = 4 + textRenderer.getWidth(editBox.getText().substring(beginIndex, editBox.getCursor()));
-			return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, lineY - y() - (int) getScrollY());
+		int lineY = (int) (4 + cursorLineIndex * 9 - getScrollY());
+		int beginIndex = ((SubstringAccessor) (Object) editBox.getLine(cursorLineIndex)).getBeginIndex();
+		
+		int caretX = 4 + textRenderer.getWidth(editBox.getText().substring(beginIndex, editBox.getCursor()));
+		int caretY;
+		if(lineY < 0) {
+			caretY = 4;
+		}else if(lineY > height) {
+			caretY = height - 4;
 		}else {
-			return new Point(FocusContainer.getMCGuiScaleFactor(), 4, (height - 8) / 2);
+			caretY = lineY;
 		}
+		return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, caretY);
 	}
 }

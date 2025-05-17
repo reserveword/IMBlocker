@@ -1,24 +1,19 @@
 package io.github.reserveword.imblocker.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import dev.ftb.mods.ftblibrary.ui.MultilineTextBox;
+import io.github.reserveword.imblocker.common.FtbMultilineTextFieldAccessor;
 import io.github.reserveword.imblocker.common.IMManager;
+import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.Point;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.components.MultilineTextField;
 
 @Mixin(value = MultilineTextBox.class, remap = false)
 public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin {
-	
-	@Shadow
-	MultilineTextField textField;
 	
 	@Override
 	public boolean isWidgetEditable() {
@@ -40,21 +35,22 @@ public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin {
 		IMManager.updateCompositionWindowPos();
 	}
 	
-	@Shadow
-	abstract boolean withinContentArea(int y1, int y2);
-	
 	@Override
 	public Point getCaretPos() {
-		int cursorLineIndex = textField.getLineAtCursor();
+		FtbMultilineTextFieldAccessor accessor = (FtbMultilineTextFieldAccessor) this;
+		int cursorLineIndex = accessor.getCursorLineIndex(); 
+		int yAbs = getAbsoluteY();
 		int scrollY = parent != null ? (int) parent.getScrollY() : 0;
-		int lineY = getAbsoluteY() + 4 + cursorLineIndex * 9;
-		if(withinContentArea(lineY, lineY + 9)) {
-			Font font = Minecraft.getInstance().font;
-			int beginIndex = ((StringViewAccessor) (Object) textField.getLineView(cursorLineIndex)).getBeginIndex();
-			int caretX = 4 + font.width(textField.value().substring(beginIndex, textField.cursor()));
-			return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, lineY - getAbsoluteY() - scrollY);
+		int visibleHeight = parent != null ? parent.height : height;
+		int lineY = yAbs + 4 + cursorLineIndex * 9;
+		boolean isVisible = lineY + 9 - scrollY >= yAbs && lineY - scrollY <= yAbs + visibleHeight;
+		if(isVisible) {
+			int beginIndex = accessor.getLineBeginIndex(cursorLineIndex);
+			int caretX = 4 + MinecraftClientAccessor.instance.getStringWidth(
+					accessor.getText().substring(beginIndex, accessor.getCursor()));
+			return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, lineY - yAbs - scrollY);
 		}else {
-			return new Point(FocusContainer.getMCGuiScaleFactor(), 4, (height - 8) / 2);
+			return new Point(FocusContainer.getMCGuiScaleFactor(), 4, (visibleHeight - 8) / 2);
 		}
 	}
 }

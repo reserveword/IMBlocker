@@ -61,6 +61,8 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("MultilineTextFieldMixin");
 			validMixins.add("MultiLineEditBoxMixin");
 			
+			validMixins.add("FtbPanelMixin");
+			validMixins.add("FtbMultilineTextFieldAccessorImpl");
 			validMixins.add("FtbMultilineTextBoxMixin");
 		}
 		

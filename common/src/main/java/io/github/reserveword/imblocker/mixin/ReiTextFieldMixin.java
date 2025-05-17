@@ -14,13 +14,11 @@ import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget;
 import me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget.TextFormatter;
 
 @Pseudo
-@Mixin(targets = {
-        "me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget",
-        "me.shedaniel.rei.gui.widget.TextFieldWidget"
-}, remap = false)
+@Mixin(value = TextFieldWidget.class, remap = false)
 public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
 	
     @Shadow

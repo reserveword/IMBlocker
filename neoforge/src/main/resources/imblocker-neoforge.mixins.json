@@ -18,8 +18,8 @@
     "ReiTextFieldMixin",
     "FtbWidgetMixin",
     "FtbTextFieldMixin",
+    "FtbMultilineTextFieldAccessorImpl",
     "FtbMultilineTextBoxMixin",
-    "FtbBaseScreenMixin",
     "RSOAbstractFrameMixin",
     "SodiumSearchFieldMixin",
     "WindowMixin"

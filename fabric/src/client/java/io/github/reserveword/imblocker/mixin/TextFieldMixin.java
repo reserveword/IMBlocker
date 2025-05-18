@@ -87,11 +87,6 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
     
     @Override
     public Point getCaretPos() {
-    	return getCaretPosImpl();
-    }
-    
-    @Override
-    public CursorInfo getCursorInfo() {
-    	return new CursorInfo(drawsBackground, height, 0/*useless*/, 0/*useless*/, firstCharacterIndex, selectionStart, text);
+    	return getCaretPos(new CursorInfo(drawsBackground, height, 0/*useless*/, 0/*useless*/, firstCharacterIndex, selectionStart, text));
     }
 }

@@ -42,14 +42,9 @@ public abstract class MultiLineEditBoxMixin extends AbstractScrollWidgetMixin im
 	
 	@Override
 	public Point getCaretPos() {
-		return getCaretPosImpl();
-	}
-	
-	@Override
-	public CursorInfo getCursorInfo() {
 		int cursorLineIndex = textField.getLineAtCursor();
-		return new CursorInfo(true, height, cursorLineIndex, scrollAmount(), 
+		return getCaretPos(new CursorInfo(true, height, cursorLineIndex, scrollAmount(), 
 				((StringViewAccessor) (Object) textField.getLineView(cursorLineIndex)).getBeginIndex(), 
-				textField.cursor(), textField.value());
+				textField.cursor(), textField.value()));
 	}
 }

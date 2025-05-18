@@ -4,13 +4,14 @@ import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
 
 public interface MinecraftMultilineEditBoxWidget {
 	
-	default Point getCaretPosImpl() {
-		CursorInfo cursorInfo = getCursorInfo();
+	default Point getCaretPos(CursorInfo cursorInfo) {
 		int lineY = (int) (4 + cursorInfo.cursorLineIndex * 9 - cursorInfo.scrollY);
 		
-		int caretX = 4 + MinecraftClientAccessor.instance.getStringWidth(
-				cursorInfo.text.substring(cursorInfo.cursorLineBeginIndex, cursorInfo.cursor));
-		int caretY;
+		int caretX = 4, caretY;
+		try {
+			caretX += MinecraftClientAccessor.instance.getStringWidth(
+					cursorInfo.text.substring(cursorInfo.cursorLineBeginIndex, cursorInfo.cursor));
+		} catch (Exception e) {}
 		if(lineY < 0) {
 			caretY = 0;
 		}else if(lineY > cursorInfo.widgetHeight) {
@@ -20,6 +21,4 @@ public interface MinecraftMultilineEditBoxWidget {
 		}
 		return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, caretY);
 	}
-	
-	CursorInfo getCursorInfo();
 }

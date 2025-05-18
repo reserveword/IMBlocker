@@ -42,14 +42,9 @@ public abstract class EditBoxWidgetMixin extends ScrollableWidgetMixin implement
 	
 	@Override
 	public Point getCaretPos() {
-		return getCaretPosImpl();
-	}
-	
-	@Override
-	public CursorInfo getCursorInfo() {
 		int cursorLineIndex = editBox.getCurrentLineIndex();
-		return new CursorInfo(true, height, cursorLineIndex, getScrollY(), 
+		return getCaretPos(new CursorInfo(true, height, cursorLineIndex, getScrollY(), 
 				((SubstringAccessor) (Object) editBox.getLine(cursorLineIndex)).getBeginIndex(), 
-				editBox.getCursor(), editBox.getText());
+				editBox.getCursor(), editBox.getText()));
 	}
 }

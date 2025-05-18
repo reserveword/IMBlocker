@@ -4,8 +4,7 @@ import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
 
 public interface MinecraftTextFieldWidget {
 	
-	default Point getCaretPosImpl() {
-		CursorInfo cursorInfo = getCursorInfo();
+	default Point getCaretPos(CursorInfo cursorInfo) {
 		int caretX = (cursorInfo.hasBorder ? 4 : 0);
     	try {
         	caretX += MinecraftClientAccessor.instance.getStringWidth(
@@ -13,6 +12,4 @@ public interface MinecraftTextFieldWidget {
 		} catch (Exception e) {}
     	return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, (cursorInfo.widgetHeight - 8) / 2);
 	}
-	
-	CursorInfo getCursorInfo();
 }

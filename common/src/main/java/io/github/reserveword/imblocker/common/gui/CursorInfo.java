@@ -1,6 +1,6 @@
 package io.github.reserveword.imblocker.common.gui;
 
-public class CursorInfo {
+public final class CursorInfo {
 	
 	public final boolean hasBorder;
 	public final int widgetHeight;

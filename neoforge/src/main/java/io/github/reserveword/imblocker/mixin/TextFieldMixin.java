@@ -87,11 +87,6 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
     
     @Override
     public Point getCaretPos() {
-    	return getCaretPosImpl();
-    }
-    
-    @Override
-    public CursorInfo getCursorInfo() {
-    	return new CursorInfo(bordered, height, 0/*useless*/, 0/*useless*/, displayPos, cursorPos, value);
+    	return getCaretPos(new CursorInfo(bordered, height, 0/*useless*/, 0/*useless*/, displayPos, cursorPos, value));
     }
 }

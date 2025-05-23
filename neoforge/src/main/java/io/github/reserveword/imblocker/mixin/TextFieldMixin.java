@@ -11,7 +11,6 @@ import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.CursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
 
 @Mixin(EditBox.class)
@@ -20,7 +19,6 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
 	@Shadow
 	private boolean isEditable;
 
-	@Shadow private Font font;
 	@Shadow private boolean bordered;
 	@Shadow private int displayPos;
 	@Shadow private int cursorPos;

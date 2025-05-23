@@ -9,9 +9,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import dev.ftb.mods.ftblibrary.ui.MultilineTextBox;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.StringUtil;
 import io.github.reserveword.imblocker.common.gui.CursorInfo;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FtbMultilineTextFieldAccessor;
+import io.github.reserveword.imblocker.common.gui.MathHelper;
 import io.github.reserveword.imblocker.common.gui.Point;
 
 @Mixin(value = MultilineTextBox.class, remap = false)
@@ -48,20 +50,15 @@ public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin {
 	@Override
 	public Point getCaretPos() {
 		CursorInfo cursorInfo = ((FtbMultilineTextFieldAccessor) this).getCursorInfo();
+		
 		double scrollY = parent != null ? parent.getScrollY() : 0;
 		int visibleHeight = parent != null ? parent.height : height;
 		int lineY = (int) (4 + cursorInfo.cursorLineIndex * 9 - scrollY);
 		
 		int caretX = 4 + MinecraftClientAccessor.instance.getStringWidth(
-				cursorInfo.text.substring(cursorInfo.cursorLineBeginIndex, cursorInfo.cursor));
-		int caretY;
-		if(lineY < 0) {
-			caretY = 4;
-		}else if(lineY > visibleHeight) {
-			caretY = visibleHeight - 4;
-		}else {
-			caretY = lineY;
-		}
+				StringUtil.getSubstring(cursorInfo.text, cursorInfo.cursorLineBeginIndex, cursorInfo.cursor));
+		int caretY = MathHelper.clamp(lineY, 0, visibleHeight - 4);
+		
 		return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, caretY);
 	}
 }

@@ -8,18 +8,17 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.CursorInfo;
+import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
 
 @Mixin(EditBox.class)
-public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin {
+public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin implements MinecraftTextFieldWidget {
 	
 	@Shadow
 	private boolean isEditable;
 	
-	@Shadow private Font font;
 	@Shadow private boolean bordered;
 	@Shadow private int displayPos;
 	@Shadow private int cursorPos;
@@ -91,7 +90,6 @@ public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin {
     
     @Override
     public Point getCaretPos() {
-    	int caretX = (bordered ? 4 : 0) + font.width(value.substring(displayPos, cursorPos));
-    	return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, (height - 8) / 2);
+    	return getCaretPos(new CursorInfo(bordered, height, 0/*useless*/, 0/*useless*/, displayPos, cursorPos, value));
     }
 }

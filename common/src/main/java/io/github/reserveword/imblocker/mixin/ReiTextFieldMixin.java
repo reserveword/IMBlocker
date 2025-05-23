@@ -10,12 +10,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.StringUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget;
-import me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget.TextFormatter;
 
 @Pseudo
 @Mixin(value = TextFieldWidget.class, remap = false)
@@ -27,7 +27,6 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
     @Shadow
     private me.shedaniel.math.Rectangle bounds;
     
-    @Shadow protected TextFormatter formatter;
     @Shadow private boolean hasBorder;
     @Shadow protected int firstCharacterIndex;
     @Shadow protected int cursorPos;
@@ -71,11 +70,8 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
     
     @Override
     public Point getCaretPos() {
-    	String clippedText = "";
-    	try {
-        	clippedText = text.substring(firstCharacterIndex, cursorPos);
-		} catch (Exception e) {}
-    	int caretX = (hasBorder ? 4 : 0) + MinecraftClientAccessor.instance.getStringWidth(clippedText);
+    	int caretX = (hasBorder ? 4 : 0) + MinecraftClientAccessor.instance.getStringWidth(
+    			StringUtil.getSubstring(text, firstCharacterIndex, cursorPos));
     	return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, (bounds.height - 8) / 2);
     }
 }

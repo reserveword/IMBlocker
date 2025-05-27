@@ -53,6 +53,9 @@ allprojects {
             name = "ModMaven"
             url = "https://modmaven.dev"
         }
+        maven {
+            url 'https://repo.spongepowered.org/repository/maven-public/'
+        }
     }
 
     def all_properties = [

@@ -10,17 +10,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.StringUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
-import me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget.TextFormatter;
+import me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget;
 
 @Pseudo
-@Mixin(targets = {
-        "me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget",
-        "me.shedaniel.rei.gui.widget.TextFieldWidget"
-}, remap = false)
+@Mixin(value = TextFieldWidget.class, remap = false)
 public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
 	
     @Shadow
@@ -29,7 +27,6 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
     @Shadow
     private me.shedaniel.math.Rectangle bounds;
     
-    @Shadow protected TextFormatter formatter;
     @Shadow private boolean hasBorder;
     @Shadow protected int firstCharacterIndex;
     @Shadow protected int cursorPos;
@@ -45,12 +42,6 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
     	onMinecraftWidgetFocusChanged(isFocused);
     }
     
-    @Inject(method = "setText", at = @At(value = "INVOKE", target = 
-    		"Lme/shedaniel/rei/impl/client/gui/widget/basewidgets/TextFieldWidget;onChanged(Ljava/lang/String;)V"))
-    public void moveCursorBeforeNotifyChanged(String text, CallbackInfo ci) {
-    	moveCursorToEnd();
-    }
-    
     @Inject(method = "onChanged", at = @At("TAIL"))
     public void onTextChanged(String newText, CallbackInfo ci) {
     	IMManager.updateCompositionWindowPos();
@@ -60,9 +51,6 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
     public void onMoveCursor(int cursor, CallbackInfo ci) {
     	IMManager.updateCompositionWindowPos();
     }
-    
-    @Shadow
-    public abstract void moveCursorToEnd();
     
     @Overwrite(aliases = {"setEditable"})
     public void setIsEditable(boolean editable) {
@@ -82,8 +70,8 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
     
     @Override
     public Point getCaretPos() {
-    	String clippedText = text.substring(firstCharacterIndex, cursorPos);
-    	int caretX = (hasBorder ? 4 : 0) + MinecraftClientAccessor.instance.getStringWidth(clippedText);
+    	int caretX = (hasBorder ? 4 : 0) + MinecraftClientAccessor.instance.getStringWidth(
+    			StringUtil.getSubstring(text, firstCharacterIndex, cursorPos));
     	return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, (bounds.height - 8) / 2);
     }
 }

@@ -15,6 +15,7 @@ import com.replaymod.lib.de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
+import io.github.reserveword.imblocker.common.StringUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
@@ -76,7 +77,8 @@ public abstract class ReplayModTextFieldMixin implements MinecraftFocusableWidge
     @Override
     public Point getCaretPos() {
     	if(bounds != null) {
-        	int caretX = 4 + MinecraftClient.getInstance().textRenderer.getWidth(text.substring(currentOffset, cursorPos));
+        	int caretX = 4 + MinecraftClient.getInstance().textRenderer.getWidth(
+        			StringUtil.getSubstring(text, currentOffset, cursorPos));
         	return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, (bounds.height() - 9) / 2);
     	}
     	return MinecraftFocusableWidget.super.getCaretPos();

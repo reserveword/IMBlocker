@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
+import io.github.reserveword.imblocker.common.StringUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
@@ -56,10 +57,7 @@ public abstract class SodiumSearchFieldMixin implements MinecraftFocusableWidget
 	@Override
 	public Point getCaretPos() {
 		TextRenderer font = MinecraftClient.getInstance().textRenderer;
-		int caretX = 6;
-		try {
-			caretX += font.getWidth(text.substring(firstCharacterIndex, selectionStart));
-		} catch (Exception e) {}
+		int caretX = 6 + font.getWidth(StringUtil.getSubstring(text, firstCharacterIndex, selectionStart));
 		return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, 5);
 	}
 }

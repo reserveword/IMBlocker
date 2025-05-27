@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import dev.emi.emi.screen.widget.EmiSearchWidget;
 
 @Mixin(value = EmiSearchWidget.class)
-public class EmiSearchWidgetLegacyMixin extends TextFieldLegacyMixin {
+public abstract class EmiSearchWidgetLegacyMixin extends TextFieldLegacyMixin {
 	
 	@Override
     @Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))

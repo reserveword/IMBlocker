@@ -56,7 +56,14 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		}
 		
 		if(IMBlocker.isGameVersionReached(760/*1.19.1*/)) {
+			validMixins.add("AbstractScrollWidgetMixin");
+			validMixins.add("StringViewAccessor");
+			validMixins.add("MultilineTextFieldMixin");
 			validMixins.add("MultiLineEditBoxMixin");
+			
+			validMixins.add("FtbPanelMixin");
+			validMixins.add("FtbMultilineTextFieldAccessorImpl");
+			validMixins.add("FtbMultilineTextBoxMixin");
 		}
 		
 		if(IMBlocker.isGameVersionReached(763/*1.20*/)) {

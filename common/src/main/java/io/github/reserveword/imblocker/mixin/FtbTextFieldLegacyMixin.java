@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import dev.ftb.mods.ftblibrary.ui.TextBox;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.StringUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.Point;
 
@@ -41,10 +42,8 @@ public abstract class FtbTextFieldLegacyMixin extends FtbWidgetMixin {
     
     @Override
     public Point getCaretPos() {
-    	int caretX = 4;
-    	try {
-        	caretX += MinecraftClientAccessor.instance.getStringWidth(text.substring(lineScrollOffset, cursorPosition));
-		} catch (Exception e) {}
+    	int caretX = 4 + MinecraftClientAccessor.instance.getStringWidth(
+    			StringUtil.getSubstring(text, lineScrollOffset, cursorPosition));
     	return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, (height - 8) / 2);
     }
 }

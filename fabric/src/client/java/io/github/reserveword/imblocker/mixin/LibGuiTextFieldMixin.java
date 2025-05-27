@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import io.github.cottonmc.cotton.gui.widget.WTextField;
 import io.github.reserveword.imblocker.common.IMManager;
+import io.github.reserveword.imblocker.common.StringUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.Point;
 import net.minecraft.client.MinecraftClient;
@@ -66,10 +67,7 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin {
 	@Override
 	public Point getCaretPos() {
 		TextRenderer font = MinecraftClient.getInstance().textRenderer;
-		int caretX = WTextField.TEXT_PADDING_X;
-		try {
-			caretX += font.getWidth(text.substring(scrollOffset, cursor));
-		} catch (Exception e) {}
+		int caretX = WTextField.TEXT_PADDING_X + font.getWidth(StringUtil.getSubstring(text, scrollOffset, cursor));
 		return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, WTextField.TEXT_PADDING_Y);
 	}
 }

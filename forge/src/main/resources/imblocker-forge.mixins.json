@@ -10,7 +10,6 @@
     "AbstractWidgetMixin",
     "MinecraftClientMixin",
     "WindowMixin",
-    "FtbBaseScreenMixin",
     "FtbWidgetMixin",
     "ReiTextFieldMixin"
   ],

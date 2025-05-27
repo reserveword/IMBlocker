@@ -54,7 +54,7 @@ public abstract class FtbWidgetMixin implements MinecraftFocusableWidget {
 		Panel p = parent;
 		while(p != null) {
 			x += p.posX;
-			p = p.getParent();
+			p = ((FtbWidgetMixin) (Object) p).parent;
 		}
 		return x;
 	}
@@ -65,7 +65,7 @@ public abstract class FtbWidgetMixin implements MinecraftFocusableWidget {
 		Panel p = parent;
 		while(p != null) {
 			y += p.posY;
-			p = p.getParent();
+			p = ((FtbWidgetMixin) (Object) p).parent;
 		}
 		return y;
 	}

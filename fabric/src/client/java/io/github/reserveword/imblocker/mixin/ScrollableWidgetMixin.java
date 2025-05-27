@@ -12,9 +12,6 @@ import net.minecraft.client.gui.widget.ScrollableWidget;
 public abstract class ScrollableWidgetMixin extends ClickableWidgetMixin {
 	
 	@Shadow
-	protected abstract boolean isVisible(int top, int bottom);
-	
-	@Shadow
 	protected abstract double getScrollY();
 	
 	@Inject(method = "setScrollY", at = @At("TAIL"))

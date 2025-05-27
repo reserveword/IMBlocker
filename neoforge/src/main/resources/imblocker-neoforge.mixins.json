@@ -17,6 +17,7 @@
     "EmiSearchWidgetMixin",
     "ReiTextFieldMixin",
     "FtbWidgetMixin",
+    "FtbPanelMixin",
     "FtbTextFieldMixin",
     "FtbMultilineTextFieldAccessorImpl",
     "FtbMultilineTextBoxMixin",

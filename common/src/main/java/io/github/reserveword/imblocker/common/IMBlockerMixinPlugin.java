@@ -156,5 +156,10 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("BlockUIScrollingContainerMixin");
 			validMixins.add("BlockUITextFieldMixin");
 		}
+		
+		if(hasMod("supermartijn642corelib")) {
+			validMixins.add("SM642WidgetMixin");
+			validMixins.add("SM642TextFieldMixin");
+		}
 	}
 }

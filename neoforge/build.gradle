@@ -16,6 +16,7 @@ runs {
 
         dependencies {
             runtime project(":common")
+            runtime project(":forge")
         }
     }
 }
@@ -34,10 +35,14 @@ dependencies {
     compileOnly "maven.modrinth:reeses-sodium-options:mc1.21.4-1.8.3+neoforge"
 
     implementation project(':common')
+    implementation project(':forge')
 }
 
 project.jar {
 	archiveFileName = "${rootProject.name}-${mod_version}-neoforge-1.20.6+.jar"
     from sourceSets.main.output
     from project(":common").sourceSets.main.output
+    from (project(":forge").sourceSets.main.output) {
+        include '**/mixin/*.class'
+    }
 }

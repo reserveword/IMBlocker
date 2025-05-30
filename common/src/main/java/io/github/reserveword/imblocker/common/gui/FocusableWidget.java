@@ -1,7 +1,7 @@
 package io.github.reserveword.imblocker.common.gui;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 
 public interface FocusableWidget {
 	
@@ -45,7 +45,7 @@ public interface FocusableWidget {
 	}
 	
 	default Rectangle getBoundsAbs() {
-		Rectangle bounds = MinecraftClientAccessor.instance.getWindowBounds();
+		Rectangle bounds = MinecraftClientAccessor.INSTANCE.getWindowBounds();
 		return new Rectangle(bounds.width() / 3, bounds.height() / 2, 0, 0);
 	}
 	

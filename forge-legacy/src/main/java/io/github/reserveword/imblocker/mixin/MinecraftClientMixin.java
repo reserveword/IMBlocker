@@ -46,6 +46,6 @@ public abstract class MinecraftClientMixin {
     }
     
     private boolean isScreenInWhiteList(Screen screen) {
-    	return screen != null && Config.INSTANCE.inScreenWhitelist(screen.getClass());
+    	return Config.INSTANCE.isScreenInWhitelist(screen);
     }
 }

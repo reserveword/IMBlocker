@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.StringUtil;
+import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
@@ -70,7 +70,7 @@ public abstract class ReiTextFieldMixin implements MinecraftFocusableWidget {
     
     @Override
     public Point getCaretPos() {
-    	int caretX = (hasBorder ? 4 : 0) + MinecraftClientAccessor.instance.getStringWidth(
+    	int caretX = (hasBorder ? 4 : 0) + MinecraftClientAccessor.INSTANCE.getStringWidth(
     			StringUtil.getSubstring(text, firstCharacterIndex, cursorPos));
     	return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, (bounds.height - 8) / 2);
     }

@@ -2,25 +2,20 @@ package io.github.reserveword.imblocker.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import com.supermartijn642.core.gui.widget.BaseWidget;
 
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
-import net.minecraft.client.gui.components.AbstractWidget;
 
-@Mixin(AbstractWidget.class)
-public abstract class AbstractWidgetMixin implements MinecraftFocusableWidget {
-
-	@Shadow private int x;
-	@Shadow private int y;
+@Mixin(value = BaseWidget.class, remap = false)
+public abstract class SM642WidgetMixin implements MinecraftFocusableWidget {
+	
+	@Shadow protected int x;
+	@Shadow protected int y;
 	@Shadow protected int width;
 	@Shadow protected int height;
-	
-	@Inject(method = "setFocused", at = @At("TAIL"))
-	public void focusChanged(boolean isFocused, CallbackInfo ci) {}
 	
 	@Override
 	public Rectangle getBoundsAbs() {

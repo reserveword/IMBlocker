@@ -4,7 +4,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import io.github.reserveword.imblocker.common.Common;
-import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.Config;
+import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -28,7 +29,7 @@ public class IMBlocker {
 	}
 	
     public IMBlocker(FMLJavaModLoadingContext context) {
-		MinecraftClientAccessor.instance = new MinecraftClientAccessor() {
+		MinecraftClientAccessor.INSTANCE = new MinecraftClientAccessor() {
 			@Override
 			public void execute(Runnable runnable) {
 				Minecraft.getInstance().execute(runnable);
@@ -55,7 +56,7 @@ public class IMBlocker {
     @SubscribeEvent
     public void onConfigLoadReload(ModConfigEvent e) {
         Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfig.Reloading)?"re":"");
-        ForgeConfig.reload();
+        Config.INSTANCE.reloadScreenWhitelist(ForgeConfig.CLIENT.screenWhitelist.get());
     }
     
     public static boolean isGameVersionReached(int protocolVersion) {

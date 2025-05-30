@@ -14,9 +14,12 @@ dependencies {
 	compileOnly 'ca.weblite:java-objc-bridge:1.1'
 	
 	compileOnly("org.spongepowered:mixin:0.8.5")
+	compileOnly("org.ow2.asm:asm-tree:9.6")
 	
 	compileOnly "me.shedaniel.cloth:basic-math:0.6.1"
 	compileOnly "maven.modrinth:rei:${rei_version}"
+	compileOnly "maven.modrinth:supermartijn642s-core-lib:1.1.18-forge-mc1.16"
+	compileOnly "curse.maven:blockui-$blockui_version"
 	compileOnlyApi "curse.maven:ftblib-$ftblib_version"
 }
 

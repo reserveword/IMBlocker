@@ -5,6 +5,7 @@ import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinNT;
 
+import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.FocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
@@ -141,7 +142,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 				while(true) {
 					long cooldown = getConversionStatusCooldown();
 					if(cooldown <= 0) {
-						MinecraftClientAccessor.instance.execute(() -> syncEnglishState());
+						MinecraftClientAccessor.INSTANCE.execute(() -> syncEnglishState());
 						break;
 					}else {
 						await(cooldown);

@@ -1,14 +1,20 @@
 package io.github.reserveword.imblocker;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 
 import com.mojang.blaze3d.platform.Window;
 
 import io.github.reserveword.imblocker.common.Common;
-import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.Config;
+import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import net.minecraft.DetectedVersion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.util.GsonHelper;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -16,13 +22,17 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Common.MODID)
 public class IMBlocker {
+
+	private static final ModLoaderAccessor modLoaderAccessor;
+	
     public IMBlocker(ModContainer container) {
-    	MinecraftClientAccessor.instance = new MinecraftClientAccessor() {
+    	MinecraftClientAccessor.INSTANCE = new MinecraftClientAccessor() {
 			@Override
 			public void execute(Runnable runnable) {
 				Minecraft.getInstance().execute(runnable);
@@ -76,7 +86,41 @@ public class IMBlocker {
         @SubscribeEvent
         public static void onConfigLoadReload(ModConfigEvent e) {
             Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading)?"re":"");
-            NeoForgeConfig.reload();
+            Config.INSTANCE.reloadScreenWhitelist(NeoForgeConfig.CLIENT.screenWhitelist.get());
         }
+    }
+    
+    public static ModLoaderAccessor getModLoaderAccessor() {
+    	return modLoaderAccessor;
+    }
+    
+    static {
+    	int protocolVersion;
+    	try(InputStream is = DetectedVersion.class.getResourceAsStream("/version.json");
+    			InputStreamReader isr = new InputStreamReader(is)) {
+    		protocolVersion = GsonHelper.getAsInt(GsonHelper.parse(isr), "protocol_version");
+    	} catch (Exception e) {
+    		Common.LOGGER.warn("Failed to get protocol version!");
+    		e.printStackTrace();
+    		protocolVersion = Integer.MAX_VALUE;
+		}
+    	int currentProtocolVersion = protocolVersion;
+    	
+    	modLoaderAccessor = new ModLoaderAccessor() {
+			@Override
+			public boolean isGameVersionReached(int protocolVersion) {
+				return currentProtocolVersion >= protocolVersion;
+			}
+			
+			@Override
+			public boolean hasMod(String modid) {
+				return FMLLoader.getLoadingModList().getModFileById(modid) != null;
+			}
+			
+			@Override
+			public Mapping getMapping() {
+				return Mapping.OFFICIAL;
+			}
+		};
     }
 }

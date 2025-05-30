@@ -23,7 +23,7 @@ public abstract class RSOAbstractFrameMixin {
     @Inject(method = "method_25395", at = @At("HEAD"))
     public void notifyFocusLost(@Nullable Element focused, CallbackInfo ci) {
         if (this.focused != null && this.focused != focused) {
-        	if(IMBlocker.isGameVersionReached(762/*1.19.4*/)) {
+        	if(IMBlocker.getModLoaderAccessor().isGameVersionReached(762/*1.19.4*/)) {
         		this.focused.setFocused(false);
         	}else if(this.focused.getClass().equals(SearchTextFieldComponent.class)) {
         		try {

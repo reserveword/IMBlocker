@@ -1,5 +1,8 @@
 package io.github.reserveword.imblocker.common;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
@@ -10,8 +13,33 @@ public abstract class Config {
             str -> (str instanceof String) && classNamePattern.matcher((String) str).matches();
 
     public static Config INSTANCE = null;
-
-    public boolean inScreenWhitelist(Class<?> cls) {
+    
+    private final Set<Class<?>> screenWhitelist = new HashSet<>();
+    
+    public void reloadScreenWhitelist(List<? extends String> newScreenWhitelist) {
+    	screenWhitelist.clear();
+    	for (String s: newScreenWhitelist) {
+            try {
+                if (s.contains(":")) {
+                    String[] ss = s.split(":");
+                    s = ss[ss.length - 1];
+                }
+                screenWhitelist.add(Class.forName(s));
+            } catch (ClassNotFoundException e) {
+                Common.LOGGER.warn("Class {} not found, ignored.", s);
+            } catch (Throwable e) {
+                Common.LOGGER.warn(e);
+            }
+        }
+        Common.LOGGER.info("imblocker bakelist {} result {}", "screenWhitelist", screenWhitelist);
+    }
+    
+    public boolean isScreenInWhitelist(Object screen) {
+    	for(Class<?> screenCls : screenWhitelist) {
+    		if(screenCls.isInstance(screen)) {
+    			return true;
+    		}
+    	}
         return false;
     }
     

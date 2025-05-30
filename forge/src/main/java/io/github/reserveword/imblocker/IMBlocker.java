@@ -6,7 +6,9 @@ import java.io.InputStreamReader;
 import com.mojang.blaze3d.platform.Window;
 
 import io.github.reserveword.imblocker.common.Common;
-import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.Config;
+import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import net.minecraft.DetectedVersion;
 import net.minecraft.client.Minecraft;
@@ -17,19 +19,20 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLLoader;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Common.MODID)
 public class IMBlocker {
-	
-	private static int currentProtocolVersion;
+
+	private static final ModLoaderAccessor modLoaderAccessor;
 
 	public IMBlocker() {
 		this(FMLJavaModLoadingContext.get());
 	}
 	
     public IMBlocker(FMLJavaModLoadingContext context) {
-		MinecraftClientAccessor.instance = new MinecraftClientAccessor() {
+		MinecraftClientAccessor.INSTANCE = new MinecraftClientAccessor() {
 			@Override
 			public void execute(Runnable runnable) {
 				Minecraft.getInstance().execute(runnable);
@@ -60,21 +63,40 @@ public class IMBlocker {
     @SubscribeEvent
     public void onConfigLoadReload(ModConfigEvent e) {
         Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading)?"re":"");
-        ForgeConfig.reload();
+        Config.INSTANCE.reloadScreenWhitelist(ForgeConfig.CLIENT.screenWhitelist.get());
     }
     
-    public static boolean isGameVersionReached(int protocolVersion) {
-    	return currentProtocolVersion >= protocolVersion;
+    public static ModLoaderAccessor getModLoaderAccessor() {
+    	return modLoaderAccessor;
     }
     
     static {
+    	int protocolVersion;
     	try(InputStream is = DetectedVersion.class.getResourceAsStream("/version.json");
     			InputStreamReader isr = new InputStreamReader(is)) {
-    		currentProtocolVersion = GsonHelper.getAsInt(GsonHelper.parse(isr), "protocol_version");
+    		protocolVersion = GsonHelper.getAsInt(GsonHelper.parse(isr), "protocol_version");
     	} catch (Exception e) {
     		Common.LOGGER.warn("Failed to get protocol version!");
     		e.printStackTrace();
-    		currentProtocolVersion = Integer.MAX_VALUE;
+    		protocolVersion = Integer.MAX_VALUE;
 		}
+    	int currentProtocolVersion = protocolVersion;
+    	
+    	modLoaderAccessor = new ModLoaderAccessor() {
+			@Override
+			public boolean isGameVersionReached(int protocolVersion) {
+				return currentProtocolVersion >= protocolVersion;
+			}
+			
+			@Override
+			public boolean hasMod(String modid) {
+				return FMLLoader.getLoadingModList().getModFileById(modid) != null;
+			}
+			
+			@Override
+			public Mapping getMapping() {
+				return Mapping.OFFICIAL;
+			}
+		};
     }
 }

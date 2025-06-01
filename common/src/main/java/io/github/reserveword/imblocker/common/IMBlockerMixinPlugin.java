@@ -146,7 +146,7 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("MeteorTextFieldMixin");
 		}
 		
-		if(hasMod("reeses-sodium-options")) {
+		if(hasMod("reeses-sodium-options") || hasMod("reeses_sodium_options")) {
 			validMixins.add("RSOAbstractFrameMixin");
 			validMixins.add("SodiumSearchFieldMixin");
 		}

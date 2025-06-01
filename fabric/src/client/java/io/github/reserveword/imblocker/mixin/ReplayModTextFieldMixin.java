@@ -15,16 +15,15 @@ import com.replaymod.lib.de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
-import io.github.reserveword.imblocker.common.StringUtil;
+import io.github.reserveword.imblocker.common.gui.CursorInfo;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
-import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
+import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
-import net.minecraft.client.MinecraftClient;
 
 @Pseudo
 @Mixin(targets = "com.replaymod.lib.de.johni0702.minecraft.gui.element.AbstractGuiTextField", remap = false)
-public abstract class ReplayModTextFieldMixin implements MinecraftFocusableWidget {
+public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidget {
 	
 	private Rectangle bounds;
 	private int lastCursorPos;
@@ -71,16 +70,11 @@ public abstract class ReplayModTextFieldMixin implements MinecraftFocusableWidge
     
     @Override
     public Rectangle getBoundsAbs() {
-    	return bounds != null ? bounds.derive(FocusContainer.getMCGuiScaleFactor()) : MinecraftFocusableWidget.super.getBoundsAbs();
+    	return bounds != null ? bounds.derive(FocusContainer.getMCGuiScaleFactor()) : MinecraftTextFieldWidget.super.getBoundsAbs();
     }
     
     @Override
-    public Point getCaretPos() {
-    	if(bounds != null) {
-        	int caretX = 4 + MinecraftClient.getInstance().textRenderer.getWidth(
-        			StringUtil.getSubstring(text, currentOffset, cursorPos));
-        	return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, (bounds.height() - 9) / 2);
-    	}
-    	return MinecraftFocusableWidget.super.getCaretPos();
+    public CursorInfo getCursorInfo() {
+    	return bounds != null ? new CursorInfo(true, bounds.height(), 0, 0, currentOffset, cursorPos, text) : null;
     }
 }

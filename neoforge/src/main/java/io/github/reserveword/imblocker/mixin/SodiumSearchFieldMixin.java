@@ -8,19 +8,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.StringUtil;
+import io.github.reserveword.imblocker.common.gui.CursorInfo;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
-import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
-import io.github.reserveword.imblocker.common.gui.Point;
+import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import net.caffeinemc.mods.sodium.client.util.Dim2i;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 
 @Pseudo
 @Mixin(targets = "me.flashyreese.mods.reeses_sodium_options."
 		+ "client.gui.frame.components.SearchTextFieldComponent", remap = false)
-public abstract class SodiumSearchFieldMixin implements MinecraftFocusableWidget {
+public abstract class SodiumSearchFieldMixin implements MinecraftTextFieldWidget {
 	
 	@Shadow
 	protected boolean editable;
@@ -51,9 +48,12 @@ public abstract class SodiumSearchFieldMixin implements MinecraftFocusableWidget
 	}
 	
 	@Override
-	public Point getCaretPos() {
-		Font font = Minecraft.getInstance().font;
-		int caretX = 6 + font.width(StringUtil.getSubstring(text, firstCharacterIndex, selectionStart));
-		return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, 5);
+	public CursorInfo getCursorInfo() {
+		return new CursorInfo(true, dim.height(), 0, 0, firstCharacterIndex, selectionStart, text);
+	}
+	
+	@Override
+	public int getPaddingX() {
+		return 6;
 	}
 }

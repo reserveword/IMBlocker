@@ -48,6 +48,6 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin {
 	@Override
 	public Point getCaretPos() {
 		int caretX = (int) (getTextWidth(cursor) - textStart + pad());
-		return new Point(caretX, 0);
+		return new Point(caretX, (int) (height / 3.5));
 	}
 }

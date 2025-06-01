@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.CursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftMultilineEditBoxWidget;
-import io.github.reserveword.imblocker.common.gui.Point;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.EditBox;
 import net.minecraft.client.gui.widget.EditBoxWidget;
@@ -41,10 +40,10 @@ public abstract class EditBoxWidgetMixin extends ScrollableWidgetMixin implement
 	}
 	
 	@Override
-	public Point getCaretPos() {
+	public CursorInfo getCursorInfo() {
 		int cursorLineIndex = editBox.getCurrentLineIndex();
-		return getCaretPos(new CursorInfo(true, height, cursorLineIndex, getScrollY(), 
+		return new CursorInfo(true, height, cursorLineIndex, getScrollY(), 
 				((SubstringAccessor) (Object) editBox.getLine(cursorLineIndex)).getBeginIndex(), 
-				editBox.getCursor(), editBox.getText()));
+				editBox.getCursor(), editBox.getText());
 	}
 }

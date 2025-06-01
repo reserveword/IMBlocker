@@ -9,14 +9,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import io.github.cottonmc.cotton.gui.widget.WTextField;
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.StringUtil;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
-import io.github.reserveword.imblocker.common.gui.Point;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
+import io.github.reserveword.imblocker.common.gui.CursorInfo;
+import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 
 @Mixin(value = WTextField.class, remap = false)
-public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin {
+public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements MinecraftTextFieldWidget {
 	
 	@Shadow
 	private boolean editable;
@@ -65,9 +62,12 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin {
 	}
 	
 	@Override
-	public Point getCaretPos() {
-		TextRenderer font = MinecraftClient.getInstance().textRenderer;
-		int caretX = WTextField.TEXT_PADDING_X + font.getWidth(StringUtil.getSubstring(text, scrollOffset, cursor));
-		return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, WTextField.TEXT_PADDING_Y);
+	public CursorInfo getCursorInfo() {
+		return new CursorInfo(true, height, 0, 0, scrollOffset, cursor, text);
+	}
+	
+	@Override
+	public int getPaddingX() {
+		return WTextField.TEXT_PADDING_X;
 	}
 }

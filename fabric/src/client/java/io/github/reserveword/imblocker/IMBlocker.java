@@ -42,7 +42,7 @@ public class IMBlocker implements ClientModInitializer {
 			}
 		};
 		
-        if (modLoaderAccessor.hasMod("cloth-config") && modLoaderAccessor.hasMod("modmenu")) {
+        if (hasClothConfig()) {
             AutoConfig.register(FabricConfig.class, GsonConfigSerializer::new);
             Config.INSTANCE = AutoConfig.getConfigHolder(FabricConfig.class).getConfig();
         } else {
@@ -56,6 +56,10 @@ public class IMBlocker implements ClientModInitializer {
             };
             Config.INSTANCE.reloadScreenWhitelist(FabricCommon.defaultScreenWhitelist);
         }
+    }
+    
+    public static boolean hasClothConfig() {
+    	return modLoaderAccessor.hasMod("cloth-config") || modLoaderAccessor.hasMod("cloth-config2");
     }
 
     public static ModLoaderAccessor getModLoaderAccessor() {

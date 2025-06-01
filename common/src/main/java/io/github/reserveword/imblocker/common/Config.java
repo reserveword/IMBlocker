@@ -14,28 +14,28 @@ public abstract class Config {
 
     public static Config INSTANCE = null;
     
-    private final Set<Class<?>> screenWhitelist = new HashSet<>();
+    private static final Set<Class<?>> bakedScreenWhitelist = new HashSet<>();
     
     public void reloadScreenWhitelist(List<? extends String> newScreenWhitelist) {
-    	screenWhitelist.clear();
+    	bakedScreenWhitelist.clear();
     	for (String s: newScreenWhitelist) {
             try {
                 if (s.contains(":")) {
                     String[] ss = s.split(":");
                     s = ss[ss.length - 1];
                 }
-                screenWhitelist.add(Class.forName(s));
+                bakedScreenWhitelist.add(Class.forName(s));
             } catch (ClassNotFoundException e) {
                 Common.LOGGER.warn("Class {} not found, ignored.", s);
             } catch (Throwable e) {
                 Common.LOGGER.warn(e);
             }
         }
-        Common.LOGGER.info("imblocker bakelist {} result {}", "screenWhitelist", screenWhitelist);
+        Common.LOGGER.info("imblocker bakelist {} result {}", "screenWhitelist", bakedScreenWhitelist);
     }
     
     public boolean isScreenInWhitelist(Object screen) {
-    	for(Class<?> screenCls : screenWhitelist) {
+    	for(Class<?> screenCls : bakedScreenWhitelist) {
     		if(screenCls.isInstance(screen)) {
     			return true;
     		}

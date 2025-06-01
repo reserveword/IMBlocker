@@ -9,13 +9,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.supermartijn642.core.gui.widget.premade.TextFieldWidget;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.StringUtil;
-import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
-import io.github.reserveword.imblocker.common.gui.Point;
+import io.github.reserveword.imblocker.common.gui.CursorInfo;
+import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 
 @Mixin(value = TextFieldWidget.class, remap = false)
-public abstract class SM642TextFieldMixin extends SM642WidgetMixin {
+public abstract class SM642TextFieldMixin extends SM642WidgetMixin implements MinecraftTextFieldWidget {
 	
 	@Shadow private String text;
 	@Shadow protected int lineScrollOffset;
@@ -37,9 +35,7 @@ public abstract class SM642TextFieldMixin extends SM642WidgetMixin {
 	}
 	
 	@Override
-	public Point getCaretPos() {
-		int caretX = 4 + MinecraftClientAccessor.INSTANCE.getStringWidth(
-				StringUtil.getSubstring(text, lineScrollOffset, cursorPosition));
-		return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, (height - 8) / 2);
+	public CursorInfo getCursorInfo() {
+		return new CursorInfo(true, height, 0, 0, lineScrollOffset, cursorPosition, text);
 	}
 }

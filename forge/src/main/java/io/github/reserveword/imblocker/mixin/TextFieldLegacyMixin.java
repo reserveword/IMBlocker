@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.CursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
-import io.github.reserveword.imblocker.common.gui.Point;
 import net.minecraft.client.gui.components.EditBox;
 
 @Mixin(EditBox.class)
@@ -89,7 +88,7 @@ public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin implement
     }
     
     @Override
-    public Point getCaretPos() {
-    	return getCaretPos(new CursorInfo(bordered, height, 0/*useless*/, 0/*useless*/, displayPos, cursorPos, value));
+    public CursorInfo getCursorInfo() {
+    	return new CursorInfo(bordered, height, 0, 0, displayPos, cursorPos, value);
     }
 }

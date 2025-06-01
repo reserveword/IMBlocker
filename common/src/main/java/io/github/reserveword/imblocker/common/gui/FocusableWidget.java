@@ -52,4 +52,8 @@ public interface FocusableWidget {
 	default Point getCaretPos() {
 		return Point.TOP_LEFT;
 	}
+	
+	default double getRenderScale() {
+		return 1.0d;
+	}
 }

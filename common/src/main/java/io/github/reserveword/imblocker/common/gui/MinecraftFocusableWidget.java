@@ -25,4 +25,8 @@ public interface MinecraftFocusableWidget extends FocusableWidget {
 	 default void setPreferredEditState(boolean state) {}
 	 
 	 default void setPreferredEnglishState(boolean state) {}
+	 
+	 default double getRenderScale() {
+		 return FocusContainer.getMCGuiScaleFactor();
+	 }
 }

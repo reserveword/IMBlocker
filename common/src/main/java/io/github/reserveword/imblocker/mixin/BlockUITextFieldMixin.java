@@ -7,12 +7,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.StringUtil;
-import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
-import io.github.reserveword.imblocker.common.gui.Point;
+import io.github.reserveword.imblocker.common.gui.CursorInfo;
+import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 
 @Mixin(targets = "com.ldtteam.blockui.controls.TextField", remap = false)
-public abstract class BlockUITextFieldMixin extends BlockUIPaneMixin {
+public abstract class BlockUITextFieldMixin extends BlockUIPaneMixin implements MinecraftTextFieldWidget {
 	
 	@Shadow protected String text;
 	@Shadow protected int scrollOffset = 0;
@@ -39,9 +38,7 @@ public abstract class BlockUITextFieldMixin extends BlockUIPaneMixin {
 	}
 	
 	@Override
-	public Point getCaretPos() {
-		int caretX = 4 + MinecraftClientAccessor.INSTANCE.getStringWidth(
-				StringUtil.getSubstring(text, scrollOffset, cursorPosition));
-		return new Point(getBOScreenFieldValue("renderScale"), caretX, (height - 8) / 2);
+	public CursorInfo getCursorInfo() {
+		return new CursorInfo(true, height, 0, 0, scrollOffset, cursorPosition, text);
 	}
 }

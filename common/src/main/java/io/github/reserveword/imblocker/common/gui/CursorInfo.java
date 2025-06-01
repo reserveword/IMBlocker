@@ -5,7 +5,7 @@ public final class CursorInfo {
 	public final boolean hasBorder;
 	public final int widgetHeight;
 	public final int cursorLineIndex;
-	public final double scrollY;
+	public double scrollY;
 	public final int cursorLineBeginIndex;
 	public final int cursor;
 	public final String text;

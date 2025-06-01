@@ -8,6 +8,7 @@ import com.sun.jna.platform.win32.WinNT;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.FocusableWidget;
+import io.github.reserveword.imblocker.common.gui.MathHelper;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.common.jnastructs.CANDIDATEFORM;
@@ -107,8 +108,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     private void updateCompositionWindowPos(WinNT.HANDLE himc) {
     	FocusableWidget focusedWidget = FocusManager.getFocusOwner();
     	if(focusedWidget != null) {
-    		Point compositionWindowPos = calculateProperCompositionWindowPos(
-    				focusedWidget.getBoundsAbs(), focusedWidget.getCaretPos());
+    		Point compositionWindowPos = calculateProperCompositionWindowPos(focusedWidget);
         	COMPOSITIONFORM cfr = new COMPOSITIONFORM();
         	ImmGetCompositionWindow(himc, cfr);
         	cfr.dwStyle = 2; //CFS_POINT
@@ -126,8 +126,13 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		}
     }
     
-    private Point calculateProperCompositionWindowPos(Rectangle inputWidgetBounds, Point caretPos) {
-    	return new Point(inputWidgetBounds.x() + caretPos.x(), inputWidgetBounds.y() + caretPos.y());
+    private Point calculateProperCompositionWindowPos(FocusableWidget inputWidget) {
+    	double scaleFactor = inputWidget.getRenderScale();
+    	Rectangle inputWidgetBounds = inputWidget.getBoundsAbs();
+    	Point caretPos = inputWidget.getCaretPos();
+    	int caretX = MathHelper.clamp(caretPos.x(), 0, (int) (inputWidgetBounds.width() - 4 * scaleFactor));
+    	int caretY = MathHelper.clamp(caretPos.y(), 0, (int) (inputWidgetBounds.height() - 4 * scaleFactor));
+    	return new Point(inputWidgetBounds.x() + caretX, inputWidgetBounds.y() + caretY);
     }
     
     private class SetConversionStateThread extends Thread {

@@ -64,7 +64,12 @@ public abstract class BlockUIPaneMixin implements MinecraftFocusableWidget {
 		xAbs = (int) (xAbs * renderScale + getBOScreenFieldValue("x"));
 		yAbs = (int) (yAbs * renderScale + getBOScreenFieldValue("y"));
 		
-		return new Rectangle(xAbs, yAbs, width, height);
+		return new Rectangle(xAbs, yAbs, (int) (width * renderScale), (int) (height * renderScale));
+	}
+	
+	@Override
+	public double getRenderScale() {
+		return getBOScreenFieldValue("renderScale");
 	}
 	
 	static {

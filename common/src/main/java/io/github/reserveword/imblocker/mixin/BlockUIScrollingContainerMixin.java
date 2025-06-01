@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import io.github.reserveword.imblocker.common.IMManager;
 
 @Mixin(targets = "com.ldtteam.blockui.views.ScrollingContainer", remap = false)
-public class BlockUIScrollingContainerMixin {
+public abstract class BlockUIScrollingContainerMixin {
 
 	@Inject(method = "setScrollY", at = @At("TAIL"))
 	public void onScroll(double scroll, CallbackInfoReturnable<Boolean> cir) {

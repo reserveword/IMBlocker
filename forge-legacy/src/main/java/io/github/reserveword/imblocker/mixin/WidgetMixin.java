@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import net.minecraft.client.gui.widget.Widget;
@@ -24,6 +23,6 @@ public abstract class WidgetMixin implements MinecraftFocusableWidget {
 	
 	@Override
 	public Rectangle getBoundsAbs() {
-		return new Rectangle(FocusContainer.getMCGuiScaleFactor(), x, y, width, height);
+		return new Rectangle(getGuiScale(), x, y, width, height);
 	}
 }

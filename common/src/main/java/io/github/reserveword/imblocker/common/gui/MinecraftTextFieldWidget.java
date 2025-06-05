@@ -5,17 +5,22 @@ import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 
 public interface MinecraftTextFieldWidget extends MinecraftFocusableWidget {
 	
+	@Override
+	default boolean getPreferredState() {
+		return true;
+	}
+	
 	default Point getCaretPos() {
-		CursorInfo cursorInfo = getCursorInfo();
+		SinglelineCursorInfo cursorInfo = getCursorInfo();
 		if(cursorInfo == null) {
 			return MinecraftFocusableWidget.super.getCaretPos();
 		}
 		int caretX = (cursorInfo.hasBorder ? getPaddingX() : 0) + MinecraftClientAccessor.INSTANCE.getStringWidth(
 				StringUtil.getSubstring(cursorInfo.text, cursorInfo.cursorLineBeginIndex, cursorInfo.cursor));
-    	return new Point(getRenderScale(), caretX, (cursorInfo.widgetHeight - getFontHeight()) / 2);
+    	return new Point(getGuiScale(), caretX, (cursorInfo.widgetHeight - getFontHeight()) / 2);
 	}
-	
-	CursorInfo getCursorInfo();
+
+	SinglelineCursorInfo getCursorInfo();
 	
 	default int getPaddingX() {
 		return 4;

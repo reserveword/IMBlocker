@@ -1,8 +1,8 @@
 package io.github.reserveword.imblocker.common.accessor;
 
-import io.github.reserveword.imblocker.common.gui.CursorInfo;
+import io.github.reserveword.imblocker.common.gui.MultilineCursorInfo;
 
 public interface FtbMultilineTextFieldAccessor {
 	
-	CursorInfo getCursorInfo();
+	MultilineCursorInfo getCursorInfo(double scrollY);
 }

@@ -8,18 +8,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import dev.ftb.mods.ftblibrary.ui.MultilineTextBox;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.accessor.FtbMultilineTextFieldAccessor;
-import io.github.reserveword.imblocker.common.gui.CursorInfo;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftMultilineEditBoxWidget;
+import io.github.reserveword.imblocker.common.gui.MultilineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 
 @Mixin(value = MultilineTextBox.class, remap = false)
 public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin implements MinecraftMultilineEditBoxWidget {
-	
-	@Override
-	public boolean isWidgetEditable() {
-		return true;
-	}
 	
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
@@ -44,15 +38,14 @@ public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin implements
 	@Override
 	public Rectangle getBoundsAbs() {
 		if(parent != null) {
-			return new Rectangle(FocusContainer.getMCGuiScaleFactor(), getAbsoluteX(), getAbsoluteY(), width, parent.height);
+			return new Rectangle(getGuiScale(), getAbsoluteX(), getAbsoluteY(), width, parent.height);
 		}
 		return super.getBoundsAbs();
 	}
 	
 	@Override
-	public CursorInfo getCursorInfo() {
-		CursorInfo cursorInfo = ((FtbMultilineTextFieldAccessor) this).getCursorInfo();
-		cursorInfo.scrollY = parent != null ? parent.getScrollY() : 0;
-		return cursorInfo;
+	public MultilineCursorInfo getCursorInfo() {
+		double scrollY = parent != null ? parent.getScrollY() : 0;
+		return ((FtbMultilineTextFieldAccessor) this).getCursorInfo(scrollY);
 	}
 }

@@ -5,7 +5,7 @@ public class GenericWhitelistScreen implements MinecraftFocusableWidget {
 	private static final GenericWhitelistScreen INSTANCE = new GenericWhitelistScreen();
 	
 	@Override
-	public boolean isWidgetEditable() {
+	public boolean getPreferredState() {
 		return true;
 	}
 	

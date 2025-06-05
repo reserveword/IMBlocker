@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.supermartijn642.core.gui.widget.premade.TextFieldWidget;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.CursorInfo;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 
 @Mixin(value = TextFieldWidget.class, remap = false)
@@ -18,11 +18,6 @@ public abstract class SM642TextFieldMixin extends SM642WidgetMixin implements Mi
 	@Shadow private String text;
 	@Shadow protected int lineScrollOffset;
 	@Shadow protected int cursorPosition;
-	
-	@Override
-	public boolean isWidgetEditable() {
-		return true;
-	}
 	
 	@Inject(method = "setSelected", at = @At("TAIL"))
 	public void focusChanged(boolean selected, CallbackInfo ci) {
@@ -35,7 +30,7 @@ public abstract class SM642TextFieldMixin extends SM642WidgetMixin implements Mi
 	}
 	
 	@Override
-	public CursorInfo getCursorInfo() {
-		return new CursorInfo(true, height, 0, 0, lineScrollOffset, cursorPosition, text);
+	public SinglelineCursorInfo getCursorInfo() {
+		return new SinglelineCursorInfo(true, height, lineScrollOffset, cursorPosition, text);
 	}
 }

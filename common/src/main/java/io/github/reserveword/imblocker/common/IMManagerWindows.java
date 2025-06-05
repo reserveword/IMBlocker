@@ -127,7 +127,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     }
     
     private Point calculateProperCompositionWindowPos(FocusableWidget inputWidget) {
-    	double scaleFactor = inputWidget.getRenderScale();
+    	double scaleFactor = inputWidget.getGuiScale();
     	Rectangle inputWidgetBounds = inputWidget.getBoundsAbs();
     	Point caretPos = inputWidget.getCaretPos();
     	int caretX = MathHelper.clamp(caretPos.x(), 0, (int) (inputWidgetBounds.width() - 4 * scaleFactor));

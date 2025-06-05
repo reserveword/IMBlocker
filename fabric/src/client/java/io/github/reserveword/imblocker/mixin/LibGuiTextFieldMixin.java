@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import io.github.cottonmc.cotton.gui.widget.WTextField;
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.CursorInfo;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 
 @Mixin(value = WTextField.class, remap = false)
@@ -21,11 +21,6 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 	@Shadow private String text;
 	@Shadow private int scrollOffset;
 	@Shadow private int cursor;
-	
-	@Override
-	public boolean isWidgetEditable() {
-		return editable;
-	}
 	
 	@Inject(method = "onFocusGained", at = @At("TAIL"))
     public void onFocusGained(CallbackInfo ci) {
@@ -62,8 +57,13 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 	}
 	
 	@Override
-	public CursorInfo getCursorInfo() {
-		return new CursorInfo(true, height, 0, 0, scrollOffset, cursor, text);
+	public boolean getPreferredState() {
+		return editable;
+	}
+	
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return new SinglelineCursorInfo(true, height, scrollOffset, cursor, text);
 	}
 	
 	@Override

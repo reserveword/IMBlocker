@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.CursorInfo;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 
 @Mixin(targets = "com.ldtteam.blockui.controls.TextField", remap = false)
@@ -16,11 +16,6 @@ public abstract class BlockUITextFieldMixin extends BlockUIPaneMixin implements 
 	@Shadow protected String text;
 	@Shadow protected int scrollOffset = 0;
 	@Shadow protected int cursorPosition = 0;
-	
-	@Override
-	public boolean isWidgetEditable() {
-		return true;
-	}
 	
 	@Inject(method = "onFocus", at = @At("TAIL"))
 	public void focusGained(CallbackInfo ci) {
@@ -38,7 +33,7 @@ public abstract class BlockUITextFieldMixin extends BlockUIPaneMixin implements 
 	}
 	
 	@Override
-	public CursorInfo getCursorInfo() {
-		return new CursorInfo(true, height, 0, 0, scrollOffset, cursorPosition, text);
+	public SinglelineCursorInfo getCursorInfo() {
+		return new SinglelineCursorInfo(true, height, scrollOffset, cursorPosition, text);
 	}
 }

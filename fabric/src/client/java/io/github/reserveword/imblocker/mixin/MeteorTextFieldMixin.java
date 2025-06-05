@@ -17,11 +17,6 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin {
 	@Shadow protected int cursor;
     @Shadow protected double textStart;
 	
-	@Override
-	public boolean isWidgetEditable() {
-		return true;
-	}
-	
 	@Shadow
 	protected abstract double getTextWidth(int pos);
     

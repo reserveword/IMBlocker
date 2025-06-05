@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.CursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftMultilineEditBoxWidget;
+import io.github.reserveword.imblocker.common.gui.MultilineCursorInfo;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.EditBox;
 import net.minecraft.client.gui.widget.EditBoxWidget;
@@ -18,11 +18,6 @@ public abstract class EditBoxWidgetMixin extends ScrollableWidgetMixin implement
 	
 	@Shadow private TextRenderer textRenderer;
 	@Shadow private EditBox editBox;
-
-	@Override
-	public boolean isWidgetEditable() {
-		return true;
-	}
 	
 	@Override
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
@@ -40,9 +35,9 @@ public abstract class EditBoxWidgetMixin extends ScrollableWidgetMixin implement
 	}
 	
 	@Override
-	public CursorInfo getCursorInfo() {
+	public MultilineCursorInfo getCursorInfo() {
 		int cursorLineIndex = editBox.getCurrentLineIndex();
-		return new CursorInfo(true, height, cursorLineIndex, getScrollY(), 
+		return new MultilineCursorInfo(cursorLineIndex, getScrollY(), 
 				((SubstringAccessor) (Object) editBox.getLine(cursorLineIndex)).getBeginIndex(), 
 				editBox.getCursor(), editBox.getText());
 	}

@@ -11,7 +11,6 @@ import com.supermartijn642.core.gui.widget.BaseWidget;
 import com.supermartijn642.core.gui.widget.Widget;
 
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 
@@ -45,11 +44,11 @@ public abstract class SM642WidgetMixin implements MinecraftFocusableWidget {
 			parent = (SM642WidgetMixin) (Object) parent.parent;
 		}
 		
-		double scaleFactor = FocusContainer.getMCGuiScaleFactor();
-		Rectangle scaledBounds = new Rectangle(scaleFactor, xAbs, yAbs, width, height);
+		double renderScale = getGuiScale();
+		Rectangle scaledBounds = new Rectangle(renderScale, xAbs, yAbs, width, height);
 		Rectangle windowBounds = MinecraftClientAccessor.INSTANCE.getWindowBounds();
-		int offsetX = (int) ((windowBounds.width() - (root.width * scaleFactor)) / 2);
-		int offsetY = (int) ((windowBounds.height() - (root.height * scaleFactor)) / 2);
+		int offsetX = (int) ((windowBounds.width() - (root.width * renderScale)) / 2);
+		int offsetY = (int) ((windowBounds.height() - (root.height * renderScale)) / 2);
 		return new Rectangle(offsetX + scaledBounds.x(), offsetY + scaledBounds.y(), scaledBounds.width(), scaledBounds.height());
 	}
 }

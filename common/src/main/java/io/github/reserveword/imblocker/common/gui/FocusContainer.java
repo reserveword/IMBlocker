@@ -68,7 +68,7 @@ public enum FocusContainer {
 		this.guiScaleFactor = factor;
 	}
 	
-	public static double getMCGuiScaleFactor() {
-		return MINECRAFT.guiScaleFactor;
+	public double getGuiScaleFactor() {
+		return guiScaleFactor;
 	}
 }

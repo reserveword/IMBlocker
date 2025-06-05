@@ -11,7 +11,6 @@ import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
 import io.github.cottonmc.cotton.gui.widget.WWidget;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import net.minecraft.client.MinecraftClient;
@@ -48,6 +47,6 @@ public abstract class LibGuiWidgetMixin implements MinecraftFocusableWidget {
     		x += ReflectionUtil.getFieldValue(CottonClientScreen.class, currentScreen, int.class, "left");
     		y += ReflectionUtil.getFieldValue(CottonClientScreen.class, currentScreen, int.class, "top");
     	}
-    	return new Rectangle(FocusContainer.getMCGuiScaleFactor(), x, y, width, height);
+    	return new Rectangle(getGuiScale(), x, y, width, height);
     }
 }

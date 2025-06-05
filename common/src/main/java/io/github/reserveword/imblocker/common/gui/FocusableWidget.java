@@ -21,8 +21,9 @@ public interface FocusableWidget {
 	}
 	
 	default void updateIMState() {
-		IMManager.setState(getPreferredState());
-		if(getPreferredState()) {
+		boolean shouldEnableIME = getPreferredState();
+		IMManager.setState(shouldEnableIME);
+		if(shouldEnableIME) {
 			IMManager.setEnglishState(getPreferredEnglishState());
 			IMManager.updateCompositionWindowPos();
 		}
@@ -34,11 +35,7 @@ public interface FocusableWidget {
 		}
 	}
 	
-	boolean isWidgetEditable();
-	
-	default boolean getPreferredState() {
-		return isWidgetEditable();
-	}
+	boolean getPreferredState();
 	
 	default boolean getPreferredEnglishState() {
 		return false;
@@ -53,7 +50,7 @@ public interface FocusableWidget {
 		return Point.TOP_LEFT;
 	}
 	
-	default double getRenderScale() {
-		return 1.0d;
+	default double getGuiScale() {
+		return getFocusContainer().getGuiScaleFactor();
 	}
 }

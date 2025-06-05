@@ -8,8 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.CursorInfo;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import net.caffeinemc.mods.sodium.client.util.Dim2i;
@@ -27,11 +26,6 @@ public abstract class SodiumSearchFieldMixin implements MinecraftTextFieldWidget
 	@Shadow private int firstCharacterIndex;
 	@Shadow private int selectionStart;
 	
-	@Override
-	public boolean isWidgetEditable() {
-		return editable; // Always true.
-	}
-	
 	@Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
 		onMinecraftWidgetFocusChanged(isFocused);
@@ -43,13 +37,18 @@ public abstract class SodiumSearchFieldMixin implements MinecraftTextFieldWidget
 	}
 	
 	@Override
-	public Rectangle getBoundsAbs() {
-		return new Rectangle(FocusContainer.getMCGuiScaleFactor(), dim.x(), dim.y(), dim.width(), dim.height());
+	public boolean getPreferredState() {
+		return editable;
 	}
 	
 	@Override
-	public CursorInfo getCursorInfo() {
-		return new CursorInfo(true, dim.height(), 0, 0, firstCharacterIndex, selectionStart, text);
+	public Rectangle getBoundsAbs() {
+		return new Rectangle(getGuiScale(), dim.x(), dim.y(), dim.width(), dim.height());
+	}
+	
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return new SinglelineCursorInfo(true, dim.height(), firstCharacterIndex, selectionStart, text);
 	}
 	
 	@Override

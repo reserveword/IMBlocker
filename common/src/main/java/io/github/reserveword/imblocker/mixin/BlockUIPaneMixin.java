@@ -60,7 +60,7 @@ public abstract class BlockUIPaneMixin implements MinecraftFocusableWidget {
 			parent = getParentWidget(parent);
 		}
 		
-		double renderScale = getBOScreenFieldValue("renderScale");
+		double renderScale = getGuiScale();
 		xAbs = (int) (xAbs * renderScale + getBOScreenFieldValue("x"));
 		yAbs = (int) (yAbs * renderScale + getBOScreenFieldValue("y"));
 		
@@ -68,7 +68,7 @@ public abstract class BlockUIPaneMixin implements MinecraftFocusableWidget {
 	}
 	
 	@Override
-	public double getRenderScale() {
+	public double getGuiScale() {
 		return getBOScreenFieldValue("renderScale");
 	}
 	

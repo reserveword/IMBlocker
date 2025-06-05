@@ -15,8 +15,7 @@ import com.replaymod.lib.de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
-import io.github.reserveword.imblocker.common.gui.CursorInfo;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
@@ -32,11 +31,6 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
 	@Shadow private String text;
 	@Shadow private int cursorPos;
 	@Shadow private int currentOffset;
-    
-    @Override
-    public boolean isWidgetEditable() {
-    	return true;
-    }
     
     @Inject(method = "onFocusChanged", at = @At("TAIL"))
     public void focusChanged(boolean isFocused, CallbackInfo ci) {
@@ -70,11 +64,11 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
     
     @Override
     public Rectangle getBoundsAbs() {
-    	return bounds != null ? bounds.derive(FocusContainer.getMCGuiScaleFactor()) : MinecraftTextFieldWidget.super.getBoundsAbs();
+    	return bounds != null ? bounds.derive(getGuiScale()) : MinecraftTextFieldWidget.super.getBoundsAbs();
     }
     
     @Override
-    public CursorInfo getCursorInfo() {
-    	return bounds != null ? new CursorInfo(true, bounds.height(), 0, 0, currentOffset, cursorPos, text) : null;
+    public SinglelineCursorInfo getCursorInfo() {
+    	return bounds != null ? new SinglelineCursorInfo(true, bounds.height(), currentOffset, cursorPos, text) : null;
     }
 }

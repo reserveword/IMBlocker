@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.CursorInfo;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 
@@ -26,16 +26,6 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 	private boolean preferredEditState = true;
 	
 	private boolean preferredEnglishState = false;
-    
-    @Override
-    public boolean isWidgetEditable() {
-    	return editable;
-    }
-    
-    @Override
-    public boolean getPreferredState() {
-    	return isWidgetEditable() && preferredEditState;
-    }
     
     @Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
     public void focusChanged(boolean isFocused, CallbackInfo ci) {
@@ -78,12 +68,17 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
     }
     
     @Override
+    public boolean getPreferredState() {
+    	return editable && preferredEditState;
+    }
+    
+    @Override
     public boolean getPreferredEnglishState() {
     	return preferredEnglishState;
     }
     
     @Override
-    public CursorInfo getCursorInfo() {
-    	return new CursorInfo(drawsBackground, height, 0, 0, firstCharacterIndex, selectionStart, text);
+    public SinglelineCursorInfo getCursorInfo() {
+    	return new SinglelineCursorInfo(drawsBackground, height, firstCharacterIndex, selectionStart, text);
     }
 }

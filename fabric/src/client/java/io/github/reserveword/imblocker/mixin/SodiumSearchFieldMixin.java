@@ -9,8 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
-import io.github.reserveword.imblocker.common.gui.CursorInfo;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 
@@ -26,11 +25,6 @@ public abstract class SodiumSearchFieldMixin implements MinecraftTextFieldWidget
 	@Shadow private int firstCharacterIndex;
 	@Shadow private int selectionStart;
 	
-	@Override
-	public boolean isWidgetEditable() {
-		return editable; // Always true.
-	}
-	
 	@Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
 		onMinecraftWidgetFocusChanged(isFocused);
@@ -42,20 +36,25 @@ public abstract class SodiumSearchFieldMixin implements MinecraftTextFieldWidget
 	}
 	
 	@Override
+	public boolean getPreferredState() {
+		return editable;
+	}
+	
+	@Override
 	public Rectangle getBoundsAbs() {
 		Object dim = ReflectionUtil.getFieldValue(getClass(), this, Object.class, "dim");
 		int x = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "x");
 		int y = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "y");
 		int width = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "width");
 		int height = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "height");
-		return new Rectangle(FocusContainer.getMCGuiScaleFactor(), x, y, width, height);
+		return new Rectangle(getGuiScale(), x, y, width, height);
 	}
 	
 	@Override
-	public CursorInfo getCursorInfo() {
+	public SinglelineCursorInfo getCursorInfo() {
 		Object dim = ReflectionUtil.getFieldValue(getClass(), this, Object.class, "dim");
 		int height = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "height");
-		return new CursorInfo(true, height, 0, 0, firstCharacterIndex, selectionStart, text);
+		return new SinglelineCursorInfo(true, height, firstCharacterIndex, selectionStart, text);
 	}
 	
 	@Override

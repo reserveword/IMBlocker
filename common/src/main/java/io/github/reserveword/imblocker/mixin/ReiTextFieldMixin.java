@@ -9,8 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.CursorInfo;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget;
@@ -29,11 +28,6 @@ public abstract class ReiTextFieldMixin implements MinecraftTextFieldWidget {
     @Shadow protected int firstCharacterIndex;
     @Shadow protected int cursorPos;
     @Shadow private String text;
-    
-    @Override
-    public boolean isWidgetEditable() {
-    	return editable;
-    }
     
     @Inject(method = {"setFocused", "method_25365", "m_93692_"}, at = @At("TAIL"))
     public void focusChanged(boolean isFocused, CallbackInfo ci) {
@@ -61,13 +55,17 @@ public abstract class ReiTextFieldMixin implements MinecraftTextFieldWidget {
     }
     
     @Override
-    public Rectangle getBoundsAbs() {
-    	return new Rectangle(FocusContainer.getMCGuiScaleFactor(), 
-    			bounds.x, bounds.y, bounds.width, bounds.height);
+    public boolean getPreferredState() {
+    	return editable;
     }
     
     @Override
-    public CursorInfo getCursorInfo() {
-    	return new CursorInfo(hasBorder, bounds.height, 0, 0, firstCharacterIndex, cursorPos, text);
+    public Rectangle getBoundsAbs() {
+    	return new Rectangle(getGuiScale(), bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+    
+    @Override
+    public SinglelineCursorInfo getCursorInfo() {
+    	return new SinglelineCursorInfo(hasBorder, bounds.height, firstCharacterIndex, cursorPos, text);
     }
 }

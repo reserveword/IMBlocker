@@ -31,7 +31,7 @@ public abstract class MeteorWidgetMixin implements MinecraftFocusableWidget {
 	}
 	
 	@Override
-	public double getRenderScale() {
+	public double getGuiScale() {
 		return 1.0;
 	}
 }

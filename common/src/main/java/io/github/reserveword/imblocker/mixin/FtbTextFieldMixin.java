@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import dev.ftb.mods.ftblibrary.ui.TextBox;
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.CursorInfo;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 
 @Mixin(value = TextBox.class, remap = false)
@@ -17,11 +17,6 @@ public abstract class FtbTextFieldMixin extends FtbWidgetMixin implements Minecr
 	@Shadow private String text;
 	@Shadow private int displayPos;
 	@Shadow private int cursorPos;
-    
-    @Override
-    public boolean isWidgetEditable() {
-    	return true;
-    }
     
     @Inject(method = "setFocused", at = @At("TAIL"))
     public void focusChanged(boolean isFocused, CallbackInfo ci) {
@@ -39,7 +34,7 @@ public abstract class FtbTextFieldMixin extends FtbWidgetMixin implements Minecr
     }
     
     @Override
-    public CursorInfo getCursorInfo() {
-    	return new CursorInfo(true, height, 0, 0, displayPos, cursorPos, text);
+    public SinglelineCursorInfo getCursorInfo() {
+    	return new SinglelineCursorInfo(true, height, displayPos, cursorPos, text);
     }
 }

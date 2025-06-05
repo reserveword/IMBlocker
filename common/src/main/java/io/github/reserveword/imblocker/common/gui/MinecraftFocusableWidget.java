@@ -14,19 +14,20 @@ public interface MinecraftFocusableWidget extends FocusableWidget {
 		}
 	}
 	
-	 default void onMinecraftWidgetFocusGained() {
-		 getFocusContainer().requestFocus(this);
-	 }
+	default void onMinecraftWidgetFocusGained() {
+		getFocusContainer().requestFocus(this);
+	}
 	 
-	 default void onMinecraftWidgetFocusLost() {
-		 getFocusContainer().removeFocus(this);
-	 }
+	default void onMinecraftWidgetFocusLost() {
+		getFocusContainer().removeFocus(this);
+	}
+	
+	@Override
+	default boolean getPreferredState() {
+		return false;
+	}
+	
+	default void setPreferredEditState(boolean state) {}
 	 
-	 default void setPreferredEditState(boolean state) {}
-	 
-	 default void setPreferredEnglishState(boolean state) {}
-	 
-	 default double getRenderScale() {
-		 return FocusContainer.getMCGuiScaleFactor();
-	 }
+	default void setPreferredEnglishState(boolean state) {}
 }

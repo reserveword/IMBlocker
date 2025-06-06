@@ -43,8 +43,16 @@ public class IMBlocker {
         if(Common.hasMod("cloth_config")) {
             AutoConfig.register(IMBlockerAutoConfig.class, GsonConfigSerializer::new);
             IMBlockerConfig.INSTANCE = AutoConfig.getConfigHolder(IMBlockerAutoConfig.class).getConfig();
-            container.registerExtensionPoint(IConfigScreenFactory.class, 
-            		(client, parent) -> IMBlockerAutoConfig.getConfigScreen(parent, Screen.class));
+            container.registerExtensionPoint(IConfigScreenFactory.class, new IConfigScreenFactory() {
+				public Screen createScreen(Minecraft minecraft, Screen modListScreen) {
+					return IMBlockerAutoConfig.getConfigScreen(modListScreen, Screen.class);
+				}
+            	
+				@SuppressWarnings("unused")
+				public Screen createScreen(ModContainer container, Screen modListScreen) {
+					return IMBlockerAutoConfig.getConfigScreen(modListScreen, Screen.class);
+				}
+            });
         }else {
         	IMBlockerConfig.INSTANCE = new IMBlockerConfig();
             IMBlockerConfig.INSTANCE.reloadScreenWhitelist(IMBlockerConfig.defaultScreenWhitelist);

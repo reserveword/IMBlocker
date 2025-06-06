@@ -7,7 +7,7 @@
   "text.autoconfig.imblocker.option.recoveredScreens.@Tooltip": "列出显示过的GUI屏幕，方便编辑白名单",
   "text.autoconfig.imblocker.option.commandInputMode": "命令输入模式",
   "text.autoconfig.imblocker.option.commandInputMode.@Tooltip[0]": "检测到命令输入环境时设置英文状态的方式\n",
-  "text.autoconfig.imblocker.option.commandInputMode.@Tooltip[1]": "如果你的输入法不能在检测到命令环境时自动切换至英文状态，将此项设置为 DISABLE_IM 可能会有帮助，但请注意此模式下输入命令时无法输入中文",
+  "text.autoconfig.imblocker.option.commandInputMode.@Tooltip[1]": "如果你的输入法不能在检测到命令环境时自动切换至英文状态\n将此项设置为 DISABLE_IM 可能会有帮助\n但请注意此模式下输入命令时无法输入中文",
   "text.autoconfig.imblocker.option.enableCompatibilityMode": "启用兼容模式",
-  "text.autoconfig.imblocker.option.enableCompatibilityMode.@Tooltip": "[!]注意：仅当输入法遇到兼容问题时才考虑启用该选项。启用后仅保留最基本的输入法控制方法，命令检测、候选框定位等功能将被禁用"
+  "text.autoconfig.imblocker.option.enableCompatibilityMode.@Tooltip": "[!]注意：仅当输入法遇到兼容问题时才考虑启用该选项\n启用后仅保留最基本的输入法控制方法，命令检测、候选框定位等功能将被禁用"
 }

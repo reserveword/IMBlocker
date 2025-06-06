@@ -7,5 +7,5 @@
   "text.autoconfig.imblocker.option.recoveredScreens.@Tooltip": "列出顯示過的螢幕，方便編輯白名單",
   "text.autoconfig.imblocker.option.commandInputMode": "命令輸入模式",
   "text.autoconfig.imblocker.option.commandInputMode.@Tooltip[0]": "偵測到命令環境時切換為英文狀態的方式\n",
-  "text.autoconfig.imblocker.option.commandInputMode.@Tooltip[1]": "如果你的輸入法在命令輸入時無法自動切換到英文，用 DISABLE_IM 模式可能會比較有效，但請注意此模式下無法輸入中文"
+  "text.autoconfig.imblocker.option.commandInputMode.@Tooltip[1]": "如果你的輸入法在命令輸入時無法自動切換到英文\n用 DISABLE_IM 模式可能會比較有效\n但請注意此模式下無法輸入中文"
 }

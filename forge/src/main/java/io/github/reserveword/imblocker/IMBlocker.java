@@ -1,7 +1,6 @@
 package io.github.reserveword.imblocker;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.mojang.blaze3d.platform.Window;
@@ -75,9 +74,9 @@ public class IMBlocker {
 			}
             Class _configFactoryCls = configFactoryCls;
             Supplier configFactorySupplier = () -> ReflectionUtil.newInstance(_configFactoryCls, 
-					new Class[] {BiFunction.class}, new Function<Screen, Screen>() {
+					new Class[] {BiFunction.class}, new BiFunction<Minecraft, Screen, Screen>() {
 						@Override
-						public Screen apply(Screen parent) {
+						public Screen apply(Minecraft client, Screen parent) {
 							return IMBlockerAutoConfig.getConfigScreen(parent, Screen.class);
 						}
 					});

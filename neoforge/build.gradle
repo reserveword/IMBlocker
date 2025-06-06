@@ -42,6 +42,7 @@ project.jar {
     from sourceSets.main.output
     from project(":common").sourceSets.main.output
     from (project(":forge").sourceSets.main.output) {
+        include '**/ForgeCommon.class'
         include '**/mixin/*.class'
     }
 }

@@ -1,5 +1,5 @@
 package io.github.reserveword.imblocker.common;
 
-public enum ChatCommandInputType {
+public enum CommandInputMode {
 	IM_ENG_STATE, DISABLE_IM
 }

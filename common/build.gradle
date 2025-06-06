@@ -16,6 +16,8 @@ dependencies {
 	compileOnly("org.spongepowered:mixin:0.8.5")
 	compileOnly("org.ow2.asm:asm-tree:9.6")
 	
+	compileOnlyApi "me.shedaniel.cloth:cloth-config-forge:$clothconfig_version"
+	
 	compileOnly "me.shedaniel.cloth:basic-math:0.6.1"
 	compileOnly "maven.modrinth:rei:${rei_version}"
 	compileOnly "maven.modrinth:supermartijn642s-core-lib:1.1.18-forge-mc1.16"

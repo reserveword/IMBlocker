@@ -1,37 +1,35 @@
 package io.github.reserveword.imblocker;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import com.mojang.blaze3d.platform.Window;
 
 import io.github.reserveword.imblocker.common.Common;
-import io.github.reserveword.imblocker.common.Config;
+import io.github.reserveword.imblocker.common.IMBlockerAutoConfig;
+import io.github.reserveword.imblocker.common.IMBlockerConfig;
+import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
-import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
-import net.minecraft.DetectedVersion;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.GsonHelper;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLLoader;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Common.MODID)
 public class IMBlocker {
 
-	private static final ModLoaderAccessor modLoaderAccessor;
-
 	public IMBlocker() {
 		this(FMLJavaModLoadingContext.get());
 	}
 	
-    public IMBlocker(FMLJavaModLoadingContext context) {
+    @SuppressWarnings("unchecked")
+	public IMBlocker(FMLJavaModLoadingContext context) {
 		MinecraftClientAccessor.INSTANCE = new MinecraftClientAccessor() {
 			@Override
 			public void execute(Runnable runnable) {
@@ -51,52 +49,42 @@ public class IMBlocker {
 			}
 		};
 
-        // Register ourselves for server and other game events we are interested in
-        context.getModEventBus().addListener(this::onConfigLoadReload);
-        try {
-            context.registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
-		} catch (NoSuchMethodError e) {
-			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ForgeConfig.clientSpec);
+		IMBlockerConfig.defaultScreenWhitelist.addAll(ForgeCommon.defaultScreenWhitelist);
+		if(Common.hasMod("cloth_config")) {
+            AutoConfig.register(IMBlockerAutoConfig.class, GsonConfigSerializer::new);
+            IMBlockerConfig.INSTANCE = AutoConfig.getConfigHolder(IMBlockerAutoConfig.class).getConfig();
+            Class configFactoryCls = null;
+            try {
+            	//1.19+
+            	configFactoryCls = Class.forName(
+            			"net.minecraftforge.client.ConfigScreenHandler$ConfigScreenFactory");
+			} catch (ClassNotFoundException e) {
+				try {
+					//1.18.x
+					configFactoryCls = Class.forName(
+							"net.minecraftforge.client.ConfigGuiHandler$ConfigGuiFactory");
+				} catch (ClassNotFoundException e1) {
+					try {
+						//1.17.x
+						configFactoryCls = Class.forName(
+								"net.minecraftforge.fmlclient.ConfigGuiHandler$ConfigGuiFactory");
+					} catch (ClassNotFoundException e2) {
+						e1.printStackTrace();
+					}
+				}
+			}
+            Class _configFactoryCls = configFactoryCls;
+            Supplier configFactorySupplier = () -> ReflectionUtil.newInstance(_configFactoryCls, 
+					new Class[] {BiFunction.class}, new Function<Screen, Screen>() {
+						@Override
+						public Screen apply(Screen parent) {
+							return IMBlockerAutoConfig.getConfigScreen(parent, Screen.class);
+						}
+					});
+			ModLoadingContext.get().registerExtensionPoint(configFactoryCls, configFactorySupplier);
+		}else {
+            IMBlockerConfig.INSTANCE = new IMBlockerConfig();
+            IMBlockerConfig.INSTANCE.reloadScreenWhitelist(IMBlockerConfig.defaultScreenWhitelist);
 		}
-    }
-
-    @SubscribeEvent
-    public void onConfigLoadReload(ModConfigEvent e) {
-        Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading)?"re":"");
-        Config.INSTANCE.reloadScreenWhitelist(ForgeConfig.CLIENT.screenWhitelist.get());
-    }
-    
-    public static ModLoaderAccessor getModLoaderAccessor() {
-    	return modLoaderAccessor;
-    }
-    
-    static {
-    	int protocolVersion;
-    	try(InputStream is = DetectedVersion.class.getResourceAsStream("/version.json");
-    			InputStreamReader isr = new InputStreamReader(is)) {
-    		protocolVersion = GsonHelper.getAsInt(GsonHelper.parse(isr), "protocol_version");
-    	} catch (Exception e) {
-    		Common.LOGGER.warn("Failed to get protocol version!");
-    		e.printStackTrace();
-    		protocolVersion = Integer.MAX_VALUE;
-		}
-    	int currentProtocolVersion = protocolVersion;
-    	
-    	modLoaderAccessor = new ModLoaderAccessor() {
-			@Override
-			public boolean isGameVersionReached(int protocolVersion) {
-				return currentProtocolVersion >= protocolVersion;
-			}
-			
-			@Override
-			public boolean hasMod(String modid) {
-				return FMLLoader.getLoadingModList().getModFileById(modid) != null;
-			}
-			
-			@Override
-			public Mapping getMapping() {
-				return Mapping.OFFICIAL;
-			}
-		};
     }
 }

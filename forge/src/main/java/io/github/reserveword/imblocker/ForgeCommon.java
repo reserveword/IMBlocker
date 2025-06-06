@@ -5,12 +5,12 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import io.github.reserveword.imblocker.common.Common;
-import net.minecraft.client.gui.screen.ingame.AbstractSignEditScreen;
-import net.minecraft.client.gui.screen.ingame.BookEditScreen;
-import net.minecraft.client.gui.screen.ingame.SignEditScreen;
+import net.minecraft.client.gui.screens.inventory.AbstractSignEditScreen;
+import net.minecraft.client.gui.screens.inventory.BookEditScreen;
+import net.minecraft.client.gui.screens.inventory.SignEditScreen;
 
-public class FabricCommon {
-    public static final List<String> defaultScreenWhitelist;
+public class ForgeCommon {
+	public static final List<String> defaultScreenWhitelist;
     
     static {
     	defaultScreenWhitelist = Lists.newArrayList(

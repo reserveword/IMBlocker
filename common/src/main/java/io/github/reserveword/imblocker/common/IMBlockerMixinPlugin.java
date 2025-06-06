@@ -8,12 +8,10 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
-import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor.Mapping;
 
 public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 	
-	private static final ModLoaderAccessor modLoaderAccessor;
 	private static final List<String> validMixins = new ArrayList<>();
 
 	@Override
@@ -51,43 +49,24 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		
 	}
 	
-	private static boolean hasMod(String modid) {
-		return modLoaderAccessor.hasMod(modid);
-	}
-	
-	private static boolean isGameVersionReached(int protocolVersion) {
-		return modLoaderAccessor.isGameVersionReached(protocolVersion);
-	}
-	
-	private static boolean isOfficialMapping() {
-		return modLoaderAccessor.getMapping() == Mapping.OFFICIAL;
-	}
-	
 	static {
-		Class<?> modEntryClass = null;
-		try {
-			modEntryClass = Class.forName("io.github.reserveword.imblocker.IMBlocker");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		modLoaderAccessor = ReflectionUtil.invokeMethod(modEntryClass, null, 
-				ModLoaderAccessor.class, "getModLoaderAccessor", new Class[0]);
+		boolean isOfficialMapping = Common.getMapping() == Mapping.OFFICIAL;
 		
 		validMixins.add("AbstractCommandBlockScreenMixin");
 		validMixins.add("ChatScreenMixin");
-		validMixins.add(isOfficialMapping() ? "AbstractWidgetMixin" : "ClickableWidgetMixin");
+		validMixins.add(isOfficialMapping ? "AbstractWidgetMixin" : "ClickableWidgetMixin");
 		validMixins.add("MinecraftClientMixin");
 		validMixins.add("WindowMixin");
 		
-		if(isGameVersionReached(762/*1.19.4*/)) {
-			validMixins.add(isOfficialMapping() ? "AbstractContainerEventHandlerMixin" : "AbstractParentElementMixin");
+		if(Common.isGameVersionReached(762/*1.19.4*/)) {
+			validMixins.add(isOfficialMapping ? "AbstractContainerEventHandlerMixin" : "AbstractParentElementMixin");
 			validMixins.add("TextFieldMixin");
 		}else {
 			validMixins.add("TextFieldLegacyMixin");
 		}
 		
-		if(isGameVersionReached(760/*1.19.1*/)) {
-			if(isOfficialMapping()) {
+		if(Common.isGameVersionReached(760/*1.19.1*/)) {
+			if(isOfficialMapping) {
 				validMixins.add("AbstractScrollWidgetMixin");
 				validMixins.add("StringViewAccessor");
 				validMixins.add("MultilineTextFieldMixin");
@@ -100,64 +79,64 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			}
 		}
 		
-		if(hasMod("axiom")) {
+		if(Common.hasMod("axiom")) {
 			validMixins.add("AxiomEditorUIMixin");
 		}
 		
-		if(hasMod("ftblibrary")) {
+		if(Common.hasMod("ftblibrary")) {
 			validMixins.add("FtbWidgetMixin");
 			
-			if(isGameVersionReached(763/*1.20*/)) {
+			if(Common.isGameVersionReached(763/*1.20*/)) {
 				validMixins.add("FtbTextFieldMixin");
 			}else {
 				validMixins.add("FtbTextFieldLegacyMixin");
 			}
 			
-			if(isGameVersionReached(760/*1.19.1*/)) {
+			if(Common.isGameVersionReached(760/*1.19.1*/)) {
 				validMixins.add("FtbPanelMixin");
 				validMixins.add("FtbMultilineTextFieldAccessorImpl");
 				validMixins.add("FtbMultilineTextBoxMixin");
 			}
 		}
 		
-		if(hasMod("libgui")) {
+		if(Common.hasMod("libgui")) {
 			validMixins.add("LibGuiWidgetMixin");
 			validMixins.add("LibGuiTextFieldMixin");
 		}
 		
-		if(hasMod("emi")) {
-			if(isGameVersionReached(762/*1.19.4*/)) {
+		if(Common.hasMod("emi")) {
+			if(Common.isGameVersionReached(762/*1.19.4*/)) {
 				validMixins.add("EmiSearchWidgetMixin");
 			}else {
 				validMixins.add("EmiSearchWidgetLegacyMixin");
 			}
 		}
 		
-		if(hasMod("roughlyenoughitems")) {
+		if(Common.hasMod("roughlyenoughitems")) {
 			validMixins.add("ReiTextFieldMixin");
 		}
 		
-		if(hasMod("replaymod")) {
+		if(Common.hasMod("replaymod")) {
 			validMixins.add("ReplayModTextFieldMixin");
 		}
 		
-		if(hasMod("meteor-client")) {
+		if(Common.hasMod("meteor-client")) {
 			validMixins.add("MeteorWidgetMixin");
 			validMixins.add("MeteorTextFieldMixin");
 		}
 		
-		if(hasMod("reeses-sodium-options") || hasMod("reeses_sodium_options")) {
+		if(Common.hasMod("reeses-sodium-options") || Common.hasMod("reeses_sodium_options")) {
 			validMixins.add("RSOAbstractFrameMixin");
 			validMixins.add("SodiumSearchFieldMixin");
 		}
 		
-		if(hasMod("blockui")) {
+		if(Common.hasMod("blockui")) {
 			validMixins.add("BlockUIPaneMixin");
 			validMixins.add("BlockUIScrollingContainerMixin");
 			validMixins.add("BlockUITextFieldMixin");
 		}
 		
-		if(hasMod("supermartijn642corelib")) {
+		if(Common.hasMod("supermartijn642corelib")) {
 			validMixins.add("SM642WidgetMixin");
 			validMixins.add("SM642TextFieldMixin");
 		}

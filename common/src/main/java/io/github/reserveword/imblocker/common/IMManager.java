@@ -10,6 +10,8 @@ public final class IMManager {
 		void setState(boolean on);
 		
 		void setEnglishState(boolean isEN);
+		
+		default void updateCompositionWindowPos() {}
 	}
 	
 	private IMManager() {}
@@ -19,12 +21,14 @@ public final class IMManager {
 	}
 	
 	public static void setEnglishState(boolean isEN) {
-		INSTANCE.setEnglishState(isEN);
+		if(!IMBlockerConfig.INSTANCE.isCompatibilityModeEnabled()) {
+			INSTANCE.setEnglishState(isEN);
+		}
 	}
 	
 	public static void updateCompositionWindowPos() {
-		if(INSTANCE instanceof IMManagerWindows) {
-			((IMManagerWindows) INSTANCE).updateCompositionWindowPos();
+		if(!IMBlockerConfig.INSTANCE.isCompatibilityModeEnabled()) {
+			INSTANCE.updateCompositionWindowPos();
 		}
 	}
 	

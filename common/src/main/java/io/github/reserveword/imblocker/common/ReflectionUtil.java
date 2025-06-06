@@ -13,6 +13,7 @@ public class ReflectionUtil {
 			field.setAccessible(true);
 			return (R) field.get(instance);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -25,6 +26,7 @@ public class ReflectionUtil {
 			method.setAccessible(true);
 			return (R) method.invoke(instance, params);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -35,6 +37,7 @@ public class ReflectionUtil {
 			constructor.setAccessible(true);
 			return constructor.newInstance(params);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}

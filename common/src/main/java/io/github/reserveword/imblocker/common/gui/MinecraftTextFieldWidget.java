@@ -17,7 +17,7 @@ public interface MinecraftTextFieldWidget extends MinecraftFocusableWidget {
 		}
 		int caretX = (cursorInfo.hasBorder ? getPaddingX() : 0) + MinecraftClientAccessor.INSTANCE.getStringWidth(
 				StringUtil.getSubstring(cursorInfo.text, cursorInfo.cursorLineBeginIndex, cursorInfo.cursor));
-    	return new Point(getGuiScale(), caretX, (cursorInfo.widgetHeight - getFontHeight()) / 2);
+    	return new Point(getGuiScale(), caretX, cursorInfo.hasBorder ? (cursorInfo.widgetHeight - getFontHeight()) / 2 : 0);
 	}
 
 	SinglelineCursorInfo getCursorInfo();

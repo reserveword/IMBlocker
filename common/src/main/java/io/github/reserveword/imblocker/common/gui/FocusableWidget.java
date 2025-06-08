@@ -24,8 +24,9 @@ public interface FocusableWidget {
 		boolean shouldEnableIME = getPreferredState();
 		IMManager.setState(shouldEnableIME);
 		if(shouldEnableIME) {
-			IMManager.setEnglishState(getPreferredEnglishState());
 			IMManager.updateCompositionWindowPos();
+			IMManager.updateCompositionFontSize();
+			IMManager.setEnglishState(getPreferredEnglishState());
 		}
 	}
 	

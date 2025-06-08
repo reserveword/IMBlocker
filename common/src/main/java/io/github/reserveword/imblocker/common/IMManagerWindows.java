@@ -9,10 +9,11 @@ import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.FocusableWidget;
 import io.github.reserveword.imblocker.common.gui.MathHelper;
+import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
-import io.github.reserveword.imblocker.common.jnastructs.CANDIDATEFORM;
 import io.github.reserveword.imblocker.common.jnastructs.COMPOSITIONFORM;
+import io.github.reserveword.imblocker.common.jnastructs.LOGFONTW;
 
 final class IMManagerWindows implements IMManager.PlatformIMManager {
 
@@ -28,13 +29,13 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     
     private static native boolean ImmSetConversionStatus(WinNT.HANDLE himc, int fdwConversion, int fdwSentence);
     
-    private static native boolean ImmGetCandidateWindow(WinNT.HANDLE himc, int param2, CANDIDATEFORM lpCandidate);
-    
-    private static native boolean ImmSetCandidateWindow(WinNT.HANDLE himc, CANDIDATEFORM cf);
-    
     private static native boolean ImmGetCompositionWindow(WinNT.HANDLE himc, COMPOSITIONFORM cfr);
     
     private static native boolean ImmSetCompositionWindow(WinNT.HANDLE himc, COMPOSITIONFORM cfr);
+    
+    private static native boolean ImmGetCompositionFontW(WinNT.HANDLE himc, LOGFONTW lplf);
+    
+    private static native boolean ImmSetCompositionFontW(WinNT.HANDLE himc, LOGFONTW lplf);
     
     public static long lastIMStateOnTimestamp = System.currentTimeMillis();
     
@@ -96,26 +97,45 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     	return 60 - (System.currentTimeMillis() - lastIMStateOnTimestamp);
     }
     
+    @Override
     public void updateCompositionWindowPos() {
     	WinDef.HWND hwnd = getActiveWindow();
         WinNT.HANDLE himc = ImmGetContext(hwnd);
         if(himc != null) {
-        	updateCompositionWindowPos(himc);
+        	FocusableWidget focusedWidget = FocusManager.getFocusOwner();
+        	if(focusedWidget != null) {
+        		Point compositionWindowPos = calculateProperCompositionWindowPos(focusedWidget);
+            	COMPOSITIONFORM cfr = new COMPOSITIONFORM();
+            	ImmGetCompositionWindow(himc, cfr);
+            	cfr.dwStyle = 2; //CFS_POINT
+            	cfr.ptCurrentPos.x = compositionWindowPos.x();
+            	cfr.ptCurrentPos.y = compositionWindowPos.y();
+            	ImmSetCompositionWindow(himc, cfr);
+        	}
         }
         ImmReleaseContext(hwnd, himc);
     }
     
-    private void updateCompositionWindowPos(WinNT.HANDLE himc) {
-    	FocusableWidget focusedWidget = FocusManager.getFocusOwner();
-    	if(focusedWidget != null) {
-    		Point compositionWindowPos = calculateProperCompositionWindowPos(focusedWidget);
-        	COMPOSITIONFORM cfr = new COMPOSITIONFORM();
-        	ImmGetCompositionWindow(himc, cfr);
-        	cfr.dwStyle = 2; //CFS_POINT
-        	cfr.ptCurrentPos.x = compositionWindowPos.x();
-        	cfr.ptCurrentPos.y = compositionWindowPos.y();
-        	ImmSetCompositionWindow(himc, cfr);
-    	}
+    @Override
+    public void updateCompositionFontSize() {
+    	WinDef.HWND hwnd = getActiveWindow();
+        WinNT.HANDLE himc = ImmGetContext(hwnd);
+        if(himc != null) {
+        	FocusableWidget focusedWidget = FocusManager.getFocusOwner();
+        	if(focusedWidget != null) {
+        		int fontSize = focusedWidget instanceof MinecraftTextFieldWidget ?
+        				((MinecraftTextFieldWidget) focusedWidget).getFontHeight() : 8;
+        		fontSize *= focusedWidget.getGuiScale();
+        		LOGFONTW lplf = new LOGFONTW();
+        		ImmGetCompositionFontW(himc, lplf);
+        		lplf.lfHeight = -fontSize;
+        		lplf.lfWidth = 0;
+        		lplf.lfCharSet = 0; //ANSI_CHARSET
+        		lplf.lfFaceName = "SansSerif".toCharArray();
+        		ImmSetCompositionFontW(himc, lplf);
+        	}
+        }
+        ImmReleaseContext(hwnd, himc);
     }
     
     private WinDef.HWND getActiveWindow() {
@@ -132,6 +152,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     	Point caretPos = inputWidget.getCaretPos();
     	int caretX = MathHelper.clamp(caretPos.x(), 0, (int) (inputWidgetBounds.width() - 4 * scaleFactor));
     	int caretY = MathHelper.clamp(caretPos.y(), 0, (int) (inputWidgetBounds.height() - 4 * scaleFactor));
+    	caretY -= scaleFactor; //Tweak yPos to fit font style.
     	return new Point(inputWidgetBounds.x() + caretX, inputWidgetBounds.y() + caretY);
     }
     

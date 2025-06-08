@@ -12,6 +12,8 @@ public final class IMManager {
 		void setEnglishState(boolean isEN);
 		
 		default void updateCompositionWindowPos() {}
+		
+		default void updateCompositionFontSize() {}
 	}
 	
 	private IMManager() {}
@@ -29,6 +31,12 @@ public final class IMManager {
 	public static void updateCompositionWindowPos() {
 		if(!IMBlockerConfig.INSTANCE.isCompatibilityModeEnabled()) {
 			INSTANCE.updateCompositionWindowPos();
+		}
+	}
+	
+	public static void updateCompositionFontSize() {
+		if(!IMBlockerConfig.INSTANCE.isCompatibilityModeEnabled()) {
+			INSTANCE.updateCompositionFontSize();
 		}
 	}
 	

@@ -67,9 +67,7 @@ public class IMBlocker {
 						//1.17.x
 						configFactoryCls = Class.forName(
 								"net.minecraftforge.fmlclient.ConfigGuiHandler$ConfigGuiFactory");
-					} catch (ClassNotFoundException e2) {
-						e1.printStackTrace();
-					}
+					} catch (ClassNotFoundException e2) {}
 				}
 			}
             Class _configFactoryCls = configFactoryCls;

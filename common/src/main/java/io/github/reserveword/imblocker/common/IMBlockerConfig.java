@@ -52,11 +52,19 @@ public class IMBlockerConfig {
     	return false;
     }
     
-    public boolean isCompatibilityModeEnabled() {
+    public CommandInputMode getChatCommandInputType() {
+    	return CommandInputMode.IM_ENG_STATE;
+    }
+    
+    public boolean isConversionStatusApiDisabled() {
     	return false;
     }
     
-    public CommandInputMode getChatCommandInputType() {
-    	return CommandInputMode.IM_ENG_STATE;
+    public boolean isCursorPositionTrackingDisabled() {
+    	return false;
+    }
+    
+    public boolean isCompositionFontTweaksDisabled() {
+    	return false;
     }
 }

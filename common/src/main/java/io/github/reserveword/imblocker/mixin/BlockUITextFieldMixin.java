@@ -30,6 +30,7 @@ public abstract class BlockUITextFieldMixin extends BlockUIPaneMixin implements 
 	@Inject(method = "onUpdate", at = @At("TAIL"))
 	public void onUpdate(CallbackInfo ci) {
 		IMManager.updateCompositionWindowPos();
+		IMManager.updateCompositionFontSize();
 	}
 	
 	@Override

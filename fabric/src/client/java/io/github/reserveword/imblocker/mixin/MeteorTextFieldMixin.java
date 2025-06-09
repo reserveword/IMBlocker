@@ -8,11 +8,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
+import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 
 @Pseudo
 @Mixin(targets = "meteordevelopment.meteorclient.gui.widgets.input.WTextBox", remap = false)
-public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin {
+public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin implements MinecraftTextFieldWidget {
 	
 	@Shadow protected int cursor;
     @Shadow protected double textStart;
@@ -38,11 +39,17 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin {
 	@Override
 	public void onLayoutWidget(CallbackInfo ci) {
 		IMManager.updateCompositionWindowPos();
+		IMManager.updateCompositionFontSize();
 	}
 	
 	@Override
 	public Point getCaretPos() {
 		int caretX = (int) (getTextWidth(cursor) - textStart + pad());
 		return new Point(caretX, (int) (height / 3.5));
+	}
+	
+	@Override
+	public int getFontHeight() {
+		return (int) (height * 3/7);
 	}
 }

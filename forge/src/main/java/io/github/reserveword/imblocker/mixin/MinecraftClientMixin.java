@@ -31,6 +31,7 @@ public abstract class MinecraftClientMixin {
     public void onResolutionChanged(CallbackInfo ci) {
     	FocusContainer.MINECRAFT.setGuiScaleFactor(window.getGuiScale());
     	IMManager.updateCompositionWindowPos();
+    	IMManager.updateCompositionFontSize();
     }
     
     @Inject(method = "setScreen", at = @At("HEAD"))

@@ -9,11 +9,11 @@
   "text.autoconfig.imblocker.option.basicSettings.recoveredScreens.@Tooltip": "列出显示过的GUI屏幕，方便编辑白名单",
   "text.autoconfig.imblocker.option.basicSettings.commandInputMode": "命令输入模式",
   "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[0]": "\u00A7l检测到命令输入环境时设置英文状态的方式",
-  "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[1]": "如果你的输入法不能在检测到命令环境时自动切换至英文状态\n将此项设置为 DISABLE_IM 可能会有帮助\n但请注意此模式下输入命令时无法输入中文",
+  "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[1]": "如果你的输入法不能在检测到命令环境时自动切换至英文状态\n将此项设置为“DISABLE_IM”可能会有帮助\n但请注意此模式下输入命令时无法输入中文",
   
   "text.autoconfig.imblocker.option.compatibilitySettings": "兼容设置",
   "text.autoconfig.imblocker.option.compatibilitySettings.disableConversionStatusApi": "禁用转换状态API",
-  "text.autoconfig.imblocker.option.compatibilitySettings.disableConversionStatusApi.@Tooltip": "禁用切换中英文状态的API\n开启后IM_ENG_STATE命令输入模式将失效",
+  "text.autoconfig.imblocker.option.compatibilitySettings.disableConversionStatusApi.@Tooltip": "禁用切换中英文状态的API\n\u00A77开启后IM_ENG_STATE命令输入模式将失效",
   "text.autoconfig.imblocker.option.compatibilitySettings.disableCursorPositionTracking": "禁用文本光标位置跟踪",
   "text.autoconfig.imblocker.option.compatibilitySettings.disableCompositionFontTweaks": "禁用合成字符串字体格式调整"
 }

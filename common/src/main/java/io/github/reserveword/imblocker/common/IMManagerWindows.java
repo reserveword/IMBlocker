@@ -131,7 +131,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
         		lplf.lfHeight = -fontSize;
         		lplf.lfWidth = 0;
         		lplf.lfCharSet = 0; //ANSI_CHARSET
-        		lplf.lfFaceName = "SansSerif".toCharArray();
+        		lplf.lfFaceName = "Arial".toCharArray();
         		ImmSetCompositionFontW(himc, lplf);
         	}
         }

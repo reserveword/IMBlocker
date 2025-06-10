@@ -130,6 +130,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
         		ImmGetCompositionFontW(himc, lplf);
         		lplf.lfHeight = -fontSize;
         		lplf.lfWidth = 0;
+        		lplf.lfWeight = 400;
         		lplf.lfCharSet = 0; //ANSI_CHARSET
         		lplf.lfFaceName = "Arial".toCharArray();
         		ImmSetCompositionFontW(himc, lplf);
@@ -152,7 +153,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
     	Point caretPos = inputWidget.getCaretPos();
     	int caretX = MathHelper.clamp(caretPos.x(), 0, (int) (inputWidgetBounds.width() - 4 * scaleFactor));
     	int caretY = MathHelper.clamp(caretPos.y(), 0, (int) (inputWidgetBounds.height() - 4 * scaleFactor));
-    	caretY -= scaleFactor; //Tweak yPos to fit font style.
+    	caretY -= scaleFactor / 2; //Tweak yPos to fit font style.
     	return new Point(inputWidgetBounds.x() + caretX, inputWidgetBounds.y() + caretY);
     }
     

@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMManager;
+import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.GenericWhitelistScreen;
@@ -28,7 +29,12 @@ public abstract class MinecraftClientMixin {
     
     @Inject(method = "onResolutionChanged", at = @At("TAIL"))
     public void onResolutionChanged(CallbackInfo ci) {
-    	FocusContainer.MINECRAFT.setGuiScaleFactor(window.getScaleFactor());
+    	try {
+			FocusContainer.MINECRAFT.setGuiScaleFactor(window.getScaleFactor());
+		} catch (NoSuchMethodError e) {
+	    	FocusContainer.MINECRAFT.setGuiScaleFactor(ReflectionUtil
+	    			.getFieldValue(window.getClass(), window, Number.class, "field_5179").doubleValue());
+		}
     	IMManager.updateCompositionWindowPos();
     	IMManager.updateCompositionFontSize();
     }

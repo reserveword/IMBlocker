@@ -16,37 +16,43 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	BasicSettings basicSettings = new BasicSettings();
 	
 	@ConfigEntry.Gui.CollapsibleObject
-	CompatibilitySettings compatibilitySettings = new CompatibilitySettings();
+	WindowsCompatibilitySettings windowsCompatibilitySettings = new WindowsCompatibilitySettings();
     
     @Override
     public void validatePostLoad() {
     	reloadScreenWhitelist(basicSettings.screenWhitelist);
     }
     
+    @Override
     public void recoverScreen(String screenClsName) {
     	if(!basicSettings.recoveredScreens.contains(screenClsName)) {
     		basicSettings.recoveredScreens.add(screenClsName);
     	}
     }
     
+    @Override
     public boolean isScreenRecoveringEnabled() {
     	return basicSettings.enableScreenRecovering;
     }
     
+    @Override
     public CommandInputMode getChatCommandInputType() {
     	return basicSettings.commandInputMode;
     }
     
-    public boolean isConversionStatusApiDisabled() {
-    	return compatibilitySettings.disableConversionStatusApi;
+    @Override
+    public boolean isConversionStatusApiEnabled() {
+    	return windowsCompatibilitySettings.enableConversionStatusApi;
     }
     
-    public boolean isCursorPositionTrackingDisabled() {
-    	return compatibilitySettings.disableCursorPositionTracking;
+    @Override
+    public boolean isCursorPositionTrackingEnabled() {
+    	return windowsCompatibilitySettings.enableCursorPositionTracking;
     }
     
-    public boolean isCompositionFontTweaksDisabled() {
-    	return compatibilitySettings.disableCompositionFontTweaks;
+    @Override
+    public boolean isCompositionFontTweaksEnabled() {
+    	return windowsCompatibilitySettings.enableCompositionFontTweaks;
     }
     
     @SuppressWarnings("unchecked")
@@ -69,12 +75,12 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
         CommandInputMode commandInputMode = CommandInputMode.IM_ENG_STATE;
     }
     
-    static class CompatibilitySettings {
+    static class WindowsCompatibilitySettings {
     	@ConfigEntry.Gui.Tooltip
-    	boolean disableConversionStatusApi = false;
+    	boolean enableConversionStatusApi = true;
     	
-    	boolean disableCursorPositionTracking = false;
+    	boolean enableCursorPositionTracking = true;
     	
-    	boolean disableCompositionFontTweaks = false;
+    	boolean enableCompositionFontTweaks = true;
     }
 }

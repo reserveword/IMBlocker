@@ -56,15 +56,15 @@ public class IMBlockerConfig {
     	return CommandInputMode.IM_ENG_STATE;
     }
     
-    public boolean isConversionStatusApiDisabled() {
-    	return false;
+    public boolean isConversionStatusApiEnabled() {
+    	return true;
     }
     
-    public boolean isCursorPositionTrackingDisabled() {
-    	return false;
+    public boolean isCursorPositionTrackingEnabled() {
+    	return true;
     }
     
-    public boolean isCompositionFontTweaksDisabled() {
-    	return false;
+    public boolean isCompositionFontTweaksEnabled() {
+    	return true;
     }
 }

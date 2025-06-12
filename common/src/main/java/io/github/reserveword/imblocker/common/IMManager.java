@@ -23,19 +23,19 @@ public final class IMManager {
 	}
 	
 	public static void setEnglishState(boolean isEN) {
-		if(!IMBlockerConfig.INSTANCE.isConversionStatusApiDisabled()) {
+		if(IMBlockerConfig.INSTANCE.isConversionStatusApiEnabled()) {
 			INSTANCE.setEnglishState(isEN);
 		}
 	}
 	
 	public static void updateCompositionWindowPos() {
-		if(!IMBlockerConfig.INSTANCE.isCursorPositionTrackingDisabled()) {
+		if(IMBlockerConfig.INSTANCE.isCursorPositionTrackingEnabled()) {
 			INSTANCE.updateCompositionWindowPos();
 		}
 	}
 	
 	public static void updateCompositionFontSize() {
-		if(!IMBlockerConfig.INSTANCE.isCompositionFontTweaksDisabled()) {
+		if(IMBlockerConfig.INSTANCE.isCompositionFontTweaksEnabled()) {
 			INSTANCE.updateCompositionFontSize();
 		}
 	}

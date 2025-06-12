@@ -11,9 +11,9 @@
   "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[0]": "\u00A7l偵測到命令環境時切換為英文狀態的方式",
   "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[1]": "如果你的輸入法在命令輸入時無法自動切換到英文\n用「DISABLE_IM」模式可能會比較有效\n但請注意此模式下無法輸入中文",
   
-  "text.autoconfig.imblocker.option.compatibilitySettings": "相容性設定",
-  "text.autoconfig.imblocker.option.compatibilitySettings.disableConversionStatusApi": "停用轉換狀態API",
-  "text.autoconfig.imblocker.option.compatibilitySettings.disableConversionStatusApi.@Tooltip": "停用切換中英文狀態的API\n\u00A77啟用後IM_ENG_STATE命令輸入模式將失效",
-  "text.autoconfig.imblocker.option.compatibilitySettings.disableCursorPositionTracking": "停用插入符號位置追蹤",
-  "text.autoconfig.imblocker.option.compatibilitySettings.disableCompositionFontTweaks": "停用合成字串字體格式調整"
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings": "Windows 相容性設定",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi": "使用轉換狀態API",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "用於切換中英文狀態的API\n\u00A77停用後IM_ENG_STATE命令輸入模式將失效",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCursorPositionTracking": "插入符號位置追蹤",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCompositionFontTweaks": "合成字串字體格式調整"
 }

@@ -38,24 +38,24 @@ public class IMBlocker {
 				return Minecraft.getInstance().font.width(text);
 			}
 		};
-        
+
 		IMBlockerConfig.defaultScreenWhitelist.addAll(ForgeCommon.defaultScreenWhitelist);
-        if(Common.hasMod("cloth_config")) {
-            AutoConfig.register(IMBlockerAutoConfig.class, GsonConfigSerializer::new);
-            IMBlockerConfig.INSTANCE = AutoConfig.getConfigHolder(IMBlockerAutoConfig.class).getConfig();
-            container.registerExtensionPoint(IConfigScreenFactory.class, new IConfigScreenFactory() {
+		if(Common.hasMod("cloth_config")) {
+			AutoConfig.register(IMBlockerAutoConfig.class, GsonConfigSerializer::new);
+			IMBlockerConfig.INSTANCE = AutoConfig.getConfigHolder(IMBlockerAutoConfig.class).getConfig();
+			container.registerExtensionPoint(IConfigScreenFactory.class, new IConfigScreenFactory() {
 				public Screen createScreen(Minecraft minecraft, Screen modListScreen) {
 					return IMBlockerAutoConfig.getConfigScreen(modListScreen, Screen.class);
 				}
-            	
+
 				@SuppressWarnings("unused")
 				public Screen createScreen(ModContainer container, Screen modListScreen) {
 					return IMBlockerAutoConfig.getConfigScreen(modListScreen, Screen.class);
 				}
-            });
-        }else {
-        	IMBlockerConfig.INSTANCE = new IMBlockerConfig();
-            IMBlockerConfig.INSTANCE.reloadScreenWhitelist(IMBlockerConfig.defaultScreenWhitelist);
-        }
-    }
+			});
+		}else {
+			IMBlockerConfig.INSTANCE = new IMBlockerConfig();
+			IMBlockerConfig.INSTANCE.reloadScreenWhitelist(IMBlockerConfig.defaultScreenWhitelist);
+		}
+	}
 }

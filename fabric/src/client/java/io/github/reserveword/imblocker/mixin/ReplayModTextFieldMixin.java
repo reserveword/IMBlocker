@@ -31,44 +31,44 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
 	@Shadow private String text;
 	@Shadow private int cursorPos;
 	@Shadow private int currentOffset;
-    
-    @Inject(method = "onFocusChanged", at = @At("TAIL"))
-    public void focusChanged(boolean isFocused, CallbackInfo ci) {
-    	onMinecraftWidgetFocusChanged(isFocused);
-    }
-    
-    @Inject(method = "draw", at = @At("TAIL"))
-    public void updateCaretPos(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo, CallbackInfo ci) {
-    	Point position = getPosition(renderer);
-    	Rectangle currentBounds = new Rectangle(position.x(), position.y(), size.getWidth(), size.getHeight());
-    	if(!currentBounds.equals(bounds) || (lastCursorPos != cursorPos) || (lastOffset != currentOffset)) {
-    		bounds = currentBounds;
-    		lastCursorPos = cursorPos;
-    		lastOffset = currentOffset;
-    		IMManager.updateCompositionWindowPos();
-    	}
-    }
-    
-    private Point getPosition(GuiRenderer renderer) {
-    	int x = 0, y = 0;
-    	while(renderer instanceof OffsetGuiRenderer offsetRenderer) {
-    		ReadablePoint pos = ReflectionUtil.getFieldValue(
-    				OffsetGuiRenderer.class, offsetRenderer, ReadablePoint.class, "position");
-    		x += pos.getX();
-    		y += pos.getY();
-    		renderer = ReflectionUtil.getFieldValue(
-    				OffsetGuiRenderer.class, offsetRenderer, GuiRenderer.class, "renderer");
-    	}
-    	return new Point(x, y);
-    }
-    
-    @Override
-    public Rectangle getBoundsAbs() {
-    	return bounds != null ? bounds.derive(getGuiScale()) : MinecraftTextFieldWidget.super.getBoundsAbs();
-    }
-    
-    @Override
-    public SinglelineCursorInfo getCursorInfo() {
-    	return bounds != null ? new SinglelineCursorInfo(true, bounds.height(), currentOffset, cursorPos, text) : null;
-    }
+
+	@Inject(method = "onFocusChanged", at = @At("TAIL"))
+	public void focusChanged(boolean isFocused, CallbackInfo ci) {
+		onMinecraftWidgetFocusChanged(isFocused);
+	}
+
+	@Inject(method = "draw", at = @At("TAIL"))
+	public void updateCaretPos(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo, CallbackInfo ci) {
+		Point position = getPosition(renderer);
+		Rectangle currentBounds = new Rectangle(position.x(), position.y(), size.getWidth(), size.getHeight());
+		if(!currentBounds.equals(bounds) || (lastCursorPos != cursorPos) || (lastOffset != currentOffset)) {
+			bounds = currentBounds;
+			lastCursorPos = cursorPos;
+			lastOffset = currentOffset;
+			IMManager.updateCompositionWindowPos();
+		}
+	}
+
+	private Point getPosition(GuiRenderer renderer) {
+		int x = 0, y = 0;
+		while(renderer instanceof OffsetGuiRenderer offsetRenderer) {
+			ReadablePoint pos = ReflectionUtil.getFieldValue(
+					OffsetGuiRenderer.class, offsetRenderer, ReadablePoint.class, "position");
+			x += pos.getX();
+			y += pos.getY();
+			renderer = ReflectionUtil.getFieldValue(
+					OffsetGuiRenderer.class, offsetRenderer, GuiRenderer.class, "renderer");
+		}
+		return new Point(x, y);
+	}
+
+	@Override
+	public Rectangle getBoundsAbs() {
+		return bounds != null ? bounds.derive(getGuiScale()) : MinecraftTextFieldWidget.super.getBoundsAbs();
+	}
+
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return bounds != null ? new SinglelineCursorInfo(true, bounds.height(), currentOffset, cursorPos, text) : null;
+	}
 }

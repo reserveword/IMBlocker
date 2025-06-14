@@ -19,22 +19,22 @@ public abstract class FtbTextFieldLegacyMixin extends FtbWidgetMixin implements 
 	@Shadow private int cursorPosition;
 	
 	@Inject(method = "setFocused", at = @At("TAIL"))
-    public void focusChanged(boolean isFocused, CallbackInfo ci) {
-    	onMinecraftWidgetFocusChanged(isFocused);
-    }
-    
-    @Inject(method = "onClosed", at = @At("TAIL"))
-    public void cancelFocus(CallbackInfo ci) {
-    	onMinecraftWidgetFocusLost();
-    }
-    
-    @Inject(method = "setSelectionPos", at = @At("TAIL"))
-    public void onCursorPosChanged(int position, CallbackInfo ci) {
-    	IMManager.updateCompositionWindowPos();
-    }
-    
-    @Override
-    public SinglelineCursorInfo getCursorInfo() {
-    	return new SinglelineCursorInfo(true, height, lineScrollOffset, cursorPosition, text);
-    }
+	public void focusChanged(boolean isFocused, CallbackInfo ci) {
+		onMinecraftWidgetFocusChanged(isFocused);
+	}
+
+	@Inject(method = "onClosed", at = @At("TAIL"))
+	public void cancelFocus(CallbackInfo ci) {
+		onMinecraftWidgetFocusLost();
+	}
+
+	@Inject(method = "setSelectionPos", at = @At("TAIL"))
+	public void onCursorPosChanged(int position, CallbackInfo ci) {
+		IMManager.updateCompositionWindowPos();
+	}
+
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return new SinglelineCursorInfo(true, height, lineScrollOffset, cursorPosition, text);
+	}
 }

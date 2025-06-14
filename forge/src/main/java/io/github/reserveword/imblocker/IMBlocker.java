@@ -27,7 +27,7 @@ public class IMBlocker {
 		this(FMLJavaModLoadingContext.get());
 	}
 	
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public IMBlocker(FMLJavaModLoadingContext context) {
 		MinecraftClientAccessor.INSTANCE = new MinecraftClientAccessor() {
 			@Override
@@ -50,13 +50,13 @@ public class IMBlocker {
 
 		IMBlockerConfig.defaultScreenWhitelist.addAll(ForgeCommon.defaultScreenWhitelist);
 		if(Common.hasMod("cloth_config")) {
-            AutoConfig.register(IMBlockerAutoConfig.class, GsonConfigSerializer::new);
-            IMBlockerConfig.INSTANCE = AutoConfig.getConfigHolder(IMBlockerAutoConfig.class).getConfig();
-            Class configFactoryCls = null;
-            try {
-            	//1.19+
-            	configFactoryCls = Class.forName(
-            			"net.minecraftforge.client.ConfigScreenHandler$ConfigScreenFactory");
+			AutoConfig.register(IMBlockerAutoConfig.class, GsonConfigSerializer::new);
+			IMBlockerConfig.INSTANCE = AutoConfig.getConfigHolder(IMBlockerAutoConfig.class).getConfig();
+			Class configFactoryCls = null;
+			try {
+				// 1.19+
+				configFactoryCls = Class.forName(
+						"net.minecraftforge.client.ConfigScreenHandler$ConfigScreenFactory");
 			} catch (ClassNotFoundException e) {
 				try {
 					//1.18.x
@@ -70,8 +70,8 @@ public class IMBlocker {
 					} catch (ClassNotFoundException e2) {}
 				}
 			}
-            Class _configFactoryCls = configFactoryCls;
-            Supplier configFactorySupplier = () -> ReflectionUtil.newInstance(_configFactoryCls, 
+			Class _configFactoryCls = configFactoryCls;
+			Supplier configFactorySupplier = () -> ReflectionUtil.newInstance(_configFactoryCls, 
 					new Class[] {BiFunction.class}, new BiFunction<Minecraft, Screen, Screen>() {
 						@Override
 						public Screen apply(Minecraft client, Screen parent) {
@@ -80,8 +80,8 @@ public class IMBlocker {
 					});
 			ModLoadingContext.get().registerExtensionPoint(configFactoryCls, configFactorySupplier);
 		}else {
-            IMBlockerConfig.INSTANCE = new IMBlockerConfig();
-            IMBlockerConfig.INSTANCE.reloadScreenWhitelist(IMBlockerConfig.defaultScreenWhitelist);
+			IMBlockerConfig.INSTANCE = new IMBlockerConfig();
+			IMBlockerConfig.INSTANCE.reloadScreenWhitelist(IMBlockerConfig.defaultScreenWhitelist);
 		}
-    }
+	}
 }

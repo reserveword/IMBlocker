@@ -28,28 +28,28 @@ public abstract class ChatScreenMixin {
 		updateChatState(originalChatText, ci);
 	}
 	
-    @Inject(method = "onChatFieldUpdate(Ljava/lang/String;)V", at = @At("HEAD"))
-    public void updateChatState(String chatText, CallbackInfo ci) {
-    	ChatState currentChatState = chatField.getText().trim().startsWith("/") ? 
-    			ChatState.COMMAND : ChatState.CHAT;
-    	if(chatState != currentChatState) {
-    		boolean engState = currentChatState == ChatState.COMMAND;
-    		MinecraftFocusableWidget _chatField = (MinecraftFocusableWidget) chatField;
-    		switch (IMBlockerConfig.INSTANCE.getChatCommandInputType()) {
+	@Inject(method = "onChatFieldUpdate(Ljava/lang/String;)V", at = @At("HEAD"))
+	public void updateChatState(String chatText, CallbackInfo ci) {
+		ChatState currentChatState = chatField.getText().trim().startsWith("/") ?
+				ChatState.COMMAND : ChatState.CHAT;
+		if (chatState != currentChatState) {
+			boolean engState = currentChatState == ChatState.COMMAND;
+			MinecraftFocusableWidget _chatField = (MinecraftFocusableWidget) chatField;
+			switch (IMBlockerConfig.INSTANCE.getChatCommandInputType()) {
 				case IM_ENG_STATE:
 					_chatField.setPreferredEditState(true);
-		    		break;
+					break;
 				case DISABLE_IM:
 					_chatField.setPreferredEditState(!engState);
 					break;
 			}
 			_chatField.setPreferredEnglishState(engState);
-    		chatState = currentChatState;
-    	}
-    }
-    
-    @Inject(method = "removed", at = @At("HEAD"))
-    public void removeChatState(CallbackInfo ci) {
-    	chatState = ChatState.NONE;
-    }
+			chatState = currentChatState;
+		}
+	}
+
+	@Inject(method = "removed", at = @At("HEAD"))
+	public void removeChatState(CallbackInfo ci) {
+		chatState = ChatState.NONE;
+	}
 }

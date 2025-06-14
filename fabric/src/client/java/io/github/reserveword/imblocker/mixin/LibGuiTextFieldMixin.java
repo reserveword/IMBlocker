@@ -23,14 +23,14 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 	@Shadow private int cursor;
 	
 	@Inject(method = "onFocusGained", at = @At("TAIL"))
-    public void onFocusGained(CallbackInfo ci) {
-    	onMinecraftWidgetFocusGained();
-    }
+	public void onFocusGained(CallbackInfo ci) {
+		onMinecraftWidgetFocusGained();
+	}
 	
 	@Override
-    public void onFocusLost(CallbackInfo ci) {
-    	onMinecraftWidgetFocusLost();
-    }
+	public void onFocusLost(CallbackInfo ci) {
+		onMinecraftWidgetFocusLost();
+	}
 	
 	@Inject(method = "setEditable", at = @At("HEAD"), cancellable = true)
 	public void setEditable(boolean editable, CallbackInfoReturnable<WTextField> cir) {

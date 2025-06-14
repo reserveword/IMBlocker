@@ -23,37 +23,37 @@ public abstract class MinecraftClientMixin {
 	@Shadow
 	private Window window;
 	
-    @Inject(method = "setWindowActive", at = @At("HEAD"))
-    public void onWindowFocusChanged(boolean isFocused, CallbackInfo ci) {
-        FocusManager.setWindowFocused(isFocused);
-    }
-    
-    @Inject(method = "resizeDisplay", at = @At("TAIL"))
-    public void onResolutionChanged(CallbackInfo ci) {
-    	try {
+	@Inject(method = "setWindowActive", at = @At("HEAD"))
+	public void onWindowFocusChanged(boolean isFocused, CallbackInfo ci) {
+		FocusManager.setWindowFocused(isFocused);
+	}
+
+	@Inject(method = "resizeDisplay", at = @At("TAIL"))
+	public void onResolutionChanged(CallbackInfo ci) {
+		try {
 			FocusContainer.MINECRAFT.setGuiScaleFactor(window.getGuiScale());
 		} catch (NoSuchMethodError e) {
-	    	FocusContainer.MINECRAFT.setGuiScaleFactor(ReflectionUtil
-	    			.getFieldValue(window.getClass(), window, Number.class, "field_5179").doubleValue());
+			FocusContainer.MINECRAFT.setGuiScaleFactor(ReflectionUtil
+					.getFieldValue(window.getClass(), window, Number.class, "field_5179").doubleValue());
 		}
-    	IMManager.updateCompositionWindowPos();
-    	IMManager.updateCompositionFontSize();
-    }
-    
-    @Inject(method = "setScreen", at = @At("HEAD"))
-    public void onScreenChanged(Screen screen, CallbackInfo ci) {
-    	if(IMBlockerConfig.INSTANCE.isScreenRecoveringEnabled() && screen != null) {
-    		IMBlockerConfig.INSTANCE.recoverScreen(screen.getClass().getName());
-    	}
-    	
-    	if(isScreenInWhiteList(screen)) {
-    		FocusContainer.MINECRAFT.requestFocus(GenericWhitelistScreen.getInstance());
-    	}else {
-    		FocusContainer.MINECRAFT.cancelFocus();
-    	}
-    }
-    
-    private boolean isScreenInWhiteList(Screen screen) {
-    	return IMBlockerConfig.INSTANCE.isScreenInWhitelist(screen);
-    }
+		IMManager.updateCompositionWindowPos();
+		IMManager.updateCompositionFontSize();
+	}
+
+	@Inject(method = "setScreen", at = @At("HEAD"))
+	public void onScreenChanged(Screen screen, CallbackInfo ci) {
+		if(IMBlockerConfig.INSTANCE.isScreenRecoveringEnabled() && screen != null) {
+			IMBlockerConfig.INSTANCE.recoverScreen(screen.getClass().getName());
+		}
+
+		if(isScreenInWhiteList(screen)) {
+			FocusContainer.MINECRAFT.requestFocus(GenericWhitelistScreen.getInstance());
+		} else {
+			FocusContainer.MINECRAFT.cancelFocus();
+		}
+	}
+
+	private boolean isScreenInWhiteList(Screen screen) {
+		return IMBlockerConfig.INSTANCE.isScreenInWhitelist(screen);
+	}
 }

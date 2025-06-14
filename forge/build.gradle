@@ -80,7 +80,7 @@ java {
 }
 
 project.jar {
-	archiveFileName = "${rootProject.name}-${mod_version}-forge+1.17-1.20.4.jar"
+    archiveFileName = "${rootProject.name}-${mod_version}-forge+1.17-1.20.4.jar"
     from sourceSets.main.output
     from project(":common").sourceSets.main.output
     manifest {

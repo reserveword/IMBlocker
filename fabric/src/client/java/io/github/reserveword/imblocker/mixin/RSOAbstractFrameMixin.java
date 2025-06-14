@@ -17,16 +17,16 @@ import net.minecraft.client.gui.Element;
 @Pseudo
 @Mixin(targets = "me.flashyreese.mods.reeses_sodium_options.client.gui.frame.AbstractFrame", remap = false)
 public abstract class RSOAbstractFrameMixin {
-    @Shadow
-    private Element focused;
+	@Shadow
+	private Element focused;
 
-    @Inject(method = "method_25395", at = @At("HEAD"))
-    public void notifyFocusLost(@Nullable Element focused, CallbackInfo ci) {
-        if (this.focused != null && this.focused != focused) {
-        	if(Common.isGameVersionReached(762/*1.19.4*/)) {
-        		this.focused.setFocused(false);
-        	}else if(this.focused.getClass().equals(SearchTextFieldComponent.class)) {
-        		try {
+	@Inject(method = "method_25395", at = @At("HEAD"))
+	public void notifyFocusLost(@Nullable Element focused, CallbackInfo ci) {
+		if (this.focused != null && this.focused != focused) {
+			if(Common.isGameVersionReached(762/*1.19.4*/)) {
+				this.focused.setFocused(false);
+			}else if(this.focused.getClass().equals(SearchTextFieldComponent.class)) {
+				try {
 					Method setFocusedMethod = SearchTextFieldComponent.class
 							.getDeclaredMethod("setFocused", boolean.class);
 					setFocusedMethod.setAccessible(true);
@@ -34,7 +34,7 @@ public abstract class RSOAbstractFrameMixin {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-        	}
-        }
-    }
+		}
+	}
+	}
 }

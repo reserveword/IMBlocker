@@ -26,59 +26,59 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 	private boolean preferredEditState = true;
 	
 	private boolean preferredEnglishState = false;
-    
-    @Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
-    public void focusChanged(boolean isFocused, CallbackInfo ci) {
-    	onMinecraftWidgetFocusChanged(isFocused);
-    }
-    
-    @Inject(method = "onChanged", at = @At("TAIL"))
-    public void onTextChanged(String newText, CallbackInfo ci) {
-    	IMManager.updateCompositionWindowPos();
-    }
-    
-    @Overwrite
-    public void setEditable(boolean editable) {
-    	if(this.editable != editable) {
-    		this.editable = editable;
-    		if(isTrulyFocused()) {
-    			updateIMState();
-    		}
-    	}
-    }
-    
-    @Override
-    public void setPreferredEditState(boolean preferredEditState) {
-    	if(this.preferredEditState != preferredEditState) {
-    		this.preferredEditState = preferredEditState;
-    		if(isTrulyFocused()) {
-    			updateIMState();
-    		}
-    	}
-    }
-    
-    @Override
-    public void setPreferredEnglishState(boolean state) {
-    	if(preferredEnglishState != state) {
-    		preferredEnglishState = state;
-    		if(isTrulyFocused()) {
-    			updateEnglishState();
-    		}
-    	}
-    }
-    
-    @Override
-    public boolean getPreferredState() {
-    	return editable && preferredEditState;
-    }
-    
-    @Override
-    public boolean getPreferredEnglishState() {
-    	return preferredEnglishState;
-    }
-    
-    @Override
-    public SinglelineCursorInfo getCursorInfo() {
-    	return new SinglelineCursorInfo(drawsBackground, height, firstCharacterIndex, selectionStart, text);
-    }
+
+	@Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
+	public void focusChanged(boolean isFocused, CallbackInfo ci) {
+		onMinecraftWidgetFocusChanged(isFocused);
+	}
+
+	@Inject(method = "onChanged", at = @At("TAIL"))
+	public void onTextChanged(String newText, CallbackInfo ci) {
+		IMManager.updateCompositionWindowPos();
+	}
+
+	@Overwrite
+	public void setEditable(boolean editable) {
+		if (this.editable != editable) {
+			this.editable = editable;
+			if (isTrulyFocused()) {
+				updateIMState();
+			}
+		}
+	}
+
+	@Override
+	public void setPreferredEditState(boolean preferredEditState) {
+		if (this.preferredEditState != preferredEditState) {
+			this.preferredEditState = preferredEditState;
+			if (isTrulyFocused()) {
+				updateIMState();
+			}
+		}
+	}
+
+	@Override
+	public void setPreferredEnglishState(boolean state) {
+		if (preferredEnglishState != state) {
+			preferredEnglishState = state;
+			if (isTrulyFocused()) {
+				updateEnglishState();
+			}
+		}
+	}
+
+	@Override
+	public boolean getPreferredState() {
+		return editable && preferredEditState;
+	}
+
+	@Override
+	public boolean getPreferredEnglishState() {
+		return preferredEnglishState;
+	}
+
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return new SinglelineCursorInfo(drawsBackground, height, firstCharacterIndex, selectionStart, text);
+	}
 }

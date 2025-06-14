@@ -45,3 +45,5 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
 [Meteor Client](https://www.meteorclient.com/)  
 [LibGui](https://github.com/CottonMC/LibGui)  
 [Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)
+[BlockUI](https://github.com/ldtteam/BlockUI)  
+[SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)

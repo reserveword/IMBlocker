@@ -30,14 +30,14 @@ public class ModLoaderAccessorImpl implements ModLoaderAccessor {
 	}
 	
 	static {
-    	int protocolVersion;
-    	try(InputStream is = IMBlocker.class.getResourceAsStream("/version.json");
-    			InputStreamReader isr = new InputStreamReader(is)) {
-    		protocolVersion = JsonHelper.getInt(JsonHelper.deserialize(isr), "protocol_version");
-    	} catch (Exception e) {
-    		Common.LOGGER.warn("Failed to get protocol version!");
-    		protocolVersion = Integer.MAX_VALUE;
+		int protocolVersion;
+		try (InputStream is = IMBlocker.class.getResourceAsStream("/version.json");
+				InputStreamReader isr = new InputStreamReader(is)) {
+			protocolVersion = JsonHelper.getInt(JsonHelper.deserialize(isr), "protocol_version");
+		} catch (Exception e) {
+			Common.LOGGER.warn("Failed to get protocol version!");
+			protocolVersion = Integer.MAX_VALUE;
 		}
-    	currentProtocolVersion = protocolVersion;
-    }
+		currentProtocolVersion = protocolVersion;
+	}
 }

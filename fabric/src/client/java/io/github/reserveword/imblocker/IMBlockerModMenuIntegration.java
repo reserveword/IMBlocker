@@ -9,9 +9,8 @@ import net.minecraft.client.gui.screen.Screen;
 public class IMBlockerModMenuIntegration implements ModMenuApi {
 	
 	@Override
-    public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return IMBlocker.hasClothConfig() ?
-        		parent -> IMBlockerAutoConfig.getConfigScreen(parent, Screen.class) :
-        			ModMenuApi.super.getModConfigScreenFactory();
-    }
+	public ConfigScreenFactory<?> getModConfigScreenFactory() {
+		return IMBlocker.hasClothConfig() ? parent -> IMBlockerAutoConfig.getConfigScreen(parent, Screen.class)
+				: ModMenuApi.super.getModConfigScreenFactory();
+	}
 }

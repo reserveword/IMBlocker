@@ -35,16 +35,16 @@ public class IMBlocker implements ClientModInitializer {
 		};
 		
 		IMBlockerConfig.defaultScreenWhitelist.addAll(FabricCommon.defaultScreenWhitelist);
-        if (hasClothConfig()) {
-            AutoConfig.register(IMBlockerAutoConfig.class, GsonConfigSerializer::new);
-            IMBlockerConfig.INSTANCE = AutoConfig.getConfigHolder(IMBlockerAutoConfig.class).getConfig();
-        } else {
-            IMBlockerConfig.INSTANCE = new IMBlockerConfig();
-            IMBlockerConfig.INSTANCE.reloadScreenWhitelist(IMBlockerConfig.defaultScreenWhitelist);
-        }
-    }
-    
-    public static boolean hasClothConfig() {
-    	return Common.hasMod("cloth-config") || Common.hasMod("cloth-config2");
-    }
+		if (hasClothConfig()) {
+			AutoConfig.register(IMBlockerAutoConfig.class, GsonConfigSerializer::new);
+			IMBlockerConfig.INSTANCE = AutoConfig.getConfigHolder(IMBlockerAutoConfig.class).getConfig();
+		} else {
+			IMBlockerConfig.INSTANCE = new IMBlockerConfig();
+			IMBlockerConfig.INSTANCE.reloadScreenWhitelist(IMBlockerConfig.defaultScreenWhitelist);
+		}
+	}
+
+	public static boolean hasClothConfig() {
+		return Common.hasMod("cloth-config") || Common.hasMod("cloth-config2");
+	}
 }

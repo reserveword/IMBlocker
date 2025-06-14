@@ -19,7 +19,7 @@ public abstract class ClickableWidgetMixin implements MinecraftFocusableWidget {
 	@Shadow protected int height;
 	
 	@Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
-    public void focusChanged(boolean isFocused, CallbackInfo ci) {}
+	public void focusChanged(boolean isFocused, CallbackInfo ci) {}
 	
 	@Override
 	public Rectangle getBoundsAbs() {

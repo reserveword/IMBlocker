@@ -18,54 +18,54 @@ import me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget;
 @Mixin(value = TextFieldWidget.class, remap = false)
 public abstract class ReiTextFieldMixin implements MinecraftTextFieldWidget {
 	
-    @Shadow
-    protected boolean editable;
-    
-    @Shadow
-    private me.shedaniel.math.Rectangle bounds;
-    
-    @Shadow private boolean hasBorder;
-    @Shadow protected int firstCharacterIndex;
-    @Shadow protected int cursorPos;
-    @Shadow private String text;
-    
-    @Inject(method = {"setFocused", "method_25365", "m_93692_"}, at = @At("TAIL"))
-    public void focusChanged(boolean isFocused, CallbackInfo ci) {
-    	onMinecraftWidgetFocusChanged(isFocused);
-    }
-    
-    @Inject(method = "onChanged", at = @At("TAIL"))
-    public void onTextChanged(String newText, CallbackInfo ci) {
-    	IMManager.updateCompositionWindowPos();
-    }
-    
-    @Inject(method = "moveCursorTo", at = @At("TAIL"))
-    public void onMoveCursor(int cursor, CallbackInfo ci) {
-    	IMManager.updateCompositionWindowPos();
-    }
-    
-    @Overwrite(aliases = {"setEditable"})
-    public void setIsEditable(boolean editable) {
-    	if(this.editable != editable) {
-    		this.editable = editable;
-    		if(isTrulyFocused()) {
-    			updateIMState();
-    		}
-    	}
-    }
-    
-    @Override
-    public boolean getPreferredState() {
-    	return editable;
-    }
-    
-    @Override
-    public Rectangle getBoundsAbs() {
-    	return new Rectangle(getGuiScale(), bounds.x, bounds.y, bounds.width, bounds.height);
-    }
-    
-    @Override
-    public SinglelineCursorInfo getCursorInfo() {
-    	return new SinglelineCursorInfo(hasBorder, bounds.height, firstCharacterIndex, cursorPos, text);
-    }
+	@Shadow
+	protected boolean editable;
+
+	@Shadow
+	private me.shedaniel.math.Rectangle bounds;
+
+	@Shadow private boolean hasBorder;
+	@Shadow protected int firstCharacterIndex;
+	@Shadow protected int cursorPos;
+	@Shadow private String text;
+
+	@Inject(method = {"setFocused", "method_25365", "m_93692_"}, at = @At("TAIL"))
+	public void focusChanged(boolean isFocused, CallbackInfo ci) {
+		onMinecraftWidgetFocusChanged(isFocused);
+	}
+
+	@Inject(method = "onChanged", at = @At("TAIL"))
+	public void onTextChanged(String newText, CallbackInfo ci) {
+		IMManager.updateCompositionWindowPos();
+	}
+
+	@Inject(method = "moveCursorTo", at = @At("TAIL"))
+	public void onMoveCursor(int cursor, CallbackInfo ci) {
+		IMManager.updateCompositionWindowPos();
+	}
+
+	@Overwrite(aliases = {"setEditable"})
+	public void setIsEditable(boolean editable) {
+		if(this.editable != editable) {
+			this.editable = editable;
+			if(isTrulyFocused()) {
+				updateIMState();
+			}
+		}
+	}
+
+	@Override
+	public boolean getPreferredState() {
+		return editable;
+	}
+
+	@Override
+	public Rectangle getBoundsAbs() {
+		return new Rectangle(getGuiScale(), bounds.x, bounds.y, bounds.width, bounds.height);
+	}
+
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return new SinglelineCursorInfo(hasBorder, bounds.height, firstCharacterIndex, cursorPos, text);
+	}
 }

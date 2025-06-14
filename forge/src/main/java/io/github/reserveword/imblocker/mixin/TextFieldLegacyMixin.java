@@ -33,57 +33,57 @@ public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin implement
 	}
 	
 	@Inject(method = "m_7207_", at = @At("TAIL"))
-    public void focusBeChanged(boolean isFocused, CallbackInfo ci) {
-    	onMinecraftWidgetFocusChanged(isFocused);
-    }
-	
+	public void focusBeChanged(boolean isFocused, CallbackInfo ci) {
+		onMinecraftWidgetFocusChanged(isFocused);
+	}
+
 	@Inject(method = "onValueChange", at = @At("TAIL"))
-    public void onTextChanged(String newValue, CallbackInfo ci) {
-    	IMManager.updateCompositionWindowPos();
-    }
-	
+	public void onTextChanged(String newValue, CallbackInfo ci) {
+		IMManager.updateCompositionWindowPos();
+	}
+
 	@Overwrite
-    public void setEditable(boolean editable) {
-		if(this.isEditable != editable) {
-    		this.isEditable = editable;
-    		if(isTrulyFocused()) {
-    			updateIMState();
-    		}
-    	}
-    }
+	public void setEditable(boolean editable) {
+		if (this.isEditable != editable) {
+			this.isEditable = editable;
+			if (isTrulyFocused()) {
+				updateIMState();
+			}
+		}
+	}
 
 	@Override
-    public void setPreferredEditState(boolean preferredEditState) {
-    	if(this.preferredEditState != preferredEditState) {
-    		this.preferredEditState = preferredEditState;
-    		if(isTrulyFocused()) {
-    			updateIMState();
-    		}
-    	}
-    }
-	
+	public void setPreferredEditState(boolean preferredEditState) {
+		if (this.preferredEditState != preferredEditState) {
+			this.preferredEditState = preferredEditState;
+			if (isTrulyFocused()) {
+				updateIMState();
+			}
+		}
+	}
+
 	@Override
 	public void setPreferredEnglishState(boolean state) {
-		if(preferredEnglishState != state) {
-    		preferredEnglishState = state;
-    		if(isTrulyFocused()) {
-    			updateEnglishState();
-    		}
-    	}
-    }
-	
+		if (preferredEnglishState != state) {
+			preferredEnglishState = state;
+			if (isTrulyFocused()) {
+				updateEnglishState();
+			}
+		}
+	}
+
 	@Override
-    public boolean getPreferredState() {
-    	return isEditable && preferredEditState;
-    }
-    
-    @Override
-    public boolean getPreferredEnglishState() {
-    	return preferredEnglishState;
-    }
-    
-    @Override
-    public SinglelineCursorInfo getCursorInfo() {
-    	return new SinglelineCursorInfo(bordered, height, displayPos, cursorPos, value);
-    }
+	public boolean getPreferredState() {
+		return isEditable && preferredEditState;
+	}
+
+	@Override
+	public boolean getPreferredEnglishState() {
+		return preferredEnglishState;
+	}
+
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return new SinglelineCursorInfo(bordered, height, displayPos, cursorPos, value);
+	}
 }

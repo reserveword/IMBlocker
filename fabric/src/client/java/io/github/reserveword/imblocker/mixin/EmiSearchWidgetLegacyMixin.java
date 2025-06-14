@@ -11,10 +11,10 @@ import dev.emi.emi.screen.widget.EmiSearchWidget;
 public abstract class EmiSearchWidgetLegacyMixin extends TextFieldLegacyMixin {
 	
 	@Override
-    @Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
-    public void focusChanged(boolean isFocused, CallbackInfo ci) {
-        super.focusChanged(isFocused, ci);
-    }
+	@Inject(method = { "setFocused", "method_25365" }, at = @At("TAIL"))
+	public void focusChanged(boolean isFocused, CallbackInfo ci) {
+		super.focusChanged(isFocused, ci);
+	}
 	
 	@Override
 	public void focusBeChanged(boolean isFocused, CallbackInfo ci) {}

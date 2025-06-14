@@ -32,13 +32,13 @@ public class ModLoaderAccessorImpl implements ModLoaderAccessor {
 	
 	static {
 		int protocolVersion;
-    	try(InputStream is = DetectedVersion.class.getResourceAsStream("/version.json");
-    			InputStreamReader isr = new InputStreamReader(is)) {
-    		protocolVersion = GsonHelper.getAsInt(GsonHelper.parse(isr), "protocol_version");
-    	} catch (Exception e) {
-    		Common.LOGGER.warn("Failed to get protocol version!");
-    		protocolVersion = Integer.MAX_VALUE;
+		try (InputStream is = DetectedVersion.class.getResourceAsStream("/version.json");
+				InputStreamReader isr = new InputStreamReader(is)) {
+			protocolVersion = GsonHelper.getAsInt(GsonHelper.parse(isr), "protocol_version");
+		} catch (Exception e) {
+			Common.LOGGER.warn("Failed to get protocol version!");
+			protocolVersion = Integer.MAX_VALUE;
 		}
-    	currentProtocolVersion = protocolVersion;
+		currentProtocolVersion = protocolVersion;
 	}
 }

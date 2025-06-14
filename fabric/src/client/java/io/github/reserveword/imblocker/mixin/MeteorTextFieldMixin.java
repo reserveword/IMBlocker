@@ -16,11 +16,11 @@ import io.github.reserveword.imblocker.common.gui.Point;
 public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin implements MinecraftTextFieldWidget {
 	
 	@Shadow protected int cursor;
-    @Shadow protected double textStart;
+	@Shadow protected double textStart;
 	
 	@Shadow
 	protected abstract double getTextWidth(int pos);
-    
+
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
 		onMinecraftWidgetFocusChanged(isFocused);

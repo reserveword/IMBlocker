@@ -17,24 +17,24 @@ public abstract class FtbTextFieldMixin extends FtbWidgetMixin implements Minecr
 	@Shadow private String text;
 	@Shadow private int displayPos;
 	@Shadow private int cursorPos;
-    
-    @Inject(method = "setFocused", at = @At("TAIL"))
-    public void focusChanged(boolean isFocused, CallbackInfo ci) {
-    	onMinecraftWidgetFocusChanged(isFocused);
-    }
-    
-    @Override
-    public void cancelFocus(CallbackInfo ci) {
-    	onMinecraftWidgetFocusLost();
-    }
-    
-    @Inject(method = "scrollTo", at = @At("TAIL"))
-    public void onCursorPosChanged(int pos, CallbackInfo ci) {
-    	IMManager.updateCompositionWindowPos();
-    }
-    
-    @Override
-    public SinglelineCursorInfo getCursorInfo() {
-    	return new SinglelineCursorInfo(true, height, displayPos, cursorPos, text);
-    }
+
+	@Inject(method = "setFocused", at = @At("TAIL"))
+	public void focusChanged(boolean isFocused, CallbackInfo ci) {
+		onMinecraftWidgetFocusChanged(isFocused);
+	}
+
+	@Override
+	public void cancelFocus(CallbackInfo ci) {
+		onMinecraftWidgetFocusLost();
+	}
+
+	@Inject(method = "scrollTo", at = @At("TAIL"))
+	public void onCursorPosChanged(int pos, CallbackInfo ci) {
+		IMManager.updateCompositionWindowPos();
+	}
+
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return new SinglelineCursorInfo(true, height, displayPos, cursorPos, text);
+	}
 }

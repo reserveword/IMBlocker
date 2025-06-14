@@ -1,18 +1,18 @@
 plugins {
-    id 'eclipse'
-    id 'idea'
-    id 'fabric-loom' version '1.8.+'
+	id 'eclipse'
+	id 'idea'
+	id 'fabric-loom' version '1.8.+'
 }
 
 loom {
-    splitEnvironmentSourceSets()
+	splitEnvironmentSourceSets()
 
-    mods {
-        "${mod_id}" {
-            sourceSet sourceSets.main
-            sourceSet sourceSets.client
-        }
-    }
+	mods {
+		"${mod_id}" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
 
 }
 
@@ -21,47 +21,46 @@ base {
 }
 
 dependencies {
-    // To change the versions see the gradle.properties file
-    minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${loader_version}"
+	// To change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${minecraft_version}"
+	mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${loader_version}"
 
-    // Fabric API. This is technically optional, but you probably want it anyway.
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+	// Fabric API. This is technically optional, but you probably want it anyway.
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
-    modApi "com.terraformersmc:modmenu:${modmenu_version}"
+	modApi "com.terraformersmc:modmenu:${modmenu_version}"
 
-    // compat
-    modCompileOnlyApi "maven.modrinth:replaymod:$replaymod_version"
-    modCompileOnlyApi "maven.modrinth:notebook:$notebook_version"
-    modLocalRuntime "maven.modrinth:voxelmap-updated:$voxelmap_version"
-    modCompileOnlyApi "dev.emi:emi-fabric:$emi_version"
-    modLocalRuntime "dev.emi:emi-fabric:$emi_version"
-    compileOnly "io.github.spair:imgui-java-app:$imgui_version"
-    compileOnly "maven.modrinth:sodium:mc1.19.4-0.4.10"
-    compileOnly "maven.modrinth:reeses-sodium-options:mc1.19.4-1.6.3"
-    compileOnly "maven.modrinth:create-fabric:0.5.1-j-build.1631+mc1.20.1"
-    // modRuntimeOnly "curse.maven:ftbquest-$ftbquest_version"
-    modCompileOnly "io.github.cottonmc:LibGui:$cottonlibgui_version"
+	// compat
+	modCompileOnlyApi "maven.modrinth:replaymod:$replaymod_version"
+	modCompileOnlyApi "maven.modrinth:notebook:$notebook_version"
+	modLocalRuntime "maven.modrinth:voxelmap-updated:$voxelmap_version"
+	modCompileOnlyApi "dev.emi:emi-fabric:$emi_version"
+	modLocalRuntime "dev.emi:emi-fabric:$emi_version"
+	compileOnly "io.github.spair:imgui-java-app:$imgui_version"
+	compileOnly "maven.modrinth:sodium:mc1.19.4-0.4.10"
+	compileOnly "maven.modrinth:reeses-sodium-options:mc1.19.4-1.6.3"
+	compileOnly "maven.modrinth:create-fabric:0.5.1-j-build.1631+mc1.20.1"
+	modCompileOnly "io.github.cottonmc:LibGui:$cottonlibgui_version"
 
-    implementation project(':common')
+	implementation project(':common')
 }
 
 java {
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.
-    // If you remove this line, sources will not be generated.
-    withSourcesJar()
+	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+	// if it is present.
+	// If you remove this line, sources will not be generated.
+	withSourcesJar()
 
-    sourceCompatibility = JavaVersion.VERSION_16
-    targetCompatibility = JavaVersion.VERSION_16
+	sourceCompatibility = JavaVersion.VERSION_16
+	targetCompatibility = JavaVersion.VERSION_16
 }
 
 project.jar {
 	from("LICENSE") {
 		rename { "${it}_${project.base.archivesName.get()}"}
 	}
-	
-    from sourceSets.main.output
-    from project(":common").sourceSets.main.output
+
+	from sourceSets.main.output
+	from project(":common").sourceSets.main.output
 }

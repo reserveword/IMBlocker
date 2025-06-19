@@ -34,7 +34,7 @@ public abstract class MinecraftClientMixin {
 			FocusContainer.MINECRAFT.setGuiScaleFactor(window.getGuiScale());
 		} catch (NoSuchMethodError e) {
 			FocusContainer.MINECRAFT.setGuiScaleFactor(ReflectionUtil
-					.getFieldValue(window.getClass(), window, Number.class, "field_5179").doubleValue());
+					.getFieldValue(window.getClass(), window, Number.class, "guiScale").doubleValue());
 		}
 		IMManager.updateCompositionWindowPos();
 		IMManager.updateCompositionFontSize();

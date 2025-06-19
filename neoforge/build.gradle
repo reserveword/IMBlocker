@@ -46,5 +46,6 @@ project.jar {
     from (project(":forge").sourceSets.main.output) {
         include '**/ForgeCommon.class'
         include '**/mixin/*.class'
+        exclude '**/mixin/AbstractScrollWidgetMixin.class'
     }
 }

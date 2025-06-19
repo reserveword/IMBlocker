@@ -62,5 +62,7 @@ project.jar {
 	}
 
 	from sourceSets.main.output
-	from project(":common").sourceSets.main.output
+	from (project(":common").sourceSets.main.output) {
+		exclude 'imblocker-old.png'
+	}
 }

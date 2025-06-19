@@ -3,15 +3,16 @@ package io.github.reserveword.imblocker.common.gui;
 import io.github.reserveword.imblocker.common.IMManager;
 
 public enum FocusContainer {
-	MINECRAFT(true), IMGUI(false);
+	MINECRAFT(true, 1.0), IMGUI(false, 4.0);
 	
-	private double guiScaleFactor = 1.0;
+	private double guiScaleFactor;
 	
 	private boolean isFocused;
 	private FocusableWidget focusedWidget;
 	
-	private FocusContainer(boolean defaultFocusState) {
+	private FocusContainer(boolean defaultFocusState, double guiScale) {
 		isFocused = defaultFocusState;
+		guiScaleFactor = guiScale;
 	}
 	
 	public FocusableWidget getFocusedWidget() {

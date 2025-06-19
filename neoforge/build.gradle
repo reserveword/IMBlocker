@@ -40,7 +40,9 @@ dependencies {
 project.jar {
     archiveFileName = "${rootProject.name}-${mod_version}-neoforge-1.20.6+.jar"
     from sourceSets.main.output
-    from project(":common").sourceSets.main.output
+    from (project(":common").sourceSets.main.output) {
+        exclude 'imblocker-old.png'
+    }
     from (project(":forge").sourceSets.main.output) {
         include '**/ForgeCommon.class'
         include '**/mixin/*.class'

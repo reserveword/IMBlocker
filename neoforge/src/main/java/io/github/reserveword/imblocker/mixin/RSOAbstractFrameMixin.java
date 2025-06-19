@@ -1,13 +1,14 @@
 package io.github.reserveword.imblocker.mixin;
 
+import java.util.function.Consumer;
+
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import io.github.reserveword.imblocker.common.ReflectionUtil;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 
 @Pseudo
@@ -16,10 +17,20 @@ public abstract class RSOAbstractFrameMixin {
 	@Shadow
 	private GuiEventListener focused;
 
-	@Inject(method = "setFocused", at = @At("HEAD"))
-	public void notifyFocusLost(@Nullable GuiEventListener focused, CallbackInfo ci) {
-		if (this.focused != null && this.focused != focused) {
-			this.focused.setFocused(false);
+	@SuppressWarnings("unchecked")
+	@Overwrite
+	public void setFocused(@Nullable GuiEventListener focused) {
+		if (this.focused != focused) {
+			if(this.focused != null) {
+				this.focused.setFocused(false);
+			}
+			
+			this.focused = focused;
+			Consumer<GuiEventListener> focusListener = ReflectionUtil
+					.getFieldValue(getClass(), this, Consumer.class, "focusListener");
+			if(focusListener != null) {
+				focusListener.accept(focused);
+			}
 		}
 	}
 }

@@ -44,11 +44,12 @@ public interface FocusableWidget {
 	
 	default Rectangle getBoundsAbs() {
 		Rectangle bounds = MinecraftClientAccessor.INSTANCE.getWindowBounds();
-		return new Rectangle(bounds.width() / 3, bounds.height() / 2, 0, 0);
+		return new Rectangle(0, 0, bounds.width(), bounds.height());
 	}
 	
 	default Point getCaretPos() {
-		return Point.TOP_LEFT;
+		Rectangle bounds = MinecraftClientAccessor.INSTANCE.getWindowBounds();
+		return new Point(bounds.width() / 3, bounds.height() / 2);
 	}
 	
 	default double getGuiScale() {

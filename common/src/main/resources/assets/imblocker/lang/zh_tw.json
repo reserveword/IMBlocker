@@ -1,21 +1,19 @@
 {
-  "key.imblocker.checkIntervalMilli" : "每隔多少毫秒檢查一次文字框？",
-  "key.imblocker.screenBlacklist": "匹配的螢幕將停用您的輸入法",
-  "key.imblocker.screenWhitelist": "匹配的螢幕將啟用您的輸入法",
-  "key.imblocker.inputBlacklist": "匹配的輸入框將停用您的輸入法",
-  "key.imblocker.inputWhitelist": "匹配的輸入框將啟用您的輸入法",
-  "key.imblocker.enableScreenRecovering": "是否輸出已恢復的螢幕？這可能會導致延遲",
-  "key.imblocker.recoveredScreens": "這裡列出了不在白名單或黑名單中的所有螢幕，以便您可以輕鬆將其新增到白名單／黑名單中。",
-  "key.imblocker.useExperimental": "偶爾模擬輸入不可打印字符以檢測活動的輸入框。如果輸入或控件出現問題，請停用此功能並告訴我。",
-  "key.imblocker.checkCommandChat": "在輸入指令時停用輸入法",
-  "text.autoconfig.imblocker.option.checkIntervalMilli" : "每隔多少刻檢查一次文本框？請確定 checkDelay 是此數的整數倍。",
-  "text.autoconfig.imblocker.option.screenBlacklist": "匹配的螢幕將停用您的輸入法",
-  "text.autoconfig.imblocker.option.screenWhitelist": "匹配的螢幕將啟用您的輸入法",
-  "text.autoconfig.imblocker.option.inputBlacklist": "匹配的輸入框將停用您的輸入法",
-  "text.autoconfig.imblocker.option.inputWhitelist": "匹配的輸入框將啟用您的輸入法",
-  "text.autoconfig.imblocker.option.enableScreenRecovering": "是否輸出已恢復的螢幕？這可能會導致延遲",
-  "text.autoconfig.imblocker.option.recoveredScreens": "這裡列出了不在白名單或黑名單中的所有螢幕，以便您可以輕鬆將其新增到白名單／黑名單中。",
-  "text.autoconfig.imblocker.option.useExperimental": "偶爾模擬輸入不可打印字符以檢測活動的輸入框。如果輸入或控件出現問題，請停用此功能並告訴我。",
-  "text.autoconfig.imblocker.option.checkCommandChat": "在輸入指令時停用輸入法",
-  "text.autoconfig.imblocker.title": "IMBlocker 設定"
+  "text.autoconfig.imblocker.title": "IMBlocker 設定",
+  
+  "text.autoconfig.imblocker.option.basicSettings": "基礎設定",
+  "text.autoconfig.imblocker.option.basicSettings.screenWhitelist": "螢幕白名單",
+  "text.autoconfig.imblocker.option.basicSettings.screenWhitelist.@Tooltip": "匹配的螢幕將啟用您的輸入法",
+  "text.autoconfig.imblocker.option.basicSettings.enableScreenRecovering": "啟用螢幕記錄",
+  "text.autoconfig.imblocker.option.basicSettings.recoveredScreens": "已記錄的螢幕",
+  "text.autoconfig.imblocker.option.basicSettings.recoveredScreens.@Tooltip": "列出顯示過的螢幕，方便編輯白名單",
+  "text.autoconfig.imblocker.option.basicSettings.commandInputMode": "命令輸入模式",
+  "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[0]": "\u00A7l偵測到命令環境時切換為英文狀態的方式",
+  "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[1]": "如果你的輸入法在命令輸入時無法自動切換到英文\n用「DISABLE_IM」模式可能會比較有效\n但請注意此模式下無法輸入中文",
+  
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings": "Windows 相容性設定",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi": "使用轉換狀態API",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "用於切換中英文狀態的API\n\u00A77停用後IM_ENG_STATE命令輸入模式將失效",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCursorPositionTracking": "插入符號位置追蹤",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCompositionFontTweaks": "合成字串字體格式調整"
 }

@@ -8,9 +8,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.CursorInfo;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
-import io.github.reserveword.imblocker.common.gui.Point;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 
 @Mixin(TextFieldWidget.class)
@@ -27,69 +26,64 @@ public abstract class TextFieldLegacyMixin extends ClickableWidgetMixin implemen
 	private boolean preferredEditState = true;
 	
 	private boolean preferredEnglishState = false;
-    
-    @Override
-    public boolean isWidgetEditable() {
-    	return editable;
-    }
-    
-    @Override
-    public boolean getPreferredState() {
-    	return isWidgetEditable() && preferredEditState;
-    }
-    
-    @Override
-    public void focusChanged(boolean isFocused, CallbackInfo ci) {
-    	onMinecraftWidgetFocusChanged(isFocused);
-    }
-    
-    @Inject(method = "method_25363", at = @At("TAIL"))
-    public void focusBeChanged(boolean isFocused, CallbackInfo ci) {
-    	onMinecraftWidgetFocusChanged(isFocused);
-    }
-    
-    @Inject(method = "onChanged", at = @At("TAIL"))
-    public void onTextChanged(String newText, CallbackInfo ci) {
-    	IMManager.updateCompositionWindowPos();
-    }
-    
-    @Overwrite
-    public void setEditable(boolean editable) {
-    	if(this.editable != editable) {
-    		this.editable = editable;
-    		if(isTrulyFocused()) {
-    			updateIMState();
-    		}
-    	}
-    }
-    
-    @Override
-    public void setPreferredEditState(boolean preferredEditState) {
-    	if(this.preferredEditState != preferredEditState) {
-    		this.preferredEditState = preferredEditState;
-    		if(isTrulyFocused()) {
-    			updateIMState();
-    		}
-    	}
-    }
-    
-    @Override
-    public void setPreferredEnglishState(boolean state) {
-    	if(preferredEnglishState != state) {
-    		preferredEnglishState = state;
-    		if(isTrulyFocused()) {
-    			updateEnglishState();
-    		}
-    	}
-    }
-    
-    @Override
-    public boolean getPreferredEnglishState() {
-    	return preferredEnglishState;
-    }
-    
-    @Override
-    public Point getCaretPos() {
-    	return getCaretPos(new CursorInfo(drawsBackground, height, 0/*useless*/, 0/*useless*/, firstCharacterIndex, selectionStart, text));
-    }
+
+	@Override
+	public void focusChanged(boolean isFocused, CallbackInfo ci) {
+		onMinecraftWidgetFocusChanged(isFocused);
+	}
+
+	@Inject(method = "method_25363", at = @At("TAIL"))
+	public void focusBeChanged(boolean isFocused, CallbackInfo ci) {
+		onMinecraftWidgetFocusChanged(isFocused);
+	}
+
+	@Inject(method = "onChanged", at = @At("TAIL"))
+	public void onTextChanged(String newText, CallbackInfo ci) {
+		IMManager.updateCompositionWindowPos();
+	}
+
+	@Overwrite
+	public void setEditable(boolean editable) {
+		if (this.editable != editable) {
+			this.editable = editable;
+			if (isTrulyFocused()) {
+				updateIMState();
+			}
+		}
+	}
+
+	@Override
+	public void setPreferredEditState(boolean preferredEditState) {
+		if (this.preferredEditState != preferredEditState) {
+			this.preferredEditState = preferredEditState;
+			if (isTrulyFocused()) {
+				updateIMState();
+			}
+		}
+	}
+
+	@Override
+	public void setPreferredEnglishState(boolean state) {
+		if (preferredEnglishState != state) {
+			preferredEnglishState = state;
+			if (isTrulyFocused()) {
+				updateEnglishState();
+			}
+		}
+	}
+
+	@Override
+	public boolean getPreferredState() {
+		return editable && preferredEditState;
+	}
+
+	@Override
+	public boolean getPreferredEnglishState() {
+		return preferredEnglishState;
+	}
+
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return new SinglelineCursorInfo(drawsBackground, height, firstCharacterIndex, selectionStart, text);
+	}
 }

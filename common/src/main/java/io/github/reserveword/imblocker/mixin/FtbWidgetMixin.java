@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import dev.ftb.mods.ftblibrary.ui.Panel;
 import dev.ftb.mods.ftblibrary.ui.Widget;
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 
@@ -30,23 +29,23 @@ public abstract class FtbWidgetMixin implements MinecraftFocusableWidget {
 	
 	@Inject(method = "setX", at = @At("TAIL"))
 	public void handleXChanged(int x, CallbackInfo ci) {
-    	IMManager.updateCompositionWindowPos();
-    }
+		IMManager.updateCompositionWindowPos();
+	}
 	
 	@Inject(method = "setY", at = @At("TAIL"))
 	public void handleYChanged(int y, CallbackInfo ci) {
-    	IMManager.updateCompositionWindowPos();
-    }
+		IMManager.updateCompositionWindowPos();
+	}
 	
 	@Inject(method = "setWidth", at = @At("TAIL"))
 	public void handleWidthChanged(int x, CallbackInfo ci) {
-    	IMManager.updateCompositionWindowPos();
-    }
+		IMManager.updateCompositionWindowPos();
+	}
 	
 	@Inject(method = "setHeight", at = @At("TAIL"))
 	public void handleHeightChanged(int y, CallbackInfo ci) {
-    	IMManager.updateCompositionWindowPos();
-    }
+		IMManager.updateCompositionWindowPos();
+	}
 	
 	@Unique
 	public int getAbsoluteX() {
@@ -72,6 +71,6 @@ public abstract class FtbWidgetMixin implements MinecraftFocusableWidget {
 	
 	@Override
 	public Rectangle getBoundsAbs() {
-		return new Rectangle(FocusContainer.getMCGuiScaleFactor(), getAbsoluteX(), getAbsoluteY(), width, height);
+		return new Rectangle(getGuiScale(), getAbsoluteX(), getAbsoluteY(), width, height);
 	}
 }

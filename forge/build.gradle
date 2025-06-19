@@ -80,12 +80,15 @@ java {
 }
 
 project.jar {
-	archiveFileName = "${rootProject.name}-${mod_version}-forge+1.17-1.20.4.jar"
+    archiveFileName = "${rootProject.name}-${mod_version}-forge+1.17-1.20.4.jar"
     from sourceSets.main.output
-    from project(":common").sourceSets.main.output
+    from (project(":common").sourceSets.main.output) {
+        exclude 'imblocker-old.png'
+    }
+
     manifest {
         attributes([
-        		"MixinConfigs": "imblocker-forge.mixins.json",
+                "MixinConfigs": "imblocker-forge.mixins.json",
                 "Specification-Title"     : mod_id,
                 "Specification-Vendor"    : author,
                 "Specification-Version"   : "1", // We are version 1 of ourselves

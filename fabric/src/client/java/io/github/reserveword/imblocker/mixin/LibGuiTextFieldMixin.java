@@ -9,14 +9,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import io.github.cottonmc.cotton.gui.widget.WTextField;
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.StringUtil;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
-import io.github.reserveword.imblocker.common.gui.Point;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
+import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 
 @Mixin(value = WTextField.class, remap = false)
-public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin {
+public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements MinecraftTextFieldWidget {
 	
 	@Shadow
 	private boolean editable;
@@ -25,20 +22,15 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin {
 	@Shadow private int scrollOffset;
 	@Shadow private int cursor;
 	
-	@Override
-	public boolean isWidgetEditable() {
-		return editable;
+	@Inject(method = "onFocusGained", at = @At("TAIL"))
+	public void onFocusGained(CallbackInfo ci) {
+		onMinecraftWidgetFocusGained();
 	}
 	
-	@Inject(method = "onFocusGained", at = @At("TAIL"))
-    public void onFocusGained(CallbackInfo ci) {
-    	onMinecraftWidgetFocusGained();
-    }
-	
 	@Override
-    public void onFocusLost(CallbackInfo ci) {
-    	onMinecraftWidgetFocusLost();
-    }
+	public void onFocusLost(CallbackInfo ci) {
+		onMinecraftWidgetFocusLost();
+	}
 	
 	@Inject(method = "setEditable", at = @At("HEAD"), cancellable = true)
 	public void setEditable(boolean editable, CallbackInfoReturnable<WTextField> cir) {
@@ -65,9 +57,17 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin {
 	}
 	
 	@Override
-	public Point getCaretPos() {
-		TextRenderer font = MinecraftClient.getInstance().textRenderer;
-		int caretX = WTextField.TEXT_PADDING_X + font.getWidth(StringUtil.getSubstring(text, scrollOffset, cursor));
-		return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, WTextField.TEXT_PADDING_Y);
+	public boolean getPreferredState() {
+		return editable;
+	}
+	
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return new SinglelineCursorInfo(true, height, scrollOffset, cursor, text);
+	}
+	
+	@Override
+	public int getPaddingX() {
+		return WTextField.TEXT_PADDING_X;
 	}
 }

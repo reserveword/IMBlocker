@@ -1,7 +1,7 @@
 package io.github.reserveword.imblocker.common.gui;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 
 public interface FocusableWidget {
 	
@@ -21,10 +21,12 @@ public interface FocusableWidget {
 	}
 	
 	default void updateIMState() {
-		IMManager.setState(getPreferredState());
-		if(getPreferredState()) {
-			IMManager.setEnglishState(getPreferredEnglishState());
+		boolean shouldEnableIME = getPreferredState();
+		IMManager.setState(shouldEnableIME);
+		if(shouldEnableIME) {
 			IMManager.updateCompositionWindowPos();
+			IMManager.updateCompositionFontSize();
+			IMManager.setEnglishState(getPreferredEnglishState());
 		}
 	}
 	
@@ -34,22 +36,23 @@ public interface FocusableWidget {
 		}
 	}
 	
-	boolean isWidgetEditable();
-	
-	default boolean getPreferredState() {
-		return isWidgetEditable();
-	}
+	boolean getPreferredState();
 	
 	default boolean getPreferredEnglishState() {
 		return false;
 	}
 	
 	default Rectangle getBoundsAbs() {
-		Rectangle bounds = MinecraftClientAccessor.instance.getWindowBounds();
-		return new Rectangle(bounds.width() / 3, bounds.height() / 2, 0, 0);
+		Rectangle bounds = MinecraftClientAccessor.INSTANCE.getWindowBounds();
+		return new Rectangle(0, 0, bounds.width(), bounds.height());
 	}
 	
 	default Point getCaretPos() {
-		return Point.TOP_LEFT;
+		Rectangle bounds = MinecraftClientAccessor.INSTANCE.getWindowBounds();
+		return new Point(bounds.width() / 3, bounds.height() / 2);
+	}
+	
+	default double getGuiScale() {
+		return getFocusContainer().getGuiScaleFactor();
 	}
 }

@@ -6,8 +6,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.reserveword.imblocker.common.Config;
+import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMManager;
+import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.GenericWhitelistScreen;
@@ -17,35 +18,41 @@ import net.minecraft.client.util.Window;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
-	
+
 	@Shadow
 	private Window window;
-	
-    @Inject(method = "onWindowFocusChanged", at = @At("HEAD"))
-    public void onWindowFocusChanged(boolean focused, CallbackInfo ci) {
-    	FocusManager.setWindowFocused(focused);
-    }
-    
-    @Inject(method = "onResolutionChanged", at = @At("TAIL"))
-    public void onResolutionChanged(CallbackInfo ci) {
-    	FocusContainer.MINECRAFT.setGuiScaleFactor(window.getScaleFactor());
-    	IMManager.updateCompositionWindowPos();
-    }
-    
-    @Inject(method = "setScreen", at = @At("HEAD"))
-    public void onScreenChanged(Screen screen, CallbackInfo ci) {
-    	if(Config.INSTANCE.isScreenRecoveringEnabled() && screen != null) {
-    		Config.INSTANCE.recoverScreen(screen.getClass().getName());
-    	}
-    	
-    	if(isScreenInWhiteList(screen)) {
-    		FocusContainer.MINECRAFT.requestFocus(GenericWhitelistScreen.getInstance());
-    	}else {
-    		FocusContainer.MINECRAFT.cancelFocus();
-    	}
-    }
-    
-    private boolean isScreenInWhiteList(Screen screen) {
-    	return screen != null && Config.INSTANCE.inScreenWhitelist(screen.getClass());
-    }
+
+	@Inject(method = "onWindowFocusChanged", at = @At("HEAD"))
+	public void onWindowFocusChanged(boolean focused, CallbackInfo ci) {
+		FocusManager.setWindowFocused(focused);
+	}
+
+	@Inject(method = "onResolutionChanged", at = @At("TAIL"))
+	public void onResolutionChanged(CallbackInfo ci) {
+		try {
+			FocusContainer.MINECRAFT.setGuiScaleFactor(window.getScaleFactor());
+		} catch (NoSuchMethodError e) {
+			FocusContainer.MINECRAFT.setGuiScaleFactor(ReflectionUtil
+					.getFieldValue(window.getClass(), window, Number.class, "field_5179").doubleValue());
+		}
+		IMManager.updateCompositionWindowPos();
+		IMManager.updateCompositionFontSize();
+	}
+
+	@Inject(method = "setScreen", at = @At("HEAD"))
+	public void onScreenChanged(Screen screen, CallbackInfo ci) {
+		if(IMBlockerConfig.INSTANCE.isScreenRecoveringEnabled() && screen != null) {
+			IMBlockerConfig.INSTANCE.recoverScreen(screen.getClass().getName());
+		}
+
+		if(isScreenInWhiteList(screen)) {
+			FocusContainer.MINECRAFT.requestFocus(GenericWhitelistScreen.getInstance());
+		}else {
+			FocusContainer.MINECRAFT.cancelFocus();
+		}
+	}
+
+	private boolean isScreenInWhiteList(Screen screen) {
+		return IMBlockerConfig.INSTANCE.isScreenInWhitelist(screen);
+	}
 }

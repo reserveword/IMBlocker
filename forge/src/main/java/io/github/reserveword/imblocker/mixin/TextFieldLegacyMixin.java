@@ -8,9 +8,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.CursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
-import io.github.reserveword.imblocker.common.gui.Point;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import net.minecraft.client.gui.components.EditBox;
 
 @Mixin(EditBox.class)
@@ -29,67 +28,62 @@ public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin implement
 	private boolean preferredEnglishState = false;
 	
 	@Override
-	public boolean isWidgetEditable() {
-		return isEditable;
-	}
-	
-	@Override
-    public boolean getPreferredState() {
-    	return isWidgetEditable() && preferredEditState;
-    }
-	
-	@Override
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
 		onMinecraftWidgetFocusChanged(isFocused);
 	}
 	
 	@Inject(method = "m_7207_", at = @At("TAIL"))
-    public void focusBeChanged(boolean isFocused, CallbackInfo ci) {
-    	onMinecraftWidgetFocusChanged(isFocused);
-    }
-	
+	public void focusBeChanged(boolean isFocused, CallbackInfo ci) {
+		onMinecraftWidgetFocusChanged(isFocused);
+	}
+
 	@Inject(method = "onValueChange", at = @At("TAIL"))
-    public void onTextChanged(String newValue, CallbackInfo ci) {
-    	IMManager.updateCompositionWindowPos();
-    }
-	
+	public void onTextChanged(String newValue, CallbackInfo ci) {
+		IMManager.updateCompositionWindowPos();
+	}
+
 	@Overwrite
-    public void setEditable(boolean editable) {
-		if(this.isEditable != editable) {
-    		this.isEditable = editable;
-    		if(isTrulyFocused()) {
-    			updateIMState();
-    		}
-    	}
-    }
+	public void setEditable(boolean editable) {
+		if (this.isEditable != editable) {
+			this.isEditable = editable;
+			if (isTrulyFocused()) {
+				updateIMState();
+			}
+		}
+	}
 
 	@Override
-    public void setPreferredEditState(boolean preferredEditState) {
-    	if(this.preferredEditState != preferredEditState) {
-    		this.preferredEditState = preferredEditState;
-    		if(isTrulyFocused()) {
-    			updateIMState();
-    		}
-    	}
-    }
-	
+	public void setPreferredEditState(boolean preferredEditState) {
+		if (this.preferredEditState != preferredEditState) {
+			this.preferredEditState = preferredEditState;
+			if (isTrulyFocused()) {
+				updateIMState();
+			}
+		}
+	}
+
 	@Override
 	public void setPreferredEnglishState(boolean state) {
-		if(preferredEnglishState != state) {
-    		preferredEnglishState = state;
-    		if(isTrulyFocused()) {
-    			updateEnglishState();
-    		}
-    	}
-    }
-    
-    @Override
-    public boolean getPreferredEnglishState() {
-    	return preferredEnglishState;
-    }
-    
-    @Override
-    public Point getCaretPos() {
-    	return getCaretPos(new CursorInfo(bordered, height, 0/*useless*/, 0/*useless*/, displayPos, cursorPos, value));
-    }
+		if (preferredEnglishState != state) {
+			preferredEnglishState = state;
+			if (isTrulyFocused()) {
+				updateEnglishState();
+			}
+		}
+	}
+
+	@Override
+	public boolean getPreferredState() {
+		return isEditable && preferredEditState;
+	}
+
+	@Override
+	public boolean getPreferredEnglishState() {
+		return preferredEnglishState;
+	}
+
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return new SinglelineCursorInfo(bordered, height, displayPos, cursorPos, value);
+	}
 }

@@ -1,13 +1,33 @@
 package io.github.reserveword.imblocker.common.gui;
 
-import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.StringUtil;
+import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 
-public interface MinecraftTextFieldWidget {
+public interface MinecraftTextFieldWidget extends MinecraftFocusableWidget {
 	
-	default Point getCaretPos(CursorInfo cursorInfo) {
-		int caretX = (cursorInfo.hasBorder ? 4 : 0) + MinecraftClientAccessor.instance.getStringWidth(
+	@Override
+	default boolean getPreferredState() {
+		return true;
+	}
+	
+	default Point getCaretPos() {
+		SinglelineCursorInfo cursorInfo = getCursorInfo();
+		if(cursorInfo == null) {
+			return MinecraftFocusableWidget.super.getCaretPos();
+		}
+		int caretX = (cursorInfo.hasBorder ? getPaddingX() : 0) + MinecraftClientAccessor.INSTANCE.getStringWidth(
 				StringUtil.getSubstring(cursorInfo.text, cursorInfo.cursorLineBeginIndex, cursorInfo.cursor));
-    	return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, (cursorInfo.widgetHeight - 8) / 2);
+		int caretY = cursorInfo.hasBorder ? (cursorInfo.widgetHeight - getFontHeight()) / 2 : 0;
+    	return new Point(getGuiScale(), caretX, caretY);
+	}
+
+	SinglelineCursorInfo getCursorInfo();
+	
+	default int getPaddingX() {
+		return 4;
+	}
+	
+	default int getFontHeight() {
+		return 8;
 	}
 }

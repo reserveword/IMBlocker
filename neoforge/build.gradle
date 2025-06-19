@@ -16,6 +16,7 @@ runs {
 
         dependencies {
             runtime project(":common")
+            runtime project(":forge")
         }
     }
 }
@@ -28,16 +29,23 @@ configurations {
 
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
-	
-	compileOnly "dev.emi:emi-neoforge:${emi_version}"
+    
 	compileOnly "maven.modrinth:sodium:mc1.21.4-0.6.13-neoforge"
     compileOnly "maven.modrinth:reeses-sodium-options:mc1.21.4-1.8.3+neoforge"
 
     implementation project(':common')
+    implementation project(':forge')
 }
 
 project.jar {
-	archiveFileName = "${rootProject.name}-${mod_version}-neoforge-1.20.6+.jar"
+    archiveFileName = "${rootProject.name}-${mod_version}-neoforge-1.20.6+.jar"
     from sourceSets.main.output
-    from project(":common").sourceSets.main.output
+    from (project(":common").sourceSets.main.output) {
+        exclude 'imblocker-old.png'
+    }
+    from (project(":forge").sourceSets.main.output) {
+        include '**/ForgeCommon.class'
+        include '**/mixin/*.class'
+        exclude '**/mixin/AbstractScrollWidgetMixin.class'
+    }
 }

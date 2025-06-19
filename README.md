@@ -44,7 +44,9 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
 [FTB Library](https://github.com/FTBTeam/FTB-Library)  
 [Meteor Client](https://www.meteorclient.com/)  
 [LibGui](https://github.com/CottonMC/LibGui)  
-[Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)
+[Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)  
+[BlockUI](https://github.com/ldtteam/BlockUI)  
+[SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)
 
 ## 致谢
 

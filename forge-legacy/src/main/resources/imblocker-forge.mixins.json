@@ -13,7 +13,9 @@
     "MainWindowMixin",
     "FtbWidgetMixin",
     "FtbTextFieldLegacyMixin",
-    "ReiTextFieldMixin"
+    "ReiTextFieldMixin",
+    "SM642WidgetMixin",
+    "SM642TextFieldMixin"
   ],
   "injectors": {
     "defaultRequire": 1

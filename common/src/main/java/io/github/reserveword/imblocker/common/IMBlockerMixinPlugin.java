@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker;
+package io.github.reserveword.imblocker.common;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,8 @@ import java.util.Set;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
+
+import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor.Mapping;
 
 public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 	
@@ -48,69 +50,95 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 	}
 	
 	static {
-		if(IMBlocker.isGameVersionReached(762/*1.19.4*/)) {
-			validMixins.add("AbstractParentElementMixin");
+		boolean isOfficialMapping = Common.getMapping() == Mapping.OFFICIAL;
+		
+		validMixins.add("AbstractCommandBlockScreenMixin");
+		validMixins.add("ChatScreenMixin");
+		validMixins.add(isOfficialMapping ? "AbstractWidgetMixin" : "ClickableWidgetMixin");
+		validMixins.add("MinecraftClientMixin");
+		validMixins.add("WindowMixin");
+		
+		if(Common.isGameVersionReached(762/*1.19.4*/)) {
+			validMixins.add(isOfficialMapping ? "AbstractContainerEventHandlerMixin" : "AbstractParentElementMixin");
 			validMixins.add("TextFieldMixin");
 		}else {
 			validMixins.add("TextFieldLegacyMixin");
 		}
-
-		if(IMBlocker.isGameVersionReached(760/*1.19.1*/)) {
-			validMixins.add("ScrollableWidgetMixin");
-			validMixins.add("SubstringAccessor");
-			validMixins.add("EditBoxMixin");
-			validMixins.add("EditBoxWidgetMixin");
+		
+		if(Common.isGameVersionReached(760/*1.19.1*/)) {
+			if(isOfficialMapping) {
+				validMixins.add("AbstractScrollWidgetMixin");
+				validMixins.add("StringViewAccessor");
+				validMixins.add("MultilineTextFieldMixin");
+				validMixins.add("MultiLineEditBoxMixin");
+			}else {
+				validMixins.add("ScrollableWidgetMixin");
+				validMixins.add("SubstringAccessor");
+				validMixins.add("EditBoxMixin");
+				validMixins.add("EditBoxWidgetMixin");
+			}
 		}
 		
-		if(IMBlocker.hasMod("axiom")) {
+		if(Common.hasMod("axiom")) {
 			validMixins.add("AxiomEditorUIMixin");
 		}
 		
-		if(IMBlocker.hasMod("ftblibrary")) {
+		if(Common.hasMod("ftblibrary")) {
 			validMixins.add("FtbWidgetMixin");
 			
-			if(IMBlocker.isGameVersionReached(763/*1.20*/)) {
+			if(Common.isGameVersionReached(763/*1.20*/)) {
 				validMixins.add("FtbTextFieldMixin");
 			}else {
 				validMixins.add("FtbTextFieldLegacyMixin");
 			}
 			
-			if(IMBlocker.isGameVersionReached(760/*1.19.1*/)) {
+			if(Common.isGameVersionReached(760/*1.19.1*/)) {
 				validMixins.add("FtbPanelMixin");
 				validMixins.add("FtbMultilineTextFieldAccessorImpl");
 				validMixins.add("FtbMultilineTextBoxMixin");
 			}
 		}
 		
-		if(IMBlocker.hasMod("libgui")) {
+		if(Common.hasMod("libgui")) {
 			validMixins.add("LibGuiWidgetMixin");
 			validMixins.add("LibGuiTextFieldMixin");
 		}
 		
-		if(IMBlocker.hasMod("emi")) {
-			if(IMBlocker.isGameVersionReached(762/*1.19.4*/)) {
+		if(Common.hasMod("emi")) {
+			if(Common.isGameVersionReached(762/*1.19.4*/)) {
 				validMixins.add("EmiSearchWidgetMixin");
 			}else {
 				validMixins.add("EmiSearchWidgetLegacyMixin");
 			}
 		}
 		
-		if(IMBlocker.hasMod("roughlyenoughitems")) {
+		if(Common.hasMod("roughlyenoughitems")) {
 			validMixins.add("ReiTextFieldMixin");
 		}
 		
-		if(IMBlocker.hasMod("replaymod")) {
+		if(Common.hasMod("replaymod")) {
 			validMixins.add("ReplayModTextFieldMixin");
 		}
 		
-		if(IMBlocker.hasMod("meteor-client")) {
+		if(Common.hasMod("meteor-client")) {
 			validMixins.add("MeteorWidgetMixin");
 			validMixins.add("MeteorTextFieldMixin");
 		}
 		
-		if(IMBlocker.hasMod("reeses-sodium-options")) {
+		if(Common.hasMod("reeses-sodium-options") || Common.hasMod("reeses_sodium_options")) {
 			validMixins.add("RSOAbstractFrameMixin");
 			validMixins.add("SodiumSearchFieldMixin");
+		}
+		
+		if(Common.hasMod("blockui")) {
+			validMixins.add("BlockUIPaneMixin");
+			validMixins.add("BlockUIScrollingContainerMixin");
+			validMixins.add("BlockUITextFieldMixin");
+		}
+		
+		if(Common.hasMod("supermartijn642corelib")) {
+			validMixins.add("SM642WidgetMixin");
+			validMixins.add("SM642TextFieldMixin");
 		}
 	}
 }

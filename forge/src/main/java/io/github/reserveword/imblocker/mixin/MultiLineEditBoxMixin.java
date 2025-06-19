@@ -7,9 +7,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.CursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftMultilineEditBoxWidget;
-import io.github.reserveword.imblocker.common.gui.Point;
+import io.github.reserveword.imblocker.common.gui.MultilineCursorInfo;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.components.MultilineTextField;
@@ -19,11 +18,6 @@ public abstract class MultiLineEditBoxMixin extends AbstractScrollWidgetMixin im
 	
 	@Shadow private Font font;
 	@Shadow private MultilineTextField textField;
-	
-	@Override
-	public boolean isWidgetEditable() {
-		return true;
-	}
 	
 	@Override
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
@@ -41,10 +35,10 @@ public abstract class MultiLineEditBoxMixin extends AbstractScrollWidgetMixin im
 	}
 	
 	@Override
-	public Point getCaretPos() {
+	public MultilineCursorInfo getCursorInfo() {
 		int cursorLineIndex = textField.getLineAtCursor();
-		return getCaretPos(new CursorInfo(true, height, cursorLineIndex, scrollAmount(), 
+		return new MultilineCursorInfo(cursorLineIndex, scrollAmount(), 
 				((StringViewAccessor) (Object) textField.getLineView(cursorLineIndex)).getBeginIndex(), 
-				textField.cursor(), textField.value()));
+				textField.cursor(), textField.value());
 	}
 }

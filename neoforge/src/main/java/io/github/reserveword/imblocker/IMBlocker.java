@@ -1,28 +1,26 @@
 package io.github.reserveword.imblocker;
 
-import java.lang.reflect.Constructor;
-
 import com.mojang.blaze3d.platform.Window;
 
 import io.github.reserveword.imblocker.common.Common;
-import io.github.reserveword.imblocker.common.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.IMBlockerAutoConfig;
+import io.github.reserveword.imblocker.common.IMBlockerConfig;
+import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Common.MODID)
 public class IMBlocker {
+	
     public IMBlocker(ModContainer container) {
-    	MinecraftClientAccessor.instance = new MinecraftClientAccessor() {
+    	MinecraftClientAccessor.INSTANCE = new MinecraftClientAccessor() {
 			@Override
 			public void execute(Runnable runnable) {
 				Minecraft.getInstance().execute(runnable);
@@ -41,42 +39,23 @@ public class IMBlocker {
 			}
 		};
 
-        // Register ourselves for server and other game events we are interested in
-        container.registerConfig(ModConfig.Type.CLIENT, NeoForgeConfig.clientSpec);
-        
-        try {
-			@SuppressWarnings("unchecked")
-			Class<? extends Screen> configurationScreenClass = (Class<? extends Screen>) 
-					Class.forName("net.neoforged.neoforge.client.gui.ConfigurationScreen");
-			Constructor<? extends Screen> configurationScreenConstructor = configurationScreenClass
-					.getDeclaredConstructor(ModContainer.class, Screen.class);
-	        container.registerExtensionPoint(IConfigScreenFactory.class, new IConfigScreenFactory() {
-				public Screen createScreen(Minecraft minecraft, Screen modListScreen) { return null; }
+		IMBlockerConfig.defaultScreenWhitelist.addAll(ForgeCommon.defaultScreenWhitelist);
+		if(Common.hasMod("cloth_config")) {
+			AutoConfig.register(IMBlockerAutoConfig.class, GsonConfigSerializer::new);
+			IMBlockerConfig.INSTANCE = AutoConfig.getConfigHolder(IMBlockerAutoConfig.class).getConfig();
+			container.registerExtensionPoint(IConfigScreenFactory.class, new IConfigScreenFactory() {
+				public Screen createScreen(Minecraft minecraft, Screen modListScreen) {
+					return IMBlockerAutoConfig.getConfigScreen(modListScreen, Screen.class);
+				}
+
+				@SuppressWarnings("unused")
 				public Screen createScreen(ModContainer container, Screen modListScreen) {
-					return createInstance(configurationScreenConstructor, container, modListScreen);
+					return IMBlockerAutoConfig.getConfigScreen(modListScreen, Screen.class);
 				}
 			});
-		} catch (ClassNotFoundException e) {
-			Common.LOGGER.warn("Configuration screen is not available, which only supports 1.21+");
-		} catch (Exception e) {
-			e.printStackTrace();
+		}else {
+			IMBlockerConfig.INSTANCE = new IMBlockerConfig();
+			IMBlockerConfig.INSTANCE.reloadScreenWhitelist(IMBlockerConfig.defaultScreenWhitelist);
 		}
-    }
-    
-    private static <T> T createInstance(Constructor<T> constructor, Object... args) {
-    	try {
-			return constructor.newInstance(args);
-		} catch (Exception e) {
-			return null;
-		}
-    }
-
-    @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
-    public static class ModEvents {
-        @SubscribeEvent
-        public static void onConfigLoadReload(ModConfigEvent e) {
-            Common.LOGGER.info("imblock {}loading config", (e instanceof ModConfigEvent.Reloading)?"re":"");
-            NeoForgeConfig.reload();
-        }
-    }
+	}
 }

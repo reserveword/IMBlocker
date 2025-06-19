@@ -12,13 +12,13 @@ public class AxiomGuiMonitor implements StartTick {
 	private final ImGuiIO axiomGuiAccessor;
 	
 	private boolean axiomGuiCaptureKeyboard = false;
-    private boolean axiomTextFieldFocused = false;
-    
-    public AxiomGuiMonitor(ImGuiIO axiomGuiAccessor) {
+	private boolean axiomTextFieldFocused = false;
+
+	public AxiomGuiMonitor(ImGuiIO axiomGuiAccessor) {
 		this.axiomGuiAccessor = axiomGuiAccessor;
 	}
-	
-    @Override
+
+	@Override
 	public void onStartTick(MinecraftClient client) {
 		boolean isAxiomGuiFocused = axiomGuiAccessor.getWantCaptureKeyboard();
 		boolean isAxiomTextFieldFocused = axiomGuiAccessor.getWantTextInput();

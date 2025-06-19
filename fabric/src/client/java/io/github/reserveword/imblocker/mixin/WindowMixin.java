@@ -27,7 +27,7 @@ public class WindowMixin {
 		if(Platform.isWindows()) {
 			long hWnd = GLFWNativeWin32.glfwGetWin32Window(handle);
 			if(fullscreen) {
-				long style = User32.WS_VISIBLE | User32.WS_CLIPSIBLINGS | User32.WS_CLIPCHILDREN;
+				long style = User32.GetWindowLongPtr(hWnd, User32.GWL_STYLE) & 0x7FFFFFFF;
 				int flags = User32.SWP_NOMOVE | User32.SWP_NOSIZE | User32.SWP_NOSENDCHANGING;
 				User32.SetWindowLongPtr(hWnd, User32.GWL_STYLE, style);
 				User32.SetWindowPos(hWnd, User32.HWND_NOTOPMOST, 0, 0, 0, 0, flags);

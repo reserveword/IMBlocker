@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.reserveword.imblocker.common.Config;
+import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
@@ -34,8 +34,8 @@ public abstract class MinecraftClientMixin {
     
     @Inject(method = "setScreen", at = @At("HEAD"))
     public void onScreenChanged(Screen screen, CallbackInfo ci) {
-    	if(Config.INSTANCE.isScreenRecoveringEnabled() && screen != null) {
-    		Config.INSTANCE.recoverScreen(screen.getClass().getName());
+    	if(IMBlockerConfig.INSTANCE.isScreenRecoveringEnabled() && screen != null) {
+    		IMBlockerConfig.INSTANCE.recoverScreen(screen.getClass().getName());
     	}
     	
     	if(isScreenInWhiteList(screen)) {
@@ -46,6 +46,6 @@ public abstract class MinecraftClientMixin {
     }
     
     private boolean isScreenInWhiteList(Screen screen) {
-    	return screen != null && Config.INSTANCE.inScreenWhitelist(screen.getClass());
+    	return IMBlockerConfig.INSTANCE.isScreenInWhitelist(screen);
     }
 }

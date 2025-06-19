@@ -48,30 +48,33 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-	
-	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-	
-	implementation fg.deobf("curse.maven:ftb-library-forge-404465:3553840")
-	
-	implementation project(':common')
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+    implementation fg.deobf("curse.maven:ftb-library-forge-404465:3553840")
+
+    implementation project(':common')
 }
 
 mixin {
     disableTargetValidator = true
     overwriteErrorLevel = 'warn'
-	// MixinGradle Settings
-	add sourceSets.main, 'imblocker-forge.mixins.refmap.json'
-	config 'imblocker-forge.mixins.json'
+    // MixinGradle Settings
+    add sourceSets.main, 'imblocker-forge.mixins.refmap.json'
+    config 'imblocker-forge.mixins.json'
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
 tasks.named('jar', Jar).configure {
-	archiveFileName = "${rootProject.name}-${mod_version}-forge+1.16.5.jar"
-	from sourceSets.main.output
-	from project(":common").sourceSets.main.output
+    archiveFileName = "${rootProject.name}-${mod_version}-forge+1.16.5.jar"
+    from sourceSets.main.output
+    from (project(":common").sourceSets.main.output) {
+        exclude 'imblocker-old.png'
+    }
+
     manifest {
         attributes([
-				'MixinConfigs': 'imblocker-forge.mixins.json',
+                'MixinConfigs': 'imblocker-forge.mixins.json',
                 'Specification-Title'     : mod_id,
                 'Specification-Vendor'    : author,
                 'Specification-Version'   : '1', // We are version 1 of ourselves

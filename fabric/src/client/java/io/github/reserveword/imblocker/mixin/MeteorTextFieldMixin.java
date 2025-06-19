@@ -8,23 +8,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
+import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 
 @Pseudo
 @Mixin(targets = "meteordevelopment.meteorclient.gui.widgets.input.WTextBox", remap = false)
-public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin {
+public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin implements MinecraftTextFieldWidget {
 	
 	@Shadow protected int cursor;
-    @Shadow protected double textStart;
-	
-	@Override
-	public boolean isWidgetEditable() {
-		return true;
-	}
+	@Shadow protected double textStart;
 	
 	@Shadow
 	protected abstract double getTextWidth(int pos);
-    
+
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
 		onMinecraftWidgetFocusChanged(isFocused);
@@ -43,11 +39,17 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin {
 	@Override
 	public void onLayoutWidget(CallbackInfo ci) {
 		IMManager.updateCompositionWindowPos();
+		IMManager.updateCompositionFontSize();
 	}
 	
 	@Override
 	public Point getCaretPos() {
 		int caretX = (int) (getTextWidth(cursor) - textStart + pad());
-		return new Point(caretX, 0);
+		return new Point(caretX, (int) (height / 3.5));
+	}
+	
+	@Override
+	public int getFontHeight() {
+		return (int) (height * 3/7);
 	}
 }

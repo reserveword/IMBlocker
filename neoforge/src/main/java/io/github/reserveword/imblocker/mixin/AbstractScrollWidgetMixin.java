@@ -6,14 +6,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.client.gui.components.AbstractScrollWidget;
-
-@Mixin(AbstractScrollWidget.class)
+@Mixin(targets = {
+		"net.minecraft.client.gui.components.AbstractScrollWidget",
+		"net.minecraft.client.gui.components.AbstractScrollArea"}, remap = false)
 public abstract class AbstractScrollWidgetMixin extends AbstractWidgetMixin {
 	
 	@Shadow
 	protected abstract double scrollAmount();
 	
-	@Inject(method = "setScrollAmount", at = @At("TAIL"))
+	@Inject(method = "setScrollAmount(D)V", at = @At("TAIL"))
 	public void onScroll(double scroll, CallbackInfo ci) {}
 }

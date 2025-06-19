@@ -8,19 +8,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.StringUtil;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
-import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
-import io.github.reserveword.imblocker.common.gui.Point;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
+import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import net.caffeinemc.mods.sodium.client.util.Dim2i;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 
 @Pseudo
 @Mixin(targets = "me.flashyreese.mods.reeses_sodium_options."
 		+ "client.gui.frame.components.SearchTextFieldComponent", remap = false)
-public abstract class SodiumSearchFieldMixin implements MinecraftFocusableWidget {
+public abstract class SodiumSearchFieldMixin implements MinecraftTextFieldWidget {
 	
 	@Shadow
 	protected boolean editable;
@@ -29,11 +25,6 @@ public abstract class SodiumSearchFieldMixin implements MinecraftFocusableWidget
 	@Shadow protected String text;
 	@Shadow private int firstCharacterIndex;
 	@Shadow private int selectionStart;
-	
-	@Override
-	public boolean isWidgetEditable() {
-		return editable; // Always true.
-	}
 	
 	@Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
@@ -46,14 +37,22 @@ public abstract class SodiumSearchFieldMixin implements MinecraftFocusableWidget
 	}
 	
 	@Override
-	public Rectangle getBoundsAbs() {
-		return new Rectangle(FocusContainer.getMCGuiScaleFactor(), dim.x(), dim.y(), dim.width(), dim.height());
+	public boolean getPreferredState() {
+		return editable;
 	}
 	
 	@Override
-	public Point getCaretPos() {
-		Font font = Minecraft.getInstance().font;
-		int caretX = 6 + font.width(StringUtil.getSubstring(text, firstCharacterIndex, selectionStart));
-		return new Point(FocusContainer.getMCGuiScaleFactor(), caretX, 5);
+	public Rectangle getBoundsAbs() {
+		return new Rectangle(getGuiScale(), dim.x(), dim.y(), dim.width(), dim.height());
+	}
+	
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return new SinglelineCursorInfo(true, dim.height(), firstCharacterIndex, selectionStart, text);
+	}
+	
+	@Override
+	public int getPaddingX() {
+		return 6;
 	}
 }

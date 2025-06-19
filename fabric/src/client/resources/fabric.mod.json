@@ -23,7 +23,7 @@
       "io.github.reserveword.imblocker.IMBlocker"
     ],
     "modmenu": [
-      "io.github.reserveword.imblocker.FabricConfig"
+      "io.github.reserveword.imblocker.IMBlockerModMenuIntegration"
     ]
   },
   "mixins": [

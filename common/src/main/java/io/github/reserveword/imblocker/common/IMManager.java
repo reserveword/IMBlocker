@@ -10,6 +10,10 @@ public final class IMManager {
 		void setState(boolean on);
 		
 		void setEnglishState(boolean isEN);
+		
+		default void updateCompositionWindowPos() {}
+		
+		default void updateCompositionFontSize() {}
 	}
 	
 	private IMManager() {}
@@ -19,12 +23,20 @@ public final class IMManager {
 	}
 	
 	public static void setEnglishState(boolean isEN) {
-		INSTANCE.setEnglishState(isEN);
+		if(IMBlockerConfig.INSTANCE.isConversionStatusApiEnabled()) {
+			INSTANCE.setEnglishState(isEN);
+		}
 	}
 	
 	public static void updateCompositionWindowPos() {
-		if(INSTANCE instanceof IMManagerWindows) {
-			((IMManagerWindows) INSTANCE).updateCompositionWindowPos();
+		if(IMBlockerConfig.INSTANCE.isCursorPositionTrackingEnabled()) {
+			INSTANCE.updateCompositionWindowPos();
+		}
+	}
+	
+	public static void updateCompositionFontSize() {
+		if(IMBlockerConfig.INSTANCE.isCompositionFontTweaksEnabled()) {
+			INSTANCE.updateCompositionFontSize();
 		}
 	}
 	

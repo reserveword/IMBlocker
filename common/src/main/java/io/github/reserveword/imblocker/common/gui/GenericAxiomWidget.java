@@ -10,7 +10,7 @@ public class GenericAxiomWidget implements FocusableWidget {
 	}
 
 	@Override
-	public boolean isWidgetEditable() {
+	public boolean getPreferredState() {
 		return true;
 	}
 	

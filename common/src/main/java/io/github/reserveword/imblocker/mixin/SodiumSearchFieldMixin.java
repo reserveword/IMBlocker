@@ -8,10 +8,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
+import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
-import net.caffeinemc.mods.sodium.client.util.Dim2i;
 
 @Pseudo
 @Mixin(targets = "me.flashyreese.mods.reeses_sodium_options."
@@ -21,12 +21,11 @@ public abstract class SodiumSearchFieldMixin implements MinecraftTextFieldWidget
 	@Shadow
 	protected boolean editable;
 	
-	@Shadow protected Dim2i dim;
 	@Shadow protected String text;
 	@Shadow private int firstCharacterIndex;
 	@Shadow private int selectionStart;
 	
-	@Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
+	@Inject(method = {"setFocused", "method_25365", "m_93692_"}, at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
 		onMinecraftWidgetFocusChanged(isFocused);
 	}
@@ -43,12 +42,19 @@ public abstract class SodiumSearchFieldMixin implements MinecraftTextFieldWidget
 	
 	@Override
 	public Rectangle getBoundsAbs() {
-		return new Rectangle(getGuiScale(), dim.x(), dim.y(), dim.width(), dim.height());
+		Object dim = ReflectionUtil.getFieldValue(getClass(), this, Object.class, "dim");
+		int x = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "x");
+		int y = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "y");
+		int width = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "width");
+		int height = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "height");
+		return new Rectangle(getGuiScale(), x, y, width, height);
 	}
 	
 	@Override
 	public SinglelineCursorInfo getCursorInfo() {
-		return new SinglelineCursorInfo(true, dim.height(), firstCharacterIndex, selectionStart, text);
+		Object dim = ReflectionUtil.getFieldValue(getClass(), this, Object.class, "dim");
+		int height = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "height");
+		return new SinglelineCursorInfo(true, height, firstCharacterIndex, selectionStart, text);
 	}
 	
 	@Override

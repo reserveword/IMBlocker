@@ -47,5 +47,6 @@ project.jar {
         include '**/ForgeCommon.class'
         include '**/mixin/*.class'
         exclude '**/mixin/AbstractScrollWidgetMixin.class'
+        exclude '**/mixin/RSOAbstractFrameMixin.class'
     }
 }

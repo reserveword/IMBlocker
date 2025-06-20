@@ -9,7 +9,7 @@ import net.minecraft.client.gui.AbstractParentElement;
 import net.minecraft.client.gui.Element;
 
 @Mixin(AbstractParentElement.class)
-public class AbstractParentElementMixin {
+public abstract class AbstractParentElementMixin {
 	
 	@Shadow
 	@Nullable

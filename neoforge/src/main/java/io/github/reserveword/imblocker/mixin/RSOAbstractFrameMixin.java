@@ -8,12 +8,15 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
 
+import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
+import me.flashyreese.mods.reeses_sodium_options.client.gui.frame.components.SearchTextFieldComponent;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 
 @Pseudo
 @Mixin(targets = "me.flashyreese.mods.reeses_sodium_options.client.gui.frame.AbstractFrame", remap = false)
 public abstract class RSOAbstractFrameMixin {
+	
 	@Shadow
 	private GuiEventListener focused;
 
@@ -22,7 +25,12 @@ public abstract class RSOAbstractFrameMixin {
 	public void setFocused(@Nullable GuiEventListener focused) {
 		if (this.focused != focused) {
 			if(this.focused != null) {
-				this.focused.setFocused(false);
+				if(Common.isGameVersionReached(762/*1.19.4*/)) {
+					this.focused.setFocused(false);
+				}else if(SearchTextFieldComponent.class.isInstance(this.focused)) {
+					ReflectionUtil.invokeMethod(SearchTextFieldComponent.class, this.focused, null, 
+							"setFocused", new Class[] {boolean.class}, false);
+				}
 			}
 			
 			this.focused = focused;

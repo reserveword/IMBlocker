@@ -13,7 +13,7 @@ import com.sun.jna.Platform;
 import net.minecraft.client.util.Window;
 
 @Mixin(value = Window.class, priority = 10001)
-public class WindowMixin {
+public abstract class WindowMixin {
 	
 	@Shadow
 	private long handle;

@@ -9,7 +9,7 @@ import net.minecraft.client.gui.components.events.AbstractContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 
 @Mixin(AbstractContainerEventHandler.class)
-public class AbstractContainerEventHandlerMixin {
+public abstract class AbstractContainerEventHandlerMixin {
 	
 	@Shadow
 	@Nullable

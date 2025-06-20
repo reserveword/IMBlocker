@@ -10,6 +10,10 @@ public interface MinecraftTextFieldWidget extends MinecraftFocusableWidget {
 		return true;
 	}
 	
+	default void setPreferredEditState(boolean state) {}
+	 
+	default void setPreferredEnglishState(boolean state) {}
+	
 	default Point getCaretPos() {
 		SinglelineCursorInfo cursorInfo = getCursorInfo();
 		if(cursorInfo == null) {

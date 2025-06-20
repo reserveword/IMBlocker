@@ -51,7 +51,7 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    implementation fg.deobf("curse.maven:ftb-library-forge-404465:3553840")
+    compileOnly fg.deobf("maven.modrinth:textrues-embeddium-options:0.1.2+mc1.16.5")
 
     implementation project(':common')
 }

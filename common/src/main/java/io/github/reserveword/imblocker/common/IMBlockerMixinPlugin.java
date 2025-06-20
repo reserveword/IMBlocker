@@ -140,5 +140,9 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("SM642WidgetMixin");
 			validMixins.add("SM642TextFieldMixin");
 		}
+		
+		if(Common.hasMod("journeymap")) {
+			validMixins.add("JourneyMapChatMixin");
+		}
 	}
 }

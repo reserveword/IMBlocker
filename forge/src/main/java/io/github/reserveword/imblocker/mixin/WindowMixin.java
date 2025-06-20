@@ -12,7 +12,7 @@ import com.mojang.blaze3d.platform.Window;
 import com.sun.jna.Platform;
 
 @Mixin(Window.class)
-public class WindowMixin {
+public abstract class WindowMixin {
 
 	@Shadow
 	private long window;

@@ -8,12 +8,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.CommandInputMode;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
-import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
+import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractCommandBlockEditScreen;
 
 @Mixin(AbstractCommandBlockEditScreen.class)
-public class AbstractCommandBlockScreenMixin {
+public abstract class AbstractCommandBlockScreenMixin {
 	
 	@Shadow
 	protected EditBox commandEdit;
@@ -21,8 +21,8 @@ public class AbstractCommandBlockScreenMixin {
 	@Inject(method = "init", at = @At("TAIL"))
 	private void setCommandInputEnglishState(CallbackInfo ci) {
 		if(IMBlockerConfig.INSTANCE.getChatCommandInputType() == CommandInputMode.DISABLE_IM) {
-			((MinecraftFocusableWidget) commandEdit).setPreferredEditState(false); 
+			((MinecraftTextFieldWidget) commandEdit).setPreferredEditState(false); 
 		}
-		((MinecraftFocusableWidget) commandEdit).setPreferredEnglishState(true); 
+		((MinecraftTextFieldWidget) commandEdit).setPreferredEnglishState(true); 
 	}
 }

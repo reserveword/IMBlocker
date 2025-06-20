@@ -14,8 +14,11 @@
     "FtbWidgetMixin",
     "FtbTextFieldLegacyMixin",
     "ReiTextFieldMixin",
+    "RSOAbstractFrameMixin",
+    "SodiumSearchFieldMixin",
     "SM642WidgetMixin",
-    "SM642TextFieldMixin"
+    "SM642TextFieldMixin",
+    "JourneyMapChatMixin"
   ],
   "injectors": {
     "defaultRequire": 1

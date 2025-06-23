@@ -80,69 +80,71 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		}
 		
 		if(Common.hasMod("axiom")) {
-			validMixins.add("AxiomEditorUIMixin");
+			validMixins.add("compat.AxiomEditorUIMixin");
 		}
 		
 		if(Common.hasMod("ftblibrary")) {
-			validMixins.add("FtbWidgetMixin");
+			validMixins.add("compat.FtbWidgetMixin");
 			
 			if(Common.isGameVersionReached(763/*1.20*/)) {
-				validMixins.add("FtbTextFieldMixin");
+				validMixins.add("compat.FtbTextFieldMixin");
 			}else {
-				validMixins.add("FtbTextFieldLegacyMixin");
+				validMixins.add("compat.FtbTextFieldLegacyMixin");
 			}
 			
 			if(Common.isGameVersionReached(760/*1.19.1*/)) {
-				validMixins.add("FtbPanelMixin");
-				validMixins.add("FtbMultilineTextFieldAccessorImpl");
-				validMixins.add("FtbMultilineTextBoxMixin");
+				validMixins.add("compat.FtbPanelMixin");
+				validMixins.add("compat.FtbMultilineTextFieldAccessorImpl");
+				validMixins.add("compat.FtbMultilineTextBoxMixin");
 			}
 		}
 		
 		if(Common.hasMod("libgui")) {
-			validMixins.add("LibGuiWidgetMixin");
-			validMixins.add("LibGuiTextFieldMixin");
+			validMixins.add("compat.LibGuiWidgetMixin");
+			validMixins.add("compat.LibGuiTextFieldMixin");
 		}
 		
 		if(Common.hasMod("emi")) {
 			if(Common.isGameVersionReached(762/*1.19.4*/)) {
-				validMixins.add("EmiSearchWidgetMixin");
+				validMixins.add("compat.EmiSearchWidgetMixin");
 			}else {
-				validMixins.add("EmiSearchWidgetLegacyMixin");
+				validMixins.add("compat.EmiSearchWidgetLegacyMixin");
 			}
 		}
 		
 		if(Common.hasMod("roughlyenoughitems")) {
-			validMixins.add("ReiTextFieldMixin");
+			validMixins.add("compat.ReiTextFieldMixin");
 		}
 		
 		if(Common.hasMod("replaymod")) {
-			validMixins.add("ReplayModTextFieldMixin");
+			validMixins.add("compat.ReplayModTextFieldMixin");
 		}
 		
 		if(Common.hasMod("meteor-client")) {
-			validMixins.add("MeteorWidgetMixin");
-			validMixins.add("MeteorTextFieldMixin");
+			validMixins.add("compat.MeteorWidgetMixin");
+			validMixins.add("compat.MeteorTextFieldMixin");
 		}
 		
 		if(Common.hasMod("reeses-sodium-options") || Common.hasMod("reeses_sodium_options")) {
-			validMixins.add("RSOAbstractFrameMixin");
-			validMixins.add("SodiumSearchFieldMixin");
+			validMixins.add("compat.RSOAbstractFrameMixin");
+			validMixins.add("compat.RSOSearchFieldMixin");
 		}
 		
 		if(Common.hasMod("blockui")) {
-			validMixins.add("BlockUIPaneMixin");
-			validMixins.add("BlockUIScrollingContainerMixin");
-			validMixins.add("BlockUITextFieldMixin");
+			validMixins.add("compat.BlockUIBOScreenMixin");
+			validMixins.add("compat.BlockUIPaneMixin");
+			validMixins.add("compat.BlockUIViewMixin");
+			validMixins.add("compat.BlockUIScrollingContainerMixin");
+			validMixins.add("compat.BlockUITextFieldMixin");
 		}
 		
 		if(Common.hasMod("supermartijn642corelib")) {
-			validMixins.add("SM642WidgetMixin");
-			validMixins.add("SM642TextFieldMixin");
+			validMixins.add("compat.SM642WidgetMixin");
+			validMixins.add("compat.SM642TextFieldMixin");
 		}
 		
 		if(Common.hasMod("journeymap")) {
-			validMixins.add("JourneyMapChatMixin");
+			validMixins.add("compat.JourneyMapChatMixin");
 		}
 	}
 }

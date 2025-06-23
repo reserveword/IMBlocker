@@ -11,14 +11,14 @@
     "TextFieldMixin",
     "MinecraftClientMixin",
     "MainWindowMixin",
-    "FtbWidgetMixin",
-    "FtbTextFieldLegacyMixin",
-    "ReiTextFieldMixin",
-    "RSOAbstractFrameMixin",
-    "SodiumSearchFieldMixin",
-    "SM642WidgetMixin",
-    "SM642TextFieldMixin",
-    "JourneyMapChatMixin"
+    "compat.FtbWidgetMixin",
+    "compat.FtbTextFieldLegacyMixin",
+    "compat.ReiTextFieldMixin",
+    "compat.RSOAbstractFrameMixin",
+    "compat.RSOSearchFieldMixin",
+    "compat.SM642WidgetMixin",
+    "compat.SM642TextFieldMixin",
+    "compat.JourneyMapChatMixin"
   ],
   "injectors": {
     "defaultRequire": 1

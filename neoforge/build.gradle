@@ -42,11 +42,13 @@ project.jar {
     from sourceSets.main.output
     from (project(":common").sourceSets.main.output) {
         exclude 'imblocker-old.png'
+        exclude '**/*LegacyMixin.class'
     }
     from (project(":forge").sourceSets.main.output) {
         include '**/ForgeCommon.class'
-        include '**/mixin/*.class'
-        exclude '**/mixin/AbstractScrollWidgetMixin.class'
-        exclude '**/mixin/RSOAbstractFrameMixin.class'
+        include '**/mixin/**/*.class'
+        exclude '**/*LegacyMixin.class'
+        exclude '**/AbstractScrollWidgetMixin.class'
+        exclude '**/RSOAbstractFrameMixin.class'
     }
 }

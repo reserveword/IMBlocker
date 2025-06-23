@@ -57,6 +57,7 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	
     compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
+	compileOnly fg.deobf("curse.maven:blockui-$blockui_version")
     compileOnly fg.deobf("maven.modrinth:textrues-embeddium-options:0.1.1+mc1.19.2")
 
     implementation project(':common')

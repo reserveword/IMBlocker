@@ -1,18 +1,32 @@
 package io.github.reserveword.imblocker.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor.Mapping;
 
-public class Common {
+public class IMBlockerCore {
 	public static final String MODID = "imblocker";
 	public static final Logger LOGGER = LogManager.getLogger();
 	
 	private static final ModLoaderAccessor modLoaderAccessor;
 	
 	public static boolean isTrackingFocus = false;
+	public static boolean isFocusLocated = false;
+	private static final List<Runnable> deferredRunnables = new ArrayList<>();
+	
+	public static synchronized void invokeLater(Runnable runnable) {
+		deferredRunnables.add(runnable);
+	}
+	
+	public static void flushDeferredRunnables() {
+		deferredRunnables.forEach(Runnable::run);
+		deferredRunnables.clear();
+	}
 	
 	public static boolean isGameVersionReached(int protocolVersion) {
 		return modLoaderAccessor.isGameVersionReached(protocolVersion);

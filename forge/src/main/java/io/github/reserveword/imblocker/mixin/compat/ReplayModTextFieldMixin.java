@@ -8,12 +8,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.replaymod.lib.de.johni0702.minecraft.gui.GuiRenderer;
-import com.replaymod.lib.de.johni0702.minecraft.gui.OffsetGuiRenderer;
-import com.replaymod.lib.de.johni0702.minecraft.gui.RenderInfo;
-import com.replaymod.lib.de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
-import com.replaymod.lib.de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 
+import de.johni0702.minecraft.gui.GuiRenderer;
+import de.johni0702.minecraft.gui.OffsetGuiRenderer;
+import de.johni0702.minecraft.gui.RenderInfo;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
@@ -24,7 +24,7 @@ import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 
 @Pseudo
-@Mixin(targets = "com.replaymod.lib.de.johni0702.minecraft.gui.element.AbstractGuiTextField", remap = false)
+@Mixin(targets = "de.johni0702.minecraft.gui.element.AbstractGuiTextField", remap = false)
 public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidget {
 	
 	private Rectangle bounds;

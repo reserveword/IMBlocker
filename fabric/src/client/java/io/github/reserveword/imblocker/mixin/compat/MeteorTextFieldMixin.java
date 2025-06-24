@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
@@ -34,7 +34,7 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin implements 
 	
 	@Inject(method = "onCharTyped", at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(char chr, CallbackInfoReturnable<Boolean> cir) {
-		if(Common.isTrackingFocus && focused) {
+		if(IMBlockerCore.isTrackingFocus && focused) {
 			FocusContainer.MINECRAFT.requestFocus(this);
 			cir.setReturnValue(true);
 		}

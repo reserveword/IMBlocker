@@ -1,5 +1,6 @@
 package io.github.reserveword.imblocker.common.gui;
 
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 
 public enum FocusContainer {
@@ -20,6 +21,10 @@ public enum FocusContainer {
 	}
 	
 	public void requestFocus(FocusableWidget toFocus) {
+		if(IMBlockerCore.isTrackingFocus) {
+			IMBlockerCore.isFocusLocated = true;
+		}
+		
 		if(focusedWidget != toFocus) {
 			if(isFocused) {
 				if(focusedWidget != null) {

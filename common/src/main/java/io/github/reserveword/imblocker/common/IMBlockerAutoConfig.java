@@ -9,7 +9,7 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.EnumHandler.EnumDisplayOption;
 
-@Config(name = Common.MODID)
+@Config(name = IMBlockerCore.MODID)
 public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	
 	@ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
@@ -44,8 +44,8 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	}
 	
 	@Override
-	public boolean isDoubleFactorFocusTrackingEnabled() {
-		return advanceSettings.enableDoubleFactorFocusTracking;
+	public boolean isTwoFactorFocusTrackingEnabled() {
+		return advanceSettings.enableTwoFactorFocusTracking;
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	}
 	
 	static class AdvanceSettings {
-		boolean enableDoubleFactorFocusTracking;
+		boolean enableTwoFactorFocusTracking = false;
 	}
 
 	static class WindowsCompatibilitySettings {

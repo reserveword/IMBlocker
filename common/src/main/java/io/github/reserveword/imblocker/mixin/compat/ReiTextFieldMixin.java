@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
@@ -41,7 +41,7 @@ public abstract class ReiTextFieldMixin implements MinecraftTextFieldWidget {
 	
 	@Inject(method = {"charTyped", "method_25400", "m_5534_", "func_231042_a_"}, at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-		if(Common.isTrackingFocus && visible && focused) {
+		if(IMBlockerCore.isTrackingFocus && visible && focused) {
 			FocusContainer.MINECRAFT.requestFocus(this);
 			cir.setReturnValue(true);
 		}

@@ -18,7 +18,7 @@ public interface MinecraftFocusableWidget extends FocusableWidget {
 	}
 	
 	default void onMinecraftWidgetFocusGained() {
-		if(!IMBlockerConfig.INSTANCE.isDoubleFactorFocusTrackingEnabled()) {
+		if(!IMBlockerConfig.INSTANCE.isTwoFactorFocusTrackingEnabled()) {
 			getFocusContainer().requestFocus(this);
 		}else {
 			MinecraftClientAccessor.INSTANCE.locateRealFocus();
@@ -26,7 +26,7 @@ public interface MinecraftFocusableWidget extends FocusableWidget {
 	}
 	 
 	default void onMinecraftWidgetFocusLost() {
-		if(!IMBlockerConfig.INSTANCE.isDoubleFactorFocusTrackingEnabled()) {
+		if(!IMBlockerConfig.INSTANCE.isTwoFactorFocusTrackingEnabled()) {
 			getFocusContainer().removeFocus(this);
 		}else {
 			MinecraftClientAccessor.INSTANCE.locateRealFocus();

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import net.minecraft.client.gui.screen.ingame.AbstractSignEditScreen;
 import net.minecraft.client.gui.screen.ingame.BookEditScreen;
 import net.minecraft.client.gui.screen.ingame.SignEditScreen;
@@ -15,7 +15,7 @@ public class FabricCommon {
 	static {
 		defaultScreenWhitelist = Lists.newArrayList(BookEditScreen.class.getName(),
 				"net.mehvahdjukaar.supplementaries.client.screens.TextHolderEditScreen");
-		if (Common.isGameVersionReached(761/* 1.19.3 */)) {
+		if (IMBlockerCore.isGameVersionReached(761/* 1.19.3 */)) {
 			defaultScreenWhitelist.add(AbstractSignEditScreen.class.getName());
 		} else {
 			defaultScreenWhitelist.add(SignEditScreen.class.getName());

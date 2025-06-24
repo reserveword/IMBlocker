@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
@@ -35,7 +35,7 @@ public abstract class RSOSearchFieldMixin implements MinecraftTextFieldWidget {
 	
 	@Inject(method = {"charTyped", "method_25400", "m_5534_", "func_231042_a_"}, at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-		if(Common.isTrackingFocus && isActive()) {
+		if(IMBlockerCore.isTrackingFocus && isActive()) {
 			FocusContainer.MINECRAFT.requestFocus(this);
 			cir.setReturnValue(true);
 		}

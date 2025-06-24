@@ -3,7 +3,7 @@ package io.github.reserveword.imblocker;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.JsonHelper;
@@ -35,7 +35,7 @@ public class ModLoaderAccessorImpl implements ModLoaderAccessor {
 				InputStreamReader isr = new InputStreamReader(is)) {
 			protocolVersion = JsonHelper.getInt(JsonHelper.deserialize(isr), "protocol_version");
 		} catch (Exception e) {
-			Common.LOGGER.warn("Failed to get protocol version!");
+			IMBlockerCore.LOGGER.warn("Failed to get protocol version!");
 			protocolVersion = Integer.MAX_VALUE;
 		}
 		currentProtocolVersion = protocolVersion;

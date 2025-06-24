@@ -3,6 +3,7 @@ plugins {
     id 'idea'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.spongepowered.mixin' version '0.7.+'
+    id "com.github.johnrengelman.shadow" version "8.1.1"
 }
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
@@ -58,6 +59,8 @@ dependencies {
 	
     compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
 	compileOnly fg.deobf("curse.maven:blockui-$blockui_version")
+	compileOnly fg.deobf("curse.maven:reforgedplay-mod-1018692:5629283")
+	compileOnly fg.deobf("com.github.ReplayMod:lwjgl-utils:27dcd66")
     compileOnly fg.deobf("maven.modrinth:textrues-embeddium-options:0.1.1+mc1.19.2")
 
     implementation project(':common')

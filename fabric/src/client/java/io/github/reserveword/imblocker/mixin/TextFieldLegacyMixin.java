@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
@@ -43,9 +43,9 @@ public abstract class TextFieldLegacyMixin extends ClickableWidgetMixin implemen
 		onMinecraftWidgetFocusChanged(isActive());
 	}
 	
-	@Inject(method = "charTyped", at = @At("HEAD"))
+	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-		if(Common.isTrackingFocus && isActive()) {
+		if(IMBlockerCore.isTrackingFocus && isActive()) {
 			FocusContainer.MINECRAFT.requestFocus(this);
 			cir.setReturnValue(true);
 		}

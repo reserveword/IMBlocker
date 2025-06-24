@@ -2,12 +2,12 @@ package io.github.reserveword.imblocker;
 
 import com.mojang.blaze3d.platform.Window;
 
-import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.IMBlockerAutoConfig;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import io.github.reserveword.imblocker.mixin.KeyboardHandlerAccessor;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.minecraft.client.Minecraft;
@@ -17,17 +17,16 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod(Common.MODID)
+@Mod(IMBlockerCore.MODID)
 public class IMBlocker {
 	
     public IMBlocker(ModContainer container) {
     	MinecraftClientAccessor.INSTANCE = new MinecraftClientAccessor() {
     		@Override
     		public void sendSafeCharForFocusTracking() {
-    			Screen screen = Minecraft.getInstance().screen;
-    			if(screen == null || !screen.charTyped('\u0001', 0)) {
-					FocusContainer.MINECRAFT.cancelFocus();
-				}
+    			Minecraft client = Minecraft.getInstance();
+				((KeyboardHandlerAccessor) client.keyboardHandler).invokeCharTyped(
+						client.getWindow().getWindow(), 1, 0);
     		}
     		
 			@Override
@@ -49,7 +48,7 @@ public class IMBlocker {
 		};
 
 		IMBlockerConfig.defaultScreenWhitelist.addAll(ForgeCommon.defaultScreenWhitelist);
-		if(Common.hasMod("cloth_config")) {
+		if(IMBlockerCore.hasMod("cloth_config")) {
 			AutoConfig.register(IMBlockerAutoConfig.class, GsonConfigSerializer::new);
 			IMBlockerConfig.INSTANCE = AutoConfig.getConfigHolder(IMBlockerAutoConfig.class).getConfig();
 			container.registerExtensionPoint(IConfigScreenFactory.class, new IConfigScreenFactory() {

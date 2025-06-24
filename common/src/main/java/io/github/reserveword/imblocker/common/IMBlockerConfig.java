@@ -30,12 +30,12 @@ public class IMBlockerConfig {
 				}
 				bakedScreenWhitelist.add(Class.forName(s));
 			} catch (ClassNotFoundException e) {
-				Common.LOGGER.warn("Class {} not found, ignored.", s);
+				IMBlockerCore.LOGGER.warn("Class {} not found, ignored.", s);
 			} catch (Throwable e) {
-				Common.LOGGER.warn(e);
+				IMBlockerCore.LOGGER.warn(e);
 			}
 		}
-		Common.LOGGER.info("imblocker bakelist {} result {}", "screenWhitelist", bakedScreenWhitelist);
+		IMBlockerCore.LOGGER.info("imblocker bakelist {} result {}", "screenWhitelist", bakedScreenWhitelist);
 	}
 
 	public boolean isScreenInWhitelist(Object screen) {
@@ -58,7 +58,7 @@ public class IMBlockerConfig {
 		return CommandInputMode.IM_ENG_STATE;
 	}
 	
-	public boolean isDoubleFactorFocusTrackingEnabled() {
+	public boolean isTwoFactorFocusTrackingEnabled() {
 		return false;
 	}
 

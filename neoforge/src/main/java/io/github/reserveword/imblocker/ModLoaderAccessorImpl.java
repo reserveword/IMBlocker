@@ -3,7 +3,7 @@ package io.github.reserveword.imblocker;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
 import net.minecraft.DetectedVersion;
 import net.minecraft.util.GsonHelper;
@@ -36,7 +36,7 @@ public class ModLoaderAccessorImpl implements ModLoaderAccessor {
 				InputStreamReader isr = new InputStreamReader(is)) {
 			protocolVersion = GsonHelper.getAsInt(GsonHelper.parse(isr), "protocol_version");
 		} catch (Exception e) {
-			Common.LOGGER.warn("Failed to get protocol version!");
+			IMBlockerCore.LOGGER.warn("Failed to get protocol version!");
 			protocolVersion = Integer.MAX_VALUE;
 		}
 		currentProtocolVersion = protocolVersion;

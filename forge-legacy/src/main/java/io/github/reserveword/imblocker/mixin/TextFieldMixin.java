@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import io.github.reserveword.imblocker.common.Common;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
@@ -45,7 +45,7 @@ public abstract class TextFieldMixin extends WidgetMixin implements MinecraftTex
 	
 	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-		if(Common.isTrackingFocus && canConsumeInput()) {
+		if(IMBlockerCore.isTrackingFocus && canConsumeInput()) {
 			FocusContainer.MINECRAFT.requestFocus(this);
 			cir.setReturnValue(true);
 		}

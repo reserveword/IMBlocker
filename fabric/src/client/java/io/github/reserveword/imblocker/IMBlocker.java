@@ -1,16 +1,15 @@
 package io.github.reserveword.imblocker;
 
-import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.IMBlockerAutoConfig;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import io.github.reserveword.imblocker.mixin.KeyboardAccessor;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.Window;
 
 public class IMBlocker implements ClientModInitializer {
@@ -20,10 +19,9 @@ public class IMBlocker implements ClientModInitializer {
 		MinecraftClientAccessor.INSTANCE = new MinecraftClientAccessor() {
 			@Override
 			public void sendSafeCharForFocusTracking() {
-				Screen screen = MinecraftClient.getInstance().currentScreen;
-				if(screen == null || !screen.charTyped('\u0001', 0)) {
-					FocusContainer.MINECRAFT.cancelFocus();
-				}
+				MinecraftClient client = MinecraftClient.getInstance();
+				((KeyboardAccessor) client.keyboard).invokeOnChar(
+						client.getWindow().getHandle(), 1, 0);
 			}
 			
 			@Override
@@ -55,6 +53,6 @@ public class IMBlocker implements ClientModInitializer {
 	}
 
 	public static boolean hasClothConfig() {
-		return Common.hasMod("cloth-config") || Common.hasMod("cloth-config2");
+		return IMBlockerCore.hasMod("cloth-config") || IMBlockerCore.hasMod("cloth-config2");
 	}
 }

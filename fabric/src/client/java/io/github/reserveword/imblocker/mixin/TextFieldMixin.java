@@ -6,10 +6,13 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
+import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 
 @Mixin(TextFieldWidget.class)
@@ -26,10 +29,21 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 	private boolean preferredEditState = true;
 	
 	private boolean preferredEnglishState = false;
+	
+	@Shadow
+	public abstract boolean isActive();
 
 	@Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(isFocused);
+		onMinecraftWidgetFocusChanged(isActive());
+	}
+	
+	@Inject(method = "charTyped", at = @At("HEAD"))
+	public void checkFocusTracking(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+		if(Common.isTrackingFocus && isActive()) {
+			FocusContainer.MINECRAFT.requestFocus(this);
+			cir.setReturnValue(true);
+		}
 	}
 
 	@Inject(method = "onChanged", at = @At("TAIL"))
@@ -41,9 +55,7 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 	public void setEditable(boolean editable) {
 		if (this.editable != editable) {
 			this.editable = editable;
-			if (isTrulyFocused()) {
-				updateIMState();
-			}
+			onMinecraftWidgetFocusChanged(isActive());
 		}
 	}
 
@@ -69,7 +81,7 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 
 	@Override
 	public boolean getPreferredState() {
-		return editable && preferredEditState;
+		return preferredEditState;
 	}
 
 	@Override

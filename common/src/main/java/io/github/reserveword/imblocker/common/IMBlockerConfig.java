@@ -57,6 +57,10 @@ public class IMBlockerConfig {
 	public CommandInputMode getChatCommandInputType() {
 		return CommandInputMode.IM_ENG_STATE;
 	}
+	
+	public boolean isDoubleFactorFocusTrackingEnabled() {
+		return false;
+	}
 
 	public boolean isConversionStatusApiEnabled() {
 		return true;

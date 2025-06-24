@@ -12,6 +12,8 @@ public class Common {
 	
 	private static final ModLoaderAccessor modLoaderAccessor;
 	
+	public static boolean isTrackingFocus = false;
+	
 	public static boolean isGameVersionReached(int protocolVersion) {
 		return modLoaderAccessor.isGameVersionReached(protocolVersion);
 	}

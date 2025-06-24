@@ -6,6 +6,7 @@ import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.IMBlockerAutoConfig;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
@@ -29,6 +30,14 @@ public class IMBlocker {
 	
     public IMBlocker(FMLJavaModLoadingContext context) {
 		MinecraftClientAccessor.INSTANCE = new MinecraftClientAccessor() {
+			@Override
+			public void sendSafeCharForFocusTracking() {
+				Screen screen = Minecraft.getInstance().screen;
+				if(screen == null || !screen.charTyped('\u0001', 0)) {
+					FocusContainer.MINECRAFT.cancelFocus();
+				}
+			}
+			
 			@Override
 			public void execute(Runnable runnable) {
 				Minecraft.getInstance().execute(runnable);

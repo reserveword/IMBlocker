@@ -36,12 +36,11 @@ public abstract class SM642WidgetMixin implements MinecraftFocusableWidget {
 	public Rectangle getBoundsAbs() {
 		int xAbs = x, yAbs = y;
 		SM642WidgetMixin root = this;
-		SM642WidgetMixin parent = (SM642WidgetMixin) (Object) this.parent;
-		while(parent != null) {
+		for(SM642WidgetMixin parent = (SM642WidgetMixin) (Object) this.parent;
+				parent != null; parent = (SM642WidgetMixin) (Object) parent.parent) {
 			xAbs += parent.x;
 			yAbs += parent.y;
 			root = parent;
-			parent = (SM642WidgetMixin) (Object) parent.parent;
 		}
 		
 		double renderScale = getGuiScale();

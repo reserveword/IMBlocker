@@ -131,9 +131,9 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		}
 		
 		if(Common.hasMod("blockui")) {
-			validMixins.add("compat.BlockUIBOScreenMixin");
+			validMixins.add("compat.BlockUIBOScreenAccessor");
 			validMixins.add("compat.BlockUIPaneMixin");
-			validMixins.add("compat.BlockUIViewMixin");
+			validMixins.add("compat.BlockUIViewAccessor");
 			validMixins.add("compat.BlockUIScrollingContainerMixin");
 			validMixins.add("compat.BlockUITextFieldMixin");
 		}
@@ -141,10 +141,6 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		if(Common.hasMod("supermartijn642corelib")) {
 			validMixins.add("compat.SM642WidgetMixin");
 			validMixins.add("compat.SM642TextFieldMixin");
-		}
-		
-		if(Common.hasMod("journeymap")) {
-			validMixins.add("compat.JourneyMapChatMixin");
 		}
 	}
 }

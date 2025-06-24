@@ -6,10 +6,13 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
+import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 
@@ -18,26 +21,29 @@ import io.github.reserveword.imblocker.common.gui.Rectangle;
 		+ "client.gui.frame.components.SearchTextFieldComponent", remap = false)
 public abstract class RSOSearchFieldMixin implements MinecraftTextFieldWidget {
 	
-	@Shadow
-	protected boolean editable;
-	
 	@Shadow protected String text;
 	@Shadow private int firstCharacterIndex;
 	@Shadow private int selectionStart;
 	
+	@Shadow
+	public abstract boolean isActive();
+	
 	@Inject(method = {"setFocused", "method_25365", "m_93692_"}, at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(isFocused);
+		onMinecraftWidgetFocusChanged(isActive());
+	}
+	
+	@Inject(method = {"charTyped", "method_25400", "m_5534_", "func_231042_a_"}, at = @At("HEAD"), cancellable = true)
+	public void checkFocusTracking(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+		if(Common.isTrackingFocus && isActive()) {
+			FocusContainer.MINECRAFT.requestFocus(this);
+			cir.setReturnValue(true);
+		}
 	}
 	
 	@Inject(method = "onChanged", at = @At("TAIL"))
 	public void onTextChanged(String newText, CallbackInfo ci) {
 		IMManager.updateCompositionWindowPos();
-	}
-	
-	@Override
-	public boolean getPreferredState() {
-		return editable;
 	}
 	
 	@Override

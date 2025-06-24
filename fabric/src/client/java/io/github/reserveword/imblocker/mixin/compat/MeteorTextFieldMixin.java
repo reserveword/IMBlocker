@@ -6,8 +6,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.IMManager;
+import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 
@@ -19,11 +22,22 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin implements 
 	@Shadow protected double textStart;
 	
 	@Shadow
+	protected boolean focused;
+	
+	@Shadow
 	protected abstract double getTextWidth(int pos);
 
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(isFocused);
+		onMinecraftWidgetFocusChanged(focused);
+	}
+	
+	@Inject(method = "onCharTyped", at = @At("HEAD"), cancellable = true)
+	public void checkFocusTracking(char chr, CallbackInfoReturnable<Boolean> cir) {
+		if(Common.isTrackingFocus && focused) {
+			FocusContainer.MINECRAFT.requestFocus(this);
+			cir.setReturnValue(true);
+		}
 	}
 	
 	@Inject(method = "cursorChanged", at = @At("TAIL"))

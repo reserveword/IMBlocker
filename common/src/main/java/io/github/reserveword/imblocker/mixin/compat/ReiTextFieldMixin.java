@@ -1,17 +1,19 @@
 package io.github.reserveword.imblocker.mixin.compat;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
+import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget;
 
 @Pseudo
@@ -19,7 +21,10 @@ import me.shedaniel.rei.impl.client.gui.widget.basewidgets.TextFieldWidget;
 public abstract class ReiTextFieldMixin implements MinecraftTextFieldWidget {
 	
 	@Shadow
-	protected boolean editable;
+	private boolean visible;
+	
+	@Shadow
+	private boolean focused;
 
 	@Shadow
 	private me.shedaniel.math.Rectangle bounds;
@@ -31,7 +36,20 @@ public abstract class ReiTextFieldMixin implements MinecraftTextFieldWidget {
 
 	@Inject(method = {"setFocused", "method_25365", "m_93692_"}, at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(isFocused);
+		onMinecraftWidgetFocusChanged(visible && focused);
+	}
+	
+	@Inject(method = {"charTyped", "method_25400", "m_5534_", "func_231042_a_"}, at = @At("HEAD"), cancellable = true)
+	public void checkFocusTracking(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+		if(Common.isTrackingFocus && visible && focused) {
+			FocusContainer.MINECRAFT.requestFocus(this);
+			cir.setReturnValue(true);
+		}
+	}
+	
+	@Inject(method = "setVisible", at = @At("TAIL"))
+	public void visibilityChanged(boolean visible, CallbackInfo ci) {
+		onMinecraftWidgetFocusChanged(this.visible && focused);
 	}
 
 	@Inject(method = "onChanged", at = @At("TAIL"))
@@ -42,21 +60,6 @@ public abstract class ReiTextFieldMixin implements MinecraftTextFieldWidget {
 	@Inject(method = "moveCursorTo", at = @At("TAIL"))
 	public void onMoveCursor(int cursor, CallbackInfo ci) {
 		IMManager.updateCompositionWindowPos();
-	}
-
-	@Overwrite(aliases = {"setEditable"})
-	public void setIsEditable(boolean editable) {
-		if(this.editable != editable) {
-			this.editable = editable;
-			if(isTrulyFocused()) {
-				updateIMState();
-			}
-		}
-	}
-
-	@Override
-	public boolean getPreferredState() {
-		return editable;
 	}
 
 	@Override

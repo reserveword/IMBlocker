@@ -17,8 +17,7 @@
     "compat.RSOAbstractFrameMixin",
     "compat.RSOSearchFieldMixin",
     "compat.SM642WidgetMixin",
-    "compat.SM642TextFieldMixin",
-    "compat.JourneyMapChatMixin"
+    "compat.SM642TextFieldMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.replaymod.lib.de.johni0702.minecraft.gui.GuiRenderer;
 import com.replaymod.lib.de.johni0702.minecraft.gui.OffsetGuiRenderer;
@@ -13,12 +14,14 @@ import com.replaymod.lib.de.johni0702.minecraft.gui.RenderInfo;
 import com.replaymod.lib.de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import com.replaymod.lib.de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 
+import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
-import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
+import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 
 @Pseudo
 @Mixin(targets = "com.replaymod.lib.de.johni0702.minecraft.gui.element.AbstractGuiTextField", remap = false)
@@ -31,10 +34,22 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
 	@Shadow private String text;
 	@Shadow private int cursorPos;
 	@Shadow private int currentOffset;
+	
+	@Shadow
+	private boolean focused;
 
 	@Inject(method = "onFocusChanged", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(isFocused);
+		onMinecraftWidgetFocusChanged(focused);
+	}
+	
+	@Inject(method = "typeKey", at = @At("HEAD"), cancellable = true)
+	public void checkFocusTracking(ReadablePoint mousePosition, int keyCode, 
+			char keyChar, boolean ctrlDown, boolean shiftDown, CallbackInfoReturnable<Boolean> cir) {
+		if(Common.isTrackingFocus && focused) {
+			FocusContainer.MINECRAFT.requestFocus(this);
+			cir.setReturnValue(true);
+		}
 	}
 
 	@Inject(method = "draw", at = @At("TAIL"))

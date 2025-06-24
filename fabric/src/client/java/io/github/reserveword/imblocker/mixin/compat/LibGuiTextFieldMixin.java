@@ -8,8 +8,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import io.github.cottonmc.cotton.gui.widget.WTextField;
+import io.github.reserveword.imblocker.common.Common;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
+import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 
 @Mixin(value = WTextField.class, remap = false)
@@ -30,6 +32,14 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 	@Override
 	public void onFocusLost(CallbackInfo ci) {
 		onMinecraftWidgetFocusLost();
+	}
+	
+	@Inject(method = "onCharTyped", at = @At("HEAD"), cancellable = true)
+	public void checkFocusTracking(char chr, CallbackInfoReturnable<Boolean> cir) {
+		if(Common.isTrackingFocus) {
+			FocusContainer.MINECRAFT.requestFocus(this);
+			cir.setReturnValue(true);
+		}
 	}
 	
 	@Inject(method = "setEditable", at = @At("HEAD"), cancellable = true)

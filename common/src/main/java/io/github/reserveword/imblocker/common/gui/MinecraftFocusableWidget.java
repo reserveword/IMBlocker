@@ -1,5 +1,8 @@
 package io.github.reserveword.imblocker.common.gui;
 
+import io.github.reserveword.imblocker.common.IMBlockerConfig;
+import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
+
 public interface MinecraftFocusableWidget extends FocusableWidget {
 	
 	default FocusContainer getFocusContainer() {
@@ -15,11 +18,19 @@ public interface MinecraftFocusableWidget extends FocusableWidget {
 	}
 	
 	default void onMinecraftWidgetFocusGained() {
-		getFocusContainer().requestFocus(this);
+		if(!IMBlockerConfig.INSTANCE.isDoubleFactorFocusTrackingEnabled()) {
+			getFocusContainer().requestFocus(this);
+		}else {
+			MinecraftClientAccessor.INSTANCE.locateRealFocus();
+		}
 	}
 	 
 	default void onMinecraftWidgetFocusLost() {
-		getFocusContainer().removeFocus(this);
+		if(!IMBlockerConfig.INSTANCE.isDoubleFactorFocusTrackingEnabled()) {
+			getFocusContainer().removeFocus(this);
+		}else {
+			MinecraftClientAccessor.INSTANCE.locateRealFocus();
+		}
 	}
 	
 	@Override

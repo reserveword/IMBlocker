@@ -15,6 +15,9 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	@ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
 	BasicSettings basicSettings = new BasicSettings();
 	
+	@ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+	AdvanceSettings advanceSettings = new AdvanceSettings();
+	
 	@ConfigEntry.Gui.CollapsibleObject
 	WindowsCompatibilitySettings windowsCompatibilitySettings = new WindowsCompatibilitySettings();
 	
@@ -38,6 +41,11 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	@Override
 	public CommandInputMode getChatCommandInputType() {
 		return basicSettings.commandInputMode;
+	}
+	
+	@Override
+	public boolean isDoubleFactorFocusTrackingEnabled() {
+		return advanceSettings.enableDoubleFactorFocusTracking;
 	}
 
 	@Override
@@ -73,6 +81,10 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 		@ConfigEntry.Gui.Tooltip(count = 2)
 		@ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
 		CommandInputMode commandInputMode = CommandInputMode.IM_ENG_STATE;
+	}
+	
+	static class AdvanceSettings {
+		boolean enableDoubleFactorFocusTracking;
 	}
 
 	static class WindowsCompatibilitySettings {

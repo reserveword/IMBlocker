@@ -1,14 +1,11 @@
-package io.github.reserveword.imblocker;
+package io.github.reserveword.imblocker.common.gui;
 
 import imgui.ImGuiIO;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
-import io.github.reserveword.imblocker.common.gui.FocusManager;
-import io.github.reserveword.imblocker.common.gui.GenericAxiomWidget;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.StartTick;
-import net.minecraft.client.MinecraftClient;
 
-public class AxiomGuiMonitor implements StartTick {
+public class AxiomGuiMonitor {
 	
+	private static AxiomGuiMonitor instance;
+
 	private final ImGuiIO axiomGuiAccessor;
 	
 	private boolean axiomGuiCaptureKeyboard = false;
@@ -18,8 +15,7 @@ public class AxiomGuiMonitor implements StartTick {
 		this.axiomGuiAccessor = axiomGuiAccessor;
 	}
 
-	@Override
-	public void onStartTick(MinecraftClient client) {
+	public final void tick() {
 		boolean isAxiomGuiFocused = axiomGuiAccessor.getWantCaptureKeyboard();
 		boolean isAxiomTextFieldFocused = axiomGuiAccessor.getWantTextInput();
 		
@@ -37,5 +33,13 @@ public class AxiomGuiMonitor implements StartTick {
 				FocusContainer.IMGUI.cancelFocus();
 			}
 		}
+	}
+	
+	public static void createInstance(ImGuiIO axiomGuiAccessor) {
+		instance = new AxiomGuiMonitor(axiomGuiAccessor);
+	}
+	
+	public static AxiomGuiMonitor getInstance() {
+		return instance;
 	}
 }

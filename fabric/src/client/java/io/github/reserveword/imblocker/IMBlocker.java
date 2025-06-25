@@ -9,6 +9,7 @@ import io.github.reserveword.imblocker.mixin.KeyboardAccessor;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Window;
 
@@ -37,8 +38,18 @@ public class IMBlocker implements ClientModInitializer {
 			}
 			
 			@Override
+			public Object getCurrentScreen() {
+				return MinecraftClient.getInstance().currentScreen;
+			}
+			
+			@Override
 			public int getStringWidth(String text) {
 				return MinecraftClient.getInstance().textRenderer.getWidth(text);
+			}
+			
+			@Override
+			public void registerClientTickEvent(Runnable tickEvent) {
+				ClientTickEvents.START_CLIENT_TICK.register(client -> tickEvent.run());
 			}
 		};
 		

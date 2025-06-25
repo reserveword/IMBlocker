@@ -11,7 +11,7 @@ import io.github.reserveword.imblocker.common.gui.Rectangle;
 import net.minecraft.client.gui.widget.Widget;
 
 @Mixin(Widget.class)
-public abstract class WidgetMixin implements MinecraftFocusableWidget {
+public abstract class AbstractWidgetMixin implements MinecraftFocusableWidget {
 
 	@Shadow private int x;
 	@Shadow private int y;

@@ -13,7 +13,7 @@ import com.sun.jna.Platform;
 import net.minecraft.client.MainWindow;
 
 @Mixin(MainWindow.class)
-public abstract class MainWindowMixin {
+public abstract class WindowMixin {
 
 	@Shadow
 	private long window;

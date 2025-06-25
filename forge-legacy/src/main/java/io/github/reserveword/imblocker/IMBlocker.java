@@ -2,9 +2,9 @@ package io.github.reserveword.imblocker;
 
 import java.util.Arrays;
 
-import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMBlockerAutoConfig;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
@@ -15,6 +15,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.EditBookScreen;
 import net.minecraft.client.gui.screen.EditSignScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -51,8 +53,18 @@ public class IMBlocker {
 			}
 			
 			@Override
+			public Object getCurrentScreen() {
+				return Minecraft.getInstance().screen;
+			}
+			
+			@Override
 			public int getStringWidth(String text) {
 				return Minecraft.getInstance().font.width(text);
+			}
+			
+			public void registerClientTickEvent(Runnable tickEvent) {
+				MinecraftForge.EVENT_BUS.addGenericListener(
+						TickEvent.ClientTickEvent.class, t -> tickEvent.run());
 			}
 		};
 		

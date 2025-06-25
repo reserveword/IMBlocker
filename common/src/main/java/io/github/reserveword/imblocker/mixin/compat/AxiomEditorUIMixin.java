@@ -8,8 +8,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import imgui.ImGuiIO;
-import io.github.reserveword.imblocker.AxiomGuiMonitor;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.gui.AxiomGuiMonitor;
 
 @Pseudo
 @Mixin(targets = "com.moulberry.axiom.editor.EditorUI", remap = false)
@@ -20,6 +20,7 @@ public abstract class AxiomEditorUIMixin {
 	
 	@Inject(method = "init", at = @At("TAIL"))
 	private static void loadImGui(CallbackInfo ci) {
-		ClientTickEvents.START_CLIENT_TICK.register(new AxiomGuiMonitor(imGuiIO));
+		AxiomGuiMonitor.createInstance(imGuiIO);
+		MinecraftClientAccessor.INSTANCE.registerClientTickEvent(AxiomGuiMonitor.getInstance()::tick);
 	}
 }

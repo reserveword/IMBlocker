@@ -17,9 +17,6 @@ import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 @Mixin(value = WTextField.class, remap = false)
 public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements MinecraftTextFieldWidget {
 	
-	@Shadow
-	private boolean editable;
-	
 	@Shadow private String text;
 	@Shadow private int scrollOffset;
 	@Shadow private int cursor;
@@ -42,15 +39,6 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 		}
 	}
 	
-	@Inject(method = "setEditable", at = @At("HEAD"), cancellable = true)
-	public void setEditable(boolean editable, CallbackInfoReturnable<WTextField> cir) {
-		if(this.editable == editable) {
-			cir.setReturnValue((WTextField) (Object) this);
-		}else if(isTrulyFocused()) {
-			updateIMState();
-		}
-	}
-	
 	@Inject(method = "setText", at = @At("TAIL"))
 	public void onTextChanged(String s, CallbackInfo ci) {
 		IMManager.updateCompositionWindowPos();
@@ -67,17 +55,7 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 	}
 	
 	@Override
-	public boolean getPreferredState() {
-		return editable;
-	}
-	
-	@Override
 	public SinglelineCursorInfo getCursorInfo() {
 		return new SinglelineCursorInfo(true, height, scrollOffset, cursor, text);
-	}
-	
-	@Override
-	public int getPaddingX() {
-		return WTextField.TEXT_PADDING_X;
 	}
 }

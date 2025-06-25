@@ -14,7 +14,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.common.NeoForge;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(IMBlockerCore.MODID)
@@ -42,8 +44,18 @@ public class IMBlocker {
 			}
 			
 			@Override
+			public Object getCurrentScreen() {
+				return Minecraft.getInstance().screen;
+			}
+			
+			@Override
 			public int getStringWidth(String text) {
 				return Minecraft.getInstance().font.width(text);
+			}
+			
+			@Override
+			public void registerClientTickEvent(Runnable tickEvent) {
+				NeoForge.EVENT_BUS.addListener(ClientTickEvent.class, t -> tickEvent.run());
 			}
 		};
 

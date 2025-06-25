@@ -16,6 +16,8 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -24,11 +26,12 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod(IMBlockerCore.MODID)
 public class IMBlocker {
 
+	@SuppressWarnings("removal")
 	public IMBlocker() {
 		this(FMLJavaModLoadingContext.get());
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes", "removal" })
 	public IMBlocker(FMLJavaModLoadingContext context) {
 		MinecraftClientAccessor.INSTANCE = new MinecraftClientAccessor() {
 			@Override
@@ -51,8 +54,19 @@ public class IMBlocker {
 			}
 			
 			@Override
+			public Object getCurrentScreen() {
+				return Minecraft.getInstance().screen;
+			}
+			
+			@Override
 			public int getStringWidth(String text) {
 				return Minecraft.getInstance().font.width(text);
+			}
+			
+			@Override
+			public void registerClientTickEvent(Runnable tickEvent) {
+				MinecraftForge.EVENT_BUS.addGenericListener(
+						TickEvent.ClientTickEvent.class, t -> tickEvent.run());
 			}
 		};
 

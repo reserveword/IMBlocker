@@ -27,5 +27,7 @@ public abstract class MinecraftClientAccessor {
 	public abstract void sendSafeCharForFocusTracking();
 	public abstract void execute(Runnable runnable);
 	public abstract Rectangle getWindowBounds();
+	public abstract Object getCurrentScreen();
 	public abstract int getStringWidth(String text);
+	public abstract void registerClientTickEvent(Runnable tickEvent);
 }

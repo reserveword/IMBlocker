@@ -16,7 +16,7 @@ import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 
 @Mixin(TextFieldWidget.class)
-public abstract class TextFieldMixin extends WidgetMixin implements MinecraftTextFieldWidget {
+public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin implements MinecraftTextFieldWidget {
 	
 	@Shadow
 	private boolean isEditable;

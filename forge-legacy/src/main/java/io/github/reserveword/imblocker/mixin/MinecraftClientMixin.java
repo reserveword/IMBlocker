@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
@@ -44,6 +45,11 @@ public abstract class MinecraftClientMixin {
     		FocusContainer.MINECRAFT.cancelFocus();
     	}
     }
+    
+    @Inject(method = "runTick", at = @At("HEAD"))
+	public void runDeferredRunnables(boolean tick, CallbackInfo ci) {
+		IMBlockerCore.flushDeferredRunnables();
+	}
     
     private boolean isScreenInWhiteList(Screen screen) {
     	return IMBlockerConfig.INSTANCE.isScreenInWhitelist(screen);

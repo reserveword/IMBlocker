@@ -38,6 +38,11 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
 		onMinecraftWidgetFocusChanged(canConsumeInput());
 	}
 	
+	@Inject(method = "setVisible", at = @At("TAIL"))
+	public void visibilityChanged(boolean isVisible, CallbackInfo ci) {
+		onMinecraftWidgetFocusChanged(canConsumeInput());
+	}
+	
 	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
 		if(IMBlockerCore.isTrackingFocus && canConsumeInput()) {

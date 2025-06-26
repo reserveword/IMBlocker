@@ -73,6 +73,8 @@ tasks.named('jar', Jar).configure {
         exclude '**/*Multiline*.class'
         exclude '**/FtbPanelMixin.class'
         exclude '**/FtbTextFieldMixin.class'
+        exclude '**/Axiom*.class'
+        exclude '**/Meteor*.class'
     }
 
     manifest {

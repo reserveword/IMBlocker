@@ -13,9 +13,14 @@ public class FabricCommon {
 	public static final List<String> defaultScreenWhitelist;
 
 	static {
-		defaultScreenWhitelist = Lists.newArrayList(BookEditScreen.class.getName(),
+		defaultScreenWhitelist = Lists.newArrayList(
 				"net.mehvahdjukaar.supplementaries.client.screens.TextHolderEditScreen");
-		if (IMBlockerCore.isGameVersionReached(761/* 1.19.3 */)) {
+		
+		if(!IMBlockerCore.isGameVersionReached(771/*1.21.6*/)) {
+			defaultScreenWhitelist.add(BookEditScreen.class.getName());
+		}
+		
+		if (IMBlockerCore.isGameVersionReached(761/*1.19.3*/)) {
 			defaultScreenWhitelist.add(AbstractSignEditScreen.class.getName());
 		} else {
 			defaultScreenWhitelist.add(SignEditScreen.class.getName());

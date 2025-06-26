@@ -3,6 +3,7 @@ package io.github.reserveword.imblocker.mixin.compat;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -77,6 +78,7 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
 		return new Point(x, y);
 	}
 
+	@Unique
 	@Override
 	public Rectangle getBoundsAbs() {
 		return bounds != null ? bounds.derive(getGuiScale()) : MinecraftTextFieldWidget.super.getBoundsAbs();

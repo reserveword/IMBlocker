@@ -32,10 +32,10 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 	}
 	
 	@Inject(method = "onCharTyped", at = @At("HEAD"), cancellable = true)
-	public void checkFocusTracking(char chr, CallbackInfoReturnable<Boolean> cir) {
+	public void checkFocusTracking(char chr, CallbackInfo ci) {
 		if(IMBlockerCore.isTrackingFocus) {
 			FocusContainer.MINECRAFT.requestFocus(this);
-			cir.setReturnValue(true);
+			ci.cancel();
 		}
 	}
 	

@@ -145,7 +145,7 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		}
 		
 		if(IMBlockerCore.hasMod("journeymap")) {
-			validMixins.add("JourneyMapChatMixin");
+			validMixins.add("compat.JourneyMapChatMixin");
 		}
 	}
 }

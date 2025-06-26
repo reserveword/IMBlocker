@@ -43,6 +43,11 @@ public abstract class TextFieldLegacyMixin extends ClickableWidgetMixin implemen
 		onMinecraftWidgetFocusChanged(isActive());
 	}
 	
+	@Inject(method = "setVisible", at = @At("TAIL"))
+	public void visibilityChanged(boolean isVisible, CallbackInfo ci) {
+		onMinecraftWidgetFocusChanged(isActive());
+	}
+	
 	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
 		if(IMBlockerCore.isTrackingFocus && isActive()) {

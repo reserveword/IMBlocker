@@ -5,9 +5,11 @@ import java.util.function.Supplier;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.EnumHandler.EnumDisplayOption;
+import me.shedaniel.clothconfig2.gui.AbstractConfigScreen;
 
 @Config(name = IMBlockerCore.MODID)
 public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
@@ -65,8 +67,21 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T getConfigScreen(T parent, Class<T> screenCls) {
-		return (T) ReflectionUtil.invokeMethod(AutoConfig.class, null, Supplier.class, "getConfigScreen",
-				new Class[] { Class.class, screenCls }, IMBlockerAutoConfig.class, parent).get();
+		T configScreen = (T) ReflectionUtil.invokeMethod(AutoConfig.class, null, Supplier.class, 
+				"getConfigScreen", new Class[] { Class.class, screenCls }, 
+				IMBlockerAutoConfig.class, parent).get();
+		ConfigHolder<IMBlockerAutoConfig> configHolder = AutoConfig
+				.getConfigHolder(IMBlockerAutoConfig.class);
+		ReflectionUtil.invokeMethod(AbstractConfigScreen.class, configScreen, null, 
+				"setSavingRunnable", new Class[] { Runnable.class }, 
+				new Runnable() {
+					@Override
+					public void run() {
+						configHolder.save();
+						configHolder.getConfig().validatePostLoad();
+					}
+				});
+		return configScreen;
 	}
 
 	static class BasicSettings {

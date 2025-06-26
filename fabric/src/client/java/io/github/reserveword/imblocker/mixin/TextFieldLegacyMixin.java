@@ -10,9 +10,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 
 @Mixin(TextFieldWidget.class)

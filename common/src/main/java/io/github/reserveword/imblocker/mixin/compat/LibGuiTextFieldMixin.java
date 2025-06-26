@@ -31,11 +31,19 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 		onMinecraftWidgetFocusLost();
 	}
 	
-	@Inject(method = "onCharTyped", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "onCharTyped(C)V", at = @At("HEAD"), cancellable = true, require = 0)
 	public void checkFocusTracking(char chr, CallbackInfo ci) {
 		if(IMBlockerCore.isTrackingFocus) {
 			FocusContainer.MINECRAFT.requestFocus(this);
 			ci.cancel();
+		}
+	}
+	
+	@Inject(method = "onCharTyped(C)Z", at = @At("HEAD"), cancellable = true, require = 0)
+	public void checkFocusTracking(char chr, CallbackInfoReturnable<Boolean> cir) {
+		if(IMBlockerCore.isTrackingFocus) {
+			FocusContainer.MINECRAFT.requestFocus(this);
+			cir.setReturnValue(true);
 		}
 	}
 	

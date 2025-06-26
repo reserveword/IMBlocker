@@ -40,7 +40,7 @@ public abstract class MinecraftClientMixin {
     	}
     	
     	if(isScreenInWhiteList(screen)) {
-    		FocusContainer.MINECRAFT.requestFocus(GenericWhitelistScreen.getInstance());
+    		GenericWhitelistScreen.getInstance().onMinecraftWidgetFocusGained();
     	}else {
     		FocusContainer.MINECRAFT.cancelFocus();
     	}

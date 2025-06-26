@@ -12,6 +12,7 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
@@ -55,7 +56,12 @@ public class IMBlocker {
 			
 			@Override
 			public void registerClientTickEvent(Runnable tickEvent) {
-				NeoForge.EVENT_BUS.addListener(ClientTickEvent.class, t -> tickEvent.run());
+				NeoForge.EVENT_BUS.register(new Object() {
+					@SubscribeEvent
+					public void onStartTick(ClientTickEvent.Pre e) {
+						tickEvent.run();
+					}
+				});
 			}
 		};
 

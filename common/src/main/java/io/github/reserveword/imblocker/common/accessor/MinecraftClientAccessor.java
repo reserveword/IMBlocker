@@ -1,7 +1,9 @@
 package io.github.reserveword.imblocker.common.accessor;
 
+import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.GenericWhitelistScreen;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 
 public abstract class MinecraftClientAccessor {
@@ -9,7 +11,7 @@ public abstract class MinecraftClientAccessor {
 	public static MinecraftClientAccessor INSTANCE;
 	
 	public void locateRealFocus() {
-		IMBlockerCore.invokeLater(() ->{
+		IMBlockerCore.invokeLater(() -> {
 			IMBlockerCore.isTrackingFocus = true;
 			try {
 				sendSafeCharForFocusTracking();
@@ -17,7 +19,11 @@ public abstract class MinecraftClientAccessor {
 				IMBlockerCore.LOGGER.warn("failed to locate focus with char simulation");
 			}
 			if(!IMBlockerCore.isFocusLocated) {
-				FocusContainer.MINECRAFT.cancelFocus();
+				if(IMBlockerConfig.INSTANCE.isScreenInWhitelist(getCurrentScreen())) {
+					FocusContainer.MINECRAFT.requestFocus(GenericWhitelistScreen.getInstance());
+				}else {
+					FocusContainer.MINECRAFT.cancelFocus();
+				}
 			}
 			IMBlockerCore.isTrackingFocus = false;
 			IMBlockerCore.isFocusLocated = false;

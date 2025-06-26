@@ -12,14 +12,14 @@ import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 public abstract class JourneyMapChatMixin {
 	
 	@Inject(method = "close", at = @At("TAIL"))
-	public void updateVisible(CallbackInfo ci) {
+	public void visibilityChanged(CallbackInfo ci) {
 		if(IMBlockerConfig.INSTANCE.isTwoFactorFocusTrackingEnabled()) {
 			MinecraftClientAccessor.INSTANCE.locateRealFocus();
 		}
 	}
 	
 	@Inject(method = "setHidden", at = @At("TAIL"))
-	public void updateVisible(boolean hidden, CallbackInfo ci) {
+	public void visibilityChanged(boolean hidden, CallbackInfo ci) {
 		if(IMBlockerConfig.INSTANCE.isTwoFactorFocusTrackingEnabled()) {
 			MinecraftClientAccessor.INSTANCE.locateRealFocus();
 		}

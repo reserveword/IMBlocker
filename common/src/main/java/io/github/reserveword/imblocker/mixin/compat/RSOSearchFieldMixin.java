@@ -17,15 +17,15 @@ import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 
 @Pseudo
-@Mixin(targets = "me.flashyreese.mods.reeses_sodium_options."
-		+ "client.gui.frame.components.SearchTextFieldComponent", remap = false)
+@Mixin(targets = "me.flashyreese.mods.reeses_sodium_options"
+		+ ".client.gui.frame.components.SearchTextFieldComponent", remap = false)
 public abstract class RSOSearchFieldMixin implements MinecraftTextFieldWidget {
 	
 	@Shadow protected String text;
 	@Shadow private int firstCharacterIndex;
 	@Shadow private int selectionStart;
 	
-	@Shadow
+	@Shadow(aliases = {"method_37303", "m_142518_"})
 	public abstract boolean isActive();
 	
 	@Inject(method = {"setFocused", "method_25365", "m_93692_"}, at = @At("TAIL"))

@@ -46,9 +46,13 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
 	@Inject(method = "typeKey", at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(ReadablePoint mousePosition, int keyCode, 
 			char keyChar, boolean ctrlDown, boolean shiftDown, CallbackInfoReturnable<Boolean> cir) {
-		if(IMBlockerCore.isTrackingFocus && focused) {
-			FocusContainer.MINECRAFT.requestFocus(this);
-			cir.setReturnValue(true);
+		if(IMBlockerCore.isTrackingFocus) {
+			if(focused) {
+				FocusContainer.MINECRAFT.requestFocus(this);
+				cir.setReturnValue(true);
+			}else {
+				cir.setReturnValue(false);
+			}
 		}
 	}
 

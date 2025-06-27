@@ -39,12 +39,7 @@ public class IMBlockerConfig {
 	}
 
 	public boolean isScreenInWhitelist(Object screen) {
-		for (Class<?> screenCls : bakedScreenWhitelist) {
-			if (screenCls.isInstance(screen)) {
-				return true;
-			}
-		}
-		return false;
+		return bakedScreenWhitelist.stream().anyMatch(screenCls -> screenCls.isInstance(screen));
 	}
 
 	public void recoverScreen(String screenClsName) {

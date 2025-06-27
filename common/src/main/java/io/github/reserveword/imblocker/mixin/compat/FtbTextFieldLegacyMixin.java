@@ -8,12 +8,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import dev.ftb.mods.ftblibrary.ui.TextBox;
-import dev.ftb.mods.ftblibrary.ui.input.KeyModifiers;
+import dev.ftb.mods.ftblibrary.ui.input.Key;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 
 @Mixin(value = TextBox.class, remap = false)
 public abstract class FtbTextFieldLegacyMixin extends FtbWidgetMixin implements MinecraftTextFieldWidget {
@@ -30,11 +30,15 @@ public abstract class FtbTextFieldLegacyMixin extends FtbWidgetMixin implements 
 		onMinecraftWidgetFocusChanged(this.isFocused);
 	}
 	
-	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
-	public void checkFocusTracking(char c, KeyModifiers modifiers, CallbackInfoReturnable<Boolean> cir) {
-		if(IMBlockerCore.isTrackingFocus && isFocused) {
-			FocusContainer.MINECRAFT.requestFocus(this);
-			cir.setReturnValue(true);
+	@Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
+	public void checkFocusTracking(Key key, CallbackInfoReturnable<Boolean> cir) {
+		if(IMBlockerCore.isTrackingFocus) {
+			if(isFocused) {
+				FocusContainer.MINECRAFT.requestFocus(this);
+				cir.setReturnValue(true);
+			}else {
+				cir.setReturnValue(false);
+			}
 		}
 	}
 

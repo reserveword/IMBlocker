@@ -32,11 +32,15 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin implements 
 		onMinecraftWidgetFocusChanged(focused);
 	}
 	
-	@Inject(method = "onCharTyped", at = @At("HEAD"), cancellable = true)
-	public void checkFocusTracking(char chr, CallbackInfoReturnable<Boolean> cir) {
-		if(IMBlockerCore.isTrackingFocus && focused) {
-			FocusContainer.MINECRAFT.requestFocus(this);
-			cir.setReturnValue(true);
+	@Inject(method = "onKeyPressed", at = @At("HEAD"), cancellable = true)
+	public void checkFocusTracking(int key, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+		if(IMBlockerCore.isTrackingFocus) {
+			if(focused) {
+				FocusContainer.MINECRAFT.requestFocus(this);
+				cir.setReturnValue(true);
+			}else {
+				cir.setReturnValue(false);
+			}
 		}
 	}
 	

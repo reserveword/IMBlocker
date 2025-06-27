@@ -57,7 +57,6 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		validMixins.add(isOfficialMapping ? "AbstractWidgetMixin" : "ClickableWidgetMixin");
 		validMixins.add("MinecraftClientMixin");
 		validMixins.add("WindowMixin");
-		validMixins.add(isOfficialMapping ? "KeyboardHandlerAccessor" : "KeyboardAccessor");
 		
 		if(IMBlockerCore.isGameVersionReached(762/*1.19.4*/)) {
 			validMixins.add(isOfficialMapping ? "AbstractContainerEventHandlerMixin" : "AbstractParentElementMixin");

@@ -30,11 +30,15 @@ public abstract class SM642TextFieldMixin extends SM642WidgetMixin implements Mi
 		onMinecraftWidgetFocusChanged(canWrite());
 	}
 	
-	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
-	public void checkFocusTracking(char character, boolean hasBeenHandled, CallbackInfoReturnable<Boolean> cir) {
-		if(IMBlockerCore.isTrackingFocus && canWrite()) {
-			FocusContainer.MINECRAFT.requestFocus(this);
-			cir.setReturnValue(true);
+	@Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
+	public void checkFocusTracking(int keyCode, boolean hasBeenHandled, CallbackInfoReturnable<Boolean> cir) {
+		if(IMBlockerCore.isTrackingFocus) {
+			if(canWrite()) {
+				FocusContainer.MINECRAFT.requestFocus(this);
+				cir.setReturnValue(true);
+			}else {
+				cir.setReturnValue(false);
+			}
 		}
 	}
 	

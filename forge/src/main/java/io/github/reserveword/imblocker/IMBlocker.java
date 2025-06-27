@@ -11,7 +11,6 @@ import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
-import io.github.reserveword.imblocker.mixin.KeyboardHandlerAccessor;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.minecraft.client.Minecraft;
@@ -37,10 +36,9 @@ public class IMBlocker {
 	public IMBlocker(FMLJavaModLoadingContext context) {
 		MinecraftClientAccessor.INSTANCE = new MinecraftClientAccessor() {
 			@Override
-			public void sendSafeCharForFocusTracking() {
+			public void sendSafeKeyForFocusTracking(int key, int scancode) {
 				Minecraft client = Minecraft.getInstance();
-				((KeyboardHandlerAccessor) client.keyboardHandler).invokeCharTyped(
-						client.getWindow().getWindow(), 1, 0);
+				client.keyboardHandler.keyPress(client.getWindow().getWindow(), key, scancode, 1, 0);
 			}
 			
 			@Override

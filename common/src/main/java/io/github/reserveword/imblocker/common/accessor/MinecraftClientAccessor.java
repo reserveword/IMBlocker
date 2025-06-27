@@ -14,7 +14,7 @@ public abstract class MinecraftClientAccessor {
 		IMBlockerCore.invokeLater(() -> {
 			IMBlockerCore.isTrackingFocus = true;
 			try {
-				sendSafeCharForFocusTracking();
+				sendSafeKeyForFocusTracking(0, 0);
 			} catch (Throwable e) {
 				IMBlockerCore.LOGGER.warn("failed to locate focus with char simulation");
 			}
@@ -30,7 +30,7 @@ public abstract class MinecraftClientAccessor {
 		});
 	}
 	
-	public abstract void sendSafeCharForFocusTracking();
+	public abstract void sendSafeKeyForFocusTracking(int key, int scancode);
 	public abstract void execute(Runnable runnable);
 	public abstract Rectangle getWindowBounds();
 	public abstract Object getCurrentScreen();

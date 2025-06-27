@@ -48,11 +48,15 @@ public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin implement
 		onMinecraftWidgetFocusChanged(canConsumeInput());
 	}
 	
-	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
-	public void checkFocusTracking(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-		if(IMBlockerCore.isTrackingFocus && canConsumeInput()) {
-			FocusContainer.MINECRAFT.requestFocus(this);
-			cir.setReturnValue(true);
+	@Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
+	public void checkFocusTracking(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+		if(IMBlockerCore.isTrackingFocus) {
+			if(canConsumeInput()) {
+				FocusContainer.MINECRAFT.requestFocus(this);
+				cir.setReturnValue(true);
+			}else {
+				cir.setReturnValue(false);
+			}
 		}
 	}
 

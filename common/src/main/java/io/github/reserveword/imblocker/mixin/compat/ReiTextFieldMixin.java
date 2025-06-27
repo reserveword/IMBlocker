@@ -39,11 +39,15 @@ public abstract class ReiTextFieldMixin implements MinecraftTextFieldWidget {
 		onMinecraftWidgetFocusChanged(visible && focused);
 	}
 	
-	@Inject(method = {"charTyped", "method_25400", "m_5534_", "func_231042_a_"}, at = @At("HEAD"), cancellable = true)
-	public void checkFocusTracking(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-		if(IMBlockerCore.isTrackingFocus && visible && focused) {
-			FocusContainer.MINECRAFT.requestFocus(this);
-			cir.setReturnValue(true);
+	@Inject(method = {"keyPressed", "method_25404", "m_7933_", "func_231046_a_"}, at = @At("HEAD"), cancellable = true)
+	public void checkFocusTracking(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+		if(IMBlockerCore.isTrackingFocus) {
+			if(visible && focused) {
+				FocusContainer.MINECRAFT.requestFocus(this);
+				cir.setReturnValue(true);
+			}else {
+				cir.setReturnValue(false);
+			}
 		}
 	}
 	

@@ -33,7 +33,7 @@ public abstract class BlockUITextFieldMixin extends BlockUIPaneMixin implements 
 	}
 	
 	@Inject(method = "onKeyTyped", at = @At("HEAD"), cancellable = true)
-	public void checkFocusTracking(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+	public void checkFocusTracking(char c, int key, CallbackInfoReturnable<Boolean> cir) {
 		if(IMBlockerCore.isTrackingFocus) {
 			FocusContainer.MINECRAFT.requestFocus(this);
 			cir.setReturnValue(true);

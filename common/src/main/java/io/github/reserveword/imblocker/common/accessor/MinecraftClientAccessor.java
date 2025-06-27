@@ -10,24 +10,26 @@ public abstract class MinecraftClientAccessor {
 	
 	public static MinecraftClientAccessor INSTANCE;
 	
+	private final Runnable locateRealFocusTask = () -> {
+		IMBlockerCore.isTrackingFocus = true;
+		try {
+			sendSafeKeyForFocusTracking(-1, 0);
+		} catch (Throwable e) {
+			IMBlockerCore.LOGGER.warn("failed to locate focus with key simulation");
+		}
+		if(!IMBlockerCore.isFocusLocated) {
+			if(IMBlockerConfig.INSTANCE.isScreenInWhitelist(getCurrentScreen())) {
+				FocusContainer.MINECRAFT.requestFocus(GenericWhitelistScreen.getInstance());
+			}else {
+				FocusContainer.MINECRAFT.cancelFocus();
+			}
+		}
+		IMBlockerCore.isTrackingFocus = false;
+		IMBlockerCore.isFocusLocated = false;
+	};
+	
 	public void locateRealFocus() {
-		IMBlockerCore.invokeLater(() -> {
-			IMBlockerCore.isTrackingFocus = true;
-			try {
-				sendSafeKeyForFocusTracking(0, 0);
-			} catch (Throwable e) {
-				IMBlockerCore.LOGGER.warn("failed to locate focus with key simulation");
-			}
-			if(!IMBlockerCore.isFocusLocated) {
-				if(IMBlockerConfig.INSTANCE.isScreenInWhitelist(getCurrentScreen())) {
-					FocusContainer.MINECRAFT.requestFocus(GenericWhitelistScreen.getInstance());
-				}else {
-					FocusContainer.MINECRAFT.cancelFocus();
-				}
-			}
-			IMBlockerCore.isTrackingFocus = false;
-			IMBlockerCore.isFocusLocated = false;
-		});
+		IMBlockerCore.invokeLater(locateRealFocusTask);
 	}
 	
 	public abstract void sendSafeKeyForFocusTracking(int key, int scancode);

@@ -1,7 +1,7 @@
 package io.github.reserveword.imblocker.common;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +17,7 @@ public class IMBlockerCore {
 	
 	public static boolean isTrackingFocus = false;
 	public static boolean isFocusLocated = false;
-	private static final List<Runnable> deferredRunnables = new ArrayList<>();
+	private static final Set<Runnable> deferredRunnables = new LinkedHashSet<>();
 	
 	public static synchronized void invokeLater(Runnable runnable) {
 		deferredRunnables.add(runnable);

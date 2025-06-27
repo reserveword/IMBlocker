@@ -6,5 +6,6 @@ public class DebugUtil {
 		for(StackTraceElement trace : Thread.currentThread().getStackTrace()) {
 			System.out.println(trace);
 		}
+		System.out.println();
 	}
 }

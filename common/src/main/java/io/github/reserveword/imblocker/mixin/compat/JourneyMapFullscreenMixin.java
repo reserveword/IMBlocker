@@ -15,7 +15,7 @@ import io.github.reserveword.imblocker.common.ReflectionUtil;
 public abstract class JourneyMapFullscreenMixin {
 	
 	private static final Method MAPCHAT_KEYPRESSED_METHOD = ReflectionUtil
-			.findMethod("journeymap.client.ui.fullscreen.MapChat",
+			.findMethod(getChatScreenClass(),
 					new String[] {"keyPressed", "method_25404", "m_7933_", "func_231046_a_"}, 
 					new Class[] {int.class, int.class, int.class});
 	
@@ -31,6 +31,14 @@ public abstract class JourneyMapFullscreenMixin {
 				cir.setReturnValue((Boolean) MAPCHAT_KEYPRESSED_METHOD
 						.invoke(mapChat, keyCode, scanCode, modifiers));
 			} catch (Throwable e) {}
+		}
+	}
+	
+	private static Class<?> getChatScreenClass() {
+		try {
+			return Class.forName("journeymap.client.ui.fullscreen.MapChat").getSuperclass();
+		} catch (ClassNotFoundException e) {
+			return null;
 		}
 	}
 }

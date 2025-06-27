@@ -29,13 +29,7 @@ public class ReflectionUtil {
 		}
 	}
 	
-	public static Method findMethod(String className, String[] methodNames, Class<?>[] paramTypes) {
-		Class<?> cls = null;
-		try {
-			cls = Class.forName(className);
-		} catch (ClassNotFoundException e) {
-			return null;
-		}
+	public static Method findMethod(Class<?> cls, String[] methodNames, Class<?>[] paramTypes) {
 		for(String methodName : methodNames) {
 			try {
 				Method method = cls.getDeclaredMethod(methodName, paramTypes);

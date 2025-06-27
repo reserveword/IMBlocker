@@ -16,7 +16,7 @@ public abstract class MinecraftClientAccessor {
 			try {
 				sendSafeKeyForFocusTracking(0, 0);
 			} catch (Throwable e) {
-				IMBlockerCore.LOGGER.warn("failed to locate focus with char simulation");
+				IMBlockerCore.LOGGER.warn("failed to locate focus with key simulation");
 			}
 			if(!IMBlockerCore.isFocusLocated) {
 				if(IMBlockerConfig.INSTANCE.isScreenInWhitelist(getCurrentScreen())) {

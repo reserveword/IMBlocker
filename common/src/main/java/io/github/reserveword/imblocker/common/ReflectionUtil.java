@@ -19,7 +19,7 @@ public class ReflectionUtil {
 	
 	@SuppressWarnings("unchecked")
 	public static <R> R invokeMethod(Class<?> cls, Object instance, Class<R> retType, String methodName,
-			Class<?>[] paramTypes, Object...params) {
+			Class<?>[] paramTypes, Object... params) {
 		try {
 			Method method = cls.getDeclaredMethod(methodName, paramTypes);
 			method.setAccessible(true);
@@ -27,6 +27,23 @@ public class ReflectionUtil {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	
+	public static Method findMethod(String className, String[] methodNames, Class<?>[] paramTypes) {
+		Class<?> cls = null;
+		try {
+			cls = Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			return null;
+		}
+		for(String methodName : methodNames) {
+			try {
+				Method method = cls.getDeclaredMethod(methodName, paramTypes);
+				method.setAccessible(true);
+				return method;
+			} catch (Exception e) {}
+		}
+		return null;
 	}
 	
 	public static <R> R newInstance(Class<R> cls, Class<?>[] paramTypes, Object... params) {

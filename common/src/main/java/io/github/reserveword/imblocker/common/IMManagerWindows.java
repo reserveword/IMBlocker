@@ -7,7 +7,7 @@ import com.sun.jna.platform.win32.WinNT;
 
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
-import io.github.reserveword.imblocker.common.gui.FocusableWidget;
+import io.github.reserveword.imblocker.common.gui.FocusableObject;
 import io.github.reserveword.imblocker.common.gui.MathHelper;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
@@ -102,7 +102,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		WinDef.HWND hwnd = getActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if (himc != null) {
-			FocusableWidget focusedWidget = FocusManager.getFocusOwner();
+			FocusableObject focusedWidget = FocusManager.getFocusOwner();
 			if (focusedWidget != null) {
 				Point compositionWindowPos = calculateProperCompositionWindowPos(focusedWidget);
 				COMPOSITIONFORM cfr = new COMPOSITIONFORM();
@@ -121,7 +121,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		WinDef.HWND hwnd = getActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if (himc != null) {
-			FocusableWidget focusedWidget = FocusManager.getFocusOwner();
+			FocusableObject focusedWidget = FocusManager.getFocusOwner();
 			if (focusedWidget != null) {
 				int fontSize = focusedWidget instanceof MinecraftTextFieldWidget
 						? ((MinecraftTextFieldWidget) focusedWidget).getFontHeight() : 8;
@@ -147,10 +147,10 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		}
 	}
 
-	private Point calculateProperCompositionWindowPos(FocusableWidget inputWidget) {
-		double scaleFactor = inputWidget.getGuiScale();
-		Rectangle inputWidgetBounds = inputWidget.getBoundsAbs();
-		Point caretPos = inputWidget.getCaretPos();
+	private Point calculateProperCompositionWindowPos(FocusableObject inputEntry) {
+		double scaleFactor = inputEntry.getGuiScale();
+		Rectangle inputWidgetBounds = inputEntry.getBoundsAbs();
+		Point caretPos = inputEntry.getCaretPos();
 		int caretX = MathHelper.clamp(caretPos.x(), 0, (int) (inputWidgetBounds.width() - 4 * scaleFactor));
 		int caretY = MathHelper.clamp(caretPos.y(), 0, (int) (inputWidgetBounds.height() - 4 * scaleFactor));
 		caretY -= scaleFactor / 2; // Tweak yPos to fit font style.

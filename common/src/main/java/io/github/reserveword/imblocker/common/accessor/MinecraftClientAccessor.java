@@ -21,7 +21,7 @@ public abstract class MinecraftClientAccessor {
 			if(IMBlockerConfig.INSTANCE.isScreenInWhitelist(getCurrentScreen())) {
 				FocusContainer.MINECRAFT.requestFocus(GenericWhitelistScreen.getInstance());
 			}else {
-				FocusContainer.MINECRAFT.cancelFocus();
+				FocusContainer.MINECRAFT.clearFocus();
 			}
 		}
 		IMBlockerCore.isTrackingFocus = false;

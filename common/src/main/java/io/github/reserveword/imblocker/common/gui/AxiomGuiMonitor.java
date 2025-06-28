@@ -30,7 +30,7 @@ public class AxiomGuiMonitor {
 			if(isAxiomTextFieldFocused) {
 				FocusContainer.IMGUI.requestFocus(GenericAxiomWidget.getInstance());
 			}else {
-				FocusContainer.IMGUI.cancelFocus();
+				FocusContainer.IMGUI.clearFocus();
 			}
 		}
 	}

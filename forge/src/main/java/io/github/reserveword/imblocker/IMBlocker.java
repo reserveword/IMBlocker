@@ -38,7 +38,7 @@ public class IMBlocker {
 			@Override
 			public void sendSafeKeyForFocusTracking(int key, int scancode) {
 				Minecraft client = Minecraft.getInstance();
-				client.keyboardHandler.keyPress(client.getWindow().getWindow(), key, scancode, 1, 0);
+				client.keyboardHandler.keyPress(client.getWindow().getWindow(), key, scancode, 2, 0);
 			}
 			
 			@Override

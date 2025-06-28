@@ -12,7 +12,6 @@ import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
-import io.github.reserveword.imblocker.common.gui.GenericWhitelistScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.Window;
@@ -46,11 +45,8 @@ public abstract class MinecraftClientMixin {
 			IMBlockerConfig.INSTANCE.recoverScreen(screen.getClass().getName());
 		}
 
-		if(isScreenInWhiteList(screen)) {
-			GenericWhitelistScreen.getInstance().onMinecraftWidgetFocusGained();
-		}else {
-			FocusContainer.MINECRAFT.cancelFocus();
-		}
+		FocusContainer.MINECRAFT.clearFocus();
+		FocusContainer.MINECRAFT.setPreferredState(isScreenInWhiteList(screen));
 	}
 	
 	@Inject(method = "render", at = @At("HEAD"))

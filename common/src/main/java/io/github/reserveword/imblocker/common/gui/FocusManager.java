@@ -5,7 +5,7 @@ public class FocusManager {
 	private static boolean isWindowFocused = true;
 	private static FocusContainer focusedContainer = FocusContainer.MINECRAFT;
 	
-	private static FocusableWidget focusOwner;
+	private static FocusableObject focusOwner;
 	
 	public static void requestFocus(FocusContainer container) {
 		if(focusedContainer != container) {
@@ -27,11 +27,11 @@ public class FocusManager {
 		}
 	}
 	
-	public static void setFocusOwner(FocusableWidget focusOwner) {
+	public static void setFocusOwner(FocusableObject focusOwner) {
 		FocusManager.focusOwner = focusOwner;
 	}
 	
-	public static FocusableWidget getFocusOwner() {
+	public static FocusableObject getFocusOwner() {
 		return focusOwner;
 	}
 }

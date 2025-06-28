@@ -52,7 +52,7 @@ public abstract class TextFieldLegacyMixin extends ClickableWidgetMixin implemen
 	public void checkFocusTracking(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
 		if(IMBlockerCore.isTrackingFocus) {
 			if(isActive()) {
-				FocusContainer.MINECRAFT.requestFocus(this);
+				FocusContainer.MINECRAFT.switchFocus(this);
 				cir.setReturnValue(true);
 			}else {
 				cir.setReturnValue(false);

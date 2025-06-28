@@ -49,7 +49,7 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
 			char keyChar, boolean ctrlDown, boolean shiftDown, CallbackInfoReturnable<Boolean> cir) {
 		if(IMBlockerCore.isTrackingFocus) {
 			if(focused) {
-				FocusContainer.MINECRAFT.requestFocus(this);
+				FocusContainer.MINECRAFT.switchFocus(this);
 				cir.setReturnValue(true);
 			}else {
 				cir.setReturnValue(false);

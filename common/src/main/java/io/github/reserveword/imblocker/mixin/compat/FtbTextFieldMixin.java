@@ -34,7 +34,7 @@ public abstract class FtbTextFieldMixin extends FtbWidgetMixin implements Minecr
 	public void checkFocusTracking(Key key, CallbackInfoReturnable<Boolean> cir) {
 		if(IMBlockerCore.isTrackingFocus) {
 			if(isFocused) {
-				FocusContainer.MINECRAFT.requestFocus(this);
+				FocusContainer.MINECRAFT.switchFocus(this);
 				cir.setReturnValue(true);
 			}else {
 				cir.setReturnValue(false);

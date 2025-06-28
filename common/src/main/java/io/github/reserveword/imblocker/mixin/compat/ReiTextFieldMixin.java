@@ -43,7 +43,7 @@ public abstract class ReiTextFieldMixin implements MinecraftTextFieldWidget {
 	public void checkFocusTracking(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
 		if(IMBlockerCore.isTrackingFocus) {
 			if(visible && focused) {
-				FocusContainer.MINECRAFT.requestFocus(this);
+				FocusContainer.MINECRAFT.switchFocus(this);
 				cir.setReturnValue(true);
 			}else {
 				cir.setReturnValue(false);

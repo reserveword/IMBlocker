@@ -37,7 +37,7 @@ public abstract class RSOSearchFieldMixin implements MinecraftTextFieldWidget {
 	public void checkFocusTracking(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
 		if(IMBlockerCore.isTrackingFocus) {
 			if(isActive()) {
-				FocusContainer.MINECRAFT.requestFocus(this);
+				FocusContainer.MINECRAFT.switchFocus(this);
 				cir.setReturnValue(true);
 			}else {
 				cir.setReturnValue(false);

@@ -42,7 +42,7 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 	@Inject(method = "onKeyPressed(III)V", at = @At("HEAD"), cancellable = true, require = 0)
 	public void checkFocusTracking(int key, int scancode, int modifiers, CallbackInfo ci) {
 		if(IMBlockerCore.isTrackingFocus) {
-			FocusContainer.MINECRAFT.requestFocus(this);
+			FocusContainer.MINECRAFT.switchFocus(this);
 			ci.cancel();
 		}
 	}
@@ -51,7 +51,7 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 			at = @At("HEAD"), cancellable = true, require = 0)
 	public void checkFocusTracking(int key, int scancode, int modifiers, CallbackInfoReturnable<Object> cir) {
 		if(IMBlockerCore.isTrackingFocus) {
-			FocusContainer.MINECRAFT.requestFocus(this);
+			FocusContainer.MINECRAFT.switchFocus(this);
 			cir.setReturnValue(PROCESSED_INPUTRESULT);
 		}
 	}

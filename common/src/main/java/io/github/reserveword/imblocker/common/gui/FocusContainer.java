@@ -43,6 +43,7 @@ public enum FocusContainer implements FocusableObject {
 	public void requestFocus(FocusableWidget toFocus) {
 		if(focusedWidget != toFocus) {
 			focusCandidates.add(toFocus);
+			System.out.println(focusCandidates);
 			if(focusCandidates.size() == 1) {
 				switchFocus(toFocus);
 			}else {
@@ -51,11 +52,16 @@ public enum FocusContainer implements FocusableObject {
 		}
 	}
 	
-	private void locateRealFocus() {
+	public void locateRealFocus() {
 		IMBlockerCore.invokeLater(locateRealFocusTask);
 	}
 	
 	public void switchFocus(FocusableWidget toFocus) {
+		if(IMBlockerCore.isTrackingFocus) {
+			IMBlockerCore.isFocusLocated = true;
+			if(focusedWidget == toFocus) return;
+		}
+		
 		if(isFocused) {
 			if(focusedWidget != null) {
 				focusedWidget.lostFocus();
@@ -70,8 +76,10 @@ public enum FocusContainer implements FocusableObject {
 	
 	public void removeFocus(FocusableWidget toRemove) {
 		focusCandidates.remove(toRemove);
+		System.out.println(focusCandidates);
 		if(focusedWidget == toRemove) {
 			toRemove.lostFocus();
+			focusedWidget = null;
 			if(focusCandidates.isEmpty()) {
 				if(isFocused) {
 					FocusableObject.super.deliverFocus();
@@ -86,6 +94,7 @@ public enum FocusContainer implements FocusableObject {
 	
 	public void clearFocus() {
 		focusCandidates.clear();
+		System.out.println(focusCandidates);
 		if(focusedWidget != null) {
 			focusedWidget.lostFocus();
 			focusedWidget = null;
@@ -114,7 +123,12 @@ public enum FocusContainer implements FocusableObject {
 	}
 	
 	public void setPreferredState(boolean preferredState) {
-		this.preferredState = preferredState;
+		if(this.preferredState != preferredState) {
+			this.preferredState = preferredState;
+			if(isTrulyFocused()) {
+				updateIMState();
+			}
+		}
 	}
 
 	@Override

@@ -34,7 +34,7 @@ public abstract class SM642TextFieldMixin extends SM642WidgetMixin implements Mi
 	public void checkFocusTracking(int keyCode, boolean hasBeenHandled, CallbackInfoReturnable<Boolean> cir) {
 		if(IMBlockerCore.isTrackingFocus) {
 			if(canWrite()) {
-				FocusContainer.MINECRAFT.requestFocus(this);
+				FocusContainer.MINECRAFT.switchFocus(this);
 				cir.setReturnValue(true);
 			}else {
 				cir.setReturnValue(false);

@@ -36,7 +36,7 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin implements 
 	public void checkFocusTracking(int key, int modifiers, CallbackInfoReturnable<Boolean> cir) {
 		if(IMBlockerCore.isTrackingFocus) {
 			if(focused) {
-				FocusContainer.MINECRAFT.requestFocus(this);
+				FocusContainer.MINECRAFT.switchFocus(this);
 				cir.setReturnValue(true);
 			}else {
 				cir.setReturnValue(false);

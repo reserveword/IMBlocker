@@ -10,6 +10,7 @@ import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
+import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import net.minecraft.client.MinecraftClient;
@@ -47,6 +48,9 @@ public abstract class MinecraftClientMixin {
 
 		FocusContainer.MINECRAFT.clearFocus();
 		FocusContainer.MINECRAFT.setPreferredState(isScreenInWhiteList(screen));
+		for(int i = 0; i < 32; i++) {
+			MinecraftClientAccessor.INSTANCE.sendSafeCharForFocusTracking(i);
+		}
 	}
 	
 	@Inject(method = "render", at = @At("HEAD"))

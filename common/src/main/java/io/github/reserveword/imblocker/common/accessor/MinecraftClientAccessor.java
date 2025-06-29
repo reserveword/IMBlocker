@@ -6,7 +6,7 @@ public abstract class MinecraftClientAccessor {
 	
 	public static MinecraftClientAccessor INSTANCE;
 	
-	public abstract void sendSafeKeyForFocusTracking(int key, int scancode);
+	public abstract void sendSafeCharForFocusTracking(int codePoint);
 	public abstract void execute(Runnable runnable);
 	public abstract Rectangle getWindowBounds();
 	public abstract Object getCurrentScreen();

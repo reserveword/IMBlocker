@@ -48,8 +48,8 @@ public abstract class TextFieldLegacyMixin extends ClickableWidgetMixin implemen
 		onMinecraftWidgetFocusChanged(isActive());
 	}
 	
-	@Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-	public void checkFocusTracking(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
+	public void checkFocusTracking(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
 		if(IMBlockerCore.isTrackingFocus) {
 			if(isActive()) {
 				FocusContainer.MINECRAFT.switchFocus(this);

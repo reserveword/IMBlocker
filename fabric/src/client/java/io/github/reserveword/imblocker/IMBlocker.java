@@ -5,6 +5,7 @@ import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import io.github.reserveword.imblocker.mixin.KeyboardAccessor;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
@@ -18,9 +19,10 @@ public class IMBlocker implements ClientModInitializer {
     public void onInitializeClient() {
 		MinecraftClientAccessor.INSTANCE = new MinecraftClientAccessor() {
 			@Override
-			public void sendSafeKeyForFocusTracking(int key, int scancode) {
+			public void sendSafeCharForFocusTracking(int codePoint) {
 				MinecraftClient client = MinecraftClient.getInstance();
-				client.keyboard.onKey(client.getWindow().getHandle(), key, scancode, 1, 0);
+				((KeyboardAccessor) client.keyboard).invokeOnChar(
+						client.getWindow().getHandle(), codePoint, 0); 
 			}
 			
 			@Override

@@ -39,17 +39,17 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 		onMinecraftWidgetFocusLost();
 	}
 	
-	@Inject(method = "onKeyPressed(III)V", at = @At("HEAD"), cancellable = true, require = 0)
-	public void checkFocusTracking(int key, int scancode, int modifiers, CallbackInfo ci) {
+	@Inject(method = "onCharTyped(C)V", at = @At("HEAD"), cancellable = true, require = 0)
+	public void checkFocusTracking(char c, CallbackInfo ci) {
 		if(IMBlockerCore.isTrackingFocus) {
 			FocusContainer.MINECRAFT.switchFocus(this);
 			ci.cancel();
 		}
 	}
 	
-	@Inject(method = "onKeyPressed(III)Lio/github/cottonmc/cotton/gui/widget/data/InputResult;", 
+	@Inject(method = "onCharTyped(C)Lio/github/cottonmc/cotton/gui/widget/data/InputResult;", 
 			at = @At("HEAD"), cancellable = true, require = 0)
-	public void checkFocusTracking(int key, int scancode, int modifiers, CallbackInfoReturnable<Object> cir) {
+	public void checkFocusTracking(char c, CallbackInfoReturnable<Object> cir) {
 		if(IMBlockerCore.isTrackingFocus) {
 			FocusContainer.MINECRAFT.switchFocus(this);
 			cir.setReturnValue(PROCESSED_INPUTRESULT);

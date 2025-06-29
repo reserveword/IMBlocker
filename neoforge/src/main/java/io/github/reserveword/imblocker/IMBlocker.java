@@ -25,9 +25,9 @@ public class IMBlocker {
     public IMBlocker(ModContainer container) {
     	MinecraftClientAccessor.INSTANCE = new MinecraftClientAccessor() {
     		@Override
-    		public void sendSafeKeyForFocusTracking(int key, int scancode) {
+    		public void sendSafeCharForFocusTracking(int codePoint) {
     			Minecraft client = Minecraft.getInstance();
-				client.keyboardHandler.keyPress(client.getWindow().getWindow(), key, scancode, 1, 0);
+				client.keyboardHandler.keyPress(client.getWindow().getWindow(), codePoint, 0, 1, 0);
     		}
     		
 			@Override

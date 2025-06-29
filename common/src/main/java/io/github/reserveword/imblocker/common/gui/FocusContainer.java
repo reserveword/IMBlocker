@@ -19,9 +19,9 @@ public enum FocusContainer implements FocusableObject {
 		if(focusCandidates.size() > 1) {
 			IMBlockerCore.isTrackingFocus = true;
 			try {
-				MinecraftClientAccessor.INSTANCE.sendSafeKeyForFocusTracking(-1, 0);
+				MinecraftClientAccessor.INSTANCE.sendSafeCharForFocusTracking(0);
 			} catch (Throwable e) {
-				IMBlockerCore.LOGGER.warn("failed to locate focus with key simulation");
+				IMBlockerCore.LOGGER.warn("failed to locate focus with char simulation");
 			}
 			if(!IMBlockerCore.isFocusLocated) {
 				clearFocus();
@@ -134,6 +134,18 @@ public enum FocusContainer implements FocusableObject {
 	@Override
 	public boolean getPreferredState() {
 		return preferredState;
+	}
+
+	@Override
+	public Rectangle getBoundsAbs() {
+		Rectangle bounds = MinecraftClientAccessor.INSTANCE.getWindowBounds();
+		return new Rectangle(0, 0, bounds.width(), bounds.height());
+	}
+	
+	@Override
+	public Point getCaretPos() {
+		Rectangle bounds = MinecraftClientAccessor.INSTANCE.getWindowBounds();
+		return new Point(bounds.width() / 3, bounds.height() / 2);
 	}
 	
 	public void setGuiScaleFactor(double factor) {

@@ -14,10 +14,15 @@ public interface MinecraftTextFieldWidget extends MinecraftFocusableWidget {
 	 
 	default void setPreferredEnglishState(boolean state) {}
 	
+	@Override
+	default Rectangle getBoundsAbs() {
+		return Rectangle.EMPTY;
+	}
+	
 	default Point getCaretPos() {
 		SinglelineCursorInfo cursorInfo = getCursorInfo();
 		if(cursorInfo == null) {
-			return MinecraftFocusableWidget.super.getCaretPos();
+			return Point.TOP_LEFT;
 		}
 		int caretX = (cursorInfo.hasBorder ? getPaddingX() : 0) + MinecraftClientAccessor.INSTANCE.getStringWidth(
 				StringUtil.getSubstring(cursorInfo.text, cursorInfo.cursorLineBeginIndex, cursorInfo.cursor));

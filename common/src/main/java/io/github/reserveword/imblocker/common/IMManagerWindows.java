@@ -148,13 +148,20 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	}
 
 	private Point calculateProperCompositionWindowPos(FocusableObject inputEntry) {
-		double scaleFactor = inputEntry.getGuiScale();
-		Rectangle inputWidgetBounds = inputEntry.getBoundsAbs();
-		Point caretPos = inputEntry.getCaretPos();
-		int caretX = MathHelper.clamp(caretPos.x(), 0, (int) (inputWidgetBounds.width() - 4 * scaleFactor));
-		int caretY = MathHelper.clamp(caretPos.y(), 0, (int) (inputWidgetBounds.height() - 4 * scaleFactor));
-		caretY -= scaleFactor / 2; // Tweak yPos to fit font style.
-		return new Point(inputWidgetBounds.x() + caretX, inputWidgetBounds.y() + caretY);
+		try {
+			double scaleFactor = inputEntry.getGuiScale();
+			Rectangle inputWidgetBounds = inputEntry.getBoundsAbs();
+			Point caretPos = inputEntry.getCaretPos();
+			if(inputWidgetBounds == Rectangle.EMPTY && caretPos == Point.TOP_LEFT) {
+				return Point.TOP_LEFT;
+			}
+			int caretX = MathHelper.clamp(caretPos.x(), 0, (int) (inputWidgetBounds.width() - 4 * scaleFactor));
+			int caretY = MathHelper.clamp(caretPos.y(), 0, (int) (inputWidgetBounds.height() - 4 * scaleFactor));
+			caretY -= scaleFactor / 2; // Tweak yPos to fit font style.
+			return new Point(inputWidgetBounds.x() + caretX, inputWidgetBounds.y() + caretY);
+		} catch (Throwable e) {
+			return Point.TOP_LEFT;
+		}
 	}
 
 	private class SetConversionStateThread extends Thread {

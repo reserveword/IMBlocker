@@ -7,4 +7,8 @@ public interface FocusableWidget extends FocusableObject {
 	default double getGuiScale() {
 		return getFocusContainer().getGuiScale();
 	}
+	
+	default boolean isRenderable() {
+		return true;
+	}
 }

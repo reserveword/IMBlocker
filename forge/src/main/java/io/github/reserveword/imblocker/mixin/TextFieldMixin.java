@@ -3,14 +3,15 @@ package io.github.reserveword.imblocker.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import net.minecraft.client.gui.components.EditBox;
@@ -27,8 +28,13 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
 	@Shadow private String value;
 
 	private boolean preferredEditState = true;
-
 	private boolean preferredEnglishState = false;
+
+	@Unique
+	private boolean isRenderable = true;
+	
+	@Unique
+	private long lastRenderTime;
 	
 	@Shadow
 	public abstract boolean canConsumeInput();
@@ -45,7 +51,7 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
 	
 	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-		if(IMBlockerCore.isTrackingFocus) {
+		if(FocusManager.isTrackingFocus) {
 			if(canConsumeInput()) {
 				FocusContainer.MINECRAFT.switchFocus(this);
 				cir.setReturnValue(true);
@@ -58,6 +64,13 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
 	@Inject(method = "onValueChange", at = @At("TAIL"))
 	public void onTextChanged(String newValue, CallbackInfo ci) {
 		IMManager.updateCompositionWindowPos();
+	}
+	
+	@Inject(method = "isVisible", at = @At("TAIL"))
+	public void isVisibleInvoked(CallbackInfoReturnable<Boolean> ci) {
+		if(FocusManager.isGameRendering) {
+			lastRenderTime = System.nanoTime();
+		}
 	}
 
 	@Overwrite
@@ -101,5 +114,24 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
 	@Override
 	public SinglelineCursorInfo getCursorInfo() {
 		return new SinglelineCursorInfo(bordered, height, displayPos, cursorPos, value);
+	}
+
+	@Override
+	public void checkVisibility(long lastGameRenderTime) {
+		setRenderable(lastRenderTime > lastGameRenderTime);
+	}
+	
+	@Unique
+	private void setRenderable(boolean renderable) {
+		if(isRenderable != renderable) {
+			this.isRenderable = renderable;
+			getFocusContainer().locateRealFocus();
+		}
+	}
+	
+	@Unique
+	@Override
+	public boolean isRenderable() {
+		return isRenderable;
 	}
 }

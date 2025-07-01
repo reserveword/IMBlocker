@@ -1,7 +1,13 @@
 package io.github.reserveword.imblocker.common.gui;
 
+import java.util.IdentityHashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
-import io.github.reserveword.imblocker.common.IdentityHashSet;
+import io.github.reserveword.imblocker.common.MathHelper;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 
 public enum FocusContainer implements FocusableObject {
@@ -13,21 +19,22 @@ public enum FocusContainer implements FocusableObject {
 	private boolean preferredState = false;
 	private FocusableWidget focusedWidget;
 	
-	private final IdentityHashSet<FocusableWidget> focusCandidates = new IdentityHashSet<>();
+	private final Map<FocusableWidget, Long> focusCandidates = new IdentityHashMap<>();
 	
 	private final Runnable locateRealFocusTask = () -> {
-		if(focusCandidates.size() > 1) {
-			IMBlockerCore.isTrackingFocus = true;
+		if(!focusCandidates.isEmpty()) {
+			FocusManager.isTrackingFocus = true;
 			try {
 				MinecraftClientAccessor.INSTANCE.sendSafeCharForFocusTracking(0);
 			} catch (Throwable e) {
 				IMBlockerCore.LOGGER.warn("failed to locate focus with char simulation");
 			}
-			if(!IMBlockerCore.isFocusLocated) {
-				clearFocus();
+			if(!FocusManager.isFocusLocated) {
+				restoreContainerFocus();
 			}
-			IMBlockerCore.isTrackingFocus = false;
-			IMBlockerCore.isFocusLocated = false;
+			System.out.println("Focus tracking result: " + focusedWidget);
+			FocusManager.isTrackingFocus = false;
+			FocusManager.isFocusLocated = false;
 		}
 	};
 	
@@ -42,24 +49,38 @@ public enum FocusContainer implements FocusableObject {
 	
 	public void requestFocus(FocusableWidget toFocus) {
 		if(focusedWidget != toFocus) {
-			focusCandidates.add(toFocus);
+			focusCandidates.put(toFocus, System.nanoTime());
 			System.out.println(focusCandidates);
-			if(focusCandidates.size() == 1) {
-				switchFocus(toFocus);
-			}else {
-				locateRealFocus();
-			}
+			locateRealFocus();
 		}
 	}
 	
 	public void locateRealFocus() {
-		IMBlockerCore.invokeLater(locateRealFocusTask);
+		if(IMBlockerConfig.INSTANCE.isTwoFactorFocusTrackingEnabled()) {
+			IMBlockerCore.invokeLater(locateRealFocusTask);
+		}else {
+			Optional<FocusableWidget> promotedFocusCandidate = focusCandidates.keySet().stream()
+					.filter(FocusableWidget::isRenderable)
+					.max((o1, o2) -> MathHelper.clampLong(focusCandidates.get(o1) - focusCandidates.get(o2)));
+			if(promotedFocusCandidate.isPresent()) {
+				switchFocus(promotedFocusCandidate.get());
+			}else {
+				restoreContainerFocus();
+			}
+		}
+	}
+	
+	private void verifyFocus() {
+		assert focusCandidates.containsKey(focusedWidget); //Let's see who will break this.
 	}
 	
 	public void switchFocus(FocusableWidget toFocus) {
-		if(IMBlockerCore.isTrackingFocus) {
-			IMBlockerCore.isFocusLocated = true;
-			if(focusedWidget == toFocus) return;
+		if(FocusManager.isTrackingFocus) {
+			FocusManager.isFocusLocated = true;
+			if(focusedWidget == toFocus) {
+				verifyFocus();
+				return;
+			}
 		}
 		
 		if(isFocused) {
@@ -71,37 +92,35 @@ public enum FocusContainer implements FocusableObject {
 		}else {
 			focusedWidget = toFocus;
 		}
-		assert focusCandidates.contains(focusedWidget); //Let's see who will break this.
+		verifyFocus();
 	}
 	
 	public void removeFocus(FocusableWidget toRemove) {
 		focusCandidates.remove(toRemove);
 		System.out.println(focusCandidates);
 		if(focusedWidget == toRemove) {
-			toRemove.lostFocus();
-			focusedWidget = null;
 			if(focusCandidates.isEmpty()) {
-				if(isFocused) {
-					FocusableObject.super.deliverFocus();
-				}
-			}else if(focusCandidates.size() == 1) {
-				switchFocus(focusCandidates.iterator().next());
+				restoreContainerFocus();
 			}else {
 				locateRealFocus();
 			}
 		}
 	}
 	
+	private void restoreContainerFocus() {
+		if(focusedWidget != null) {
+			if(isFocused) {
+				focusedWidget.lostFocus();
+				FocusableObject.super.deliverFocus();
+			}
+			focusedWidget = null;
+		}
+	}
+	
 	public void clearFocus() {
 		focusCandidates.clear();
 		System.out.println(focusCandidates);
-		if(focusedWidget != null) {
-			focusedWidget.lostFocus();
-			focusedWidget = null;
-			if(isFocused) {
-				FocusableObject.super.deliverFocus();
-			}
-		}
+		restoreContainerFocus();
 	}
 	
 	@Override
@@ -120,6 +139,10 @@ public enum FocusContainer implements FocusableObject {
 		if(focusedWidget != null) {
 			focusedWidget.lostFocus();
 		}
+	}
+	
+	public Set<FocusableWidget> getFocusCandidates() {
+		return focusCandidates.keySet();
 	}
 	
 	public void setPreferredState(boolean preferredState) {

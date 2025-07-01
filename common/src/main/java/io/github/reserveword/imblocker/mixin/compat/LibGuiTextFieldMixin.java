@@ -12,9 +12,10 @@ import io.github.cottonmc.cotton.gui.widget.WTextField;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
-import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 
 @Mixin(value = WTextField.class, remap = false)
 public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements MinecraftTextFieldWidget {
@@ -41,7 +42,7 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 	
 	@Inject(method = "onCharTyped(C)V", at = @At("HEAD"), cancellable = true, require = 0)
 	public void checkFocusTracking(char c, CallbackInfo ci) {
-		if(IMBlockerCore.isTrackingFocus) {
+		if(FocusManager.isTrackingFocus) {
 			FocusContainer.MINECRAFT.switchFocus(this);
 			ci.cancel();
 		}
@@ -50,7 +51,7 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 	@Inject(method = "onCharTyped(C)Lio/github/cottonmc/cotton/gui/widget/data/InputResult;", 
 			at = @At("HEAD"), cancellable = true, require = 0)
 	public void checkFocusTracking(char c, CallbackInfoReturnable<Object> cir) {
-		if(IMBlockerCore.isTrackingFocus) {
+		if(FocusManager.isTrackingFocus) {
 			FocusContainer.MINECRAFT.switchFocus(this);
 			cir.setReturnValue(PROCESSED_INPUTRESULT);
 		}

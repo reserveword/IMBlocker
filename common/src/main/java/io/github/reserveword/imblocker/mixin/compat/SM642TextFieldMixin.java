@@ -9,11 +9,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.supermartijn642.core.gui.widget.premade.TextFieldWidget;
 
-import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 
 @Mixin(value = TextFieldWidget.class, remap = false)
 public abstract class SM642TextFieldMixin extends SM642WidgetMixin implements MinecraftTextFieldWidget {
@@ -32,7 +32,7 @@ public abstract class SM642TextFieldMixin extends SM642WidgetMixin implements Mi
 	
 	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(char c, boolean hasBeenHandled, CallbackInfoReturnable<Boolean> cir) {
-		if(IMBlockerCore.isTrackingFocus) {
+		if(FocusManager.isTrackingFocus) {
 			if(canWrite()) {
 				FocusContainer.MINECRAFT.switchFocus(this);
 				cir.setReturnValue(true);

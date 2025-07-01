@@ -9,16 +9,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
-import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
-
 import de.johni0702.minecraft.gui.GuiRenderer;
 import de.johni0702.minecraft.gui.OffsetGuiRenderer;
 import de.johni0702.minecraft.gui.RenderInfo;
-import io.github.reserveword.imblocker.common.IMBlockerCore;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
@@ -47,7 +46,7 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
 	@Inject(method = "typeKey", at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(ReadablePoint mousePosition, int keyCode, 
 			char keyChar, boolean ctrlDown, boolean shiftDown, CallbackInfoReturnable<Boolean> cir) {
-		if(IMBlockerCore.isTrackingFocus) {
+		if(FocusManager.isTrackingFocus) {
 			if(focused) {
 				FocusContainer.MINECRAFT.switchFocus(this);
 				cir.setReturnValue(true);

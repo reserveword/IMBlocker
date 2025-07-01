@@ -9,11 +9,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.ldtteam.blockui.controls.TextField;
 
-import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 
 @Mixin(value = TextField.class, remap = false)
 public abstract class BlockUITextFieldMixin extends BlockUIPaneMixin implements MinecraftTextFieldWidget {
@@ -34,7 +34,7 @@ public abstract class BlockUITextFieldMixin extends BlockUIPaneMixin implements 
 	
 	@Inject(method = "onKeyTyped", at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(char c, int key, CallbackInfoReturnable<Boolean> cir) {
-		if(IMBlockerCore.isTrackingFocus) {
+		if(FocusManager.isTrackingFocus) {
 			FocusContainer.MINECRAFT.switchFocus(this);
 			cir.setReturnValue(true);
 		}

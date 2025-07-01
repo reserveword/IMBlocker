@@ -7,6 +7,10 @@ public class FocusManager {
 	
 	private static FocusableObject focusOwner;
 	
+	public static boolean isTrackingFocus = false;
+	public static boolean isFocusLocated = false;
+	public static boolean isGameRendering = false;
+	
 	public static void requestFocus(FocusContainer container) {
 		if(focusedContainer != container) {
 			if(isWindowFocused) {

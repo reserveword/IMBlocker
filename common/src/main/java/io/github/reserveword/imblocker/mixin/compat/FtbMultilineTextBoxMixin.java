@@ -9,10 +9,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import dev.ftb.mods.ftblibrary.ui.MultilineTextBox;
 import dev.ftb.mods.ftblibrary.ui.input.KeyModifiers;
-import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.accessor.FtbMultilineTextFieldAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftMultilineEditBoxWidget;
 import io.github.reserveword.imblocker.common.gui.MultilineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
@@ -35,7 +35,7 @@ public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin implements
 	
 	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(char c, KeyModifiers modifiers, CallbackInfoReturnable<Boolean> cir) {
-		if(IMBlockerCore.isTrackingFocus) {
+		if(FocusManager.isTrackingFocus) {
 			if(isFocused) {
 				FocusContainer.MINECRAFT.switchFocus(this);
 				cir.setReturnValue(true);

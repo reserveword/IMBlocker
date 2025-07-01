@@ -15,8 +15,6 @@ public class IMBlockerCore {
 	
 	private static final ModLoaderAccessor modLoaderAccessor;
 	
-	public static boolean isTrackingFocus = false;
-	public static boolean isFocusLocated = false;
 	private static final Set<Runnable> deferredRunnables = new LinkedHashSet<>();
 	
 	public static synchronized void invokeLater(Runnable runnable) {

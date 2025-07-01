@@ -8,7 +8,6 @@ import com.sun.jna.platform.win32.WinNT;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.FocusableObject;
-import io.github.reserveword.imblocker.common.gui.MathHelper;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
@@ -160,6 +159,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 			caretY -= scaleFactor / 2; // Tweak yPos to fit font style.
 			return new Point(inputWidgetBounds.x() + caretX, inputWidgetBounds.y() + caretY);
 		} catch (Throwable e) {
+			IMBlockerCore.LOGGER.error("failed to calculate input position: " + e);
 			return Point.TOP_LEFT;
 		}
 	}

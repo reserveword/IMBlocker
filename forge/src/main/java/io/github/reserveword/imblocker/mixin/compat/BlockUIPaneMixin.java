@@ -11,7 +11,7 @@ import com.ldtteam.blockui.views.BOWindow;
 import com.ldtteam.blockui.views.ScrollingContainer;
 import com.ldtteam.blockui.views.View;
 
-import io.github.reserveword.imblocker.common.gui.MathHelper;
+import io.github.reserveword.imblocker.common.MathHelper;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 

@@ -14,10 +14,10 @@ import com.replaymod.lib.de.johni0702.minecraft.gui.RenderInfo;
 import com.replaymod.lib.de.johni0702.minecraft.gui.utils.lwjgl.ReadableDimension;
 import com.replaymod.lib.de.johni0702.minecraft.gui.utils.lwjgl.ReadablePoint;
 
-import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
@@ -46,7 +46,7 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
 	@Inject(method = "typeKey", at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(ReadablePoint mousePosition, int keyCode, 
 			char keyChar, boolean ctrlDown, boolean shiftDown, CallbackInfoReturnable<Boolean> cir) {
-		if(IMBlockerCore.isTrackingFocus) {
+		if(FocusManager.isTrackingFocus) {
 			if(focused) {
 				FocusContainer.MINECRAFT.switchFocus(this);
 				cir.setReturnValue(true);

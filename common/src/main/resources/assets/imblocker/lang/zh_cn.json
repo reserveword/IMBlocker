@@ -12,7 +12,7 @@
   "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[1]": "如果你的输入法不能在检测到命令环境时自动切换至英文状态\n将此项设置为“DISABLE_IM”可能会有帮助\n但请注意此模式下输入命令时无法输入中文",
   
   "text.autoconfig.imblocker.option.advanceSettings": "高级设置",
-  "text.autoconfig.imblocker.option.advanceSettings.enableTwoFactorFocusTracking": "强制双因素焦点跟踪",
+  "text.autoconfig.imblocker.option.advanceSettings.enableTwoFactorFocusTracking": "启用双因素焦点跟踪",
   
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings": "Windows 兼容设置",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi": "使用转换状态API",

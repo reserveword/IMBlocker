@@ -13,7 +13,6 @@ import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
-import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.Window;
@@ -58,7 +57,7 @@ public abstract class MinecraftClientMixin {
 	}
 	
 	@Inject(method = "render", at = @At("HEAD"))
-	public void runDeferredRunnables(boolean tick, CallbackInfo ci) {
+	public void runPreRenderTasks(boolean tick, CallbackInfo ci) {
 		IMBlockerCore.flushDeferredRunnables();
 		if(!skipGameRender) {
 			lastGameRenderTime = System.nanoTime();
@@ -68,11 +67,7 @@ public abstract class MinecraftClientMixin {
 	
 	@Inject(method = "render", at = @At("TAIL"))
 	public void checkFocusCandidatesVisibility(boolean tick, CallbackInfo ci) {
-		FocusContainer.MINECRAFT.getFocusCandidates().forEach(focusCandidate -> {
-			if(focusCandidate instanceof MinecraftTextFieldWidget textFieldFocusCandidate) {
-				textFieldFocusCandidate.checkVisibility(lastGameRenderTime);
-			}
-		});
+		FocusContainer.MINECRAFT.checkFocusCandidatesVisibility(lastGameRenderTime);
 		FocusManager.isGameRendering = false;
 	}
 

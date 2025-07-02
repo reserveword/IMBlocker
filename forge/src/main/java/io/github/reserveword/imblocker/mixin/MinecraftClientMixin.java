@@ -2,6 +2,7 @@ package io.github.reserveword.imblocker.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -22,6 +23,12 @@ public abstract class MinecraftClientMixin {
 	
 	@Shadow
 	private Window window;
+	
+	@Shadow
+	private boolean noRender;
+	
+	@Unique
+	private long lastGameRenderTime = 0;
 	
 	@Inject(method = "setWindowActive", at = @At("HEAD"))
 	public void onWindowFocusChanged(boolean isFocused, CallbackInfo ci) {
@@ -51,8 +58,18 @@ public abstract class MinecraftClientMixin {
 	}
 	
 	@Inject(method = "runTick", at = @At("HEAD"))
-	public void runDeferredRunnables(boolean tick, CallbackInfo ci) {
+	public void runPreRenderTasks(boolean tick, CallbackInfo ci) {
 		IMBlockerCore.flushDeferredRunnables();
+		if(!noRender) {
+			lastGameRenderTime = System.nanoTime();
+			FocusManager.isGameRendering = true;
+		}
+	}
+	
+	@Inject(method = "runTick", at = @At("TAIL"))
+	public void checkFocusCandidatesVisibility(boolean tick, CallbackInfo ci) {
+		FocusContainer.MINECRAFT.checkFocusCandidatesVisibility(lastGameRenderTime);
+		FocusManager.isGameRendering = false;
 	}
 
 	private boolean isScreenInWhiteList(Screen screen) {

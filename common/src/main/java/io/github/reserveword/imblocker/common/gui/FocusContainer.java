@@ -3,7 +3,6 @@ package io.github.reserveword.imblocker.common.gui;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
@@ -17,11 +16,11 @@ public enum FocusContainer implements FocusableObject {
 	
 	private boolean isFocused;
 	private boolean preferredState = false;
-	private FocusableWidget focusedWidget;
 	
+	private FocusableWidget focusedWidget;
 	private final Map<FocusableWidget, Long> focusCandidates = new IdentityHashMap<>();
 	
-	private final Runnable locateRealFocusTask = () -> {
+	private final Runnable locateFocusByCharSimulation = () -> {
 		if(!focusCandidates.isEmpty()) {
 			FocusManager.isTrackingFocus = true;
 			try {
@@ -48,16 +47,14 @@ public enum FocusContainer implements FocusableObject {
 	}
 	
 	public void requestFocus(FocusableWidget toFocus) {
-		if(focusedWidget != toFocus) {
-			focusCandidates.put(toFocus, System.nanoTime());
-			System.out.println(focusCandidates);
-			locateRealFocus();
-		}
+		focusCandidates.put(toFocus, System.nanoTime());
+		System.out.println(focusCandidates);
+		locateRealFocus();
 	}
 	
 	public void locateRealFocus() {
 		if(IMBlockerConfig.INSTANCE.isTwoFactorFocusTrackingEnabled()) {
-			IMBlockerCore.invokeLater(locateRealFocusTask);
+			IMBlockerCore.invokeLater(locateFocusByCharSimulation);
 		}else {
 			Optional<FocusableWidget> promotedFocusCandidate = focusCandidates.keySet().stream()
 					.filter(FocusableWidget::isRenderable)
@@ -77,33 +74,31 @@ public enum FocusContainer implements FocusableObject {
 	public void switchFocus(FocusableWidget toFocus) {
 		if(FocusManager.isTrackingFocus) {
 			FocusManager.isFocusLocated = true;
-			if(focusedWidget == toFocus) {
-				verifyFocus();
-				return;
-			}
 		}
 		
-		if(isFocused) {
-			if(focusedWidget != null) {
-				focusedWidget.lostFocus();
+		if(focusedWidget != toFocus) {
+			if(isFocused) {
+				if(focusedWidget != null) {
+					focusedWidget.lostFocus();
+				}
+				focusedWidget = toFocus;
+				focusedWidget.deliverFocus();
+			}else {
+				focusedWidget = toFocus;
 			}
-			focusedWidget = toFocus;
-			focusedWidget.deliverFocus();
-		}else {
-			focusedWidget = toFocus;
 		}
 		verifyFocus();
 	}
 	
 	public void removeFocus(FocusableWidget toRemove) {
-		focusCandidates.remove(toRemove);
-		System.out.println(focusCandidates);
-		if(focusedWidget == toRemove) {
-			if(focusCandidates.isEmpty()) {
+		if(focusCandidates.containsKey(toRemove)) {
+			focusCandidates.remove(toRemove);
+			System.out.println(focusCandidates);
+			if (focusCandidates.isEmpty()) {
 				restoreContainerFocus();
-			}else {
+			} else {
 				locateRealFocus();
-			}
+			} 
 		}
 	}
 	
@@ -141,8 +136,12 @@ public enum FocusContainer implements FocusableObject {
 		}
 	}
 	
-	public Set<FocusableWidget> getFocusCandidates() {
-		return focusCandidates.keySet();
+	public void checkFocusCandidatesVisibility(long lastGameRenderTime) {
+		focusCandidates.keySet().forEach(focusCandidate -> {
+			if(focusCandidate instanceof MinecraftTextFieldWidget) {
+				((MinecraftTextFieldWidget) focusCandidate).checkVisibility(lastGameRenderTime);
+			}
+		});
 	}
 	
 	public void setPreferredState(boolean preferredState) {

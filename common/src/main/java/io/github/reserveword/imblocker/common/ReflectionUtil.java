@@ -29,17 +29,6 @@ public class ReflectionUtil {
 		}
 	}
 	
-	public static Method findMethod(Class<?> cls, String[] methodNames, Class<?>[] paramTypes) {
-		for(String methodName : methodNames) {
-			try {
-				Method method = cls.getDeclaredMethod(methodName, paramTypes);
-				method.setAccessible(true);
-				return method;
-			} catch (Exception e) {}
-		}
-		return null;
-	}
-	
 	public static <R> R newInstance(Class<R> cls, Class<?>[] paramTypes, Object... params) {
 		try {
 			Constructor<R> constructor = cls.getDeclaredConstructor(paramTypes);

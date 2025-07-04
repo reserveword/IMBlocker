@@ -67,7 +67,7 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
 	}
 	
 	@Inject(method = "isVisible", at = @At("TAIL"))
-	public void isVisibleInvoked(CallbackInfoReturnable<Boolean> ci) {
+	public void updateLastRenderTime(CallbackInfoReturnable<Boolean> ci) {
 		if(FocusManager.isGameRendering) {
 			lastRenderTime = System.nanoTime();
 		}

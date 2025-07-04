@@ -8,7 +8,6 @@ import com.sun.jna.platform.win32.WinNT;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.FocusableObject;
-import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.common.jnastructs.COMPOSITIONFORM;
@@ -122,8 +121,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		if (himc != null) {
 			FocusableObject focusedWidget = FocusManager.getFocusOwner();
 			if (focusedWidget != null) {
-				int fontSize = focusedWidget instanceof MinecraftTextFieldWidget
-						? ((MinecraftTextFieldWidget) focusedWidget).getFontHeight() : 8;
+				int fontSize = focusedWidget.getFontHeight();
 				fontSize *= focusedWidget.getGuiScale();
 				LOGFONTW lplf = new LOGFONTW();
 				ImmGetCompositionFontW(himc, lplf);

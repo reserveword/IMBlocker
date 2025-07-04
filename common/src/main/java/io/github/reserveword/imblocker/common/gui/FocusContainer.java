@@ -9,6 +9,32 @@ import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.MathHelper;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 
+/**
+ * <p>This class represents the focus destination of the game window. The game
+ * window must have a {@code FocusContainer} to deliver the focus, on receiving
+ * the focus, this container will transfer it to its focus destination -
+ * {@code focusedWidget} or directly hold it if the {@code focusedWidget} is
+ * null.
+ * 
+ * <p>While there can be only one {@code focusedWidget} at most, multiple
+ * {@code focusCandidate}s may be presented. A {@code focusCandidate} is a
+ * {@link FocusableWidget} that <i>may</i> be interested in keyboard inputs,
+ * whenever the content of {@code focusCandidates} changed, the 
+ * {@code focusedWidget} needs to be relocated through availability comparator
+ * or char simulation. <b>This feature is not required in standard applications,
+ * and designed only to resolve ambiguous focus states in Minecraft context.</b>
+ * 
+ * <p>The corresponding Minecraft GUI context of a {@code FocusContainer} is all
+ * non-textfield widgets, as they share the same IME preferences.
+ * 
+ * <p>This class is a base part of <b>IMBlocker's focus management system</b>.
+ * 
+ * @see FocusManager
+ * @see FocusableObject
+ * @see FocusableWidget
+ * @author LitnhJacuzzi
+ * @since 5.1.0
+ */
 public enum FocusContainer implements FocusableObject {
 	MINECRAFT(true, 1.0), IMGUI(false, 4.0);
 	
@@ -40,10 +66,6 @@ public enum FocusContainer implements FocusableObject {
 	private FocusContainer(boolean defaultFocusState, double guiScale) {
 		isFocused = defaultFocusState;
 		guiScaleFactor = guiScale;
-	}
-	
-	public FocusableWidget getFocusedWidget() {
-		return focusedWidget;
 	}
 	
 	public void requestFocus(FocusableWidget toFocus) {

@@ -36,9 +36,5 @@ public interface MinecraftTextFieldWidget extends MinecraftFocusableWidget {
 		return 4;
 	}
 	
-	default int getFontHeight() {
-		return 8;
-	}
-	
 	default void checkVisibility(long lastGameRenderTime) {}
 }

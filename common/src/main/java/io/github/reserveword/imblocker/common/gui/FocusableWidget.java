@@ -21,6 +21,11 @@ package io.github.reserveword.imblocker.common.gui;
  * {@link FocusableWidget#isRenderable()} are true.
  * 
  * <p>This class is a base part of <b>IMBlocker's focus management system</b>.
+ * 
+ * @see FocusManager
+ * @see FocusContainer
+ * @author LitnhJacuzzi
+ * @since 5.1.0
  */
 public interface FocusableWidget extends FocusableObject {
 	
@@ -34,6 +39,9 @@ public interface FocusableWidget extends FocusableObject {
 	 * Whether this widget is <b>ACTUALLY</b> visible (i.e. will be rendered by
 	 * the game). It's <i>different</i> from {@code isVisible()} methods which
 	 * are generally shadowed from injected Minecraft widgets.
+	 * 
+	 * @see FocusContainer#checkFocusCandidatesVisibility
+	 * @see FocusContainer#locateRealFocus
 	 */
 	default boolean isRenderable() {
 		return true;

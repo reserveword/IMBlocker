@@ -28,9 +28,9 @@ public class AxiomGuiMonitor {
 		if(axiomTextFieldFocused != isAxiomTextFieldFocused) {
 			axiomTextFieldFocused = isAxiomTextFieldFocused;
 			if(isAxiomTextFieldFocused) {
-				FocusContainer.IMGUI.setPreferredState(true);
+				FocusContainer.IMGUI.requestFocus(GenericAxiomTextField.getInstance());
 			}else {
-				FocusContainer.IMGUI.setPreferredState(false);
+				FocusContainer.IMGUI.removeFocus(GenericAxiomTextField.getInstance());
 			}
 		}
 	}

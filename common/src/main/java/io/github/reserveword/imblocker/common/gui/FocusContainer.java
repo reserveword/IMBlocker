@@ -30,15 +30,14 @@ import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
  * <p>This class is a base part of <b>IMBlocker's focus management system</b>.
  * 
  * @see FocusManager
- * @see FocusableObject
  * @see FocusableWidget
  * @author LitnhJacuzzi
  * @since 5.1.0
  */
 public enum FocusContainer implements FocusableObject {
-	MINECRAFT(true, 1.0), IMGUI(false, 4.0);
+	MINECRAFT(true), IMGUI(false);
 	
-	private double guiScaleFactor;
+	private double guiScaleFactor = 1.0;
 	
 	private boolean isFocused;
 	private boolean preferredState = false;
@@ -63,9 +62,8 @@ public enum FocusContainer implements FocusableObject {
 		}
 	};
 	
-	private FocusContainer(boolean defaultFocusState, double guiScale) {
+	private FocusContainer(boolean defaultFocusState) {
 		isFocused = defaultFocusState;
-		guiScaleFactor = guiScale;
 	}
 	
 	public void requestFocus(FocusableWidget toFocus) {
@@ -75,7 +73,7 @@ public enum FocusContainer implements FocusableObject {
 	}
 	
 	public void locateRealFocus() {
-		if(IMBlockerConfig.INSTANCE.isTwoFactorFocusTrackingEnabled()) {
+		if(this == MINECRAFT && IMBlockerConfig.INSTANCE.isTwoFactorFocusTrackingEnabled()) {
 			IMBlockerCore.invokeLater(locateFocusByCharSimulation);
 		}else {
 			Optional<FocusableWidget> promotedFocusCandidate = focusCandidates.keySet().stream()
@@ -155,9 +153,17 @@ public enum FocusContainer implements FocusableObject {
 		isFocused = false;
 		if(focusedWidget != null) {
 			focusedWidget.lostFocus();
+		}else {
+			FocusableObject.super.lostFocus();
 		}
 	}
 	
+	/**
+	 * Called from every game event loop to check the <i>real</i> visibility
+	 * of all focus candidates.
+	 * 
+	 * @see FocusableWidget#isRenderable
+	 */
 	public void checkFocusCandidatesVisibility(long lastGameRenderTime) {
 		focusCandidates.keySet().forEach(focusCandidate -> {
 			if(focusCandidate instanceof MinecraftTextFieldWidget) {
@@ -186,6 +192,12 @@ public enum FocusContainer implements FocusableObject {
 		return new Rectangle(0, 0, bounds.width(), bounds.height());
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>This implementation provides default caret position for
+	 * non-standard input context, such as {@code SignEditScreen}.
+	 */
 	@Override
 	public Point getCaretPos() {
 		Rectangle bounds = MinecraftClientAccessor.INSTANCE.getWindowBounds();

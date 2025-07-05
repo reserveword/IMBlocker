@@ -14,7 +14,7 @@ import io.github.reserveword.imblocker.common.IMManager;
  * @see FocusContainer
  * @see FocusableWidget
  * @author LitnhJacuzzi
- * @since 5.1.0
+ * @since 5.4.0
  */
 public interface FocusableObject {
 

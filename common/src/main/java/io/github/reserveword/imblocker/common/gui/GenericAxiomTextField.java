@@ -1,11 +1,14 @@
 package io.github.reserveword.imblocker.common.gui;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import imgui.ImGui;
 import imgui.ImGuiInputTextCallbackData;
 import imgui.ImVec2;
 import imgui.callback.ImGuiInputTextCallback;
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.StringUtil;
 
 public class GenericAxiomTextField implements FocusableWidget {
 	
@@ -16,6 +19,10 @@ public class GenericAxiomTextField implements FocusableWidget {
 	private static int fontHeight = 8;
 	private static Rectangle bounds = Rectangle.EMPTY;
 	private static Point caretPos = Point.TOP_LEFT;
+	
+	private static String textBeforeCursor = "";
+	private static int lineCountBeforeCursor = 0;
+	private static String textLineBeforeCursor = "";
 
 	@Override
 	public boolean getPreferredState() {
@@ -52,26 +59,35 @@ public class GenericAxiomTextField implements FocusableWidget {
 	}
 	
 	private static void updateTextFieldGUIProperties(ImGuiInputTextCallbackData axiomTextFieldData) {
+		int currentFontHeight;
 		Rectangle currentBounds;
 		Point currentCaretPos;
-		int currentFontHeight;
-		
-		ImVec2 startPos = ImGui.getItemRectMin();
-		ImVec2 endPos = ImGui.getItemRectMax();
-		int x = (int) startPos.x;
-		int y = (int) startPos.y;
-		int width = (int) (endPos.x - startPos.x);
-		int height = (int) (endPos.y - startPos.y);
-		currentBounds = new Rectangle(x, y, width, height);
+		String currentTextBeforeCursor;
+
+		currentFontHeight = ImGui.getFontSize();
+		ImVec2 pos = ImGui.getItemRectMin();
+		ImVec2 size = ImGui.getItemRectSize();
+		currentBounds = new Rectangle((int) pos.x, (int) pos.y, (int) size.x, Integer.MAX_VALUE);
 		if(axiomTextFieldData != null) {
-			String text = axiomTextFieldData.getBuf();
 			int cursorPos = axiomTextFieldData.getCursorPos();
-			int caretX = (int) ImGui.calcTextSize(StringUtil.getSubstring(text, 0, cursorPos)).x;
-			currentCaretPos = new Point(caretX, 0);
+			currentTextBeforeCursor = new String(Arrays.copyOfRange(
+					axiomTextFieldData.getBuf().getBytes(), 0, cursorPos));
+			if(!textBeforeCursor.equals(currentTextBeforeCursor)) {
+				textBeforeCursor = currentTextBeforeCursor;
+				String[] lines = splitLines(textBeforeCursor);
+				lineCountBeforeCursor = lines.length - 1;
+				textLineBeforeCursor = lines[lineCountBeforeCursor];
+			}
+			float paddingX = ImGui.getStyle().getFramePaddingX();
+			float paddingY = ImGui.getStyle().getFramePaddingY();
+			int caretX = (int) (paddingX + 
+					ImGui.calcTextSize(textLineBeforeCursor).x - ImGui.getScrollX());
+			int caretY = (int) (paddingY + 
+					lineCountBeforeCursor * currentFontHeight - ImGui.getScrollY());
+			currentCaretPos = new Point(caretX, caretY);
 		}else {
 			currentCaretPos = Point.TOP_LEFT;
 		}
-		currentFontHeight = ImGui.getFontSize();
 		
 		if(!bounds.equals(currentBounds) || !caretPos.equals(currentCaretPos)) {
 			bounds = currentBounds;
@@ -83,6 +99,21 @@ public class GenericAxiomTextField implements FocusableWidget {
 			fontHeight = currentFontHeight;
 			IMManager.updateCompositionFontSize();
 		}
+	}
+	
+	private static String[] splitLines(String text) {
+		List<String> lines = new ArrayList<>();
+		String currentLine = "";
+		for(int i = 0; i < text.length(); i++) {
+			char currentChar = text.charAt(i);
+			currentLine += currentChar;
+			if(currentChar == '\n') {
+				lines.add(currentLine);
+				currentLine = "";
+			}
+		}
+		lines.add(currentLine);
+		return lines.toArray(new String[lines.size()]);
 	}
 	
 	private static class AxiomTextFieldCallback extends ImGuiInputTextCallback {

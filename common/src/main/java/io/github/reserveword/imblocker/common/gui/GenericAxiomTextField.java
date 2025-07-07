@@ -9,7 +9,9 @@ import imgui.ImGuiInputTextCallbackData;
 import imgui.ImVec2;
 import imgui.callback.ImGuiInputTextCallback;
 import imgui.flag.ImGuiInputTextFlags;
+import imgui.internal.ImGuiWindow;
 import io.github.reserveword.imblocker.common.IMManager;
+import io.github.reserveword.imblocker.common.ReflectionUtil;
 
 public class GenericAxiomTextField implements FocusableWidget {
 	
@@ -91,7 +93,7 @@ public class GenericAxiomTextField implements FocusableWidget {
 				textLineBeforeCursor = lines[lineCountBeforeCursor];
 			}
 			float cursorX = ImGui.calcTextSize(textLineBeforeCursor).x;
-			updateInternalScrollX(cursorX, size.y == 0);
+			updateInternalScrollX(cursorX, size);
 			int caretX = (int) (ImGui.getStyle().getFramePaddingX() + 
 					cursorX - internalScrollX - ImGui.getScrollX());
 			int caretY = (int) (ImGui.getStyle().getFramePaddingY() + 
@@ -118,20 +120,20 @@ public class GenericAxiomTextField implements FocusableWidget {
 	 * because of the lack of corresponding APIs. Calculations are taken from
 	 * {@code imgui_widgets.cpp}.
 	 */
-	private static void updateInternalScrollX(float cursorOffsetX, boolean isMultiline) {
+	private static void updateInternalScrollX(float cursorOffsetX, ImVec2 itemSize) {
 		if(!activeItemLabel.equals(currentItemLabel)) {
 			activeItemLabel = currentItemLabel;
 			internalScrollX = 0;
 		}
 		
-		float innerWidth = ImGui.getItemRectSizeX();
-		if(!isMultiline) { //imgui_widgets.cpp#3889
+		float innerWidth = itemSize.x;
+		if(!(itemSize.y == 0/*isMultiline*/)) { //imgui_widgets.cpp#3889
 			float labelWidth = ImGui.calcTextSize(activeItemLabel, true).x;
 			if(labelWidth > 0) {
 				innerWidth -= (labelWidth + ImGui.getStyle().getItemInnerSpacingX());
 			}
 		}
-		if((inputTextFlags & ImGuiInputTextFlags_Multiline) != 0/*has scroll bar*/) {
+		if(hasVerticalScrollBar()) {
 			innerWidth -= ImGui.getStyle().getScrollbarSize(); //imgui_wigets.cpp#L3922
 		}
 		if((inputTextFlags & ImGuiInputTextFlags.NoHorizontalScroll) == 0) { //imgui_wigets.cpp#L4528
@@ -144,6 +146,24 @@ public class GenericAxiomTextField implements FocusableWidget {
 			}
 		}else {
 			internalScrollX = 0.0f;
+		}
+	}
+	
+	private static boolean hasVerticalScrollBar() {
+		try {
+			ImGuiWindow currentWindow = imgui.internal.ImGui.getCurrentWindow();
+			try {
+				return currentWindow.getScrollbarY();
+			} catch (NoSuchMethodError e) {
+				return ReflectionUtil.invokeMethod(ImGuiWindow.class, currentWindow, 
+						boolean.class, "isScrollbarY", new Class[0]);
+			}
+		} catch (Throwable e) {
+			try {
+				return ImGui.getScrollMaxY() > 0;
+			} catch (Throwable e2) {
+				return false; //Absolute Anti-Crash.
+			}
 		}
 	}
 	

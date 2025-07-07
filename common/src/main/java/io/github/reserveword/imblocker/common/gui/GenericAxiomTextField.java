@@ -20,7 +20,7 @@ public class GenericAxiomTextField implements FocusableWidget {
 	private static final int ImGuiInputTextFlags_Multiline = 1 << 26;
 	
 	private static String currentItemLabel = "";
-	private static String itemLabel = "";
+	private static String activeItemLabel = "";
 
 	private static int fontHeight = 8;
 	private static Rectangle bounds = Rectangle.EMPTY;
@@ -91,7 +91,7 @@ public class GenericAxiomTextField implements FocusableWidget {
 				textLineBeforeCursor = lines[lineCountBeforeCursor];
 			}
 			float cursorX = ImGui.calcTextSize(textLineBeforeCursor).x;
-			updateInternalScrollX(cursorX);
+			updateInternalScrollX(cursorX, size.y == 0);
 			int caretX = (int) (ImGui.getStyle().getFramePaddingX() + 
 					cursorX - internalScrollX - ImGui.getScrollX());
 			int caretY = (int) (ImGui.getStyle().getFramePaddingY() + 
@@ -118,14 +118,20 @@ public class GenericAxiomTextField implements FocusableWidget {
 	 * because of the lack of corresponding APIs. Calculations are taken from
 	 * {@code imgui_widgets.cpp}.
 	 */
-	private static void updateInternalScrollX(float cursorOffsetX) {
-		if(!itemLabel.equals(currentItemLabel)) {
-			itemLabel = currentItemLabel;
+	private static void updateInternalScrollX(float cursorOffsetX, boolean isMultiline) {
+		if(!activeItemLabel.equals(currentItemLabel)) {
+			activeItemLabel = currentItemLabel;
 			internalScrollX = 0;
 		}
 		
-		float innerWidth = ImGui.calcItemWidth();
-		if((inputTextFlags & ImGuiInputTextFlags_Multiline) != 0/*isMultiline*/) {
+		float innerWidth = ImGui.getItemRectSizeX();
+		if(!isMultiline) { //imgui_widgets.cpp#3889
+			float labelWidth = ImGui.calcTextSize(activeItemLabel, true).x;
+			if(labelWidth > 0) {
+				innerWidth -= (labelWidth + ImGui.getStyle().getItemInnerSpacingX());
+			}
+		}
+		if((inputTextFlags & ImGuiInputTextFlags_Multiline) != 0/*has scroll bar*/) {
 			innerWidth -= ImGui.getStyle().getScrollbarSize(); //imgui_wigets.cpp#L3922
 		}
 		if((inputTextFlags & ImGuiInputTextFlags.NoHorizontalScroll) == 0) { //imgui_wigets.cpp#L4528

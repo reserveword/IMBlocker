@@ -5,11 +5,6 @@ import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 
 public interface MinecraftTextFieldWidget extends MinecraftFocusableWidget {
 	
-	@Override
-	default boolean getPreferredState() {
-		return true;
-	}
-	
 	default void setPreferredEditState(boolean state) {}
 	 
 	default void setPreferredEnglishState(boolean state) {}

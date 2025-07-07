@@ -21,9 +21,4 @@ public interface MinecraftFocusableWidget extends FocusableWidget {
 	default void onMinecraftWidgetFocusLost() {
 		getFocusContainer().removeFocus(this);
 	}
-	
-	@Override
-	default boolean getPreferredState() {
-		return false;
-	}
 }

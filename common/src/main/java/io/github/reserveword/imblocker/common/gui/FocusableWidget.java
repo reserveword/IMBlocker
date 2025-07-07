@@ -31,6 +31,11 @@ public interface FocusableWidget extends FocusableObject {
 	
 	FocusContainer getFocusContainer();
 	
+	@Override
+	default boolean getPreferredState() {
+		return true;
+	}
+	
 	default double getGuiScale() {
 		return getFocusContainer().getGuiScale();
 	}

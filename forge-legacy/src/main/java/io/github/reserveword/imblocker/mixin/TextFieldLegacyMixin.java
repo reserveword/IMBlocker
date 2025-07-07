@@ -68,7 +68,7 @@ public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin implement
 	
 	@Inject(method = "onValueChange", at = @At("TAIL"))
     public void onTextChanged(String newValue, CallbackInfo ci) {
-    	IMManager.updateCompositionWindowPos();
+		IMManager.updateCompositionWindowPos();
     }
 	
 	@Inject(method = "isVisible", at = @At("TAIL"))

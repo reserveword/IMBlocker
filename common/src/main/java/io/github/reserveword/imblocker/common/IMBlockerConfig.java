@@ -14,7 +14,7 @@ public class IMBlockerConfig {
 	public static final Predicate<Object> checkClassForName = str -> (str instanceof String)
 			&& classNamePattern.matcher((String) str).matches();
 
-	public static IMBlockerConfig INSTANCE = null;
+	public static IMBlockerConfig INSTANCE = new IMBlockerConfig();
 
 	public static final List<String> defaultScreenWhitelist = new ArrayList<>();
 

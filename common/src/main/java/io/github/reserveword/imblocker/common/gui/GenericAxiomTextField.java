@@ -162,9 +162,12 @@ public class GenericAxiomTextField implements FocusableWidget {
 		
 		@Override
 		public void accept(ImGuiInputTextCallbackData t) {
+			//Pass to existed callback.
 			if(nested != null) {
 				nested.accept(t);
 			}
+			
+			//Filter resize callback since it provides invalid data.
 			if((t.getEventFlag() & ImGuiInputTextFlags.CallbackResize) == 0) {
 				updateTextFieldGUIProperties(t);
 			}

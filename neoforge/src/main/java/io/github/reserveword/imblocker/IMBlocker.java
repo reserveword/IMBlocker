@@ -78,7 +78,6 @@ public class IMBlocker {
 				}
 			});
 		}else {
-			IMBlockerConfig.INSTANCE = new IMBlockerConfig();
 			IMBlockerConfig.INSTANCE.reloadScreenWhitelist(IMBlockerConfig.defaultScreenWhitelist);
 		}
 	}

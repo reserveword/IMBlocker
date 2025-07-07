@@ -110,7 +110,6 @@ public class IMBlocker {
 					});
 			ModLoadingContext.get().registerExtensionPoint(configFactoryCls, configFactorySupplier);
 		}else {
-			IMBlockerConfig.INSTANCE = new IMBlockerConfig();
 			IMBlockerConfig.INSTANCE.reloadScreenWhitelist(IMBlockerConfig.defaultScreenWhitelist);
 		}
 	}

@@ -84,7 +84,6 @@ public class IMBlocker {
 			ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, 
 					() -> (client, parent) -> IMBlockerAutoConfig.getConfigScreen(parent, Screen.class));
 		}else {
-            IMBlockerConfig.INSTANCE = new IMBlockerConfig();
             IMBlockerConfig.INSTANCE.reloadScreenWhitelist(IMBlockerConfig.defaultScreenWhitelist);
 		}
     }

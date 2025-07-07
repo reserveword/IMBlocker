@@ -58,7 +58,6 @@ public class IMBlocker implements ClientModInitializer {
 			AutoConfig.register(IMBlockerAutoConfig.class, GsonConfigSerializer::new);
 			IMBlockerConfig.INSTANCE = AutoConfig.getConfigHolder(IMBlockerAutoConfig.class).getConfig();
 		} else {
-			IMBlockerConfig.INSTANCE = new IMBlockerConfig();
 			IMBlockerConfig.INSTANCE.reloadScreenWhitelist(IMBlockerConfig.defaultScreenWhitelist);
 		}
 	}

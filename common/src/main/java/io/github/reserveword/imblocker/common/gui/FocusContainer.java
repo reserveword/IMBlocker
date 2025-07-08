@@ -115,7 +115,7 @@ public abstract class FocusContainer implements FocusableObject {
 
 	@Override
 	public boolean getPreferredState() {
-		return preferredState || true;
+		return preferredState;
 	}
 
 	@Override

@@ -21,9 +21,10 @@ public class ImGuiMixin {
 			"preInputText(ZLjava/lang/String;Ljava/lang/String;Limgui/type/ImString;FFILimgui/callback/ImGuiInputTextCallback;)Z";
 	
 	@Inject(method = preInputTextMethodDescriptor, at = @At("HEAD"))
-	private static void captureLabel(boolean multiline, String label, String hint, 
+	private static void captureArgs(boolean multiline, String label, String hint, 
 			ImString text, float width, float height, int flagsV, 
 			ImGuiInputTextCallback callback, CallbackInfoReturnable<Boolean> cir) {
+		GenericAxiomTextField.setMultiline(multiline);
 		GenericAxiomTextField.setLabel(label);
 	}
 	

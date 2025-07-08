@@ -19,10 +19,10 @@ public class GenericAxiomTextField implements FocusableWidget {
 	
 	private static final AxiomTextFieldCallback axiomTextFieldCallback = new AxiomTextFieldCallback();
 	
-	private static final int ImGuiInputTextFlags_Multiline = 1 << 26;
-	
-	private static String currentItemLabel = "";
-	private static String activeItemLabel = "";
+	private static boolean isMultiline = false;
+	private static int currentItemId = 0;
+	private static int activeItemId = 0;
+	private static String itemLabel = "";
 
 	private static int fontHeight = 8;
 	private static Rectangle bounds = Rectangle.EMPTY;
@@ -64,8 +64,13 @@ public class GenericAxiomTextField implements FocusableWidget {
 		return axiomTextFieldCallback;
 	}
 	
-	public static void setLabel(String newLabel) {
-		currentItemLabel = newLabel;
+	public static void setMultiline(boolean multiline) {
+		isMultiline = multiline;
+	}
+	
+	public static void setLabel(String label) {
+		currentItemId = ImGui.getID(label);
+		itemLabel = label;
 	}
 	
 	public static void setInputTextFlags(int flags) {
@@ -93,7 +98,7 @@ public class GenericAxiomTextField implements FocusableWidget {
 				textLineBeforeCursor = lines[lineCountBeforeCursor];
 			}
 			float cursorX = ImGui.calcTextSize(textLineBeforeCursor).x;
-			updateInternalScrollX(cursorX, size);
+			updateInternalScrollX(cursorX);
 			int caretX = (int) (ImGui.getStyle().getFramePaddingX() + 
 					cursorX - internalScrollX - ImGui.getScrollX());
 			int caretY = (int) (ImGui.getStyle().getFramePaddingY() + 
@@ -120,21 +125,24 @@ public class GenericAxiomTextField implements FocusableWidget {
 	 * because of the lack of corresponding APIs. Calculations are taken from
 	 * {@code imgui_widgets.cpp}.
 	 */
-	private static void updateInternalScrollX(float cursorOffsetX, ImVec2 itemSize) {
-		if(!activeItemLabel.equals(currentItemLabel)) {
-			activeItemLabel = currentItemLabel;
+	private static void updateInternalScrollX(float cursorOffsetX) {
+		if(activeItemId != currentItemId) {
+			activeItemId = currentItemId;
 			internalScrollX = 0;
 		}
 		
-		float innerWidth = itemSize.x;
-		if(!(itemSize.y == 0/*isMultiline*/)) { //imgui_widgets.cpp#3889
-			float labelWidth = ImGui.calcTextSize(activeItemLabel, true).x;
-			if(labelWidth > 0) {
-				innerWidth -= (labelWidth + ImGui.getStyle().getItemInnerSpacingX());
+		float innerWidth = ImGui.getItemRectSizeX();
+		if(!isMultiline) {
+			if(!itemLabel.startsWith("##")) {
+				float labelWidth = ImGui.calcTextSize(itemLabel, true).x;
+				if (labelWidth > 0) { //imgui_widgets.cpp#L3889
+					innerWidth -= (labelWidth + ImGui.getStyle().getItemInnerSpacingX());
+				} 
 			}
-		}
-		if(hasVerticalScrollBar()) {
-			innerWidth -= ImGui.getStyle().getScrollbarSize(); //imgui_wigets.cpp#L3922
+		}else {
+			if(hasVerticalScrollBar()) {
+				innerWidth -= ImGui.getStyle().getScrollbarSize(); //imgui_wigets.cpp#L3922
+			}
 		}
 		if((inputTextFlags & ImGuiInputTextFlags.NoHorizontalScroll) == 0) { //imgui_wigets.cpp#L4528
 			final float scrollIncrementX = innerWidth * 0.25f;

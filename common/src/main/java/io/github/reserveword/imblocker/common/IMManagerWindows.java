@@ -8,6 +8,7 @@ import com.sun.jna.platform.win32.WinNT;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.FocusableObject;
+import io.github.reserveword.imblocker.common.gui.FocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.common.jnastructs.COMPOSITIONFORM;
@@ -147,24 +148,29 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	private Point calculateProperCompositionWindowPos(FocusableObject inputEntry) {
 		try {
 			double scaleFactor = inputEntry.getGuiScale();
-			Rectangle inputWidgetBounds = inputEntry.getBoundsAbs();
+			Rectangle inputEntryBounds = inputEntry.getBoundsAbs();
 			Point caretPos = inputEntry.getCaretPos();
-			if(inputWidgetBounds == Rectangle.EMPTY && caretPos == Point.TOP_LEFT) {
+			if(inputEntryBounds == Rectangle.EMPTY && caretPos == Point.TOP_LEFT) {
 				return Point.TOP_LEFT;
 			}
-			//Constrained to widget border.
-			int caretX = MathHelper.clamp(caretPos.x(), 0, (int) (inputWidgetBounds.width() - 4 * scaleFactor));
-			int caretY = MathHelper.clamp(caretPos.y(), 0, (int) (inputWidgetBounds.height() - 4 * scaleFactor));
+			//Constrained to entry border.
+			int caretX = MathHelper.clamp(caretPos.x(), 0, (int) (inputEntryBounds.width() - 4 * scaleFactor));
+			int caretY = MathHelper.clamp(caretPos.y(), 0, (int) (inputEntryBounds.height() - 4 * scaleFactor));
 			caretY -= scaleFactor / 2; // Tweak yPos to fit font style.
-			int compositionWindowPosX = inputWidgetBounds.x() + caretX;
-			int compositionWindowPosY = inputWidgetBounds.y() + caretY;
-			//Constrained to game window border.
-			Rectangle gameWindowBounds = MinecraftClientAccessor.INSTANCE.getWindowBounds();
-			compositionWindowPosX = MathHelper.clamp(compositionWindowPosX, 0, gameWindowBounds.width() - 16);
-			compositionWindowPosY = MathHelper.clamp(compositionWindowPosY, 0, gameWindowBounds.height() - 16);
+			int compositionWindowPosX = inputEntryBounds.x() + caretX;
+			int compositionWindowPosY = inputEntryBounds.y() + caretY;
+			if(inputEntry instanceof FocusableWidget) {
+				//Constrained to container border.
+				FocusableWidget inputWidget = (FocusableWidget) inputEntry;
+				Rectangle containerBounds = inputWidget.getFocusContainer().getBoundsAbs();
+				compositionWindowPosX = MathHelper.clamp(compositionWindowPosX, 0, containerBounds.width() - 16);
+				compositionWindowPosY = MathHelper.clamp(compositionWindowPosY, 0, containerBounds.height() - 16);
+				compositionWindowPosX += containerBounds.x();
+				compositionWindowPosY += containerBounds.y();
+			}
 			return new Point(compositionWindowPosX, compositionWindowPosY);
 		} catch (Throwable e) {
-			IMBlockerCore.LOGGER.error("failed to calculate input position: " + e);
+			IMBlockerCore.LOGGER.error("failed to calculate caret position: " + e);
 			return Point.TOP_LEFT;
 		}
 	}

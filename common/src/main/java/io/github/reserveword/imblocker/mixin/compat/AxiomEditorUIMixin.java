@@ -20,7 +20,11 @@ public abstract class AxiomEditorUIMixin {
 	
 	@Inject(method = "init", at = @At("TAIL"))
 	private static void loadImGui(CallbackInfo ci) {
-		AxiomGuiMonitor.createInstance(imGuiIO);
+		Class<?> editorUIClass = null;
+		try {
+			editorUIClass = Class.forName("com.moulberry.axiom.editor.EditorUI");
+		} catch (Exception e) {}
+		AxiomGuiMonitor.createInstance(imGuiIO, editorUIClass);
 		MinecraftClientAccessor.INSTANCE.registerClientTickEvent(AxiomGuiMonitor.getInstance()::tick);
 	}
 }

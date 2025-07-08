@@ -113,4 +113,24 @@ final class MinecraftFocusContext extends FocusContainer {
 			}
 		});
 	}
+	
+	@Override
+	public Rectangle getBoundsAbs() {
+		int x = 0, y = 0;
+		Dimension contentSize = MinecraftClientAccessor.INSTANCE.getContentSize();
+		if(IMBlockerCore.hasMod("axiom")) {
+			AxiomGuiMonitor axiomMonitor = AxiomGuiMonitor.getInstance();
+			if(axiomMonitor != null && axiomMonitor.isAxiomEditorShowing()) {
+				x = axiomMonitor.getGameContentOffsetX();
+				y = axiomMonitor.getGameContentOffsetY();
+			}
+		}
+		return new Rectangle(x, y, contentSize.width(), contentSize.height());
+	}
+	
+	@Override
+	public Point getCaretPos() {
+		Dimension contentSize = MinecraftClientAccessor.INSTANCE.getContentSize();
+		return new Point(contentSize.width() / 3, contentSize.height() / 2);
+	}
 }

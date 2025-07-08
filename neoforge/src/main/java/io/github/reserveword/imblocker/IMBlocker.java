@@ -8,6 +8,7 @@ import io.github.reserveword.imblocker.common.IMBlockerAutoConfig;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.gui.Dimension;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
@@ -43,6 +44,12 @@ public class IMBlocker {
 				int[] width = new int[1], height = new int[1];
 				GLFW.glfwGetWindowSize(gameWindow.getWindow(), width, height);
 				return new Rectangle(gameWindow.getX(), gameWindow.getY(), width[0], height[0]);
+			}
+			
+			@Override
+			public Dimension getContentSize() {
+				Window gameWindow = Minecraft.getInstance().getWindow();
+				return new Dimension(gameWindow.getWidth(), gameWindow.getHeight());
 			}
 			
 			@Override

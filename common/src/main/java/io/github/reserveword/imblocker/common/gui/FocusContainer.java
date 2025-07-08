@@ -19,7 +19,7 @@ import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
  * @author LitnhJacuzzi
  * @since 5.1.0
  */
-public class FocusContainer implements FocusableObject {
+public abstract class FocusContainer implements FocusableObject {
 	public static final FocusContainer MINECRAFT = new MinecraftFocusContext();
 	public static final FocusContainer IMGUI = new ImGuiFocusContext();
 	
@@ -115,7 +115,7 @@ public class FocusContainer implements FocusableObject {
 
 	@Override
 	public boolean getPreferredState() {
-		return preferredState;
+		return preferredState || true;
 	}
 
 	@Override

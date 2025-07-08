@@ -203,6 +203,9 @@ public class GenericAxiomTextField implements FocusableWidget {
 			
 			//Filter resize callback since it provides invalid data.
 			if((t.getEventFlag() & ImGuiInputTextFlags.CallbackResize) == 0) {
+				if(!INSTANCE.isTrulyFocused()) {
+					FocusContainer.IMGUI.requestFocus(INSTANCE);
+				}
 				updateTextFieldGUIProperties(t);
 			}
 		}

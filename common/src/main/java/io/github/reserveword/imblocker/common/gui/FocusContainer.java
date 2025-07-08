@@ -1,12 +1,5 @@
 package io.github.reserveword.imblocker.common.gui;
 
-import java.util.IdentityHashMap;
-import java.util.Map;
-import java.util.Optional;
-
-import io.github.reserveword.imblocker.common.IMBlockerConfig;
-import io.github.reserveword.imblocker.common.IMBlockerCore;
-import io.github.reserveword.imblocker.common.MathHelper;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 
 /**
@@ -15,14 +8,6 @@ import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
  * the focus, this container will transfer it to its focus destination -
  * {@code focusedWidget} or directly hold it if the {@code focusedWidget} is
  * null.
- * 
- * <p>While there can be only one {@code focusedWidget} at most, multiple
- * {@code focusCandidate}s may be presented. A {@code focusCandidate} is a
- * {@link FocusableWidget} that <i>may</i> be interested in keyboard inputs,
- * whenever the content of {@code focusCandidates} changed, the 
- * {@code focusedWidget} needs to be relocated through availability comparator
- * or char simulation. <b>This feature is not required in standard applications,
- * and designed only to resolve ambiguous focus states in Minecraft context.</b>
  * 
  * <p>The corresponding Minecraft GUI context of a {@code FocusContainer} is all
  * non-textfield widgets, as they share the same IME preferences.
@@ -34,68 +19,39 @@ import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
  * @author LitnhJacuzzi
  * @since 5.1.0
  */
-public enum FocusContainer implements FocusableObject {
-	MINECRAFT(true), IMGUI(false);
+public class FocusContainer implements FocusableObject {
+	public static final FocusContainer MINECRAFT = new MinecraftFocusContext();
+	public static final FocusContainer IMGUI = new ImGuiFocusContext();
 	
-	private double guiScaleFactor = 1.0;
+	double guiScaleFactor = 1.0;
 	
-	private boolean isFocused;
-	private boolean preferredState = false;
+	boolean isFocused;
+	boolean preferredState = false;
 	
-	private FocusableWidget focusedWidget;
-	private final Map<FocusableWidget, Long> focusCandidates = new IdentityHashMap<>();
+	FocusableWidget focusedWidget;
 	
-	private final Runnable locateFocusByCharSimulation = () -> {
-		if(!focusCandidates.isEmpty()) {
-			FocusManager.isTrackingFocus = true;
-			try {
-				MinecraftClientAccessor.INSTANCE.sendSafeCharForFocusTracking(0);
-			} catch (Throwable e) {
-				IMBlockerCore.LOGGER.warn("failed to locate focus with char simulation");
-			}
-			if(!FocusManager.isFocusLocated) {
-				restoreContainerFocus();
-			}
-			System.out.println("Focus tracking result: " + focusedWidget);
-			FocusManager.isTrackingFocus = false;
-			FocusManager.isFocusLocated = false;
-		}
-	};
-	
-	private FocusContainer(boolean defaultFocusState) {
+	FocusContainer(boolean defaultFocusState) {
 		isFocused = defaultFocusState;
 	}
 	
 	public void requestFocus(FocusableWidget toFocus) {
-		focusCandidates.put(toFocus, System.nanoTime());
-		System.out.println(focusCandidates);
-		locateRealFocus();
-	}
-	
-	public void locateRealFocus() {
-		if(this == MINECRAFT && IMBlockerConfig.INSTANCE.isTwoFactorFocusTrackingEnabled()) {
-			IMBlockerCore.invokeLater(locateFocusByCharSimulation);
-		}else {
-			Optional<FocusableWidget> promotedFocusCandidate = focusCandidates.keySet().stream()
-					.filter(FocusableWidget::isRenderable)
-					.max((o1, o2) -> MathHelper.clampLong(focusCandidates.get(o1) - focusCandidates.get(o2)));
-			if(promotedFocusCandidate.isPresent()) {
-				switchFocus(promotedFocusCandidate.get());
-			}else {
-				restoreContainerFocus();
-			}
+		if(focusedWidget != toFocus) {
+			switchFocus(toFocus);
 		}
 	}
 	
-	private void verifyFocus() {
-		assert focusCandidates.containsKey(focusedWidget); //Let's see who will break this.
+	/**
+	 * @see MinecraftFocusContext#locateRealFocus
+	 */
+	public void locateRealFocus() {}
+	
+	public void removeFocus(FocusableWidget toRemove) {
+		if(focusedWidget == toRemove) {
+			restoreContainerFocus();
+		}
 	}
 	
 	public void switchFocus(FocusableWidget toFocus) {
-		if(FocusManager.isTrackingFocus) {
-			FocusManager.isFocusLocated = true;
-		}
-		
 		if(focusedWidget != toFocus) {
 			if(isFocused) {
 				if(focusedWidget != null) {
@@ -107,22 +63,18 @@ public enum FocusContainer implements FocusableObject {
 				focusedWidget = toFocus;
 			}
 		}
-		verifyFocus();
 	}
 	
-	public void removeFocus(FocusableWidget toRemove) {
-		if(focusCandidates.containsKey(toRemove)) {
-			focusCandidates.remove(toRemove);
-			System.out.println(focusCandidates);
-			if (focusCandidates.isEmpty()) {
-				restoreContainerFocus();
-			} else {
-				locateRealFocus();
-			} 
-		}
+	public void clearFocus() {
+		restoreContainerFocus();
 	}
 	
-	private void restoreContainerFocus() {
+	/**
+	 * @see MinecraftFocusContext#checkFocusCandidatesVisibility
+	 */
+	public void checkFocusCandidatesVisibility(long lastGameRenderTime) {}
+	
+	void restoreContainerFocus() {
 		if(focusedWidget != null) {
 			if(isFocused) {
 				focusedWidget.lostFocus();
@@ -130,12 +82,6 @@ public enum FocusContainer implements FocusableObject {
 			}
 			focusedWidget = null;
 		}
-	}
-	
-	public void clearFocus() {
-		focusCandidates.clear();
-		System.out.println(focusCandidates);
-		restoreContainerFocus();
 	}
 	
 	@Override
@@ -156,20 +102,6 @@ public enum FocusContainer implements FocusableObject {
 		}else {
 			FocusableObject.super.lostFocus();
 		}
-	}
-	
-	/**
-	 * Called from every game event loop to check the <i>real</i> visibility
-	 * of all focus candidates.
-	 * 
-	 * @see FocusableWidget#isRenderable
-	 */
-	public void checkFocusCandidatesVisibility(long lastGameRenderTime) {
-		focusCandidates.keySet().forEach(focusCandidate -> {
-			if(focusCandidate instanceof MinecraftTextFieldWidget) {
-				((MinecraftTextFieldWidget) focusCandidate).checkVisibility(lastGameRenderTime);
-			}
-		});
 	}
 	
 	public void setPreferredState(boolean preferredState) {

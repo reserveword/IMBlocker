@@ -3,6 +3,8 @@ package io.github.reserveword.imblocker;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
+import org.lwjgl.glfw.GLFW;
+
 import com.mojang.blaze3d.platform.Window;
 
 import io.github.reserveword.imblocker.common.IMBlockerAutoConfig;
@@ -51,8 +53,9 @@ public class IMBlocker {
 			@Override
 			public Rectangle getWindowBounds() {
 				Window gameWindow = Minecraft.getInstance().getWindow();
-				return new Rectangle(gameWindow.getX(), gameWindow.getY(), 
-						gameWindow.getWidth(), gameWindow.getHeight());
+				int[] width = new int[1], height = new int[1];
+				GLFW.glfwGetWindowSize(gameWindow.getWindow(), width, height);
+				return new Rectangle(gameWindow.getX(), gameWindow.getY(), width[0], height[0]);
 			}
 			
 			@Override

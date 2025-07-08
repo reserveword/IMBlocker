@@ -152,10 +152,17 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 			if(inputWidgetBounds == Rectangle.EMPTY && caretPos == Point.TOP_LEFT) {
 				return Point.TOP_LEFT;
 			}
+			//Constrained to widget border.
 			int caretX = MathHelper.clamp(caretPos.x(), 0, (int) (inputWidgetBounds.width() - 4 * scaleFactor));
 			int caretY = MathHelper.clamp(caretPos.y(), 0, (int) (inputWidgetBounds.height() - 4 * scaleFactor));
 			caretY -= scaleFactor / 2; // Tweak yPos to fit font style.
-			return new Point(inputWidgetBounds.x() + caretX, inputWidgetBounds.y() + caretY);
+			int compositionWindowPosX = inputWidgetBounds.x() + caretX;
+			int compositionWindowPosY = inputWidgetBounds.y() + caretY;
+			//Constrained to game window border.
+			Rectangle gameWindowBounds = MinecraftClientAccessor.INSTANCE.getWindowBounds();
+			compositionWindowPosX = MathHelper.clamp(compositionWindowPosX, 0, gameWindowBounds.width() - 16);
+			compositionWindowPosY = MathHelper.clamp(compositionWindowPosY, 0, gameWindowBounds.height() - 16);
+			return new Point(compositionWindowPosX, compositionWindowPosY);
 		} catch (Throwable e) {
 			IMBlockerCore.LOGGER.error("failed to calculate input position: " + e);
 			return Point.TOP_LEFT;

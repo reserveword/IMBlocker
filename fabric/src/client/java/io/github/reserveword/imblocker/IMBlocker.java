@@ -1,5 +1,7 @@
 package io.github.reserveword.imblocker;
 
+import org.lwjgl.glfw.GLFW;
+
 import io.github.reserveword.imblocker.common.IMBlockerAutoConfig;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
@@ -33,8 +35,9 @@ public class IMBlocker implements ClientModInitializer {
 			@Override
 			public Rectangle getWindowBounds() {
 				Window gameWindow = MinecraftClient.getInstance().getWindow();
-				return new Rectangle(gameWindow.getX(), gameWindow.getY(), 
-						gameWindow.getFramebufferWidth(), gameWindow.getFramebufferHeight());
+				int[] width = new int[1], height = new int[1];
+				GLFW.glfwGetWindowSize(gameWindow.getHandle(), width, height);
+				return new Rectangle(gameWindow.getX(), gameWindow.getY(), width[0], height[0]);
 			}
 			
 			@Override

@@ -97,7 +97,7 @@ public class GenericAxiomTextField implements FocusableWidget {
 					currentText.getBytes(), 0, axiomTextFieldData.getCursorPos())).length();
 			String currentTextBeforeCursor = StringUtil
 					.getSubstring(text, beginIndexData[cursorPos], cursorPos);
-			if(!textBeforeCursor.equals(currentTextBeforeCursor) || true) {
+			if(!textBeforeCursor.equals(currentTextBeforeCursor)) {
 				textBeforeCursor = currentTextBeforeCursor;
 				cursorX = ImGui.calcTextSize(textBeforeCursor).x;
 				updateInternalScrollX(cursorX);

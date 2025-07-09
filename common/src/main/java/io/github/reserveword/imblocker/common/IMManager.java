@@ -48,7 +48,7 @@ public final class IMManager {
 		}else if(Platform.isLinux()) {
 			INSTANCE = new IMManagerLinux();
 		}else {
-			IMBlockerCore.LOGGER.warn("Unsupported platform, using stub");
+			IMBlockerCore.LOGGER.warn("[IMBlocker] Unsupported platform, using stub");
 			INSTANCE = new IMManagerStub();
 		}
 	}

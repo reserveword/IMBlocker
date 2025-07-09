@@ -170,7 +170,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 			}
 			return new Point(compositionWindowPosX, compositionWindowPosY);
 		} catch (Throwable e) {
-			IMBlockerCore.LOGGER.error("failed to calculate caret position: " + e);
+			IMBlockerCore.LOGGER.error("[IMBlocker] Failed to calculate caret position: " + e);
 			return Point.TOP_LEFT;
 		}
 	}

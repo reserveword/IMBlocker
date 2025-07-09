@@ -30,12 +30,12 @@ public class IMBlockerConfig {
 				}
 				bakedScreenWhitelist.add(Class.forName(s));
 			} catch (ClassNotFoundException e) {
-				IMBlockerCore.LOGGER.warn("Class {} not found, ignored.", s);
+				IMBlockerCore.LOGGER.warn("[IMBlocker] Class {} not found, ignored.", s);
 			} catch (Throwable e) {
-				IMBlockerCore.LOGGER.warn(e);
+				IMBlockerCore.LOGGER.warn("[IMBlocker] Invalid screen class: " + e);
 			}
 		}
-		IMBlockerCore.LOGGER.info("imblocker bakelist {} result {}", "screenWhitelist", bakedScreenWhitelist);
+		IMBlockerCore.LOGGER.info("[IMBlocker] bakelist {} result {}", "screenWhitelist", bakedScreenWhitelist);
 	}
 
 	public boolean isScreenInWhitelist(Object screen) {

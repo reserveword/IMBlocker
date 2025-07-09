@@ -31,6 +31,8 @@ public class GenericAxiomTextField implements FocusableWidget {
 	private static float internalScrollX = 0.0f;
 	
 	private static String text = "";
+	private static String textBeforeCursor = "";
+	private static float cursorX = 0;
 	private static int[] lineData = {0};
 	private static int[] beginIndexData = {0};
 
@@ -91,11 +93,15 @@ public class GenericAxiomTextField implements FocusableWidget {
 				text = currentText;
 				splitLines(text);
 			}
-			int cursorPos =  new String(Arrays.copyOfRange(
+			int cursorPos = new String(Arrays.copyOfRange(
 					currentText.getBytes(), 0, axiomTextFieldData.getCursorPos())).length();
-			float cursorX = ImGui.calcTextSize(StringUtil
-					.getSubstring(text, beginIndexData[cursorPos], cursorPos)).x;
-			updateInternalScrollX(cursorX);
+			String currentTextBeforeCursor = StringUtil
+					.getSubstring(text, beginIndexData[cursorPos], cursorPos);
+			if(!textBeforeCursor.equals(currentTextBeforeCursor) || true) {
+				textBeforeCursor = currentTextBeforeCursor;
+				cursorX = ImGui.calcTextSize(textBeforeCursor).x;
+				updateInternalScrollX(cursorX);
+			}
 			int caretX = (int) (ImGui.getStyle().getFramePaddingX() + 
 					cursorX - internalScrollX - ImGui.getScrollX());
 			int caretY = (int) (ImGui.getStyle().getFramePaddingY() + 
@@ -149,7 +155,6 @@ public class GenericAxiomTextField implements FocusableWidget {
 			}else if((cursorOffsetX - visibleWidth) >= internalScrollX) {
 				internalScrollX = (float) Math.floor(cursorOffsetX - visibleWidth + scrollIncrementX);
 			}
-			if(System.currentTimeMillis() % 100 < 1) System.out.println(internalScrollX);
 		}else {
 			internalScrollX = 0.0f;
 		}
@@ -206,7 +211,7 @@ public class GenericAxiomTextField implements FocusableWidget {
 				if(!INSTANCE.isTrulyFocused()) {
 					FocusContainer.IMGUI.requestFocus(INSTANCE);
 				}
-				updateTextFieldGUIProperties(t);
+				updateTextFieldGUIProperties(t); //Overhead: ~7000ns
 			}
 		}
 	}

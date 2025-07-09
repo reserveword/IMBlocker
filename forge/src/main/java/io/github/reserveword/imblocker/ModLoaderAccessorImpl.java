@@ -36,7 +36,7 @@ public class ModLoaderAccessorImpl implements ModLoaderAccessor {
 				InputStreamReader isr = new InputStreamReader(is)) {
 			protocolVersion = GsonHelper.getAsInt(GsonHelper.parse(isr), "protocol_version");
 		} catch (Exception e) {
-			IMBlockerCore.LOGGER.warn("Failed to get protocol version!");
+			IMBlockerCore.LOGGER.warn("[IMBlocker] Failed to get protocol version!");
 			protocolVersion = Integer.MAX_VALUE;
 		}
 		currentProtocolVersion = protocolVersion;

@@ -34,6 +34,9 @@ public abstract class FocusContainer implements FocusableObject {
 		isFocused = defaultFocusState;
 	}
 	
+	/**
+	 * Request to change the focus destination of this container to given widget.
+	 */
 	public void requestFocus(FocusableWidget toFocus) {
 		if(focusedWidget != toFocus) {
 			switchFocus(toFocus);
@@ -45,12 +48,18 @@ public abstract class FocusContainer implements FocusableObject {
 	 */
 	public void locateRealFocus() {}
 	
+	/**
+	 * Request to remove the given widget from this container's focus candidates.
+	 */
 	public void removeFocus(FocusableWidget toRemove) {
 		if(focusedWidget == toRemove) {
 			restoreContainerFocus();
 		}
 	}
 	
+	/**
+	 * Change the focus destination of this container to given widget.
+	 */
 	public void switchFocus(FocusableWidget toFocus) {
 		if(focusedWidget != toFocus) {
 			if(isFocused) {
@@ -65,6 +74,9 @@ public abstract class FocusContainer implements FocusableObject {
 		}
 	}
 	
+	/**
+	 * Clear all focus candidates in this container.
+	 */
 	public void clearFocus() {
 		restoreContainerFocus();
 	}
@@ -74,6 +86,9 @@ public abstract class FocusContainer implements FocusableObject {
 	 */
 	public void checkFocusCandidatesVisibility(long lastGameRenderTime) {}
 	
+	/**
+	 * Assign the global focus owner to this container if no focus destination available.
+	 */
 	void restoreContainerFocus() {
 		if(focusedWidget != null) {
 			if(isFocused) {

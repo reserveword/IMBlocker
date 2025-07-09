@@ -124,9 +124,11 @@ public class GenericAxiomTextField implements FocusableWidget {
 	}
 	
 	/**
-	 * Manually maintain the internal horizontal scroll amount of the text field
+	 * <p>Manually maintain the internal horizontal scroll amount of the text field
 	 * because of the lack of corresponding APIs. Calculations are taken from
 	 * {@code imgui_widgets.cpp}.
+	 * 
+	 * <p><i>This workaround may not be 100% accurate.</i>
 	 */
 	private static void updateInternalScrollX(float cursorOffsetX) {
 		if(activeItemId != currentItemId) {

@@ -50,22 +50,23 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 	}
 	
 	static {
-		boolean isOfficialMapping = Common.getMapping() == Mapping.OFFICIAL;
+		boolean isOfficialMapping = IMBlockerCore.getMapping() == Mapping.OFFICIAL;
 		
 		validMixins.add("AbstractCommandBlockScreenMixin");
 		validMixins.add("ChatScreenMixin");
 		validMixins.add(isOfficialMapping ? "AbstractWidgetMixin" : "ClickableWidgetMixin");
 		validMixins.add("MinecraftClientMixin");
 		validMixins.add("WindowMixin");
+		validMixins.add(isOfficialMapping ? "KeyboardHandlerAccessor" : "KeyboardAccessor");
 		
-		if(Common.isGameVersionReached(762/*1.19.4*/)) {
+		if(IMBlockerCore.isGameVersionReached(762/*1.19.4*/)) {
 			validMixins.add(isOfficialMapping ? "AbstractContainerEventHandlerMixin" : "AbstractParentElementMixin");
 			validMixins.add("TextFieldMixin");
 		}else {
 			validMixins.add("TextFieldLegacyMixin");
 		}
 		
-		if(Common.isGameVersionReached(760/*1.19.1*/)) {
+		if(IMBlockerCore.isGameVersionReached(760/*1.19.1*/)) {
 			if(isOfficialMapping) {
 				validMixins.add("AbstractScrollWidgetMixin");
 				validMixins.add("StringViewAccessor");
@@ -79,70 +80,69 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			}
 		}
 		
-		if(Common.hasMod("axiom")) {
-			validMixins.add("AxiomEditorUIMixin");
+		if(IMBlockerCore.hasMod("axiom")) {
+			validMixins.add("compat.AxiomEditorUIMixin");
+			validMixins.add("compat.ImGuiMixin");
 		}
 		
-		if(Common.hasMod("ftblibrary")) {
-			validMixins.add("FtbWidgetMixin");
+		if(IMBlockerCore.hasMod("ftblibrary")) {
+			validMixins.add("compat.FtbWidgetMixin");
 			
-			if(Common.isGameVersionReached(763/*1.20*/)) {
-				validMixins.add("FtbTextFieldMixin");
+			if(IMBlockerCore.isGameVersionReached(763/*1.20*/)) {
+				validMixins.add("compat.FtbTextFieldMixin");
 			}else {
-				validMixins.add("FtbTextFieldLegacyMixin");
+				validMixins.add("compat.FtbTextFieldLegacyMixin");
 			}
 			
-			if(Common.isGameVersionReached(760/*1.19.1*/)) {
-				validMixins.add("FtbPanelMixin");
-				validMixins.add("FtbMultilineTextFieldAccessorImpl");
-				validMixins.add("FtbMultilineTextBoxMixin");
+			if(IMBlockerCore.isGameVersionReached(760/*1.19.1*/)) {
+				validMixins.add("compat.FtbPanelMixin");
+				validMixins.add("compat.FtbMultilineTextFieldAccessorImpl");
+				validMixins.add("compat.FtbMultilineTextBoxMixin");
 			}
 		}
 		
-		if(Common.hasMod("libgui")) {
-			validMixins.add("LibGuiWidgetMixin");
-			validMixins.add("LibGuiTextFieldMixin");
+		if(IMBlockerCore.hasMod("libgui")) {
+			validMixins.add("compat.LibGuiWidgetMixin");
+			validMixins.add("compat.LibGuiTextFieldMixin");
 		}
 		
-		if(Common.hasMod("emi")) {
-			if(Common.isGameVersionReached(762/*1.19.4*/)) {
-				validMixins.add("EmiSearchWidgetMixin");
+		if(IMBlockerCore.hasMod("emi")) {
+			if(IMBlockerCore.isGameVersionReached(762/*1.19.4*/)) {
+				validMixins.add("compat.EmiSearchWidgetMixin");
 			}else {
-				validMixins.add("EmiSearchWidgetLegacyMixin");
+				validMixins.add("compat.EmiSearchWidgetLegacyMixin");
 			}
 		}
 		
-		if(Common.hasMod("roughlyenoughitems")) {
-			validMixins.add("ReiTextFieldMixin");
+		if(IMBlockerCore.hasMod("roughlyenoughitems")) {
+			validMixins.add("compat.ReiTextFieldMixin");
 		}
 		
-		if(Common.hasMod("replaymod")) {
-			validMixins.add("ReplayModTextFieldMixin");
+		if(IMBlockerCore.hasMod("replaymod")) {
+			validMixins.add("compat.ReplayModTextFieldMixin");
 		}
 		
-		if(Common.hasMod("meteor-client")) {
-			validMixins.add("MeteorWidgetMixin");
-			validMixins.add("MeteorTextFieldMixin");
+		if(IMBlockerCore.hasMod("meteor-client")) {
+			validMixins.add("compat.MeteorWidgetMixin");
+			validMixins.add("compat.MeteorTextFieldMixin");
 		}
 		
-		if(Common.hasMod("reeses-sodium-options") || Common.hasMod("reeses_sodium_options")) {
-			validMixins.add("RSOAbstractFrameMixin");
-			validMixins.add("SodiumSearchFieldMixin");
+		if(IMBlockerCore.hasMod("reeses-sodium-options") || IMBlockerCore.hasMod("reeses_sodium_options")) {
+			validMixins.add("compat.RSOAbstractFrameMixin");
+			validMixins.add("compat.RSOSearchFieldMixin");
 		}
 		
-		if(Common.hasMod("blockui")) {
-			validMixins.add("BlockUIPaneMixin");
-			validMixins.add("BlockUIScrollingContainerMixin");
-			validMixins.add("BlockUITextFieldMixin");
+		if(IMBlockerCore.hasMod("blockui")) {
+			validMixins.add("compat.BlockUIBOScreenAccessor");
+			validMixins.add("compat.BlockUIPaneMixin");
+			validMixins.add("compat.BlockUIViewAccessor");
+			validMixins.add("compat.BlockUIScrollingContainerMixin");
+			validMixins.add("compat.BlockUITextFieldMixin");
 		}
 		
-		if(Common.hasMod("supermartijn642corelib")) {
-			validMixins.add("SM642WidgetMixin");
-			validMixins.add("SM642TextFieldMixin");
-		}
-		
-		if(Common.hasMod("journeymap")) {
-			validMixins.add("JourneyMapChatMixin");
+		if(IMBlockerCore.hasMod("supermartijn642corelib")) {
+			validMixins.add("compat.SM642WidgetMixin");
+			validMixins.add("compat.SM642TextFieldMixin");
 		}
 	}
 }

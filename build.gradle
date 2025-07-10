@@ -56,6 +56,7 @@ allprojects {
         maven {
             url 'https://repo.spongepowered.org/repository/maven-public/'
         }
+        maven { url "https://jitpack.io" }
     }
 
     def all_properties = [

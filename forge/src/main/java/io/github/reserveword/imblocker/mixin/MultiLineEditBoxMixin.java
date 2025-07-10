@@ -5,8 +5,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import io.github.reserveword.imblocker.common.IMManager;
+import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftMultilineEditBoxWidget;
 import io.github.reserveword.imblocker.common.gui.MultilineCursorInfo;
 import net.minecraft.client.gui.Font;
@@ -21,7 +24,19 @@ public abstract class MultiLineEditBoxMixin extends AbstractScrollWidgetMixin im
 	
 	@Override
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(isFocused);
+		onMinecraftWidgetFocusChanged(isFocused());
+	}
+	
+	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
+	public void checkFocusTracking(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+		if(FocusManager.isTrackingFocus) {
+			if(isFocused()) {
+				FocusContainer.MINECRAFT.switchFocus(this);
+				cir.setReturnValue(true);
+			}else {
+				cir.setReturnValue(false);
+			}
+		}
 	}
 	
 	@Inject(method = "scrollToCursor", at = @At("TAIL"))

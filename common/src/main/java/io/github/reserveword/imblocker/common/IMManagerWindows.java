@@ -7,9 +7,8 @@ import com.sun.jna.platform.win32.WinNT;
 
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
+import io.github.reserveword.imblocker.common.gui.FocusableObject;
 import io.github.reserveword.imblocker.common.gui.FocusableWidget;
-import io.github.reserveword.imblocker.common.gui.MathHelper;
-import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.common.jnastructs.COMPOSITIONFORM;
@@ -102,7 +101,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		WinDef.HWND hwnd = getActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if (himc != null) {
-			FocusableWidget focusedWidget = FocusManager.getFocusOwner();
+			FocusableObject focusedWidget = FocusManager.getFocusOwner();
 			if (focusedWidget != null) {
 				Point compositionWindowPos = calculateProperCompositionWindowPos(focusedWidget);
 				COMPOSITIONFORM cfr = new COMPOSITIONFORM();
@@ -121,10 +120,9 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		WinDef.HWND hwnd = getActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if (himc != null) {
-			FocusableWidget focusedWidget = FocusManager.getFocusOwner();
+			FocusableObject focusedWidget = FocusManager.getFocusOwner();
 			if (focusedWidget != null) {
-				int fontSize = focusedWidget instanceof MinecraftTextFieldWidget
-						? ((MinecraftTextFieldWidget) focusedWidget).getFontHeight() : 8;
+				int fontSize = focusedWidget.getFontHeight();
 				fontSize *= focusedWidget.getGuiScale();
 				LOGFONTW lplf = new LOGFONTW();
 				ImmGetCompositionFontW(himc, lplf);
@@ -147,14 +145,34 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		}
 	}
 
-	private Point calculateProperCompositionWindowPos(FocusableWidget inputWidget) {
-		double scaleFactor = inputWidget.getGuiScale();
-		Rectangle inputWidgetBounds = inputWidget.getBoundsAbs();
-		Point caretPos = inputWidget.getCaretPos();
-		int caretX = MathHelper.clamp(caretPos.x(), 0, (int) (inputWidgetBounds.width() - 4 * scaleFactor));
-		int caretY = MathHelper.clamp(caretPos.y(), 0, (int) (inputWidgetBounds.height() - 4 * scaleFactor));
-		caretY -= scaleFactor / 2; // Tweak yPos to fit font style.
-		return new Point(inputWidgetBounds.x() + caretX, inputWidgetBounds.y() + caretY);
+	private Point calculateProperCompositionWindowPos(FocusableObject inputEntry) {
+		try {
+			double scaleFactor = inputEntry.getGuiScale();
+			Rectangle inputEntryBounds = inputEntry.getBoundsAbs();
+			Point caretPos = inputEntry.getCaretPos();
+			if(inputEntryBounds == Rectangle.EMPTY && caretPos == Point.TOP_LEFT) {
+				return Point.TOP_LEFT;
+			}
+			//Constrained to entry border.
+			int caretX = MathHelper.clamp(caretPos.x(), 0, (int) (inputEntryBounds.width() - 4 * scaleFactor));
+			int caretY = MathHelper.clamp(caretPos.y(), 0, (int) (inputEntryBounds.height() - 4 * scaleFactor));
+			caretY -= scaleFactor / 2; // Tweak yPos to fit font style.
+			int compositionWindowPosX = inputEntryBounds.x() + caretX;
+			int compositionWindowPosY = inputEntryBounds.y() + caretY;
+			if(inputEntry instanceof FocusableWidget) {
+				//Constrained to container border.
+				FocusableWidget inputWidget = (FocusableWidget) inputEntry;
+				Rectangle containerBounds = inputWidget.getFocusContainer().getBoundsAbs();
+				compositionWindowPosX = MathHelper.clamp(compositionWindowPosX, 0, containerBounds.width() - 16);
+				compositionWindowPosY = MathHelper.clamp(compositionWindowPosY, 0, containerBounds.height() - 16);
+				compositionWindowPosX += containerBounds.x();
+				compositionWindowPosY += containerBounds.y();
+			}
+			return new Point(compositionWindowPosX, compositionWindowPosY);
+		} catch (Throwable e) {
+			IMBlockerCore.LOGGER.error("[IMBlocker] Failed to calculate caret position: " + e);
+			return Point.TOP_LEFT;
+		}
 	}
 
 	private class SetConversionStateThread extends Thread {

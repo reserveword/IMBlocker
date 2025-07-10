@@ -2,15 +2,16 @@ package io.github.reserveword.imblocker.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
-import io.github.reserveword.imblocker.common.gui.GenericWhitelistScreen;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -20,6 +21,12 @@ public abstract class MinecraftClientMixin {
 	
 	@Shadow
 	private MainWindow window;
+	
+	@Shadow
+	private boolean noRender;
+	
+	@Unique
+	private long lastGameRenderTime = 0;
 	
     @Inject(method = "setWindowActive", at = @At("HEAD"))
     public void onWindowFocusChanged(boolean isFocused, CallbackInfo ci) {
@@ -38,12 +45,24 @@ public abstract class MinecraftClientMixin {
     		IMBlockerConfig.INSTANCE.recoverScreen(screen.getClass().getName());
     	}
     	
-    	if(isScreenInWhiteList(screen)) {
-    		FocusContainer.MINECRAFT.requestFocus(GenericWhitelistScreen.getInstance());
-    	}else {
-    		FocusContainer.MINECRAFT.cancelFocus();
-    	}
+    	FocusContainer.MINECRAFT.clearFocus();
+    	FocusContainer.MINECRAFT.setPreferredState(isScreenInWhiteList(screen));
     }
+    
+    @Inject(method = "runTick", at = @At("HEAD"))
+	public void runPreRenderTasks(boolean tick, CallbackInfo ci) {
+		IMBlockerCore.flushDeferredRunnables();
+		if(!noRender) {
+			lastGameRenderTime = System.nanoTime();
+			FocusManager.isGameRendering = true;
+		}
+	}
+	
+	@Inject(method = "runTick", at = @At("TAIL"))
+	public void checkFocusCandidatesVisibility(boolean tick, CallbackInfo ci) {
+		FocusContainer.MINECRAFT.checkFocusCandidatesVisibility(lastGameRenderTime);
+		FocusManager.isGameRendering = false;
+	}
     
     private boolean isScreenInWhiteList(Screen screen) {
     	return IMBlockerConfig.INSTANCE.isScreenInWhitelist(screen);

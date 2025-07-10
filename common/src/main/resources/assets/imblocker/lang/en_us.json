@@ -11,6 +11,11 @@
   "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[0]": "\u00A7lThe method of setting English state when typing command",
   "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[1]": "If your input method can't auto-switch to English state when typing command,\nset this option to \"DISABLE_IM\" may help,\nbut note that you can only type English in this mode.",
   
+  "text.autoconfig.imblocker.option.advanceSettings": "Advance Settings",
+  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation": "Enable Char Simulation",
+  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[0]": "\u00A7lLocate the focus owner with char simulation",
+  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[1]": "This approach can locate the focus owner with 100% accuracy.\nGenerally, the probe char will be safely absorbed by the injection,\nhowever, it might leak to the screen that doesn't filter it.",
+  
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings": "Windows Compatibility Settings",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi": "Allow ConversionStatus API",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "The API that controls the English state.\n\u00A77If disabled, IM_ENG_STATE command input mode will not work.",

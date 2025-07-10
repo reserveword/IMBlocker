@@ -14,7 +14,7 @@ public class IMBlockerConfig {
 	public static final Predicate<Object> checkClassForName = str -> (str instanceof String)
 			&& classNamePattern.matcher((String) str).matches();
 
-	public static IMBlockerConfig INSTANCE = null;
+	public static IMBlockerConfig INSTANCE = new IMBlockerConfig();
 
 	public static final List<String> defaultScreenWhitelist = new ArrayList<>();
 
@@ -30,21 +30,16 @@ public class IMBlockerConfig {
 				}
 				bakedScreenWhitelist.add(Class.forName(s));
 			} catch (ClassNotFoundException e) {
-				Common.LOGGER.warn("Class {} not found, ignored.", s);
+				IMBlockerCore.LOGGER.warn("[IMBlocker] Class {} not found, ignored.", s);
 			} catch (Throwable e) {
-				Common.LOGGER.warn(e);
+				IMBlockerCore.LOGGER.warn("[IMBlocker] Invalid screen class: " + e);
 			}
 		}
-		Common.LOGGER.info("imblocker bakelist {} result {}", "screenWhitelist", bakedScreenWhitelist);
+		IMBlockerCore.LOGGER.info("[IMBlocker] bakelist {} result {}", "screenWhitelist", bakedScreenWhitelist);
 	}
 
 	public boolean isScreenInWhitelist(Object screen) {
-		for (Class<?> screenCls : bakedScreenWhitelist) {
-			if (screenCls.isInstance(screen)) {
-				return true;
-			}
-		}
-		return false;
+		return bakedScreenWhitelist.stream().anyMatch(screenCls -> screenCls.isInstance(screen));
 	}
 
 	public void recoverScreen(String screenClsName) {
@@ -56,6 +51,10 @@ public class IMBlockerConfig {
 
 	public CommandInputMode getChatCommandInputType() {
 		return CommandInputMode.IM_ENG_STATE;
+	}
+	
+	public boolean isCharSimulationEnabled() {
+		return false;
 	}
 
 	public boolean isConversionStatusApiEnabled() {

@@ -3,9 +3,9 @@ package io.github.reserveword.imblocker.common;
 public class StringUtil {
 
 	public static String getSubstring(String string, int beginIndex, int endIndex) {
-		try {
+		if((endIndex >= beginIndex) && (beginIndex >= 0) && (endIndex <= string.length())) {
 			return string.substring(beginIndex, endIndex);
-		} catch (Exception e) {
+		}else {
 			return "";
 		}
 	}

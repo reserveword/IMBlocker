@@ -70,6 +70,11 @@ tasks.named('jar', Jar).configure {
     from sourceSets.main.output
     from (project(":common").sourceSets.main.output) {
         exclude 'imblocker-old.png'
+        exclude '**/*Multiline*.class'
+        exclude '**/FtbPanelMixin.class'
+        exclude '**/FtbTextFieldMixin.class'
+        exclude '**/*Axiom*.class'
+        exclude '**/Meteor*.class'
     }
 
     manifest {

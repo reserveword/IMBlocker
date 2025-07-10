@@ -4,22 +4,7 @@
   "package" : "io.github.reserveword.imblocker.mixin",
   "refmap" : "imblocker-forge.mixins.refmap.json",
   "compatibilityLevel": "JAVA_8",
-  "client": [
-  	"AbstractCommandBlockScreenMixin",
-  	"ChatScreenMixin",
-    "WidgetMixin",
-    "TextFieldMixin",
-    "MinecraftClientMixin",
-    "MainWindowMixin",
-    "FtbWidgetMixin",
-    "FtbTextFieldLegacyMixin",
-    "ReiTextFieldMixin",
-    "RSOAbstractFrameMixin",
-    "SodiumSearchFieldMixin",
-    "SM642WidgetMixin",
-    "SM642TextFieldMixin",
-    "JourneyMapChatMixin"
-  ],
+  "plugin": "io.github.reserveword.imblocker.common.IMBlockerMixinPlugin",
   "injectors": {
     "defaultRequire": 1
   },

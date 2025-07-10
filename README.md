@@ -28,11 +28,11 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
     - 通过 Mixin 注入的方式为已知组件的焦点状态变化添加回调机制
     - 构建焦点管理系统，将各种组件焦点状态的变化按照标准焦点管理规范将实际焦点变化结果映射到全局焦点路径中，并据此调整输入法状态
 - 例外情况
-    - 有些GUI屏幕（比如书与笔和告示牌）显示时直接处理输入字符而不产生焦点请求
+    - 有些 GUI 屏幕（比如书与笔和告示牌）显示时直接处理输入字符而不产生焦点请求
     - 我们将这些屏幕（Screen）视为等效焦点组件并放入白名单，显示与关闭时显式产生焦点变化请求。如果你需要开启输入法的地方看起来像一个屏幕而非文本框类组件，请尝试使用屏幕记录功能识别并将其添加到白名单
 - 问题
     - 未被注入的文本框组件无法被焦点管理系统监听，若某模组拥有自己的组件框架实现本模组可能无法自动为其调整输入法状态，此时请将它们提交到 [#13](https://github.com/reserveword/IMBlocker/issues/13) 供开发者处理
-    - GLFW窗口系统在Windows下有一个已知漏洞：如果游戏窗口被创建时未获得焦点则第一次获得焦点不会触发焦点回调，此时可能出现锁键现象。解决方法：使游戏窗口失去再获得一次焦点
+    - GLFW 窗口系统在 Windows 下有一个已知漏洞：如果游戏窗口被创建时未获得焦点则第一次获得焦点不会触发焦点回调，此时可能出现锁键现象。解决方法：使游戏窗口失去再获得一次焦点
     - 欢迎提出建议或反馈
 
 ## 已支持的具有自定义GUI实现的模组
@@ -50,6 +50,7 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
 
 ## 致谢
 
-感谢 [TimmyOVO](https://www.mcbbs.net/?1696224) 制作的 [InputMethodBlocker](https://www.mcbbs.net/thread-688825-12-1.html) ，启发我制作这个mod
+感谢 [TimmyOVO](https://www.mcbbs.net/?1696224) 制作的 [InputMethodBlocker](https://www.mcbbs.net/thread-688825-12-1.html) ，启发我制作这个mod  
+注意，原贴中代码地址已失效，目前 Github 上的仓库为 [InputMethodBlocker](https://github.com/lss233/InputMethodBlocker)  
 
-注意，原贴中代码地址已失效，目前 Github 上的仓库为 [InputMethodBlocker](https://github.com/lss233/InputMethodBlocker)
+模组 Logo by [@Halogly](https://github.com/Halogly)

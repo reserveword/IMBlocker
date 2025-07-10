@@ -19,7 +19,7 @@ public class ReflectionUtil {
 	
 	@SuppressWarnings("unchecked")
 	public static <R> R invokeMethod(Class<?> cls, Object instance, Class<R> retType, String methodName,
-			Class<?>[] paramTypes, Object...params) {
+			Class<?>[] paramTypes, Object... params) {
 		try {
 			Method method = cls.getDeclaredMethod(methodName, paramTypes);
 			method.setAccessible(true);

@@ -10,6 +10,7 @@ import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.Dimension;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import io.github.reserveword.imblocker.mixin.KeyboardHandlerAccessor;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.minecraft.client.Minecraft;
@@ -30,7 +31,8 @@ public class IMBlocker {
     		@Override
     		public void sendSafeCharForFocusTracking(int codePoint) {
     			Minecraft client = Minecraft.getInstance();
-				client.keyboardHandler.keyPress(client.getWindow().getWindow(), codePoint, 0, 1, 0);
+				((KeyboardHandlerAccessor) client.keyboardHandler).invokeCharTyped(
+						client.getWindow().getWindow(), codePoint, 0);
     		}
     		
 			@Override

@@ -46,8 +46,8 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	}
 	
 	@Override
-	public boolean isTwoFactorFocusTrackingEnabled() {
-		return advanceSettings.enableTwoFactorFocusTracking;
+	public boolean isCharSimulationEnabled() {
+		return advanceSettings.enableCharSimulation;
 	}
 
 	@Override
@@ -99,7 +99,8 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	}
 	
 	static class AdvanceSettings {
-		boolean enableTwoFactorFocusTracking = false;
+		@ConfigEntry.Gui.Tooltip(count = 2)
+		boolean enableCharSimulation = false;
 	}
 
 	static class WindowsCompatibilitySettings {

@@ -21,7 +21,7 @@ public class IMBlockerCore {
 		deferredRunnables.add(runnable);
 	}
 	
-	public static void flushDeferredRunnables() {
+	public static synchronized void flushDeferredRunnables() {
 		deferredRunnables.forEach(Runnable::run);
 		deferredRunnables.clear();
 	}

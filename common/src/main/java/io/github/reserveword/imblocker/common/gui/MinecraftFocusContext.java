@@ -11,6 +11,8 @@ import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 
 final class MinecraftFocusContext extends FocusContainer {
 	
+	private static final boolean IS_AXIOM_LOADED = IMBlockerCore.hasMod("axiom");
+	
 	/**
 	 * While there can be only one {@code focusedWidget} at most, multiple
 	 * {@code focusCandidate}s may be presented. A {@code focusCandidate} is a
@@ -71,7 +73,7 @@ final class MinecraftFocusContext extends FocusContainer {
 	 */
 	@Override
 	public void locateRealFocus() {
-		if(IMBlockerConfig.INSTANCE.isTwoFactorFocusTrackingEnabled()) {
+		if(IMBlockerConfig.INSTANCE.isCharSimulationEnabled()) {
 			IMBlockerCore.invokeLater(locateFocusByCharSimulation);
 		}else {
 			Optional<FocusableWidget> promotedFocusCandidate = focusCandidates.keySet().stream()
@@ -137,7 +139,7 @@ final class MinecraftFocusContext extends FocusContainer {
 	public Rectangle getBoundsAbs() {
 		int x = 0, y = 0;
 		Dimension contentSize = MinecraftClientAccessor.INSTANCE.getContentSize();
-		if(IMBlockerCore.hasMod("axiom")) {
+		if(IS_AXIOM_LOADED) {
 			AxiomGuiMonitor axiomMonitor = AxiomGuiMonitor.getInstance();
 			if(axiomMonitor != null && axiomMonitor.isAxiomEditorShowing()) {
 				x = axiomMonitor.getGameContentOffsetX();

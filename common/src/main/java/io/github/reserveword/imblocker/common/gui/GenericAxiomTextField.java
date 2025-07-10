@@ -1,5 +1,6 @@
 package io.github.reserveword.imblocker.common.gui;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import imgui.ImGui;
@@ -93,8 +94,8 @@ public class GenericAxiomTextField implements FocusableWidget {
 				text = currentText;
 				splitLines(text);
 			}
-			int cursorPos = new String(Arrays.copyOfRange(
-					currentText.getBytes(), 0, axiomTextFieldData.getCursorPos())).length();
+			int cursorPos = new String(Arrays.copyOfRange(currentText.getBytes(StandardCharsets.UTF_8), 
+					0, axiomTextFieldData.getCursorPos()), StandardCharsets.UTF_8).length();
 			String currentTextBeforeCursor = StringUtil
 					.getSubstring(text, beginIndexData[cursorPos], cursorPos);
 			if(!textBeforeCursor.equals(currentTextBeforeCursor)) {

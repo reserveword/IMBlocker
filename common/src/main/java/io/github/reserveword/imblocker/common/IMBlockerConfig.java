@@ -53,7 +53,7 @@ public class IMBlockerConfig {
 		return CommandInputMode.IM_ENG_STATE;
 	}
 	
-	public boolean isTwoFactorFocusTrackingEnabled() {
+	public boolean isCharSimulationEnabled() {
 		return false;
 	}
 

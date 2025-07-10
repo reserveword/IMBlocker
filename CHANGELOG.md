@@ -1,4 +1,4 @@
-# v5.4.0
+# v5.4.0 ([#106](https://github.com/reserveword/IMBlocker/pull/106))
 **此版本包含重要的技术和功能更新**
 ## 修复与改进
  - 在类加载阶段创建默认配置实例以避免空指针访问（[#105](https://github.com/reserveword/IMBlocker/issues/105)）

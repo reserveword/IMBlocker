@@ -35,7 +35,7 @@ final class MinecraftFocusContext extends FocusContainer {
 			if(!FocusManager.isFocusLocated) {
 				restoreContainerFocus();
 			}
-			//IMBlockerCore.LOGGER.info("[IMBlocker] Focus track result: {}", focusedWidget);
+			IMBlockerCore.LOGGER.info("[IMBlocker] Focus track result: {}", focusedWidget);
 			FocusManager.isTrackingFocus = false;
 			FocusManager.isFocusLocated = false;
 		}
@@ -48,7 +48,7 @@ final class MinecraftFocusContext extends FocusContainer {
 	@Override
 	public void requestFocus(FocusableWidget toFocus) {
 		focusCandidates.put(toFocus, System.nanoTime());
-		//IMBlockerCore.LOGGER.info(focusCandidates);
+		IMBlockerCore.LOGGER.info(focusCandidates);
 		locateRealFocus();
 	}
 	
@@ -95,7 +95,7 @@ final class MinecraftFocusContext extends FocusContainer {
 	public void removeFocus(FocusableWidget toRemove) {
 		if(focusCandidates.containsKey(toRemove)) {
 			focusCandidates.remove(toRemove);
-			//IMBlockerCore.LOGGER.info(focusCandidates);
+			IMBlockerCore.LOGGER.info(focusCandidates);
 			if (focusCandidates.isEmpty()) {
 				restoreContainerFocus();
 			} else {
@@ -116,7 +116,7 @@ final class MinecraftFocusContext extends FocusContainer {
 	@Override
 	public void clearFocus() {
 		focusCandidates.clear();
-		//IMBlockerCore.LOGGER.info(focusCandidates);
+		IMBlockerCore.LOGGER.info(focusCandidates);
 		restoreContainerFocus();
 	}
 	

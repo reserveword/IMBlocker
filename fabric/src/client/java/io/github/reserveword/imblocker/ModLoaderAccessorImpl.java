@@ -16,7 +16,7 @@ public class ModLoaderAccessorImpl implements ModLoaderAccessor {
 
 	@Override
 	public boolean isGameVersionReached(int protocolVersion) {
-		return currentProtocolVersion > protocolVersion;
+		return currentProtocolVersion >= protocolVersion;
 	}
 	
 	@Override

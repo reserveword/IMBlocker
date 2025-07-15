@@ -1,13 +1,1 @@
-# v5.4.0 ([#106](https://github.com/reserveword/IMBlocker/pull/106))
-**此版本包含重要的技术和功能更新**
-## 修复与改进
- - 在类加载阶段创建默认配置实例以避免空指针访问（[#105](https://github.com/reserveword/IMBlocker/issues/105)）
- - (Neo)Forge 现在包含所有已兼容模组的注入类以支持信雅互联
- - 修复 Axiom 编辑器打开时输入法候选框位置未随游戏内容偏移的问题
- - 修复屏幕白名单配置项编辑后需要重启游戏才生效的问题
-## 新功能
- - 使用更严格的可见性检测和候选队列机制处理多焦点竞争问题，大幅提升焦点组件的定位精度
- - 增加使用模拟字符定位焦点组件的选项（详细信息见游戏内配置项）
- - **输入法候选框现在可以定位至 Axiom 的文本光标**
-##
-※本模组核心模块的源代码现在包含详细的文档和注释
+修复 Fabric 游戏版本检测方法中漏掉的[等号](https://github.com/LitnhJacuzzi/IMBlocker/compare/95fdfc0..97349f3#diff-9e06d162918f68b78952fbb0bff96702d32c6701944743ffcad7edddfedbe301R19)

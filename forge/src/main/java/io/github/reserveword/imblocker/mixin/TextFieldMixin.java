@@ -41,12 +41,12 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
 	
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(canConsumeInput());
+		imblocker$onFocusChanged(canConsumeInput());
 	}
 	
 	@Inject(method = "setVisible", at = @At("TAIL"))
 	public void visibilityChanged(boolean isVisible, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(canConsumeInput());
+		imblocker$onFocusChanged(canConsumeInput());
 	}
 	
 	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
@@ -77,7 +77,7 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
 	public void setEditable(boolean editable) {
 		if (this.isEditable != editable) {
 			this.isEditable = editable;
-			onMinecraftWidgetFocusChanged(canConsumeInput());
+			imblocker$onFocusChanged(canConsumeInput());
 		}
 	}
 

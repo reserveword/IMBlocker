@@ -36,7 +36,7 @@ public abstract class ReiTextFieldMixin implements MinecraftTextFieldWidget {
 
 	@Inject(method = {"setFocused", "method_25365", "m_93692_"}, at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(visible && focused);
+		imblocker$onFocusChanged(visible && focused);
 	}
 	
 	@Inject(method = {"charTyped", "method_25400", "m_5534_", "func_231042_a_"}, at = @At("HEAD"), cancellable = true)
@@ -53,7 +53,7 @@ public abstract class ReiTextFieldMixin implements MinecraftTextFieldWidget {
 	
 	@Inject(method = "setVisible", at = @At("TAIL"))
 	public void visibilityChanged(boolean visible, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(this.visible && focused);
+		imblocker$onFocusChanged(this.visible && focused);
 	}
 
 	@Inject(method = "onChanged", at = @At("TAIL"))

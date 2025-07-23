@@ -24,7 +24,7 @@ public abstract class EditBoxWidgetMixin extends ScrollableWidgetMixin implement
 	
 	@Override
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(isFocused());
+		imblocker$onFocusChanged(isFocused());
 	}
 	
 	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)

@@ -27,7 +27,7 @@ public abstract class SM642TextFieldMixin extends SM642WidgetMixin implements Mi
 	
 	@Inject(method = "setSelected", at = @At("TAIL"))
 	public void focusChanged(boolean selected, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(canWrite());
+		imblocker$onFocusChanged(canWrite());
 	}
 	
 	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)

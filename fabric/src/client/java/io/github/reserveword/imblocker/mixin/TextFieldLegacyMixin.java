@@ -41,17 +41,17 @@ public abstract class TextFieldLegacyMixin extends ClickableWidgetMixin implemen
 
 	@Override
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(isActive());
+		imblocker$onFocusChanged(isActive());
 	}
 
 	@Inject(method = "method_25363", at = @At("TAIL"))
 	public void focusBeChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(isActive());
+		imblocker$onFocusChanged(isActive());
 	}
 	
 	@Inject(method = "setVisible", at = @At("TAIL"))
 	public void visibilityChanged(boolean isVisible, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(isActive());
+		imblocker$onFocusChanged(isActive());
 	}
 	
 	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
@@ -82,7 +82,7 @@ public abstract class TextFieldLegacyMixin extends ClickableWidgetMixin implemen
 	public void setEditable(boolean editable) {
 		if (this.editable != editable) {
 			this.editable = editable;
-			onMinecraftWidgetFocusChanged(isActive());
+			imblocker$onFocusChanged(isActive());
 		}
 	}
 

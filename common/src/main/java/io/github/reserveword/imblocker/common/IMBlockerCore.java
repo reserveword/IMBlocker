@@ -15,13 +15,29 @@ public class IMBlockerCore {
 	
 	private static final ModLoaderAccessor modLoaderAccessor;
 	
+	private static final boolean IS_IXERIS_LOADED;
+	
 	private static final Set<Runnable> deferredRunnables = new LinkedHashSet<>();
+	
+	public static void invokeOnMainThread(Runnable runnable) {
+		if(IS_IXERIS_LOADED) {
+			try {
+				ReflectionUtil.invokeMethod(Class.forName(
+						"me.decce.ixeris.threading.MainThreadDispatcher"), 
+						null, null, "runLater", new Class[] {Runnable.class}, runnable);
+			} catch (Exception e) {
+				LOGGER.fatal("[IMBlocker] Ixeris incompatible! Please report it to developer: {}", e);
+			}
+		}else {
+			runnable.run();
+		}
+	}
 	
 	public static synchronized void invokeLater(Runnable runnable) {
 		deferredRunnables.add(runnable);
 	}
 	
-	public static synchronized void flushDeferredRunnables() {
+	public static synchronized void renderStart() {
 		deferredRunnables.forEach(Runnable::run);
 		deferredRunnables.clear();
 	}
@@ -46,5 +62,6 @@ public class IMBlockerCore {
 			e.printStackTrace();
 		}
 		modLoaderAccessor = (ModLoaderAccessor) ReflectionUtil.newInstance(modLoaderAccessorCls, new Class[0]);
+		IS_IXERIS_LOADED = modLoaderAccessor.hasMod("ixeris");
 	}
 }

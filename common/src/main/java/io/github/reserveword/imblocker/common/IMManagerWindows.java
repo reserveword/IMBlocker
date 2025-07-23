@@ -73,23 +73,25 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	public void setEnglishState(boolean englishState) {
 		preferredEnglishState = englishState;
 		if (!setConversionStateThread.isScheduled) {
-			if (getConversionStatusCooldown() <= 0) {
-				syncEnglishState();
-			} else {
-				setConversionStateThread.awake();
-				setConversionStateThread.isScheduled = true;
-			}
+			setConversionStateThread.awake();
+			setConversionStateThread.isScheduled = true;
 		}
 	}
 
 	private void syncEnglishState() {
-		WinDef.HWND hwnd = getActiveWindow();
-		WinNT.HANDLE himc = ImmGetContext(hwnd);
-		if (himc != null) {
-			ImmSetConversionStatus(himc, preferredEnglishState ? 0 : 1, 0);
-		}
-		ImmReleaseContext(hwnd, himc);
-		setConversionStateThread.isScheduled = false;
+		IMBlockerCore.invokeOnMainThread(() -> {
+			if(getConversionStatusCooldown() <= 0) {
+				WinDef.HWND hwnd = getActiveWindow();
+				WinNT.HANDLE himc = ImmGetContext(hwnd);
+				if (himc != null) {
+					ImmSetConversionStatus(himc, preferredEnglishState ? 0 : 1, 0);
+				}
+				ImmReleaseContext(hwnd, himc);
+				setConversionStateThread.isScheduled = false;
+			}else {
+				setConversionStateThread.awake();
+			}
+		});
 	}
 
 	private long getConversionStatusCooldown() {

@@ -27,7 +27,7 @@ public abstract class FtbTextFieldMixin extends FtbWidgetMixin implements Minecr
 
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(this.isFocused);
+		imblocker$onFocusChanged(this.isFocused);
 	}
 	
 	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
@@ -44,7 +44,7 @@ public abstract class FtbTextFieldMixin extends FtbWidgetMixin implements Minecr
 
 	@Override
 	public void cancelFocus(CallbackInfo ci) {
-		onMinecraftWidgetFocusLost();
+		imblocker$onFocusLost();
 	}
 
 	@Inject(method = "scrollTo", at = @At("TAIL"))

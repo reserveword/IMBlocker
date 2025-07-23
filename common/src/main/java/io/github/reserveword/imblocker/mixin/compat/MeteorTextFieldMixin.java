@@ -29,7 +29,7 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin implements 
 
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(focused);
+		imblocker$onFocusChanged(focused);
 	}
 	
 	@Inject(method = "onCharTyped", at = @At("HEAD"), cancellable = true)

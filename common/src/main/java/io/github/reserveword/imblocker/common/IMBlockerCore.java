@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor.Mapping;
+import me.decce.ixeris.api.IxerisApi;
 
 public class IMBlockerCore {
 	public static final String MODID = "imblocker";
@@ -22,9 +23,7 @@ public class IMBlockerCore {
 	public static void invokeOnMainThread(Runnable runnable) {
 		if(IS_IXERIS_LOADED) {
 			try {
-				ReflectionUtil.invokeMethod(Class.forName(
-						"me.decce.ixeris.threading.MainThreadDispatcher"), 
-						null, null, "runLater", new Class[] {Runnable.class}, runnable);
+				IxerisApi.getInstance().runLaterOnMainThread(runnable);
 			} catch (Exception e) {
 				LOGGER.fatal("[IMBlocker] Ixeris incompatible! Please report it to developer: {}", e);
 			}

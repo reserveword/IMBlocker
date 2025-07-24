@@ -24,6 +24,7 @@ dependencies {
 	compileOnly "maven.modrinth:supermartijn642s-core-lib:1.1.18-forge-mc1.16"
 	compileOnlyApi "curse.maven:ftblib-$ftblib_version"
 	compileOnly "io.github.cottonmc:LibGui:$cottonlibgui_version"
+	compileOnly "maven.modrinth:ixeris:3.2.2+1.20.1-fabric"
 }
 
 java {

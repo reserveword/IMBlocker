@@ -1,3 +1,1 @@
- - 修复与 Ixeris 一起使用时本模组功能不生效的问题
- - 修复 5.4.0.x 与 Easy Anvils 的微小兼容问题
- - 原生兼容 Notes（笔记）模组
+在游戏主类访问接口的类加载阶段创建实例以避免空指针访问（[#109](https://github.com/reserveword/IMBlocker/issues/109)）

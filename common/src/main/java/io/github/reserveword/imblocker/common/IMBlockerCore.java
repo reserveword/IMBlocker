@@ -54,6 +54,10 @@ public class IMBlockerCore {
 		return modLoaderAccessor.getMapping();
 	}
 	
+	public static void registerClientTickEvent(Runnable tickEvent) {
+		modLoaderAccessor.registerClientTickEvent(tickEvent);
+	}
+	
 	static {
 		Class<?> modLoaderAccessorCls = null;
 		try {

@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import imgui.ImGuiIO;
-import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.gui.AxiomGuiMonitor;
 
 @Pseudo
@@ -25,6 +25,6 @@ public abstract class AxiomEditorUIMixin {
 			editorUIClass = Class.forName("com.moulberry.axiom.editor.EditorUI");
 		} catch (Exception e) {}
 		AxiomGuiMonitor.createInstance(imGuiIO, editorUIClass);
-		MinecraftClientAccessor.INSTANCE.registerClientTickEvent(AxiomGuiMonitor.getInstance()::tick);
+		IMBlockerCore.registerClientTickEvent(AxiomGuiMonitor.getInstance()::tick);
 	}
 }

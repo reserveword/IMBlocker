@@ -46,6 +46,7 @@ project.jar {
     }
     from (project(":forge").sourceSets.main.output) {
         include '**/ForgeCommon.class'
+        include '**/MinecraftClientAccessorImpl.class'
         include '**/mixin/**/*.class'
         exclude '**/*LegacyMixin.class'
         exclude '**/AbstractScrollWidgetMixin.class'

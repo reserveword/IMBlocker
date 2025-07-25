@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.JsonHelper;
 
@@ -27,6 +28,11 @@ public class ModLoaderAccessorImpl implements ModLoaderAccessor {
 	@Override
 	public Mapping getMapping() {
 		return Mapping.YARN;
+	}
+	
+	@Override
+	public void registerClientTickEvent(Runnable tickEvent) {
+		ClientTickEvents.START_CLIENT_TICK.register(client -> tickEvent.run());
 	}
 	
 	static {

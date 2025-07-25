@@ -7,7 +7,10 @@ import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
 import net.minecraft.DetectedVersion;
 import net.minecraft.util.GsonHelper;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.common.NeoForge;
 
 public class ModLoaderAccessorImpl implements ModLoaderAccessor {
 
@@ -28,6 +31,16 @@ public class ModLoaderAccessorImpl implements ModLoaderAccessor {
 	@Override
 	public Mapping getMapping() {
 		return Mapping.OFFICIAL;
+	}
+	
+	@Override
+	public void registerClientTickEvent(Runnable tickEvent) {
+		NeoForge.EVENT_BUS.register(new Object() {
+			@SubscribeEvent
+			public void onStartTick(ClientTickEvent.Pre e) {
+				tickEvent.run();
+			}
+		});
 	}
 	
 	static {

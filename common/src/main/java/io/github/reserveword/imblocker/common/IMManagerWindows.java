@@ -5,7 +5,6 @@ import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinNT;
 
-import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.FocusableObject;
 import io.github.reserveword.imblocker.common.gui.FocusableWidget;
@@ -79,19 +78,17 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	}
 
 	private void syncEnglishState() {
-		IMBlockerCore.invokeOnMainThread(() -> {
-			if(getConversionStatusCooldown() <= 0) {
-				WinDef.HWND hwnd = getActiveWindow();
-				WinNT.HANDLE himc = ImmGetContext(hwnd);
-				if (himc != null) {
-					ImmSetConversionStatus(himc, preferredEnglishState ? 0 : 1, 0);
-				}
-				ImmReleaseContext(hwnd, himc);
-				setConversionStateThread.isScheduled = false;
-			}else {
-				setConversionStateThread.awake();
+		if(getConversionStatusCooldown() <= 0) {
+			WinDef.HWND hwnd = getActiveWindow();
+			WinNT.HANDLE himc = ImmGetContext(hwnd);
+			if (himc != null) {
+				ImmSetConversionStatus(himc, preferredEnglishState ? 0 : 1, 0);
 			}
-		});
+			ImmReleaseContext(hwnd, himc);
+			setConversionStateThread.isScheduled = false;
+		}else {
+			setConversionStateThread.awake();
+		}
 	}
 
 	private long getConversionStatusCooldown() {
@@ -189,7 +186,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 				while (true) {
 					long cooldown = getConversionStatusCooldown();
 					if (cooldown <= 0) {
-						MinecraftClientAccessor.INSTANCE.execute(() -> syncEnglishState());
+						IMBlockerCore.invokeOnMainThread(() -> syncEnglishState());
 						break;
 					} else {
 						await(cooldown);

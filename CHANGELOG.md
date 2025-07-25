@@ -1,1 +1,3 @@
-修复 Fabric 游戏版本检测方法中漏掉的[等号](https://github.com/LitnhJacuzzi/IMBlocker/compare/95fdfc0..97349f3#diff-9e06d162918f68b78952fbb0bff96702d32c6701944743ffcad7edddfedbe301R19)
+ - 修复与 Ixeris 一起使用时本模组功能不生效的问题
+ - 修复 5.4.0.x 与 Easy Anvils 的微小兼容问题
+ - 原生兼容 Notes（笔记）模组

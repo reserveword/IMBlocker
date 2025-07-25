@@ -24,7 +24,7 @@ public final class IMManager {
 	
 	public static void setEnglishState(boolean isEN) {
 		if(IMBlockerConfig.INSTANCE.isConversionStatusApiEnabled()) {
-			INSTANCE.setEnglishState(isEN);
+			IMBlockerCore.invokeOnMainThread(() -> INSTANCE.setEnglishState(isEN));
 		}
 	}
 	

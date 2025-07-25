@@ -6,6 +6,7 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor.Mapping;
 import me.decce.ixeris.api.IxerisApi;
@@ -28,7 +29,7 @@ public class IMBlockerCore {
 				LOGGER.fatal("[IMBlocker] Ixeris incompatible! Please report it to developer: {}", e);
 			}
 		}else {
-			runnable.run();
+			MinecraftClientAccessor.INSTANCE.execute(runnable);
 		}
 	}
 	

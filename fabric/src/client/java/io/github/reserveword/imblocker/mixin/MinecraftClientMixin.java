@@ -58,7 +58,7 @@ public abstract class MinecraftClientMixin {
 	
 	@Inject(method = "render", at = @At("HEAD"))
 	public void runPreRenderTasks(boolean tick, CallbackInfo ci) {
-		IMBlockerCore.flushDeferredRunnables();
+		IMBlockerCore.renderStart();
 		if(!skipGameRender) {
 			lastGameRenderTime = System.nanoTime();
 			FocusManager.isGameRendering = true;

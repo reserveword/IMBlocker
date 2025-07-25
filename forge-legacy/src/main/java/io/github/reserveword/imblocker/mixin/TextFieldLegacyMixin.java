@@ -41,17 +41,17 @@ public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin implement
 	
 	@Override
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(canConsumeInput());
+		imblocker$onFocusChanged(canConsumeInput());
 	}
 	
 	@Inject(method = "onFocusedChanged", at = @At("TAIL"))
     public void focusBeChanged(boolean isFocused, CallbackInfo ci) {
-    	onMinecraftWidgetFocusChanged(canConsumeInput());
+    	imblocker$onFocusChanged(canConsumeInput());
     }
 	
 	@Inject(method = "setVisible", at = @At("TAIL"))
 	public void visibilityChanged(boolean isVisible, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(canConsumeInput());
+		imblocker$onFocusChanged(canConsumeInput());
 	}
 	
 	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
@@ -82,7 +82,7 @@ public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin implement
     public void setEditable(boolean editable) {
 		if(this.isEditable != editable) {
     		this.isEditable = editable;
-    		onMinecraftWidgetFocusChanged(canConsumeInput());
+    		imblocker$onFocusChanged(canConsumeInput());
     	}
     }
 

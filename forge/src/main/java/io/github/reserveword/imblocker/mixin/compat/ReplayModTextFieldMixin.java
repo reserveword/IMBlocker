@@ -40,7 +40,7 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
 
 	@Inject(method = "onFocusChanged", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(focused);
+		imblocker$onFocusChanged(focused);
 	}
 	
 	@Inject(method = "typeKey", at = @At("HEAD"), cancellable = true)

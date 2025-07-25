@@ -25,12 +25,12 @@ public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin implements
 	
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(isFocused);
+		imblocker$onFocusChanged(isFocused);
 	}
 	
 	@Override
     public void cancelFocus(CallbackInfo ci) {
-    	onMinecraftWidgetFocusLost();
+    	imblocker$onFocusLost();
     }
 	
 	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)

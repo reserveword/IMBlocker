@@ -19,24 +19,24 @@ public final class IMManager {
 	private IMManager() {}
 	
 	public static void setState(boolean on) {
-		INSTANCE.setState(on);
+		IMBlockerCore.invokeOnMainThread(() -> INSTANCE.setState(on));
 	}
 	
 	public static void setEnglishState(boolean isEN) {
 		if(IMBlockerConfig.INSTANCE.isConversionStatusApiEnabled()) {
-			INSTANCE.setEnglishState(isEN);
+			IMBlockerCore.invokeOnMainThread(() -> INSTANCE.setEnglishState(isEN));
 		}
 	}
 	
 	public static void updateCompositionWindowPos() {
 		if(IMBlockerConfig.INSTANCE.isCursorPositionTrackingEnabled()) {
-			INSTANCE.updateCompositionWindowPos();
+			IMBlockerCore.invokeOnMainThread(() -> INSTANCE.updateCompositionWindowPos());
 		}
 	}
 	
 	public static void updateCompositionFontSize() {
 		if(IMBlockerConfig.INSTANCE.isCompositionFontTweaksEnabled()) {
-			INSTANCE.updateCompositionFontSize();
+			IMBlockerCore.invokeOnMainThread(() -> INSTANCE.updateCompositionFontSize());
 		}
 	}
 	

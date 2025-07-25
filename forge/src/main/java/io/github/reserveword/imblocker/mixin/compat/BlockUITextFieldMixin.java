@@ -24,12 +24,12 @@ public abstract class BlockUITextFieldMixin extends BlockUIPaneMixin implements 
 	
 	@Inject(method = "onFocus", at = @At("TAIL"))
 	public void focusGained(CallbackInfo ci) {
-		onMinecraftWidgetFocusGained();
+		imblocker$onFocusGained();
 	}
 	
 	@Override
 	public void focusLost(CallbackInfo ci) {
-		onMinecraftWidgetFocusLost();
+		imblocker$onFocusLost();
 	}
 	
 	@Inject(method = "onKeyTyped", at = @At("HEAD"), cancellable = true)

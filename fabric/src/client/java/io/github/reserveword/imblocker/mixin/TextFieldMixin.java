@@ -40,12 +40,12 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 
 	@Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(isActive());
+		imblocker$onFocusChanged(isActive());
 	}
 	
 	@Inject(method = "setVisible", at = @At("TAIL"))
 	public void visibilityChanged(boolean isVisible, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(isActive());
+		imblocker$onFocusChanged(isActive());
 	}
 	
 	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
@@ -76,7 +76,7 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 	public void setEditable(boolean editable) {
 		if (this.editable != editable) {
 			this.editable = editable;
-			onMinecraftWidgetFocusChanged(isActive());
+			imblocker$onFocusChanged(isActive());
 		}
 	}
 

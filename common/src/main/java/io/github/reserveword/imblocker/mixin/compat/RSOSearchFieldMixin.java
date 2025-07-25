@@ -30,7 +30,7 @@ public abstract class RSOSearchFieldMixin implements MinecraftTextFieldWidget {
 	
 	@Inject(method = {"setFocused", "method_25365", "m_93692_"}, at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		onMinecraftWidgetFocusChanged(isActive());
+		imblocker$onFocusChanged(isActive());
 	}
 	
 	@Inject(method = {"charTyped", "method_25400", "m_5534_", "func_231042_a_"}, at = @At("HEAD"), cancellable = true)

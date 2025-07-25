@@ -32,12 +32,12 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 	
 	@Inject(method = "onFocusGained", at = @At("TAIL"))
 	public void onFocusGained(CallbackInfo ci) {
-		onMinecraftWidgetFocusGained();
+		imblocker$onFocusGained();
 	}
 	
 	@Override
 	public void onFocusLost(CallbackInfo ci) {
-		onMinecraftWidgetFocusLost();
+		imblocker$onFocusLost();
 	}
 	
 	@Inject(method = "onCharTyped(C)V", at = @At("HEAD"), cancellable = true, require = 0)

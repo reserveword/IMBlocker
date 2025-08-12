@@ -25,7 +25,7 @@ public class IMBlockerCore {
 		if(IS_IXERIS_LOADED) {
 			try {
 				IxerisApi.getInstance().runLaterOnMainThread(runnable);
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				LOGGER.fatal("[IMBlocker] Ixeris incompatible! Please report it to developer: {}", e);
 			}
 		}else {

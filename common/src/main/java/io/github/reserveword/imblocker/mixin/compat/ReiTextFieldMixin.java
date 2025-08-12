@@ -65,6 +65,11 @@ public abstract class ReiTextFieldMixin implements MinecraftTextFieldWidget {
 	public void onMoveCursor(int cursor, CallbackInfo ci) {
 		IMManager.updateCompositionWindowPos();
 	}
+	
+	@Override
+	public boolean getPreferredEnglishState() {
+		return getPrimaryEnglishState();
+	}
 
 	@Override
 	public Rectangle getBoundsAbs() {

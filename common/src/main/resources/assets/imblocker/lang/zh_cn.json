@@ -10,6 +10,10 @@
   "text.autoconfig.imblocker.option.basicSettings.commandInputMode": "命令输入模式",
   "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[0]": "\u00A7l检测到命令输入环境时设置英文状态的方式",
   "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[1]": "如果你的输入法不能在检测到命令环境时自动切换至英文状态\n将此项设置为“DISABLE_IM”可能会有帮助\n但请注意此模式下输入命令时无法输入中文",
+  "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState": "首选中英文状态",
+  "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[0]": "\u00A7l文本框获得焦点时输入法的初始中英文状态",
+  "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[1]": "CJK - 初始状态为中文\nENG - 初始状态为英文",
+  "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[2]": "习惯使用拼音搜索的玩家推荐将此项设置为ENG\n此设置不影响聊天栏和搜索元素较少的模组",
   
   "text.autoconfig.imblocker.option.advanceSettings": "高级设置",
   "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation": "使用模拟字符定位焦点",

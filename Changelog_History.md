@@ -1,21 +1,21 @@
-# <font color=green>v5.4.1.1</font>
+# 5.4.1.1
  - 在游戏主类访问接口的类加载阶段创建实例以避免空指针访问（[#109](https://github.com/reserveword/IMBlocker/issues/109)）
 
 <br>
 
-# <font color=blue>v5.4.1</font>
+# 5.4.1
  - 修复与 Ixeris 一起使用时本模组功能不生效的问题
  - 修复 5.4.0.x 与 Easy Anvils 的微小兼容问题
  - 原生兼容 Notes（笔记）模组
 
 <br>
 
-# <font color=green>v5.4.0.1</font>
+# 5.4.0.1
  - 修复 Fabric 游戏版本检测方法中漏掉的[等号](https://github.com/LitnhJacuzzi/IMBlocker/compare/95fdfc0..97349f3#diff-9e06d162918f68b78952fbb0bff96702d32c6701944743ffcad7edddfedbe301R19)
 
 <br>
 
-# <font color=red>**v5.4.0**</font>
+# 5.4.0
 **此版本包含重要的技术和功能更新**
 ## 修复与改进
  - 在类加载阶段创建默认配置实例以避免空指针访问（[#105](https://github.com/reserveword/IMBlocker/issues/105)）
@@ -31,13 +31,13 @@
 
 <br>
 
-# <font color=green>v5.3.1</font>
+# 5.3.1
  - 为 Forge 添加钠视频界面的兼容  
  - 过滤 JourneyMap 的全屏地图产生的无效焦点请求
 
 <br>
 
-# <font color=red>**v5.3.0**</font>
+# 5.3.0
 **⚠注意⚠：此版本更新内容较多，请仔细阅读更新日志**
 ## 修复与改进
  - **从此版本开始，所有平台统一使用 Cloth Config 管理配置项，如需更改默认配置，请安装它！**  
@@ -60,13 +60,13 @@
 
 <br>
 
-# <font color=blue>v5.2.2</font>
+# 5.2.2
  - 修复原版文本框小概率出现的无效文本光标索引导致的崩溃（[#93](https://github.com/reserveword/IMBlocker/issues/93)）  
  - 增强对多行文本框的支持（原版/FTB Library）
 
 <br>
 
-# <font color=blue>v5.2.1</font>
+# 5.2.1
  - NeoForge：修复屏幕记录功能失效的问题  
  - Fabric：支持 [LibGui](https://github.com/CottonMC/LibGui)  
  - Fabric/NeoForge：完全适配 Reese's Sodium Options  
@@ -75,14 +75,14 @@
 
 <br>
 
-# <font color=red>**v5.2.0**</font>
+# 5.2.0
  - 大幅增加版本兼容范围（包括兼容的模组）：  
 Fabric -> 1.17+  
 Forge -> 1.16.5, 1.17~1.20.4
 
 <br>
 
-# <font color=blue>v5.1.2</font>
+# 5.1.2
 ## 修复与改进
  - 修复调用FTB内部组件方法可能导致的空指针异常（[#88](https://github.com/reserveword/IMBlocker/issues/88)）  
  - 防止模组内部系统方法与被注入类的方法重名，这可能会解决一些潜在的冲突  
@@ -91,12 +91,12 @@ Forge -> 1.16.5, 1.17~1.20.4
 
 <br>
 
-# <font color=blue>v5.1.1</font>
+# v5.1.1
  - Windows：增强输入法候选框的定位功能
 
 <br>
 
-# <font color=red>**v5.1.0**</font>
+# v5.1.0
 ## 修复与改进
  - 使用标准焦点管理系统完全重写底层架构，修复所有主要漏洞  
  - 移除新架构下不再需要的配置项目  

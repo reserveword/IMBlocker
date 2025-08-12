@@ -27,7 +27,7 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 	@Shadow private String text;
 	
 	private boolean preferredEditState = true;
-	private boolean preferredEnglishState = false;
+	private boolean preferredEnglishState = getPrimaryEnglishState();
 	
 	@Unique
 	private boolean isRenderable = true;

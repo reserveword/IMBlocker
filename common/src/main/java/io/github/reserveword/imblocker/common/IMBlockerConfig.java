@@ -53,6 +53,10 @@ public class IMBlockerConfig {
 		return CommandInputMode.IM_ENG_STATE;
 	}
 	
+	public EnglishState getPrimaryEnglishState() {
+		return EnglishState.CJK;
+	}
+	
 	public boolean isCharSimulationEnabled() {
 		return false;
 	}

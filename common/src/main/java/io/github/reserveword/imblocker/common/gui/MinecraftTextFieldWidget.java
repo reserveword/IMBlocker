@@ -1,5 +1,6 @@
 package io.github.reserveword.imblocker.common.gui;
 
+import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.StringUtil;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 
@@ -8,6 +9,10 @@ public interface MinecraftTextFieldWidget extends MinecraftFocusableWidget {
 	default void setPreferredEditState(boolean state) {}
 	 
 	default void setPreferredEnglishState(boolean state) {}
+	
+	default boolean getPrimaryEnglishState() {
+		return IMBlockerConfig.INSTANCE.getPrimaryEnglishState().getBoolean();
+	}
 	
 	@Override
 	default Rectangle getBoundsAbs() {

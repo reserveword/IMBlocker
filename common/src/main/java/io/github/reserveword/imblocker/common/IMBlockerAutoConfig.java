@@ -46,6 +46,11 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	}
 	
 	@Override
+	public EnglishState getPrimaryEnglishState() {
+		return basicSettings.primaryEnglishState;
+	}
+	
+	@Override
 	public boolean isCharSimulationEnabled() {
 		return advanceSettings.enableCharSimulation;
 	}
@@ -96,6 +101,10 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 		@ConfigEntry.Gui.Tooltip(count = 2)
 		@ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
 		CommandInputMode commandInputMode = CommandInputMode.IM_ENG_STATE;
+		
+		@ConfigEntry.Gui.Tooltip(count = 3)
+		@ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
+		EnglishState primaryEnglishState = EnglishState.CJK;
 	}
 	
 	static class AdvanceSettings {

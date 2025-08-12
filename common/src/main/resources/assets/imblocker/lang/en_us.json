@@ -9,7 +9,11 @@
   "text.autoconfig.imblocker.option.basicSettings.recoveredScreens.@Tooltip": "Here lists all recorded Screens for whitelist editing.",
   "text.autoconfig.imblocker.option.basicSettings.commandInputMode": "Command Input Mode",
   "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[0]": "\u00A7lThe method of setting English state when typing command",
-  "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[1]": "If your input method can't auto-switch to English state when typing command,\nset this option to \"DISABLE_IM\" may help,\nbut note that you can only type English in this mode.",
+  "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[1]": "If your input method can't auto-switch to English state when typing command,\nset this option to \"DISABLE_IM\" may help,\nbut note that you can only type English in command in this mode.",
+  "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState": "Primary English State",
+  "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[0]": "\u00A7lThe initial English state of the IME when a text field focused.",
+  "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[1]": "This option is mainly for Chinese users who are used to search with JECh.",
+  "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[2]": "This option doesn't affect chat field and mods with few search scenarios.",
   
   "text.autoconfig.imblocker.option.advanceSettings": "Advance Settings",
   "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation": "Enable Char Simulation",

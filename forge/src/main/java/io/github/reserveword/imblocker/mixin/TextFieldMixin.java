@@ -28,7 +28,7 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
 	@Shadow private String value;
 
 	private boolean preferredEditState = true;
-	private boolean preferredEnglishState = false;
+	private boolean preferredEnglishState = getPrimaryEnglishState();
 
 	@Unique
 	private boolean isRenderable = true;

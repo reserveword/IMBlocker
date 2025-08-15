@@ -56,16 +56,22 @@ final class MinecraftFocusContext extends FocusContainer {
 	 * Locate the <b>real</b> ultimate destination of keyboard inputs through
 	 * one of these approaches:
 	 * 
+	 * 
 	 * <h3>Availability Comparator</h3>
+	 * 
 	 * <p>Collect all {@code focusCandidates} that are {@link FocusableWidget#isRenderable() renderable}
 	 * and promote the one that requested the focus most recently.
+	 * 
 	 * <p>This approach is <b><i>not</i></b> 100% reliable.
 	 * 
+	 * 
 	 * <h3>Char Simulation</h3>
+	 * 
 	 * <p>Send a {@code NUL} char to the game window using internal Minecraft
 	 * keyboard handler (equivalent to physical input) that will eventually
 	 * passed to the {@code charTyped} method of the <b>real</b> focus owner,
 	 * which is injected a callback to pass this result to the container.
+	 * 
 	 * <p>This approach <b><i>can</i></b> 100% accurately locate the real focus owner.
 	 * Generally, the probe char will be safely absorbed by the injection, but
 	 * may leak to the screen if there's no focus owner located and the screen

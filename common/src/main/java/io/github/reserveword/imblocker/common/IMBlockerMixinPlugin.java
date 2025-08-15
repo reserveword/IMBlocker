@@ -8,6 +8,8 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+import com.sun.jna.Platform;
+
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor.Mapping;
 
 public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
@@ -58,6 +60,10 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		validMixins.add("MinecraftClientMixin");
 		validMixins.add("WindowMixin");
 		validMixins.add(isOfficialMapping ? "KeyboardHandlerAccessor" : "KeyboardAccessor");
+		
+		if(Platform.isLinux()) {
+			validMixins.add("LinuxKeyboardPatch");
+		}
 		
 		if(IMBlockerCore.isGameVersionReached(762/*1.19.4*/)) {
 			validMixins.add(isOfficialMapping ? "AbstractContainerEventHandlerMixin" : "AbstractParentElementMixin");

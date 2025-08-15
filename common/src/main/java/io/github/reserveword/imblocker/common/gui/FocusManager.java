@@ -1,5 +1,9 @@
 package io.github.reserveword.imblocker.common.gui;
 
+import com.sun.jna.Platform;
+
+import io.github.reserveword.imblocker.common.LinuxKeyCallbackMonitor;
+
 /**
  * <p>This class is the core of <b>IMBlocker's focus management system</b>,
  * holds all global focus-related variables and acts as the root of Minecraft
@@ -82,6 +86,9 @@ public class FocusManager {
 			focusedContainer.deliverFocus();
 		}else {
 			focusedContainer.lostFocus();
+			if(Platform.isLinux()) {
+				LinuxKeyCallbackMonitor.resetConsistency();
+			}
 		}
 	}
 	

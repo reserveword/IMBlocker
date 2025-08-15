@@ -26,6 +26,8 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
 	@Shadow private int displayPos;
 	@Shadow private int cursorPos;
 	@Shadow private String value;
+	
+	@Shadow private boolean canLoseFocus;
 
 	private boolean preferredEditState = true;
 	private boolean preferredEnglishState = getPrimaryEnglishState();

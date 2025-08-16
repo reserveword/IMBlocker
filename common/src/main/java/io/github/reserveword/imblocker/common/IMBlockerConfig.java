@@ -72,4 +72,32 @@ public class IMBlockerConfig {
 	public boolean isCompositionFontTweaksEnabled() {
 		return true;
 	}
+	
+	public boolean isLinuxKeyboardPatchEnabled() {
+		return true;
+	}
+	
+	public String getIBusOnArgName() {
+		return "libpinyin";
+	}
+	
+	public String getIBusOffArgName() {
+		return "xkb:us::eng";
+	}
+	
+	public String getIBusOnStateName() {
+		return getIBusOnArgName();
+	}
+	
+	public String getFcitx5OnArgName() {
+		return "-o";
+	}
+	
+	public String getFcitx5OffArgName() {
+		return "-c";
+	}
+	
+	public String getFcitx5OnStateName() {
+		return "2";
+	}
 }

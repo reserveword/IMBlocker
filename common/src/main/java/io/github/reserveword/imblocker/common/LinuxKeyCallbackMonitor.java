@@ -4,6 +4,10 @@ public abstract class LinuxKeyCallbackMonitor {
 	private static boolean isKeyConsistentWithChar = true;
 	
 	public static boolean evaluateKey(int key, int action, int modifiers) {
+		if(!IMBlockerConfig.INSTANCE.isLinuxKeyboardPatchEnabled()) {
+			return true;
+		}
+		
 		char c = (char) key;
 		boolean isAlphabet = c >= 'A' && c <= 'Z';
 		if(action != 0) {

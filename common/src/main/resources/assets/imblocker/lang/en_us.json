@@ -24,5 +24,20 @@
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi": "Allow ConversionStatus API",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "The API that controls the English state.\n\u00A77If disabled, IM_ENG_STATE command input mode will not work.",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCursorPositionTracking": "Caret Position Tracking",
-  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCompositionFontTweaks": "Composition Font Tweaks"
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCompositionFontTweaks": "Composition Font Tweaks",
+  
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings": "Linux Compatibility Settings",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch": "Enable callback-level Keyboard Patch",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[0]": "Apply the patch that prevent non-character keys from being sent to the game while candidates showing",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[1]": "If the candidate window is closed by pre-edit characters being cleared by Backspaces,\nthe game will not be able to process non-character keys.\nIn this case, press Esc or type any character to fix it.",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOnArgName": "IBus Enable Command Argument",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOnArgName.@Tooltip": "To determine it:\nExecute \"ibus engine <this argument>\" command in terminal will enable the IME.",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOffArgName": "IBus Disable Command Argument",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOffArgName.@Tooltip": "To determine it:\nExecute \"ibus engine <this argument>\" command in terminal will disable the IME.",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnArgName": "Fcitx5 Enable Command Argument",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnArgName.@Tooltip": "To determine it:\nExecute \"fcitx5-remote <this argument>\" command in terminal will enable the IME.",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OffArgName": "Fcitx5 Disable Command Argument",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OffArgName.@Tooltip": "To determine it:\nExecute \"fcitx5-remote <this argument>\" command in terminal will disable the IME.",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnStateName": "Fcitx5 Enabled Identifier",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnStateName.@Tooltip": "To determine it:\nExecute \"fcitx5-remote\" command in terminal will return <this argument>."
 }

@@ -12,21 +12,13 @@ import net.minecraft.client.KeyboardListener;
 public abstract class LinuxKeyboardPatch {
 	@Inject(method = "keyPress", at = @At("HEAD"), cancellable = true)
 	private void onKeyInvoked(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
-		char c = (char) key;
-		if(action != 0) {
-			if(c >= 'A' && c <= 'Z') {
-				LinuxKeyCallbackMonitor.glfwPrintableKeyPressed();
-			}else if(key == 256) {
-				LinuxKeyCallbackMonitor.resetConsistency();
-			}
-		}
-		if((c < 'A' || c > 'Z') && !LinuxKeyCallbackMonitor.isKeyConsistentWithChar()) {
+		if(!LinuxKeyCallbackMonitor.evaluateKey(key, action, modifiers)) {
 			ci.cancel();
 		}
 	}
 	
 	@Inject(method = "charTyped", at = @At("HEAD"))
 	private void onCharInvoked(long window, int codePoint, int modifiers, CallbackInfo ci) {
-		LinuxKeyCallbackMonitor.glfwCharTyped();
+		LinuxKeyCallbackMonitor.resetConsistency();
 	}
 }

@@ -1,5 +1,7 @@
 package io.github.reserveword.imblocker.mixin;
 
+import java.util.Objects;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,6 +29,9 @@ public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin implement
 	@Shadow private int cursorPos;
 	@Shadow private String value;
 
+	@Unique
+	private String imblocker$lastText;
+	
 	private boolean preferredEditState = true;
 	private boolean preferredEnglishState = getPrimaryEnglishState();
 
@@ -68,7 +73,12 @@ public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin implement
 	
 	@Inject(method = "onValueChange", at = @At("TAIL"))
     public void onTextChanged(String newValue, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		//There is already a mod that invoke this method 8k times per second BUT DO NOTHING 
+		//thus these checks are necessary.
+		if(!Objects.equals(imblocker$lastText, newValue) && isTrulyFocused()) {
+			imblocker$lastText = newValue;
+			IMManager.updateCompositionWindowPos();
+		}
     }
 	
 	@Override

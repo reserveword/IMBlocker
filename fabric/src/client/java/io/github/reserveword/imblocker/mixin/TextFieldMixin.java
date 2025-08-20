@@ -65,7 +65,7 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 		IMManager.updateCompositionWindowPos();
 	}
 	
-	@Inject(method = "isVisible", at = @At("TAIL"))
+	@Override
 	public void updateLastRenderTime(CallbackInfoReturnable<Boolean> ci) {
 		if(FocusManager.isGameRendering) {
 			lastRenderTime = System.nanoTime();

@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
@@ -23,6 +24,9 @@ public abstract class ClickableWidgetMixin implements MinecraftFocusableWidget {
 	
 	@Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {}
+	
+	@Inject(method = "isFocused", at = @At("TAIL"))
+	public void updateLastRenderTime(CallbackInfoReturnable<Boolean> ci) {}
 	
 	@Override
 	public Rectangle getBoundsAbs() {

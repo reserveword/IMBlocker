@@ -15,8 +15,9 @@ public abstract class LinuxKeyCallbackMonitor {
 				isKeyConsistentWithChar = false;
 			}
 		}else {
-			if(key == 256) {
+			if(key == 256 && !isKeyConsistentWithChar) {
 				isKeyConsistentWithChar = true;
+				return false;
 			}
 		}
 		return isAlphabet || isKeyConsistentWithChar;

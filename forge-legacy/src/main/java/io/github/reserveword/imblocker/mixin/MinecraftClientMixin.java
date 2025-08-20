@@ -4,7 +4,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
@@ -52,16 +54,22 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "runTick", at = @At("HEAD"))
 	public void runPreRenderTasks(boolean tick, CallbackInfo ci) {
 		IMBlockerCore.renderStart();
-		if(!noRender) {
-			lastGameRenderTime = System.nanoTime();
-			FocusManager.isGameRendering = true;
-		}
 	}
 	
-	@Inject(method = "runTick", at = @At("TAIL"))
-	public void checkFocusCandidatesVisibility(boolean tick, CallbackInfo ci) {
-		FocusContainer.MINECRAFT.checkFocusCandidatesVisibility(lastGameRenderTime);
-		FocusManager.isGameRendering = false;
+    @ModifyConstant(method = "runTick", constant = @Constant(stringValue = "gameRenderer"))
+	public String recordGameRenderStartTime(String location) {
+		lastGameRenderTime = System.nanoTime();
+		FocusManager.isGameRendering = true;
+		return location;
+	}
+	
+	@Inject(method = "runTick", at = @At(value = "INVOKE", target = 
+			"Lnet/minecraft/profiler/IProfiler;pop()V"))
+	public void captureGameRenderEnd(boolean tick, CallbackInfo ci) {
+		if(FocusManager.isGameRendering) {
+			FocusManager.isGameRendering = false;
+			FocusContainer.MINECRAFT.checkFocusCandidatesVisibility(lastGameRenderTime);
+		}
 	}
     
     private boolean isScreenInWhiteList(Screen screen) {

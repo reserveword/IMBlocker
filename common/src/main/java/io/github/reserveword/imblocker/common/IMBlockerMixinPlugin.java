@@ -154,9 +154,5 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		if(IMBlockerCore.hasMod("notes")) {
 			validMixins.add("compat.NotesTextFieldMixin");
 		}
-		
-		if(IMBlockerCore.hasMod("easyanvils")) {
-			validMixins.add("compat.EasyAnvilsTextFieldMixin");
-		}
 	}
 }

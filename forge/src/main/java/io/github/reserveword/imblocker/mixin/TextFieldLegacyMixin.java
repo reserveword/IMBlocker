@@ -71,7 +71,7 @@ public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin implement
 		IMManager.updateCompositionWindowPos();
 	}
 	
-	@Inject(method = "isVisible", at = @At("TAIL"))
+	@Override
 	public void updateLastRenderTime(CallbackInfoReturnable<Boolean> ci) {
 		if(FocusManager.isGameRendering) {
 			lastRenderTime = System.nanoTime();

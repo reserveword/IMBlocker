@@ -46,7 +46,8 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
 [LibGui](https://github.com/CottonMC/LibGui)  
 [Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)  
 [BlockUI](https://github.com/ldtteam/BlockUI)  
-[SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)
+[SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)  
+[Notes](https://github.com/MattCzyr/Notes)
 
 ## 致谢
 

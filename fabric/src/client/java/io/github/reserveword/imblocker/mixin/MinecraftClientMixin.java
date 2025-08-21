@@ -4,9 +4,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
@@ -60,11 +58,10 @@ public abstract class MinecraftClientMixin {
 		IMBlockerCore.renderStart();
 	}
 	
-	@ModifyConstant(method = "render", constant = @Constant(stringValue = "gameRenderer"))
-	public String recordGameRenderStartTime(String location) {
+	@Inject(method = "render", at = @At(value = "CONSTANT", args = "stringValue=gameRenderer"))
+	public void recordGameRenderStartTime(boolean tick, CallbackInfo ci) {
 		lastGameRenderTime = System.nanoTime();
 		FocusManager.isGameRendering = true;
-		return location;
 	}
 	
 	@Inject(method = "render", at = @At(value = "INVOKE", target = 

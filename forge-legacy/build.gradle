@@ -75,7 +75,6 @@ tasks.named('jar', Jar).configure {
         exclude '**/FtbTextFieldMixin.class'
         exclude '**/*Axiom*.class'
         exclude '**/Meteor*.class'
-        exclude '**/NotesTextFieldMixin.class'
     }
 
     manifest {

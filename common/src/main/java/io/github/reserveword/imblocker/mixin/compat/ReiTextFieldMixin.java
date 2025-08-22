@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
@@ -33,6 +32,9 @@ public abstract class ReiTextFieldMixin implements MinecraftTextFieldWidget {
 	@Shadow protected int firstCharacterIndex;
 	@Shadow protected int cursorPos;
 	@Shadow private String text;
+	
+	private final SinglelineCursorInfo imblocker$cursorInfo = 
+			new SinglelineCursorInfo(hasBorder, 0, firstCharacterIndex, cursorPos, text);
 
 	@Inject(method = {"setFocused", "method_25365", "m_93692_"}, at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
@@ -58,12 +60,22 @@ public abstract class ReiTextFieldMixin implements MinecraftTextFieldWidget {
 
 	@Inject(method = "onChanged", at = @At("TAIL"))
 	public void onTextChanged(String newText, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		imblocker$onCursorChanged();
 	}
 
 	@Inject(method = "moveCursorTo", at = @At("TAIL"))
 	public void onMoveCursor(int cursor, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		imblocker$onCursorChanged();
+	}
+	
+	@Override
+	public boolean updateCursorInfo() {
+		return imblocker$cursorInfo.updateCursorInfo(hasBorder, bounds.height, firstCharacterIndex, cursorPos, text);
+	}
+
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return imblocker$cursorInfo;
 	}
 	
 	@Override
@@ -74,10 +86,5 @@ public abstract class ReiTextFieldMixin implements MinecraftTextFieldWidget {
 	@Override
 	public Rectangle getBoundsAbs() {
 		return new Rectangle(getGuiScale(), bounds.x, bounds.y, bounds.width, bounds.height);
-	}
-
-	@Override
-	public SinglelineCursorInfo getCursorInfo() {
-		return new SinglelineCursorInfo(hasBorder, bounds.height, firstCharacterIndex, cursorPos, text);
 	}
 }

@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
@@ -26,7 +25,7 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 	@Shadow private int selectionStart;
 	@Shadow private String text;
 	
-	private final SinglelineCursorInfo cursorInfo = new SinglelineCursorInfo(
+	private final SinglelineCursorInfo imblocker$cursorInfo = new SinglelineCursorInfo(
 			drawsBackground, height, firstCharacterIndex, selectionStart, text);
 	
 	private boolean preferredEditState = true;
@@ -65,19 +64,17 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 
 	@Inject(method = "onChanged", at = @At("TAIL"))
 	public void onTextChanged(String newText, CallbackInfo ci) {
-		if(updateCursorInfo() && isTrulyFocused()) {
-			IMManager.updateCompositionWindowPos();
-		}
+		imblocker$onCursorChanged();
 	}
 	
 	@Override
 	public boolean updateCursorInfo() {
-		return cursorInfo.updateCursorInfo(drawsBackground, height, firstCharacterIndex, selectionStart, text);
+		return imblocker$cursorInfo.updateCursorInfo(drawsBackground, height, firstCharacterIndex, selectionStart, text);
 	}
 
 	@Override
 	public SinglelineCursorInfo getCursorInfo() {
-		return cursorInfo;
+		return imblocker$cursorInfo;
 	}
 	
 	@Override

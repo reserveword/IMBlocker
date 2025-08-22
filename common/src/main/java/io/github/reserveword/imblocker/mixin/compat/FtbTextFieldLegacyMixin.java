@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import dev.ftb.mods.ftblibrary.ui.TextBox;
 import dev.ftb.mods.ftblibrary.ui.input.KeyModifiers;
-import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
@@ -25,7 +24,8 @@ public abstract class FtbTextFieldLegacyMixin extends FtbWidgetMixin implements 
 	@Shadow
 	private boolean isFocused;
 	
-	private final SinglelineCursorInfo cursorInfo = new SinglelineCursorInfo(true, height, lineScrollOffset, cursorPosition, text);
+	private final SinglelineCursorInfo imblocker$cursorInfo = 
+			new SinglelineCursorInfo(true, height, lineScrollOffset, cursorPosition, text);
 	
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
@@ -51,18 +51,16 @@ public abstract class FtbTextFieldLegacyMixin extends FtbWidgetMixin implements 
 
 	@Inject(method = "setSelectionPos", at = @At("TAIL"))
 	public void onCursorPosChanged(int position, CallbackInfo ci) {
-		if(updateCursorInfo() && isTrulyFocused()) {
-			IMManager.updateCompositionWindowPos();
-		}
+		imblocker$onCursorChanged();
 	}
 
 	@Override
 	public boolean updateCursorInfo() {
-		return cursorInfo.updateCursorInfo(true, height, lineScrollOffset, cursorPosition, text);
+		return imblocker$cursorInfo.updateCursorInfo(true, height, lineScrollOffset, cursorPosition, text);
 	}
 
 	@Override
 	public SinglelineCursorInfo getCursorInfo() {
-		return cursorInfo;
+		return imblocker$cursorInfo;
 	}
 }

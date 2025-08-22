@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.supermartijn642.core.gui.widget.premade.TextFieldWidget;
 
-import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
@@ -21,6 +20,9 @@ public abstract class SM642TextFieldMixin extends SM642WidgetMixin implements Mi
 	@Shadow private String text;
 	@Shadow protected int lineScrollOffset;
 	@Shadow protected int cursorPosition;
+	
+	private final SinglelineCursorInfo imblocker$cursorInfo = 
+			new SinglelineCursorInfo(true, height, lineScrollOffset, cursorPosition, text);
 	
 	@Shadow
 	public abstract boolean canWrite();
@@ -44,11 +46,16 @@ public abstract class SM642TextFieldMixin extends SM642WidgetMixin implements Mi
 	
 	@Inject(method = "update", at = @At("TAIL"))
 	public void onUpdate(CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		imblocker$onCursorChanged();
+	}
+	
+	@Override
+	public boolean updateCursorInfo() {
+		return imblocker$cursorInfo.updateCursorInfo(true, height, lineScrollOffset, cursorPosition, text);
 	}
 	
 	@Override
 	public SinglelineCursorInfo getCursorInfo() {
-		return new SinglelineCursorInfo(true, height, lineScrollOffset, cursorPosition, text);
+		return imblocker$cursorInfo;
 	}
 }

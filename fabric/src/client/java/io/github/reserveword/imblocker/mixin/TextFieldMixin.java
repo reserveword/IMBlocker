@@ -1,7 +1,5 @@
 package io.github.reserveword.imblocker.mixin;
 
-import java.util.Objects;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,8 +26,8 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 	@Shadow private int selectionStart;
 	@Shadow private String text;
 	
-	@Unique
-	private String imblocker$lastText;
+	private final SinglelineCursorInfo cursorInfo = new SinglelineCursorInfo(
+			drawsBackground, height, firstCharacterIndex, selectionStart, text);
 	
 	private boolean preferredEditState = true;
 	private boolean preferredEnglishState = getPrimaryEnglishState();
@@ -67,12 +65,19 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 
 	@Inject(method = "onChanged", at = @At("TAIL"))
 	public void onTextChanged(String newText, CallbackInfo ci) {
-		//There is already a mod that invoke this method 8k times per second BUT DO NOTHING 
-		//thus these checks are necessary.
-		if(!Objects.equals(imblocker$lastText, newText) && isTrulyFocused()) {
-			imblocker$lastText = newText;
+		if(updateCursorInfo() && isTrulyFocused()) {
 			IMManager.updateCompositionWindowPos();
 		}
+	}
+	
+	@Override
+	public boolean updateCursorInfo() {
+		return cursorInfo.updateCursorInfo(drawsBackground, height, firstCharacterIndex, selectionStart, text);
+	}
+
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return cursorInfo;
 	}
 	
 	@Override
@@ -118,11 +123,6 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 	@Override
 	public boolean getPreferredEnglishState() {
 		return preferredEnglishState;
-	}
-
-	@Override
-	public SinglelineCursorInfo getCursorInfo() {
-		return new SinglelineCursorInfo(drawsBackground, height, firstCharacterIndex, selectionStart, text);
 	}
 	
 	@Override

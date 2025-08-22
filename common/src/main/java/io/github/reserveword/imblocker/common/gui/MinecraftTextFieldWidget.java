@@ -6,6 +6,12 @@ import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 
 public interface MinecraftTextFieldWidget extends MinecraftFocusableWidget {
 	
+	@Override
+	default void deliverFocus() {
+		updateCursorInfo();
+		MinecraftFocusableWidget.super.deliverFocus();
+	}
+	
 	default void setPreferredEditState(boolean state) {}
 	 
 	default void setPreferredEnglishState(boolean state) {}
@@ -28,6 +34,10 @@ public interface MinecraftTextFieldWidget extends MinecraftFocusableWidget {
 				StringUtil.getSubstring(cursorInfo.text, cursorInfo.cursorLineBeginIndex, cursorInfo.cursor));
 		int caretY = cursorInfo.hasBorder ? (cursorInfo.widgetHeight - getFontHeight()) / 2 : 0;
     	return new Point(getGuiScale(), caretX, caretY);
+	}
+	
+	default boolean updateCursorInfo() {
+		return true;
 	}
 
 	SinglelineCursorInfo getCursorInfo();

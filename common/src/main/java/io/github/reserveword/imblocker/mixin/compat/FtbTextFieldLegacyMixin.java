@@ -25,6 +25,8 @@ public abstract class FtbTextFieldLegacyMixin extends FtbWidgetMixin implements 
 	@Shadow
 	private boolean isFocused;
 	
+	private final SinglelineCursorInfo cursorInfo = new SinglelineCursorInfo(true, height, lineScrollOffset, cursorPosition, text);
+	
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
 		imblocker$onFocusChanged(this.isFocused);
@@ -49,11 +51,18 @@ public abstract class FtbTextFieldLegacyMixin extends FtbWidgetMixin implements 
 
 	@Inject(method = "setSelectionPos", at = @At("TAIL"))
 	public void onCursorPosChanged(int position, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		if(updateCursorInfo() && isTrulyFocused()) {
+			IMManager.updateCompositionWindowPos();
+		}
+	}
+
+	@Override
+	public boolean updateCursorInfo() {
+		return cursorInfo.updateCursorInfo(true, height, lineScrollOffset, cursorPosition, text);
 	}
 
 	@Override
 	public SinglelineCursorInfo getCursorInfo() {
-		return new SinglelineCursorInfo(true, height, lineScrollOffset, cursorPosition, text);
+		return cursorInfo;
 	}
 }

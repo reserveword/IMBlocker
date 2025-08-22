@@ -24,6 +24,8 @@ public abstract class FtbTextFieldMixin extends FtbWidgetMixin implements Minecr
 	
 	@Shadow
 	private boolean isFocused;
+	
+	private final SinglelineCursorInfo cursorInfo = new SinglelineCursorInfo(true, height, displayPos, cursorPos, text);
 
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
@@ -49,11 +51,18 @@ public abstract class FtbTextFieldMixin extends FtbWidgetMixin implements Minecr
 
 	@Inject(method = "scrollTo", at = @At("TAIL"))
 	public void onCursorPosChanged(int pos, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		if(updateCursorInfo() && isTrulyFocused()) {
+			IMManager.updateCompositionWindowPos();
+		}
+	}
+	
+	@Override
+	public boolean updateCursorInfo() {
+		return cursorInfo.updateCursorInfo(true, height, displayPos, cursorPos, text);
 	}
 
 	@Override
 	public SinglelineCursorInfo getCursorInfo() {
-		return new SinglelineCursorInfo(true, height, displayPos, cursorPos, text);
+		return cursorInfo;
 	}
 }

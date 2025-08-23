@@ -1,7 +1,6 @@
 package io.github.reserveword.imblocker.common.gui;
 
 public abstract class CursorInfo {
-
 	public int cursorLineBeginIndex;
 	public int cursor;
 	public String text;

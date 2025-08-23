@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
@@ -24,6 +23,9 @@ public abstract class RSOSearchFieldMixin implements MinecraftTextFieldWidget {
 	@Shadow protected String text;
 	@Shadow private int firstCharacterIndex;
 	@Shadow private int selectionStart;
+	
+	private final SinglelineCursorInfo imblocker$cursorInfo = 
+			new SinglelineCursorInfo(true, 0, firstCharacterIndex, selectionStart, text);
 	
 	@Shadow(aliases = {"method_37303", "m_142518_"})
 	public abstract boolean isActive();
@@ -47,7 +49,19 @@ public abstract class RSOSearchFieldMixin implements MinecraftTextFieldWidget {
 	
 	@Inject(method = "onChanged", at = @At("TAIL"))
 	public void onTextChanged(String newText, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		imblocker$onCursorChanged();
+	}
+	
+	@Override
+	public boolean updateCursorInfo() {
+		Object dim = ReflectionUtil.getFieldValue(getClass(), this, Object.class, "dim");
+		int height = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "height");
+		return imblocker$cursorInfo.updateCursorInfo(true, height, firstCharacterIndex, selectionStart, text);
+	}
+	
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return imblocker$cursorInfo;
 	}
 	
 	@Override
@@ -58,13 +72,6 @@ public abstract class RSOSearchFieldMixin implements MinecraftTextFieldWidget {
 		int width = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "width");
 		int height = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "height");
 		return new Rectangle(getGuiScale(), x, y, width, height);
-	}
-	
-	@Override
-	public SinglelineCursorInfo getCursorInfo() {
-		Object dim = ReflectionUtil.getFieldValue(getClass(), this, Object.class, "dim");
-		int height = ReflectionUtil.getFieldValue(dim.getClass(), dim, int.class, "height");
-		return new SinglelineCursorInfo(true, height, firstCharacterIndex, selectionStart, text);
 	}
 	
 	@Override

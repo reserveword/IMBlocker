@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import dev.ftb.mods.ftblibrary.ui.MultilineTextBox;
 import dev.ftb.mods.ftblibrary.ui.input.KeyModifiers;
-import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.accessor.FtbMultilineTextFieldAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
@@ -22,6 +21,8 @@ public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin implements
 	
 	@Shadow
 	private boolean isFocused;
+	
+	private final MultilineCursorInfo imblocker$cursorInfo = new MultilineCursorInfo(0, 0, 0, 0, "");
 	
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
@@ -47,12 +48,12 @@ public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin implements
 	
 	@Inject(method = "scrollToCursor", at = @At("TAIL"))
 	public void onCursorChange(CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		imblocker$onCursorChanged();
 	}
 	
 	@Inject(method = "recalculateHeight", at = @At("TAIL"))
 	public void onRecalculateHeight(CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		imblocker$onCursorChanged();
 	}
 	
 	@Override
@@ -64,8 +65,13 @@ public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin implements
 	}
 	
 	@Override
-	public MultilineCursorInfo getCursorInfo() {
+	public boolean updateCursorInfo() {
 		double scrollY = parent != null ? parent.getScrollY() : 0;
-		return ((FtbMultilineTextFieldAccessor) this).getCursorInfo(scrollY);
+		return ((FtbMultilineTextFieldAccessor) this).updateCursorInfo(imblocker$cursorInfo, scrollY);
+	}
+	
+	@Override
+	public MultilineCursorInfo getCursorInfo() {
+		return imblocker$cursorInfo;
 	}
 }

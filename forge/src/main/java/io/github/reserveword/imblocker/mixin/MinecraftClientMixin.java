@@ -24,9 +24,6 @@ public abstract class MinecraftClientMixin {
 	@Shadow
 	private Window window;
 	
-	@Shadow
-	private boolean noRender;
-	
 	@Unique
 	private long lastGameRenderTime = 0;
 	
@@ -60,16 +57,21 @@ public abstract class MinecraftClientMixin {
 	@Inject(method = "runTick", at = @At("HEAD"))
 	public void runPreRenderTasks(boolean tick, CallbackInfo ci) {
 		IMBlockerCore.renderStart();
-		if(!noRender) {
-			lastGameRenderTime = System.nanoTime();
-			FocusManager.isGameRendering = true;
-		}
 	}
 	
-	@Inject(method = "runTick", at = @At("TAIL"))
-	public void checkFocusCandidatesVisibility(boolean tick, CallbackInfo ci) {
-		FocusContainer.MINECRAFT.checkFocusCandidatesVisibility(lastGameRenderTime);
-		FocusManager.isGameRendering = false;
+	@Inject(method = "runTick", at = @At(value = "CONSTANT", args = "stringValue=gameRenderer"))
+	public void recordGameRenderStartTime(boolean tick, CallbackInfo ci) {
+		lastGameRenderTime = System.nanoTime();
+		FocusManager.isGameRendering = true;
+	}
+	
+	@Inject(method = "runTick", at = @At(value = "INVOKE", target = 
+			"Lnet/minecraft/util/profiling/ProfilerFiller;pop()V"))
+	public void captureGameRenderEnd(boolean tick, CallbackInfo ci) {
+		if(FocusManager.isGameRendering) {
+			FocusManager.isGameRendering = false;
+			FocusContainer.MINECRAFT.checkFocusCandidatesVisibility(lastGameRenderTime);
+		}
 	}
 
 	private boolean isScreenInWhiteList(Screen screen) {

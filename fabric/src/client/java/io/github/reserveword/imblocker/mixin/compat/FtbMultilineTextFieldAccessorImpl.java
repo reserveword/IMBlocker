@@ -16,9 +16,9 @@ public abstract class FtbMultilineTextFieldAccessorImpl implements FtbMultilineT
 	EditBox textField;
 	
 	@Override
-	public MultilineCursorInfo getCursorInfo(double scrollY) {
+	public boolean updateCursorInfo(MultilineCursorInfo cursorInfo, double scrollY) {
 		int cursorLineIndex = textField.getCurrentLineIndex();
-		return new MultilineCursorInfo(cursorLineIndex, scrollY, 
+		return cursorInfo.updateCursorInfo(cursorLineIndex, scrollY, 
 				((SubstringAccessor) (Object) textField.getLine(cursorLineIndex)).getBeginIndex(), 
 				textField.getCursor(), textField.getText());
 	}

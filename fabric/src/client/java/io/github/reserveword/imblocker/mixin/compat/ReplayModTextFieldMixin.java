@@ -3,6 +3,7 @@ package io.github.reserveword.imblocker.mixin.compat;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -26,10 +27,7 @@ import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 @Pseudo
 @Mixin(targets = "com.replaymod.lib.de.johni0702.minecraft.gui.element.AbstractGuiTextField", remap = false)
 public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidget {
-	
-	private Rectangle bounds;
-	private int lastCursorPos;
-	private int lastOffset;
+	@Unique private Rectangle bounds;
 	
 	@Shadow private String text;
 	@Shadow private int cursorPos;
@@ -37,6 +35,9 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
 	
 	@Shadow
 	private boolean focused;
+	
+	private final SinglelineCursorInfo imblocker$cursorInfo = 
+			new SinglelineCursorInfo(true, 0, currentOffset, cursorPos, text);
 
 	@Inject(method = "onFocusChanged", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
@@ -60,10 +61,11 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
 	public void updateCaretPos(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo, CallbackInfo ci) {
 		Point position = getPosition(renderer);
 		Rectangle currentBounds = new Rectangle(position.x(), position.y(), size.getWidth(), size.getHeight());
-		if(!currentBounds.equals(bounds) || (lastCursorPos != cursorPos) || (lastOffset != currentOffset)) {
+		boolean boundsChanged;
+		if(boundsChanged = !currentBounds.equals(bounds)) {
 			bounds = currentBounds;
-			lastCursorPos = cursorPos;
-			lastOffset = currentOffset;
+		}
+		if(updateCursorInfo() || boundsChanged) {
 			IMManager.updateCompositionWindowPos();
 		}
 	}
@@ -85,9 +87,15 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
 	public Rectangle getBoundsAbs() {
 		return bounds != null ? bounds.derive(getGuiScale()) : MinecraftTextFieldWidget.super.getBoundsAbs();
 	}
+	
+	@Override
+	public boolean updateCursorInfo() {
+		int height = bounds != null ? bounds.height() : 0;
+		return imblocker$cursorInfo.updateCursorInfo(true, height, currentOffset, cursorPos, text);
+	}
 
 	@Override
 	public SinglelineCursorInfo getCursorInfo() {
-		return bounds != null ? new SinglelineCursorInfo(true, bounds.height(), currentOffset, cursorPos, text) : null;
+		return imblocker$cursorInfo;
 	}
 }

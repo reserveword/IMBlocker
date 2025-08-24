@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
@@ -25,6 +24,9 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 	@Shadow private int firstCharacterIndex;
 	@Shadow private int selectionStart;
 	@Shadow private String text;
+	
+	private final SinglelineCursorInfo imblocker$cursorInfo = new SinglelineCursorInfo(
+			drawsBackground, height, firstCharacterIndex, selectionStart, text);
 	
 	private boolean preferredEditState = true;
 	private boolean preferredEnglishState = getPrimaryEnglishState();
@@ -62,10 +64,20 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 
 	@Inject(method = "onChanged", at = @At("TAIL"))
 	public void onTextChanged(String newText, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		imblocker$onCursorChanged();
 	}
 	
-	@Inject(method = "isVisible", at = @At("TAIL"))
+	@Override
+	public boolean updateCursorInfo() {
+		return imblocker$cursorInfo.updateCursorInfo(drawsBackground, height, firstCharacterIndex, selectionStart, text);
+	}
+
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return imblocker$cursorInfo;
+	}
+	
+	@Override
 	public void updateLastRenderTime(CallbackInfoReturnable<Boolean> ci) {
 		if(FocusManager.isGameRendering) {
 			lastRenderTime = System.nanoTime();
@@ -108,11 +120,6 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 	@Override
 	public boolean getPreferredEnglishState() {
 		return preferredEnglishState;
-	}
-
-	@Override
-	public SinglelineCursorInfo getCursorInfo() {
-		return new SinglelineCursorInfo(drawsBackground, height, firstCharacterIndex, selectionStart, text);
 	}
 	
 	@Override

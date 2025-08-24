@@ -23,6 +23,9 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	@ConfigEntry.Gui.CollapsibleObject
 	WindowsCompatibilitySettings windowsCompatibilitySettings = new WindowsCompatibilitySettings();
 	
+	@ConfigEntry.Gui.CollapsibleObject
+	LinuxCompatibilitySettings linuxCompatibilitySettings = new LinuxCompatibilitySettings();
+	
 	@Override
 	public void validatePostLoad() {
 		reloadScreenWhitelist(basicSettings.screenWhitelist);
@@ -68,6 +71,36 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	@Override
 	public boolean isCompositionFontTweaksEnabled() {
 		return windowsCompatibilitySettings.enableCompositionFontTweaks;
+	}
+	
+	@Override
+	public boolean isLinuxKeyboardPatchEnabled() {
+		return linuxCompatibilitySettings.enableKeyboardPatch;
+	}
+	
+	@Override
+	public String getIBusOnArgName() {
+		return linuxCompatibilitySettings.ibusOnArgName;
+	}
+	
+	@Override
+	public String getIBusOffArgName() {
+		return linuxCompatibilitySettings.ibusOffArgName;
+	}
+	
+	@Override
+	public String getFcitx5OnArgName() {
+		return linuxCompatibilitySettings.fcitx5OnArgName;
+	}
+	
+	@Override
+	public String getFcitx5OffArgName() {
+		return linuxCompatibilitySettings.fcitx5OffArgName;
+	}
+	
+	@Override
+	public String getFcitx5OnStateName() {
+		return linuxCompatibilitySettings.fcitx5OnStateName;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -119,5 +152,25 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 		boolean enableCursorPositionTracking = true;
 
 		boolean enableCompositionFontTweaks = true;
+	}
+	
+	static class LinuxCompatibilitySettings {
+		@ConfigEntry.Gui.Tooltip(count = 2)
+		boolean enableKeyboardPatch = true;
+		
+		@ConfigEntry.Gui.Tooltip
+		String ibusOnArgName = "libpinyin";
+		
+		@ConfigEntry.Gui.Tooltip
+		String ibusOffArgName = "xkb:us::eng";
+		
+		@ConfigEntry.Gui.Tooltip
+		String fcitx5OnArgName = "-o";
+		
+		@ConfigEntry.Gui.Tooltip
+		String fcitx5OffArgName = "-c";
+		
+		@ConfigEntry.Gui.Tooltip
+		String fcitx5OnStateName = "2";
 	}
 }

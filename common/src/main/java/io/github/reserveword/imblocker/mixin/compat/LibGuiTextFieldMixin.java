@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import io.github.cottonmc.cotton.gui.widget.WTextField;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
-import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
@@ -26,6 +25,9 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 	@Shadow private String text;
 	@Shadow private int scrollOffset;
 	@Shadow private int cursor;
+	
+	private final SinglelineCursorInfo imblocker$cursorInfo = 
+			new SinglelineCursorInfo(true, height, scrollOffset, cursor, text);
 	
 	@Unique
 	private static final Object PROCESSED_INPUTRESULT;
@@ -59,22 +61,27 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 	
 	@Inject(method = "setText", at = @At("TAIL"))
 	public void onTextChanged(String s, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		imblocker$onCursorChanged();
 	}
 	
 	@Inject(method = "getSelection", at = @At("TAIL"))
 	public void onGetSelection(CallbackInfoReturnable<String> cir) {
-		IMManager.updateCompositionWindowPos();
+		imblocker$onCursorChanged();
 	}
 	
 	@Inject(method = "scrollCursorIntoView", at = @At("TAIL"))
 	public void onScroll(CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		imblocker$onCursorChanged();
+	}
+	
+	@Override
+	public boolean updateCursorInfo() {
+		return imblocker$cursorInfo.updateCursorInfo(true, height, scrollOffset, cursor, text);
 	}
 	
 	@Override
 	public SinglelineCursorInfo getCursorInfo() {
-		return new SinglelineCursorInfo(true, height, scrollOffset, cursor, text);
+		return imblocker$cursorInfo;
 	}
 	
 	@Override

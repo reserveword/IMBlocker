@@ -16,9 +16,9 @@ public abstract class FtbMultilineTextFieldAccessorImpl implements FtbMultilineT
 	MultilineTextField textField;
 	
 	@Override
-	public MultilineCursorInfo getCursorInfo(double scrollY) {
+	public boolean updateCursorInfo(MultilineCursorInfo cursorInfo, double scrollY) {
 		int cursorLineIndex = textField.getLineAtCursor();
-		return new MultilineCursorInfo(cursorLineIndex, scrollY, 
+		return cursorInfo.updateCursorInfo(cursorLineIndex, scrollY, 
 				((StringViewAccessor) (Object) textField.getLineView(cursorLineIndex)).getBeginIndex(), 
 				textField.cursor(), textField.value());
 	}

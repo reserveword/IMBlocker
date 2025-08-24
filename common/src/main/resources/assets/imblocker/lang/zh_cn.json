@@ -24,5 +24,20 @@
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi": "使用转换状态API",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "用于切换中英文状态的API\n\u00A77禁用后IM_ENG_STATE命令输入模式将失效",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCursorPositionTracking": "文本光标位置跟踪",
-  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCompositionFontTweaks": "合成字符串字体格式调整"
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCompositionFontTweaks": "合成字符串字体格式调整",
+  
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings": "Linux 兼容设置",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch": "启用回调级键盘补丁",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[0]": "该补丁从 GLFW 回调层修复了输入法候选词框显示时控制按键会泄漏至游戏窗口的漏洞",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[1]": "如果候选词框因退格键清空了预编辑字符而关闭会导致游戏无法处理控制字符\n此时请按下 Esc 或输入任意字符以解除此状态",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOnArgName": "IBus 开启输入法的命令参数",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOnArgName.@Tooltip": "确定方法：系统终端中执行 “ibus engine <此参数>” 命令能够开启输入法",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOffArgName": "IBus 关闭输入法的命令参数",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOffArgName.@Tooltip": "确定方法：系统终端中执行 “ibus engine <此参数>” 命令能够关闭输入法",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnArgName": "Fcitx5 开启输入法的命令参数",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnArgName.@Tooltip": "确定方法：系统终端中执行 “fcitx5-remote <此参数>” 命令能够开启输入法",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OffArgName": "Fcitx5 关闭输入法的命令参数",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OffArgName.@Tooltip": "确定方法：系统终端中执行 “fcitx5-remote <此参数>” 命令能够关闭输入法",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnStateName": "Fcitx5 输入法开启的状态标识符",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnStateName.@Tooltip": "确定方法：系统终端中执行 “fcitx5-remote” 命令能够返回此参数"
 }

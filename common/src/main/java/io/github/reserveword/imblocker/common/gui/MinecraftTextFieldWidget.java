@@ -1,10 +1,17 @@
 package io.github.reserveword.imblocker.common.gui;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
+import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.StringUtil;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 
 public interface MinecraftTextFieldWidget extends MinecraftFocusableWidget {
+	
+	@Override
+	default void deliverFocus() {
+		updateCursorInfo();
+		MinecraftFocusableWidget.super.deliverFocus();
+	}
 	
 	default void setPreferredEditState(boolean state) {}
 	 
@@ -28,6 +35,16 @@ public interface MinecraftTextFieldWidget extends MinecraftFocusableWidget {
 				StringUtil.getSubstring(cursorInfo.text, cursorInfo.cursorLineBeginIndex, cursorInfo.cursor));
 		int caretY = cursorInfo.hasBorder ? (cursorInfo.widgetHeight - getFontHeight()) / 2 : 0;
     	return new Point(getGuiScale(), caretX, caretY);
+	}
+	
+	default void imblocker$onCursorChanged() {
+		if(updateCursorInfo() && isTrulyFocused()) {
+			IMManager.updateCompositionWindowPos();
+		}
+	}
+	
+	default boolean updateCursorInfo() {
+		return true;
 	}
 
 	SinglelineCursorInfo getCursorInfo();

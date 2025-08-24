@@ -15,7 +15,8 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
 - Automatically set IME state based on current input context
 - Monitor the chat field and automatically set the conversion state when detected command syntax
 - Make candidate window be able to locate text location (Windows Only)
-- Make candidate window be displayable at full screen mode (Windows Only)
+- Make candidate window be displayable at full screen mode on Windows
+- Fix non-character keys leaking to the game while candidates showing on Linux
 
 ## How it works
 
@@ -44,6 +45,7 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
 [FTB Library](https://github.com/FTBTeam/FTB-Library)  
 [Meteor Client](https://www.meteorclient.com/)  
 [LibGui](https://github.com/CottonMC/LibGui)  
-[Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)
+[Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)  
 [BlockUI](https://github.com/ldtteam/BlockUI)  
-[SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)
+[SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)  
+[Notes](https://github.com/MattCzyr/Notes)

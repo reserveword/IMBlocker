@@ -3,24 +3,34 @@ package io.github.reserveword.imblocker.common;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.function.Supplier;
 
 public enum LinuxIMFramework {
-	IBUS("ibus engine", "ibus engine", "libpinyin", "xkb:us::eng", "libpinyin"),
-	FCITX5("fcitx5-remote", "fcitx5-remote", "-o", "-c", "2");
+	IBUS("ibus engine", "ibus engine",
+			IMBlockerConfig.INSTANCE::getIBusOnArgName,
+			IMBlockerConfig.INSTANCE::getIBusOffArgName,
+			IMBlockerConfig.INSTANCE::getIBusOnStateName),
+	FCITX5("fcitx5-remote", "fcitx5-remote",
+			IMBlockerConfig.INSTANCE::getFcitx5OnArgName,
+			IMBlockerConfig.INSTANCE::getFcitx5OffArgName,
+			IMBlockerConfig.INSTANCE::getFcitx5OnStateName);
 
 	private final String setStateCommand;
 	private final String[] getStateCommand;
-	private final String onArgName;
-	private final String offArgName;
-	private final String onStateName;
+	private final Supplier<String> onArgSupplier;
+	private final Supplier<String> offArgSupplier;
+	private final Supplier<String> onStateSupplier;
 
-	LinuxIMFramework(String setStateCommand, String getStateCommand,
-			String onArgName, String offArgName, String onStateName) {
+	LinuxIMFramework(String setStateCommand, 
+			String getStateCommand,
+			Supplier<String> onArgSupplier, 
+			Supplier<String> offArgSupplier, 
+			Supplier<String> onStateSupplier) {
 		this.setStateCommand = setStateCommand;
 		this.getStateCommand = getStateCommand.split(" ");
-		this.onArgName = onArgName;
-		this.offArgName = offArgName;
-		this.onStateName = onStateName;
+		this.onArgSupplier = onArgSupplier;
+		this.offArgSupplier = offArgSupplier;
+		this.onStateSupplier = onStateSupplier;
 	}
 
 	public boolean getState() {
@@ -32,11 +42,12 @@ public enum LinuxIMFramework {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return stateName != null && stateName.equals(onStateName);
+		return stateName != null && stateName.equals(onStateSupplier.get());
 	}
 
 	public void setState(boolean state) {
-		String[] command = (setStateCommand + " " + (state ? onArgName : offArgName)).split(" ");
+		String[] command = (setStateCommand + " " + (state ? 
+				onArgSupplier.get() : offArgSupplier.get())).split(" ");
 		try {
 			Runtime.getRuntime().exec(command);
 		} catch (IOException e) {

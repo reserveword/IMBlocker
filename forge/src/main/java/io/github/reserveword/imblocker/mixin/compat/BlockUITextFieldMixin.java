@@ -22,6 +22,10 @@ public abstract class BlockUITextFieldMixin extends BlockUIPaneMixin implements 
 	@Shadow protected int scrollOffset = 0;
 	@Shadow protected int cursorPosition = 0;
 	
+	private double imblocker$guiScale;
+	private final SinglelineCursorInfo imblocker$cursorInfo = 
+			new SinglelineCursorInfo(true, height, scrollOffset, cursorPosition, text);
+	
 	@Inject(method = "onFocus", at = @At("TAIL"))
 	public void focusGained(CallbackInfo ci) {
 		imblocker$onFocusGained();
@@ -42,12 +46,35 @@ public abstract class BlockUITextFieldMixin extends BlockUIPaneMixin implements 
 	
 	@Inject(method = "onUpdate", at = @At("TAIL"))
 	public void onUpdate(CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
-		IMManager.updateCompositionFontSize();
+		double currentGuiScale = super.getGuiScale();
+		if(imblocker$guiScale != currentGuiScale) {
+			imblocker$guiScale = currentGuiScale;
+			IMManager.updateCompositionFontSize();
+		}
+	}
+	
+	@Inject(method = "setCursorPosition", at = @At("TAIL"))
+	public void onCursorChanged(int pos, CallbackInfo ci) {
+		imblocker$onCursorChanged();
+	}
+	
+	@Inject(method = "setSelectionEnd", at = @At("TAIL"))
+	public void onSelectionChanged(int pos, CallbackInfo ci) {
+		imblocker$onCursorChanged();
+	}
+	
+	@Override
+	public boolean updateCursorInfo() {
+		return imblocker$cursorInfo.updateCursorInfo(true, height, scrollOffset, cursorPosition, text);
 	}
 	
 	@Override
 	public SinglelineCursorInfo getCursorInfo() {
-		return new SinglelineCursorInfo(true, height, scrollOffset, cursorPosition, text);
+		return imblocker$cursorInfo;
+	}
+	
+	@Override
+	public double getGuiScale() {
+		return imblocker$guiScale;
 	}
 }

@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftMultilineEditBoxWidget;
@@ -21,6 +20,8 @@ public abstract class EditBoxWidgetMixin extends ScrollableWidgetMixin implement
 	
 	@Shadow private TextRenderer textRenderer;
 	@Shadow private EditBox editBox;
+	
+	private final MultilineCursorInfo imblocker$cursorInfo = new MultilineCursorInfo(0, 0, 0, 0, "");
 	
 	@Override
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
@@ -41,19 +42,24 @@ public abstract class EditBoxWidgetMixin extends ScrollableWidgetMixin implement
 	
 	@Inject(method = "onCursorChange", at = @At("TAIL"))
 	public void onCursorChange(CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		imblocker$onCursorChanged();
 	}
 	
 	@Override
 	public void onScroll(double scrollY, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		imblocker$onCursorChanged();
+	}
+	
+	@Override
+	public boolean updateCursorInfo() {
+		int cursorLineIndex = editBox.getCurrentLineIndex();
+		return imblocker$cursorInfo.updateCursorInfo(cursorLineIndex, getScrollY(), 
+				((SubstringAccessor) (Object) editBox.getLine(cursorLineIndex)).getBeginIndex(), 
+				editBox.getCursor(), editBox.getText());
 	}
 	
 	@Override
 	public MultilineCursorInfo getCursorInfo() {
-		int cursorLineIndex = editBox.getCurrentLineIndex();
-		return new MultilineCursorInfo(cursorLineIndex, getScrollY(), 
-				((SubstringAccessor) (Object) editBox.getLine(cursorLineIndex)).getBeginIndex(), 
-				editBox.getCursor(), editBox.getText());
+		return imblocker$cursorInfo;
 	}
 }

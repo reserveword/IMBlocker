@@ -28,8 +28,8 @@
   
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings": "Linux 兼容设置",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch": "启用回调级键盘补丁",
-  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[0]": "该补丁从 GLFW 回调层修复了输入法候选词框显示时控制字符会传入游戏窗口的漏洞",
-  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[1]": "如果候选词框因退格键清空了预编辑字符而关闭会导致游戏无法处理控制字符\n此时按下 Esc 或输入任意字符即可解除此状态",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[0]": "该补丁从 GLFW 回调层修复了输入法候选词框显示时控制按键会泄漏至游戏窗口的漏洞",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[1]": "如果候选词框因退格键清空了预编辑字符而关闭会导致游戏无法处理控制字符\n此时请按下 Esc 或输入任意字符以解除此状态",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOnArgName": "IBus 开启输入法的命令参数",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOnArgName.@Tooltip": "确定方法：系统终端中执行 “ibus engine <此参数>” 命令能够开启输入法",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOffArgName": "IBus 关闭输入法的命令参数",

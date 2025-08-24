@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
@@ -71,9 +70,7 @@ public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin implement
 
 	@Inject(method = "onValueChange", at = @At("TAIL"))
 	public void onTextChanged(String newValue, CallbackInfo ci) {
-		if(updateCursorInfo() && isTrulyFocused()) {
-			IMManager.updateCompositionWindowPos();
-		}
+		imblocker$onCursorChanged();
 	}
 	
 	@Override

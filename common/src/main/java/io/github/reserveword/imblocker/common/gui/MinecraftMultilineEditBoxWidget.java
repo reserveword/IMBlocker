@@ -6,6 +6,12 @@ import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 
 public interface MinecraftMultilineEditBoxWidget extends MinecraftFocusableWidget {
 	
+	@Override
+	default void deliverFocus() {
+		updateCursorInfo();
+		MinecraftFocusableWidget.super.deliverFocus();
+	}
+	
 	default Point getCaretPos() {
 		MultilineCursorInfo cursorInfo = getCursorInfo();
 		int caretX = 4 + MinecraftClientAccessor.INSTANCE.getStringWidth(

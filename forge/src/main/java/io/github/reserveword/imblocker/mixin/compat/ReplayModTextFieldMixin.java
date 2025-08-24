@@ -27,8 +27,6 @@ import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 @Mixin(targets = "de.johni0702.minecraft.gui.element.AbstractGuiTextField", remap = false)
 public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidget {
 	@Unique private Rectangle bounds;
-	@Unique private int lastCursorPos;
-	@Unique private int lastOffset;
 	
 	@Shadow private String text;
 	@Shadow private int cursorPos;
@@ -62,11 +60,11 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
 	public void updateCaretPos(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo, CallbackInfo ci) {
 		Point position = getPosition(renderer);
 		Rectangle currentBounds = new Rectangle(position.x(), position.y(), size.getWidth(), size.getHeight());
-		if(!currentBounds.equals(bounds) || (lastCursorPos != cursorPos) || (lastOffset != currentOffset)) {
+		boolean boundsChanged;
+		if(boundsChanged = !currentBounds.equals(bounds)) {
 			bounds = currentBounds;
-			lastCursorPos = cursorPos;
-			lastOffset = currentOffset;
-			updateCursorInfo();
+		}
+		if(updateCursorInfo() || boundsChanged) {
 			IMManager.updateCompositionWindowPos();
 		}
 	}

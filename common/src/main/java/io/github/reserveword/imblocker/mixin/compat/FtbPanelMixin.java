@@ -12,7 +12,13 @@ import io.github.reserveword.imblocker.common.gui.FocusableObject;
 import io.github.reserveword.imblocker.common.gui.MinecraftMultilineEditBoxWidget;
 
 @Mixin(value = Panel.class, remap = false)
-public abstract class FtbPanelMixin {
+public abstract class FtbPanelMixin extends FtbWidgetMixin {
+	
+	@Override
+	public boolean isValidLayoutWidget() {
+		return true;
+	}
+	
 	@Inject(method = "setScrollY", at = @At("TAIL"))
 	public void onScroll(double scroll, CallbackInfo ci) {
 		FocusableObject focusOwner = FocusManager.getFocusOwner();

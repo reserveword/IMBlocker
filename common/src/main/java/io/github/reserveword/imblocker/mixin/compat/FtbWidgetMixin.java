@@ -10,6 +10,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import dev.ftb.mods.ftblibrary.ui.Panel;
 import dev.ftb.mods.ftblibrary.ui.Widget;
 import io.github.reserveword.imblocker.common.IMManager;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
+import io.github.reserveword.imblocker.common.gui.FocusableObject;
+import io.github.reserveword.imblocker.common.gui.FtbTextInputWidget;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 
@@ -29,22 +32,35 @@ public abstract class FtbWidgetMixin implements MinecraftFocusableWidget {
 	
 	@Inject(method = "setX", at = @At("TAIL"))
 	public void handleXChanged(int x, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		handleBoundsChanged();
 	}
 	
 	@Inject(method = "setY", at = @At("TAIL"))
 	public void handleYChanged(int y, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		handleBoundsChanged();
 	}
 	
 	@Inject(method = "setWidth", at = @At("TAIL"))
 	public void handleWidthChanged(int x, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		handleBoundsChanged();
 	}
 	
 	@Inject(method = "setHeight", at = @At("TAIL"))
 	public void handleHeightChanged(int y, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		handleBoundsChanged();
+	}
+	
+	public void handleBoundsChanged() {
+		if(isValidLayoutWidget()) {
+			FocusableObject focusOwner = FocusManager.getFocusOwner();
+			if(focusOwner instanceof FtbTextInputWidget) {
+				IMManager.updateCompositionWindowPos();
+			}
+		}
+	}
+	
+	public boolean isValidLayoutWidget() {
+		return false;
 	}
 	
 	@Unique

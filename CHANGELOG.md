@@ -1,3 +1,6 @@
+完全解决 FTB 文本框的性能问题（[#114](https://github.com/reserveword/IMBlocker/issues/114)）
+
+## v5.4.3
  - 所有文本光标回调触发时进行额外验证以防止某些模组滥用引发性能问题（[#114](https://github.com/reserveword/IMBlocker/issues/114)）
  - 增强可见性检测技术的模组兼容性
  - 增加实用 Linux 兼容性设置，包括：

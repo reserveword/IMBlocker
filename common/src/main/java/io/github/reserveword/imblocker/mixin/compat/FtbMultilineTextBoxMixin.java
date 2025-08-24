@@ -12,17 +12,24 @@ import dev.ftb.mods.ftblibrary.ui.input.KeyModifiers;
 import io.github.reserveword.imblocker.common.accessor.FtbMultilineTextFieldAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
+import io.github.reserveword.imblocker.common.gui.FtbTextInputWidget;
 import io.github.reserveword.imblocker.common.gui.MinecraftMultilineEditBoxWidget;
 import io.github.reserveword.imblocker.common.gui.MultilineCursorInfo;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 
 @Mixin(value = MultilineTextBox.class, remap = false)
-public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin implements MinecraftMultilineEditBoxWidget {
+public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin 
+	implements MinecraftMultilineEditBoxWidget, FtbTextInputWidget {
 	
 	@Shadow
 	private boolean isFocused;
 	
 	private final MultilineCursorInfo imblocker$cursorInfo = new MultilineCursorInfo(0, 0, 0, 0, "");
+	
+	@Override
+	public boolean isValidLayoutWidget() {
+		return true;
+	}
 	
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {

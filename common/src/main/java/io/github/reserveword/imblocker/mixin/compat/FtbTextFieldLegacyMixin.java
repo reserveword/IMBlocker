@@ -11,11 +11,13 @@ import dev.ftb.mods.ftblibrary.ui.TextBox;
 import dev.ftb.mods.ftblibrary.ui.input.KeyModifiers;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
+import io.github.reserveword.imblocker.common.gui.FtbTextInputWidget;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
 
 @Mixin(value = TextBox.class, remap = false)
-public abstract class FtbTextFieldLegacyMixin extends FtbWidgetMixin implements MinecraftTextFieldWidget {
+public abstract class FtbTextFieldLegacyMixin extends FtbWidgetMixin 
+	implements MinecraftTextFieldWidget, FtbTextInputWidget {
 	
 	@Shadow private String text;
 	@Shadow private int lineScrollOffset;
@@ -26,6 +28,11 @@ public abstract class FtbTextFieldLegacyMixin extends FtbWidgetMixin implements 
 	
 	private final SinglelineCursorInfo imblocker$cursorInfo = 
 			new SinglelineCursorInfo(true, height, lineScrollOffset, cursorPosition, text);
+	
+	@Override
+	public boolean isValidLayoutWidget() {
+		return true;
+	}
 	
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {

@@ -51,12 +51,12 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin implements 
 	
 	@Inject(method = "move", at = @At("TAIL"))
 	public void handlePosChanged(double x, double y, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		imblocker$onBoundsChanged();
 	}
 	
 	@Override
 	public void onLayoutWidget(CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		imblocker$onBoundsChanged();
 		IMManager.updateCompositionFontSize();
 	}
 	

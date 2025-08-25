@@ -21,6 +21,12 @@ public interface MinecraftTextFieldWidget extends MinecraftFocusableWidget {
 		return IMBlockerConfig.INSTANCE.getPrimaryEnglishState().getBoolean();
 	}
 	
+	default void imblocker$onBoundsChanged() {
+		if(isTrulyFocused()) {
+			IMManager.updateCompositionWindowPos();
+		}
+	}
+	
 	@Override
 	default Rectangle getBoundsAbs() {
 		return Rectangle.EMPTY;

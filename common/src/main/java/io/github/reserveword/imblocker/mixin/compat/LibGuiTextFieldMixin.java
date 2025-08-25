@@ -32,6 +32,16 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 	@Unique
 	private static final Object PROCESSED_INPUTRESULT;
 	
+	@Override
+	public void handleLocationChanged(int x, int y, CallbackInfo ci) {
+		imblocker$onBoundsChanged();
+	}
+
+	@Override
+	public void handleSizeChanged(int width, int height, CallbackInfo ci) {
+		imblocker$onBoundsChanged();
+	}
+	
 	@Inject(method = "onFocusGained", at = @At("TAIL"))
 	public void onFocusGained(CallbackInfo ci) {
 		imblocker$onFocusGained();

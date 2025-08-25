@@ -12,6 +12,12 @@ public interface MinecraftMultilineEditBoxWidget extends MinecraftFocusableWidge
 		MinecraftFocusableWidget.super.deliverFocus();
 	}
 	
+	default void imblocker$onBoundsChanged() {
+		if(isTrulyFocused()) {
+			IMManager.updateCompositionWindowPos();
+		}
+	}
+	
 	default Point getCaretPos() {
 		MultilineCursorInfo cursorInfo = getCursorInfo();
 		int caretX = 4 + MinecraftClientAccessor.INSTANCE.getStringWidth(

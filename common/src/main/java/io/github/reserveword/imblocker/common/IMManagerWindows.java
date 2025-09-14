@@ -1,10 +1,15 @@
 package io.github.reserveword.imblocker.common;
 
+import org.lwjgl.glfw.GLFWNativeWin32;
+
 import com.sun.jna.Native;
+import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinNT;
 
+import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.FocusableObject;
 import io.github.reserveword.imblocker.common.gui.FocusableWidget;
@@ -13,7 +18,7 @@ import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.common.jnastructs.COMPOSITIONFORM;
 import io.github.reserveword.imblocker.common.jnastructs.LOGFONTW;
 
-final class IMManagerWindows implements IMManager.PlatformIMManager {
+public final class IMManagerWindows implements IMManager.PlatformIMManager {
 
 	private static native WinNT.HANDLE ImmGetContext(WinDef.HWND hwnd);
 
@@ -34,6 +39,11 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	private static native boolean ImmGetCompositionFontW(WinNT.HANDLE himc, LOGFONTW lplf);
 
 	private static native boolean ImmSetCompositionFontW(WinNT.HANDLE himc, LOGFONTW lplf);
+	
+	private static native WinDef.HWND ImmGetDefaultIMEWnd(WinNT.HWND hwnd);
+	
+	private static final HWND HWND_NOTOPMOST = new HWND(Pointer.createConstant(-2));
+	private static final int setWindowLayerFlags = User32.SWP_NOMOVE | User32.SWP_NOSIZE | User32.SWP_NOSENDCHANGING;
 
 	public static long lastIMStateOnTimestamp = System.currentTimeMillis();
 
@@ -60,12 +70,14 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 				himc = ImmCreateContext();
 				ImmAssociateContext(hwnd, himc);
 				lastIMStateOnTimestamp = System.currentTimeMillis();
+				updateCompositionWindowPos();
+				updateCompositionFontSize();
 			} else {
 				himc = ImmAssociateContext(hwnd, null);
 				ImmDestroyContext(himc);
 			}
-			ImmReleaseContext(hwnd, himc);
 		}
+		ImmReleaseContext(hwnd, himc);
 	}
 
 	@Override
@@ -93,6 +105,14 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 
 	private long getConversionStatusCooldown() {
 		return 60 - (System.currentTimeMillis() - lastIMStateOnTimestamp);
+	}
+	
+	public static void tweakFullScreenWindowStyle() {
+		HWND hwnd = new HWND(new Pointer(GLFWNativeWin32
+				.glfwGetWin32Window(MinecraftClientAccessor.INSTANCE.getWindowHandle())));
+		long style = User32.INSTANCE.GetWindowLongPtr(hwnd, User32.GWL_STYLE).longValue() & 0x7FFFFFFF;
+		User32.INSTANCE.SetWindowLongPtr(hwnd, User32.GWL_STYLE, new Pointer(style));
+		User32.INSTANCE.SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, setWindowLayerFlags);
 	}
 
 	@Override
@@ -136,7 +156,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		ImmReleaseContext(hwnd, himc);
 	}
 
-	private WinDef.HWND getActiveWindow() {
+	private static WinDef.HWND getActiveWindow() {
 		try {
 			return u.GetActiveWindow();
 		} catch (NoSuchMethodError e) {

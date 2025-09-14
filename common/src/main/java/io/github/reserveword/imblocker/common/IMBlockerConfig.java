@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
+import com.sun.jna.Platform;
+
 public class IMBlockerConfig {
 	public static final Pattern classNamePattern = Pattern
 			.compile("^([\\p{L}_][\\p{L}\\p{N}_]*:)?([\\p{L}_$][\\p{L}\\p{N}_$]*\\.)*[\\p{L}_$][\\p{L}\\p{N}_$]*$");
@@ -48,9 +50,9 @@ public class IMBlockerConfig {
 	public boolean isScreenRecoveringEnabled() {
 		return false;
 	}
-
-	public CommandInputMode getChatCommandInputType() {
-		return CommandInputMode.IM_ENG_STATE;
+	
+	public EnglishStateImpl getEnglishStateImpl() {
+		return Platform.isWindows() ? EnglishStateImpl.CONVERSION_STATUS : EnglishStateImpl.DISABLE_IM;
 	}
 	
 	public EnglishState getPrimaryEnglishState() {

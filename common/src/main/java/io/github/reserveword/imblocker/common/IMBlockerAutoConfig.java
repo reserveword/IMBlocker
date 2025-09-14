@@ -3,6 +3,8 @@ package io.github.reserveword.imblocker.common;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 
+import com.sun.jna.Platform;
+
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.ConfigHolder;
@@ -42,10 +44,10 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	public boolean isScreenRecoveringEnabled() {
 		return basicSettings.enableScreenRecovering;
 	}
-
+	
 	@Override
-	public CommandInputMode getChatCommandInputType() {
-		return basicSettings.commandInputMode;
+	public EnglishStateImpl getEnglishStateImpl() {
+		return basicSettings.englishStateImpl;
 	}
 	
 	@Override
@@ -131,9 +133,10 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 		@ConfigEntry.Gui.Tooltip
 		ArrayList<String> recoveredScreens = new ArrayList<>();
 
-		@ConfigEntry.Gui.Tooltip(count = 2)
+		@ConfigEntry.Gui.Tooltip(count = 3)
 		@ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
-		CommandInputMode commandInputMode = CommandInputMode.IM_ENG_STATE;
+		EnglishStateImpl englishStateImpl = Platform.isWindows() ? 
+				EnglishStateImpl.CONVERSION_STATUS : EnglishStateImpl.DISABLE_IM;
 		
 		@ConfigEntry.Gui.Tooltip(count = 3)
 		@ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)

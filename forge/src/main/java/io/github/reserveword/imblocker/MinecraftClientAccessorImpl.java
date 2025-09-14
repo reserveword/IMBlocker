@@ -27,6 +27,11 @@ public class MinecraftClientAccessorImpl extends MinecraftClientAccessor {
 	}
 	
 	@Override
+	public long getWindowHandle() {
+		return Minecraft.getInstance().getWindow().getWindow();
+	}
+	
+	@Override
 	public Rectangle getWindowBounds() {
 		Window gameWindow = Minecraft.getInstance().getWindow();
 		int[] width = new int[1], height = new int[1];

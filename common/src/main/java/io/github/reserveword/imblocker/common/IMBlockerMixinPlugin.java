@@ -58,8 +58,12 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		validMixins.add("ChatScreenMixin");
 		validMixins.add(isOfficialMapping ? "AbstractWidgetMixin" : "ClickableWidgetMixin");
 		validMixins.add("MinecraftClientMixin");
-		validMixins.add("WindowMixin");
+		validMixins.add("ActiveIMEKeyListener");
 		validMixins.add(isOfficialMapping ? "KeyboardHandlerAccessor" : "KeyboardAccessor");
+		
+		if(Platform.isWindows()) {
+			validMixins.add("WindowsFullScreenPatch");
+		}
 		
 		if(Platform.isLinux()) {
 			validMixins.add("LinuxKeyboardPatch");

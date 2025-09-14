@@ -2,6 +2,9 @@ package io.github.reserveword.imblocker.common;
 
 import com.sun.jna.Platform;
 
+import io.github.reserveword.imblocker.common.gui.FocusManager;
+import io.github.reserveword.imblocker.common.gui.FocusableObject;
+
 public final class IMManager {
 	private static final PlatformIMManager INSTANCE;
 	
@@ -37,6 +40,16 @@ public final class IMManager {
 	public static void updateCompositionFontSize() {
 		if(IMBlockerConfig.INSTANCE.isCompositionFontTweaksEnabled()) {
 			IMBlockerCore.invokeOnMainThread(() -> INSTANCE.updateCompositionFontSize());
+		}
+	}
+	
+	public static void evaluateKeyInput(boolean isActiveIMEKey, int action, int modifiers) {
+		if(IMBlockerConfig.INSTANCE.getEnglishStateImpl() == EnglishStateImpl.DISABLE_IM &&
+				isActiveIMEKey && (modifiers & 14) == 0 && action == 0) {
+			FocusableObject focusOwner = FocusManager.getFocusOwner();
+			if(focusOwner != null && focusOwner.getPreferredState()) {
+				setState(true);
+			}
 		}
 	}
 	

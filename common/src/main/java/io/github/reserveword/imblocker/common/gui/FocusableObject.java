@@ -1,5 +1,6 @@
 package io.github.reserveword.imblocker.common.gui;
 
+import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMManager;
 
 /**
@@ -59,12 +60,17 @@ public interface FocusableObject {
 	 * <p><b>This method can only be called if this element {@code isTrulyFocused}</b>.
 	 */
 	default void updateIMState() {
-		boolean shouldEnableIME = getPreferredState();
-		IMManager.setState(shouldEnableIME);
-		if(shouldEnableIME) {
-			IMManager.updateCompositionWindowPos();
-			IMManager.updateCompositionFontSize();
-			IMManager.setEnglishState(getPreferredEnglishState());
+		switch (IMBlockerConfig.INSTANCE.getEnglishStateImpl()) {
+			case CONVERSION_STATUS:
+				boolean shouldEnableIME = getPreferredState();
+				IMManager.setState(shouldEnableIME);
+				if(shouldEnableIME) {
+					IMManager.setEnglishState(getPreferredEnglishState());
+				}
+				break;
+			case DISABLE_IM:
+				IMManager.setState(getPreferredState() && !getPreferredEnglishState());
+				break;
 		}
 	}
 	
@@ -75,8 +81,13 @@ public interface FocusableObject {
 	 * <p><b>This method can only be called if this element {@code isTrulyFocused}</b>.
 	 */
 	default void updateEnglishState() {
-		if(getPreferredState()) {
-			IMManager.setEnglishState(getPreferredEnglishState());
+		switch (IMBlockerConfig.INSTANCE.getEnglishStateImpl()) {
+			case CONVERSION_STATUS:
+				IMManager.setEnglishState(getPreferredEnglishState());
+				break;
+			case DISABLE_IM:
+				IMManager.setState(!getPreferredEnglishState());
+				break;
 		}
 	}
 	

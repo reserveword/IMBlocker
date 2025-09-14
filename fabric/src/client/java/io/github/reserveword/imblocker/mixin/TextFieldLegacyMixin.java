@@ -29,7 +29,6 @@ public abstract class TextFieldLegacyMixin extends ClickableWidgetMixin implemen
 	private final SinglelineCursorInfo imblocker$cursorInfo = new SinglelineCursorInfo(
 			drawsBackground, height, firstCharacterIndex, selectionStart, text);
 	
-	private boolean preferredEditState = true;
 	private boolean preferredEnglishState = getPrimaryEnglishState();
 
 	@Unique
@@ -97,17 +96,6 @@ public abstract class TextFieldLegacyMixin extends ClickableWidgetMixin implemen
 			imblocker$onFocusChanged(isActive());
 		}
 	}
-
-	@Override
-	public void setPreferredEditState(boolean preferredEditState) {
-		if (this.preferredEditState != preferredEditState) {
-			this.preferredEditState = preferredEditState;
-			if (isTrulyFocused()) {
-				updateEnglishState();
-			}
-		}
-	}
-
 	@Override
 	public void setPreferredEnglishState(boolean state) {
 		if (preferredEnglishState != state) {
@@ -116,11 +104,6 @@ public abstract class TextFieldLegacyMixin extends ClickableWidgetMixin implemen
 				updateEnglishState();
 			}
 		}
-	}
-
-	@Override
-	public boolean getPreferredState() {
-		return preferredEditState;
 	}
 
 	@Override

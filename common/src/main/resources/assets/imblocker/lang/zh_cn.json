@@ -7,9 +7,10 @@
   "text.autoconfig.imblocker.option.basicSettings.enableScreenRecovering": "激活GUI屏幕记录",
   "text.autoconfig.imblocker.option.basicSettings.recoveredScreens": "已记录的屏幕",
   "text.autoconfig.imblocker.option.basicSettings.recoveredScreens.@Tooltip": "列出显示过的GUI屏幕，方便编辑白名单",
-  "text.autoconfig.imblocker.option.basicSettings.commandInputMode": "命令输入模式",
-  "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[0]": "\u00A7l检测到命令输入环境时设置英文状态的方式",
-  "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[1]": "如果你的输入法不能在检测到命令环境时自动切换至英文状态\n将此项设置为“DISABLE_IM”可能会有帮助\n但请注意此模式下输入命令时无法输入中文",
+  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl": "英文状态实现方式",
+  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[0]": "\u00A7l自动设置英文状态的方式",
+  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[1]": "一般仅推荐使用微软系列输入法时将此项设置为“CONVERSION_STATUS”",
+  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[2]": "如果你的输入法不能正常自动切换至英文状态\n请将此项设置为“DISABLE_IM”并通过热键（默认右Shift）来解锁输入法",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState": "首选中英文状态",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[0]": "\u00A7l文本框获得焦点时输入法的初始中英文状态",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[1]": "CJK - 初始状态为中文\nENG - 初始状态为英文",
@@ -22,7 +23,7 @@
   
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings": "Windows 兼容设置",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi": "使用转换状态API",
-  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "用于切换中英文状态的API\n\u00A77禁用后IM_ENG_STATE命令输入模式将失效",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "用于切换中英文状态的API\n\u00A77禁用后CONVERSION_STATUS英文状态实现将失效",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCursorPositionTracking": "文本光标位置跟踪",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCompositionFontTweaks": "合成字符串字体格式调整",
   
@@ -39,5 +40,8 @@
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OffArgName": "Fcitx5 关闭输入法的命令参数",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OffArgName.@Tooltip": "确定方法：系统终端中执行 “fcitx5-remote <此参数>” 命令能够关闭输入法",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnStateName": "Fcitx5 输入法开启的状态标识符",
-  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnStateName.@Tooltip": "确定方法：系统终端中执行 “fcitx5-remote” 命令能够返回此参数"
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnStateName.@Tooltip": "确定方法：系统终端中执行 “fcitx5-remote” 命令能够返回此参数",
+  
+  "key.categories.imblocker": "IMBlocker",
+  "key.unlockIME": "解锁输入法"
 }

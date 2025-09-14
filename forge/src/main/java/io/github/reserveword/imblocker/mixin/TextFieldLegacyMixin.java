@@ -29,7 +29,6 @@ public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin implement
 	private final SinglelineCursorInfo imblocker$cursorInfo = 
 			new SinglelineCursorInfo(bordered, height, displayPos, cursorPos, value);
 	
-	private boolean preferredEditState = true;
 	private boolean preferredEnglishState = getPrimaryEnglishState();
 	
 	@Unique
@@ -99,16 +98,6 @@ public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin implement
 	}
 
 	@Override
-	public void setPreferredEditState(boolean preferredEditState) {
-		if (this.preferredEditState != preferredEditState) {
-			this.preferredEditState = preferredEditState;
-			if (isTrulyFocused()) {
-				updateIMState();
-			}
-		}
-	}
-
-	@Override
 	public void setPreferredEnglishState(boolean state) {
 		if (preferredEnglishState != state) {
 			preferredEnglishState = state;
@@ -116,11 +105,6 @@ public abstract class TextFieldLegacyMixin extends AbstractWidgetMixin implement
 				updateEnglishState();
 			}
 		}
-	}
-
-	@Override
-	public boolean getPreferredState() {
-		return preferredEditState;
 	}
 
 	@Override

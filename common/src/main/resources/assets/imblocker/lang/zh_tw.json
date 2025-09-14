@@ -10,7 +10,7 @@
   
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings": "Windows 相容性設定",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi": "使用轉換狀態API",
-  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "用於切換中英文狀態的API\n\u00A77停用後IM_ENG_STATE命令輸入模式將失效",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "用於切換中英文狀態的API\n\u00A77停用後CONVERSION_STATUS英文狀態實現將失效",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCursorPositionTracking": "插入符號位置追蹤",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCompositionFontTweaks": "合成字串字體格式調整"
 }

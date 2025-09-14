@@ -1,7 +1,5 @@
 package io.github.reserveword.imblocker.common.gui;
 
-import com.sun.jna.Platform;
-
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.StringUtil;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
@@ -9,10 +7,6 @@ import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 public interface MinecraftTextFieldWidget extends MinecraftAbstractTextInputWidget<SinglelineCursorInfo> {
 	
 	default void setPreferredEnglishState(boolean state) {}
-	
-	default boolean getPrimaryEditState() {
-		return Platform.isLinux() ? getPrimaryEnglishState() : true;
-	}
 	
 	default boolean getPrimaryEnglishState() {
 		return IMBlockerConfig.INSTANCE.getPrimaryEnglishState().getBoolean();

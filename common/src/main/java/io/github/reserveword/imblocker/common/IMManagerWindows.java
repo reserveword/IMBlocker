@@ -70,14 +70,16 @@ public final class IMManagerWindows implements IMManager.PlatformIMManager {
 				himc = ImmCreateContext();
 				ImmAssociateContext(hwnd, himc);
 				lastIMStateOnTimestamp = System.currentTimeMillis();
-				updateCompositionWindowPos();
-				updateCompositionFontSize();
 			} else {
 				himc = ImmAssociateContext(hwnd, null);
 				ImmDestroyContext(himc);
 			}
 		}
 		ImmReleaseContext(hwnd, himc);
+		if (on) {
+			updateCompositionWindowPos();
+			updateCompositionFontSize();
+		}
 	}
 
 	@Override
@@ -173,8 +175,9 @@ public final class IMManagerWindows implements IMManager.PlatformIMManager {
 				return Point.TOP_LEFT;
 			}
 			//Constrained to entry border.
-			int caretX = MathHelper.clamp(caretPos.x(), 0, (int) (inputEntryBounds.width() - 4 * scaleFactor));
-			int caretY = MathHelper.clamp(caretPos.y(), 0, (int) (inputEntryBounds.height() - 4 * scaleFactor));
+			int margin = (int) (inputEntry.getFontHeight() * scaleFactor / 2); 
+			int caretX = MathHelper.clamp(caretPos.x(), 0, (int) (inputEntryBounds.width() - margin));
+			int caretY = MathHelper.clamp(caretPos.y(), 0, (int) (inputEntryBounds.height() - margin));
 			caretY -= scaleFactor / 2; // Tweak yPos to fit font style.
 			int compositionWindowPosX = inputEntryBounds.x() + caretX;
 			int compositionWindowPosY = inputEntryBounds.y() + caretY;
@@ -182,8 +185,8 @@ public final class IMManagerWindows implements IMManager.PlatformIMManager {
 				//Constrained to container border.
 				FocusableWidget inputWidget = (FocusableWidget) inputEntry;
 				Rectangle containerBounds = inputWidget.getFocusContainer().getBoundsAbs();
-				compositionWindowPosX = MathHelper.clamp(compositionWindowPosX, 0, containerBounds.width() - 16);
-				compositionWindowPosY = MathHelper.clamp(compositionWindowPosY, 0, containerBounds.height() - 16);
+				compositionWindowPosX = MathHelper.clamp(compositionWindowPosX, 0, containerBounds.width() - margin);
+				compositionWindowPosY = MathHelper.clamp(compositionWindowPosY, 0, containerBounds.height() - margin);
 				compositionWindowPosX += containerBounds.x();
 				compositionWindowPosY += containerBounds.y();
 			}

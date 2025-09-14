@@ -79,11 +79,6 @@ public abstract class ReiTextFieldMixin implements MinecraftTextFieldWidget {
 	}
 	
 	@Override
-	public boolean getPreferredState() {
-		return getPrimaryEditState();
-	}
-	
-	@Override
 	public boolean getPreferredEnglishState() {
 		return getPrimaryEnglishState();
 	}

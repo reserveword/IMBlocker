@@ -7,12 +7,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.IMBlocker;
 import io.github.reserveword.imblocker.common.IMManager;
-import net.minecraft.client.Keyboard;
+import net.minecraft.client.KeyboardHandler;
 
-@Mixin(Keyboard.class)
-public abstract class ActiveIMEKeyListener {
-	@Inject(method = "onKey", at = @At("HEAD"), cancellable = true)
+@Mixin(KeyboardHandler.class)
+public abstract class UnlockIMEKeyListener {
+	@Inject(method = "keyPress", at = @At("HEAD"), cancellable = true)
 	private void onKeyInvoked(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
-		IMManager.evaluateKeyInput(IMBlocker.unlockIMEKey.matchesKey(key, scancode), action, modifiers);
+		IMManager.evaluateKeyInput(IMBlocker.unlockIMEKey.matches(key, scancode), action, modifiers);
 	}
 }

@@ -1,7 +1,6 @@
 package io.github.reserveword.imblocker.common.gui;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
-import io.github.reserveword.imblocker.common.IMManager;
 
 /**
  * <p>This interface represents an <b>effective input entry</b> in Minecraft
@@ -60,18 +59,7 @@ public interface FocusableObject {
 	 * <p><b>This method can only be called if this element {@code isTrulyFocused}</b>.
 	 */
 	default void updateIMState() {
-		switch (IMBlockerConfig.INSTANCE.getEnglishStateImpl()) {
-			case CONVERSION_STATUS:
-				boolean shouldEnableIME = getPreferredState();
-				IMManager.setState(shouldEnableIME);
-				if(shouldEnableIME) {
-					IMManager.setEnglishState(getPreferredEnglishState());
-				}
-				break;
-			case DISABLE_IM:
-				IMManager.setState(getPreferredState() && !getPreferredEnglishState());
-				break;
-		}
+		IMBlockerConfig.INSTANCE.getEnglishStateImpl().updateIMState(this);
 	}
 	
 	/**
@@ -81,14 +69,7 @@ public interface FocusableObject {
 	 * <p><b>This method can only be called if this element {@code isTrulyFocused}</b>.
 	 */
 	default void updateEnglishState() {
-		switch (IMBlockerConfig.INSTANCE.getEnglishStateImpl()) {
-			case CONVERSION_STATUS:
-				IMManager.setEnglishState(getPreferredEnglishState());
-				break;
-			case DISABLE_IM:
-				IMManager.setState(!getPreferredEnglishState());
-				break;
-		}
+		IMBlockerConfig.INSTANCE.getEnglishStateImpl().updateEnglishState(this);
 	}
 	
 	/**

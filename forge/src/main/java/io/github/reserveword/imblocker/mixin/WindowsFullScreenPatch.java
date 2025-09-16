@@ -8,11 +8,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.platform.Window;
 
-import io.github.reserveword.imblocker.common.IMBlockerCore;
-import io.github.reserveword.imblocker.common.IMManagerWindows;
+import io.github.reserveword.imblocker.common.WindowsFullScreenManager;
 
 @Mixin(value = Window.class, priority = 10001)
 public abstract class WindowsFullScreenPatch {
+	
+	@Shadow
+	private long window;
 	
 	@Shadow
 	private boolean fullscreen;
@@ -21,7 +23,7 @@ public abstract class WindowsFullScreenPatch {
 			"Lorg/lwjgl/glfw/GLFW;glfwSetWindowMonitor(JJIIIII)V", shift = At.Shift.AFTER))
 	public void tweakFullScreenWindowStyle(CallbackInfo ci) {
 		if(fullscreen) {
-			IMBlockerCore.invokeOnMainThread(() -> IMManagerWindows.tweakFullScreenWindowStyle());
+			WindowsFullScreenManager.tweakFullScreenWindowStyle(window);
 		}
 	}
 }

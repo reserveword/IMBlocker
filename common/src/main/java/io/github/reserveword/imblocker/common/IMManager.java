@@ -43,9 +43,9 @@ public final class IMManager {
 		}
 	}
 	
-	public static void evaluateKeyInput(boolean isActiveIMEKey, int action, int modifiers) {
+	public static void evaluateKeyInput(boolean isUnlockIMEKey, int action, int modifiers) {
 		if(IMBlockerConfig.INSTANCE.getEnglishStateImpl() == EnglishStateImpl.DISABLE_IM &&
-				isActiveIMEKey && (modifiers & 14) == 0 && action == 0) {
+				isUnlockIMEKey && (modifiers & 14) == 0 && action == 0) {
 			FocusableObject focusOwner = FocusManager.getFocusOwner();
 			if(focusOwner != null && focusOwner.getPreferredState()) {
 				setState(true);

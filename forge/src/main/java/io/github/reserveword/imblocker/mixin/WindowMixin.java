@@ -11,7 +11,7 @@ import io.github.reserveword.imblocker.common.gui.FocusContainer;
 
 @Mixin(Window.class)
 public abstract class WindowMixin {
-	@Inject(method = "setGuiScale", at = @At("TAIL"), require = 0)
+	@Inject(method = "setGuiScale(D)V", at = @At("TAIL"), require = 0)
 	public void onScaleFactorChanged(double scaleFactor, CallbackInfo ci) {
 		FocusContainer.MINECRAFT.setGuiScaleFactor(scaleFactor);
 	}

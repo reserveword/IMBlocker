@@ -161,9 +161,8 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		}
 		
 		if(IMBlockerCore.hasMod("essential")) {
-			System.out.println("[IMBlocker] Loaded Essential Mixins.");
 			validMixins.add("compat.EssentialUIComponentMixin");
-			validMixins.add("compat.EssentialTextFieldMixin");
+			validMixins.add("compat.EssentialAbstractTextInputMixin");
 		}
 	}
 }

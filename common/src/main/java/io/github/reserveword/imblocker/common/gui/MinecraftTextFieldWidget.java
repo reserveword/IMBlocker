@@ -12,11 +12,6 @@ public interface MinecraftTextFieldWidget extends MinecraftAbstractTextInputWidg
 		return IMBlockerConfig.INSTANCE.getPrimaryEnglishState().getBoolean();
 	}
 	
-	@Override
-	default Rectangle getBoundsAbs() {
-		return Rectangle.EMPTY;
-	}
-	
 	default Point getCaretPos() {
 		SinglelineCursorInfo cursorInfo = getCursorInfo();
 		if(cursorInfo == null) {

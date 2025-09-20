@@ -18,14 +18,26 @@ public abstract class EssentialUIComponentMixin implements MinecraftFocusableWid
 	@Shadow
 	public abstract float getTop();
 	
+	@Shadow
+	public abstract float getWidth();
+	
+	@Shadow
+	public abstract float getHeight();
+	
+	@Shadow
+	public abstract float getTextScale();
+	
 	@Inject(method = "focus", at = @At("TAIL"))
 	public void onFocusGained(CallbackInfo ci) {}
 	
 	@Inject(method = "loseFocus", at = @At("TAIL"))
 	public void onFocusLost(CallbackInfo ci) {}
+	
+	@Inject(method = "keyType", at = @At("HEAD"), cancellable = true)
+	public void checkFocusTracking(char c, int keyCode, CallbackInfo ci) {}
 
 	@Override
 	public Rectangle getBoundsAbs() {
-		return new Rectangle(getGuiScale(), (int) getLeft(), (int) getTop(), Integer.MAX_VALUE, Integer.MAX_VALUE);
+		return new Rectangle(getGuiScale(), (int) getLeft(), (int) getTop(), (int) getWidth(), (int) getHeight());
 	}
 }

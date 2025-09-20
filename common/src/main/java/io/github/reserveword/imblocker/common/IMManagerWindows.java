@@ -159,14 +159,14 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 				return Point.TOP_LEFT;
 			}
 			//Constrained to entry border.
-			int margin = (int) (inputEntry.getFontHeight() * scaleFactor / 2); 
-			int caretX = MathHelper.clamp(caretPos.x(), 0, (int) (inputEntryBounds.width() - margin));
-			int caretY = MathHelper.clamp(caretPos.y(), 0, (int) (inputEntryBounds.height() - margin));
+			int caretX = MathHelper.clamp(caretPos.x(), 0, inputEntryBounds.width());
+			int caretY = MathHelper.clamp(caretPos.y(), 0, inputEntryBounds.height());
 			caretY -= scaleFactor / 2; // Tweak yPos to fit font style.
 			int compositionWindowPosX = inputEntryBounds.x() + caretX;
 			int compositionWindowPosY = inputEntryBounds.y() + caretY;
 			if(inputEntry instanceof FocusableWidget) {
 				//Constrained to container border.
+				int margin = (int) (inputEntry.getFontHeight() * scaleFactor / 2);
 				FocusableWidget inputWidget = (FocusableWidget) inputEntry;
 				Rectangle containerBounds = inputWidget.getFocusContainer().getBoundsAbs();
 				compositionWindowPosX = MathHelper.clamp(compositionWindowPosX, 0, containerBounds.width() - margin);

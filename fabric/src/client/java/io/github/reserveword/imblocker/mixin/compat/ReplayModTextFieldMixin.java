@@ -85,7 +85,7 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
 
 	@Override
 	public Rectangle getBoundsAbs() {
-		return bounds != null ? bounds.derive(getGuiScale()) : MinecraftTextFieldWidget.super.getBoundsAbs();
+		return bounds != null ? bounds.derive(getGuiScale()) : Rectangle.EMPTY;
 	}
 	
 	@Override

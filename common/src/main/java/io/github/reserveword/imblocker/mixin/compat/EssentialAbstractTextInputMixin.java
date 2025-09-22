@@ -8,15 +8,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import gg.essential.gui.common.input.AbstractTextInput.LinePosition;
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.gui.CursorInfo;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
-import io.github.reserveword.imblocker.common.gui.MinecraftAbstractTextInputWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import kotlin.Pair;
 
 @Mixin(targets = "gg.essential.gui.common.input.AbstractTextInput", remap = false)
-public abstract class EssentialAbstractTextInputMixin extends EssentialUIComponentMixin implements MinecraftAbstractTextInputWidget<CursorInfo> {
+public abstract class EssentialAbstractTextInputMixin extends EssentialUIComponentMixin {
 	
 	@Shadow
 	private LinePosition cursor;

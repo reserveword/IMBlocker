@@ -7,16 +7,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import dev.ftb.mods.ftblibrary.ui.MultilineTextBox;
 import dev.ftb.mods.ftblibrary.ui.Panel;
+import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.FocusableObject;
+import io.github.reserveword.imblocker.common.gui.FtbTextInputWidget;
 import io.github.reserveword.imblocker.common.gui.MinecraftMultilineEditBoxWidget;
 
 @Mixin(value = Panel.class, remap = false)
 public abstract class FtbPanelMixin extends FtbWidgetMixin {
 	
 	@Override
-	public boolean isValidLayoutWidget() {
-		return true;
+	public void handleBoundsChanged() {
+		if(FocusManager.getFocusOwner() instanceof FtbTextInputWidget) {
+			IMManager.updateCompositionWindowPos();
+		}
 	}
 	
 	@Inject(method = "setScrollY", at = @At("TAIL"))

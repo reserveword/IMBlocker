@@ -9,8 +9,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
-import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import net.minecraft.client.MinecraftClient;
@@ -29,18 +27,6 @@ public abstract class MinecraftClientMixin {
 	@Inject(method = "onWindowFocusChanged", at = @At("HEAD"))
 	public void onWindowFocusChanged(boolean focused, CallbackInfo ci) {
 		FocusManager.setWindowFocused(focused);
-	}
-
-	@Inject(method = "onResolutionChanged", at = @At("TAIL"))
-	public void onResolutionChanged(CallbackInfo ci) {
-		try {
-			FocusContainer.MINECRAFT.setGuiScaleFactor(window.getScaleFactor());
-		} catch (NoSuchMethodError e) {
-			FocusContainer.MINECRAFT.setGuiScaleFactor(ReflectionUtil
-					.getFieldValue(window.getClass(), window, Number.class, "field_5179").doubleValue());
-		}
-		IMManager.updateCompositionWindowPos();
-		IMManager.updateCompositionFontSize();
 	}
 
 	@Inject(method = "setScreen", at = @At("HEAD"))

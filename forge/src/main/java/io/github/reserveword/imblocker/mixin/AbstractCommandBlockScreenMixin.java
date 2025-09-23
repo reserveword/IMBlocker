@@ -6,8 +6,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.reserveword.imblocker.common.CommandInputMode;
-import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractCommandBlockEditScreen;
@@ -20,9 +18,6 @@ public abstract class AbstractCommandBlockScreenMixin {
 
 	@Inject(method = "init", at = @At("TAIL"))
 	private void setCommandInputEnglishState(CallbackInfo ci) {
-		if(IMBlockerConfig.INSTANCE.getChatCommandInputType() == CommandInputMode.DISABLE_IM) {
-			((MinecraftTextFieldWidget) commandEdit).setPreferredEditState(false); 
-		}
 		((MinecraftTextFieldWidget) commandEdit).setPreferredEnglishState(true); 
 	}
 }

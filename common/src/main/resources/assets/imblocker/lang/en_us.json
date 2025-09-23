@@ -7,9 +7,10 @@
   "text.autoconfig.imblocker.option.basicSettings.enableScreenRecovering": "Enable Screen Recovering",
   "text.autoconfig.imblocker.option.basicSettings.recoveredScreens": "Recorded Screens",
   "text.autoconfig.imblocker.option.basicSettings.recoveredScreens.@Tooltip": "Here lists all recorded Screens for whitelist editing.",
-  "text.autoconfig.imblocker.option.basicSettings.commandInputMode": "Command Input Mode",
-  "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[0]": "\u00A7lThe method of setting English state when typing command",
-  "text.autoconfig.imblocker.option.basicSettings.commandInputMode.@Tooltip[1]": "If your input method can't auto-switch to English state when typing command,\nset this option to \"DISABLE_IM\" may help,\nbut note that you can only type English in command in this mode.",
+  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl": "English State Implementation",
+  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[0]": "\u00A7lThe method of applying English state.",
+  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[1]": "\"CONVERSION_STATUS\" is generally recommended only for Microsoft IME users.",
+  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[2]": "If your IME cannot auto-switch to English state normally,\nplease select \"DISABLE_IM\" and manually unlock the IME by pressing the hotkey (R-Shift by default).",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState": "Primary English State",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[0]": "\u00A7lThe initial English state of the IME when a text field focused.",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[1]": "This option is mainly for Chinese users who are used to search with JECh.",
@@ -22,7 +23,7 @@
   
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings": "Windows Compatibility Settings",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi": "Allow ConversionStatus API",
-  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "The API that controls the English state.\n\u00A77If disabled, IM_ENG_STATE command input mode will not work.",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "The API that controls the English state.\n\u00A77If disabled, CONVERSION_STATUS English state implementation will not work.",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCursorPositionTracking": "Caret Position Tracking",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCompositionFontTweaks": "Composition Font Tweaks",
   
@@ -39,5 +40,8 @@
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OffArgName": "Fcitx5 Disable Command Argument",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OffArgName.@Tooltip": "To determine it:\nExecute \"fcitx5-remote <this argument>\" command in terminal will disable the IME.",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnStateName": "Fcitx5 Enabled Identifier",
-  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnStateName.@Tooltip": "To determine it:\nExecute \"fcitx5-remote\" command in terminal will return <this argument>."
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnStateName.@Tooltip": "To determine it:\nExecute \"fcitx5-remote\" command in terminal will return <this argument>.",
+  
+  "key.categories.imblocker": "IMBlocker",
+  "key.unlockIME": "Unlock IME"
 }

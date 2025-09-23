@@ -27,8 +27,8 @@ public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin
 	private final MultilineCursorInfo imblocker$cursorInfo = new MultilineCursorInfo(0, 0, 0, 0, "");
 	
 	@Override
-	public boolean isValidLayoutWidget() {
-		return true;
+	public void handleBoundsChanged() {
+		imblocker$onBoundsChanged();
 	}
 	
 	@Inject(method = "setFocused", at = @At("TAIL"))

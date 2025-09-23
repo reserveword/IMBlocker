@@ -27,6 +27,20 @@ dependencies {
 	compileOnly "maven.modrinth:ixeris:3.2.2+1.20.1-fabric"
 }
 
+sourceSets {
+	shadow {
+		java {
+			srcDir 'src/shadow/java'
+		}
+	}
+	
+	main {
+		compileClasspath += sourceSets.shadow.output
+	}
+}
+
+
+
 java {
 	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
 	// if it is present.

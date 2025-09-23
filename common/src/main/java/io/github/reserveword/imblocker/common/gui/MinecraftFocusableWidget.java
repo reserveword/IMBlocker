@@ -1,5 +1,7 @@
 package io.github.reserveword.imblocker.common.gui;
 
+import io.github.reserveword.imblocker.common.IMManager;
+
 public interface MinecraftFocusableWidget extends FocusableWidget {
 	
 	default FocusContainer getFocusContainer() {
@@ -20,5 +22,11 @@ public interface MinecraftFocusableWidget extends FocusableWidget {
 	
 	default void imblocker$onFocusLost() {
 		getFocusContainer().removeFocus(this);
+	}
+	
+	default void imblocker$onBoundsChanged() {
+		if(isTrulyFocused()) {
+			IMManager.updateCompositionWindowPos();
+		}
 	}
 }

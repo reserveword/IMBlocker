@@ -17,7 +17,7 @@ loom {
 }
 
 base {
-	archivesName = "${rootProject.name}-${mod_version}-fabric-1.17+"
+	archivesName = "${rootProject.name}-${mod_version}-fabric+1.17-1.21.8"
 }
 
 dependencies {

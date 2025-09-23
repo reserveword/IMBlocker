@@ -11,8 +11,6 @@ import com.mojang.blaze3d.platform.Window;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
-import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import net.minecraft.client.Minecraft;
@@ -30,18 +28,6 @@ public abstract class MinecraftClientMixin {
 	@Inject(method = "setWindowActive", at = @At("HEAD"))
 	public void onWindowFocusChanged(boolean isFocused, CallbackInfo ci) {
 		FocusManager.setWindowFocused(isFocused);
-	}
-
-	@Inject(method = "resizeDisplay", at = @At("TAIL"))
-	public void onResolutionChanged(CallbackInfo ci) {
-		try {
-			FocusContainer.MINECRAFT.setGuiScaleFactor(window.getGuiScale());
-		} catch (NoSuchMethodError e) {
-			FocusContainer.MINECRAFT.setGuiScaleFactor(ReflectionUtil
-					.getFieldValue(window.getClass(), window, Number.class, "guiScale").doubleValue());
-		}
-		IMManager.updateCompositionWindowPos();
-		IMManager.updateCompositionFontSize();
 	}
 
 	@Inject(method = "setScreen", at = @At("HEAD"))

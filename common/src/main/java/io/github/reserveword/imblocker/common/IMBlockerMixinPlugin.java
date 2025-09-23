@@ -59,7 +59,12 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		validMixins.add(isOfficialMapping ? "AbstractWidgetMixin" : "ClickableWidgetMixin");
 		validMixins.add("MinecraftClientMixin");
 		validMixins.add("WindowMixin");
+		validMixins.add("UnlockIMEKeyListener");
 		validMixins.add(isOfficialMapping ? "KeyboardHandlerAccessor" : "KeyboardAccessor");
+		
+		if(Platform.isWindows()) {
+			validMixins.add("WindowsFullScreenPatch");
+		}
 		
 		if(Platform.isLinux()) {
 			validMixins.add("LinuxKeyboardPatch");
@@ -153,6 +158,11 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		
 		if(IMBlockerCore.hasMod("notes")) {
 			validMixins.add("compat.NotesTextFieldMixin");
+		}
+		
+		if(IMBlockerCore.hasMod("essential")) {
+			validMixins.add("compat.EssentialUIComponentMixin");
+			validMixins.add("compat.EssentialAbstractTextInputMixin");
 		}
 	}
 }

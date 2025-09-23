@@ -34,6 +34,8 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	private static native boolean ImmGetCompositionFontW(WinNT.HANDLE himc, LOGFONTW lplf);
 
 	private static native boolean ImmSetCompositionFontW(WinNT.HANDLE himc, LOGFONTW lplf);
+	
+	private static native WinDef.HWND ImmGetDefaultIMEWnd(WinNT.HWND hwnd);
 
 	public static long lastIMStateOnTimestamp = System.currentTimeMillis();
 
@@ -64,7 +66,11 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 				himc = ImmAssociateContext(hwnd, null);
 				ImmDestroyContext(himc);
 			}
-			ImmReleaseContext(hwnd, himc);
+		}
+		ImmReleaseContext(hwnd, himc);
+		if (on) {
+			updateCompositionWindowPos();
+			updateCompositionFontSize();
 		}
 	}
 
@@ -136,7 +142,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		ImmReleaseContext(hwnd, himc);
 	}
 
-	private WinDef.HWND getActiveWindow() {
+	private static WinDef.HWND getActiveWindow() {
 		try {
 			return u.GetActiveWindow();
 		} catch (NoSuchMethodError e) {
@@ -153,17 +159,18 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 				return Point.TOP_LEFT;
 			}
 			//Constrained to entry border.
-			int caretX = MathHelper.clamp(caretPos.x(), 0, (int) (inputEntryBounds.width() - 4 * scaleFactor));
-			int caretY = MathHelper.clamp(caretPos.y(), 0, (int) (inputEntryBounds.height() - 4 * scaleFactor));
+			int caretX = MathHelper.clamp(caretPos.x(), 0, inputEntryBounds.width());
+			int caretY = MathHelper.clamp(caretPos.y(), 0, inputEntryBounds.height());
 			caretY -= scaleFactor / 2; // Tweak yPos to fit font style.
 			int compositionWindowPosX = inputEntryBounds.x() + caretX;
 			int compositionWindowPosY = inputEntryBounds.y() + caretY;
 			if(inputEntry instanceof FocusableWidget) {
 				//Constrained to container border.
+				int margin = (int) (inputEntry.getFontHeight() * scaleFactor / 2);
 				FocusableWidget inputWidget = (FocusableWidget) inputEntry;
 				Rectangle containerBounds = inputWidget.getFocusContainer().getBoundsAbs();
-				compositionWindowPosX = MathHelper.clamp(compositionWindowPosX, 0, containerBounds.width() - 16);
-				compositionWindowPosY = MathHelper.clamp(compositionWindowPosY, 0, containerBounds.height() - 16);
+				compositionWindowPosX = MathHelper.clamp(compositionWindowPosX, 0, containerBounds.width() - margin);
+				compositionWindowPosY = MathHelper.clamp(compositionWindowPosY, 0, containerBounds.height() - margin);
 				compositionWindowPosX += containerBounds.x();
 				compositionWindowPosY += containerBounds.y();
 			}

@@ -48,4 +48,7 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
 [Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)  
 [BlockUI](https://github.com/ldtteam/BlockUI)  
 [SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)  
-[Notes](https://github.com/MattCzyr/Notes)
+[Notes](https://github.com/MattCzyr/Notes)  
+[Essential Mod](https://essential.gg/)*
+
+*On Fabric, you need to extract the file named "essential-<32-bit code>.jar" from the root directory of its mod JAR and **only** put this file into your mod folder.

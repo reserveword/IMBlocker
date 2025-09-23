@@ -1,29 +1,15 @@
 package io.github.reserveword.imblocker.common.gui;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
-import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.StringUtil;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 
-public interface MinecraftTextFieldWidget extends MinecraftFocusableWidget {
+public interface MinecraftTextFieldWidget extends MinecraftAbstractTextInputWidget<SinglelineCursorInfo> {
 	
-	@Override
-	default void deliverFocus() {
-		updateCursorInfo();
-		MinecraftFocusableWidget.super.deliverFocus();
-	}
-	
-	default void setPreferredEditState(boolean state) {}
-	 
 	default void setPreferredEnglishState(boolean state) {}
 	
 	default boolean getPrimaryEnglishState() {
 		return IMBlockerConfig.INSTANCE.getPrimaryEnglishState().getBoolean();
-	}
-	
-	@Override
-	default Rectangle getBoundsAbs() {
-		return Rectangle.EMPTY;
 	}
 	
 	default Point getCaretPos() {
@@ -36,18 +22,6 @@ public interface MinecraftTextFieldWidget extends MinecraftFocusableWidget {
 		int caretY = cursorInfo.hasBorder ? (cursorInfo.widgetHeight - getFontHeight()) / 2 : 0;
     	return new Point(getGuiScale(), caretX, caretY);
 	}
-	
-	default void imblocker$onCursorChanged() {
-		if(updateCursorInfo() && isTrulyFocused()) {
-			IMManager.updateCompositionWindowPos();
-		}
-	}
-	
-	default boolean updateCursorInfo() {
-		return true;
-	}
-
-	SinglelineCursorInfo getCursorInfo();
 	
 	default int getPaddingX() {
 		return 4;

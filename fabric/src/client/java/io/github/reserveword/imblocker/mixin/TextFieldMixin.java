@@ -28,7 +28,6 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 	private final SinglelineCursorInfo imblocker$cursorInfo = new SinglelineCursorInfo(
 			drawsBackground, height, firstCharacterIndex, selectionStart, text);
 	
-	private boolean preferredEditState = true;
 	private boolean preferredEnglishState = getPrimaryEnglishState();
 	
 	@Unique
@@ -93,16 +92,6 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 	}
 
 	@Override
-	public void setPreferredEditState(boolean preferredEditState) {
-		if (this.preferredEditState != preferredEditState) {
-			this.preferredEditState = preferredEditState;
-			if (isTrulyFocused()) {
-				updateIMState();
-			}
-		}
-	}
-
-	@Override
 	public void setPreferredEnglishState(boolean state) {
 		if (preferredEnglishState != state) {
 			preferredEnglishState = state;
@@ -110,11 +99,6 @@ public abstract class TextFieldMixin extends ClickableWidgetMixin implements Min
 				updateEnglishState();
 			}
 		}
-	}
-
-	@Override
-	public boolean getPreferredState() {
-		return preferredEditState;
 	}
 
 	@Override

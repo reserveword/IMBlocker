@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
 import io.github.cottonmc.cotton.gui.widget.WWidget;
-import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
@@ -28,14 +27,10 @@ public abstract class LibGuiWidgetMixin implements MinecraftFocusableWidget {
 	public void onFocusLost(CallbackInfo ci) {}
 
 	@Inject(method = "setLocation", at = @At("TAIL"))
-	public void handleLocationChanged(int x, int y, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
-	}
+	public void handleLocationChanged(int x, int y, CallbackInfo ci) {}
 
 	@Inject(method = "setSize", at = @At("TAIL"))
-	public void handleSizeChanged(int width, int height, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
-	}
+	public void handleSizeChanged(int width, int height, CallbackInfo ci) {}
 
 	@Override
 	public Rectangle getBoundsAbs() {

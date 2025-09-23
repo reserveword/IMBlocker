@@ -3,12 +3,18 @@ package io.github.reserveword.imblocker;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.lwjgl.glfw.GLFW;
+
+import com.mojang.blaze3d.platform.InputConstants.Type;
+
 import io.github.reserveword.imblocker.common.IMBlockerAutoConfig;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -18,6 +24,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(IMBlockerCore.MODID)
 public class IMBlocker {
+	
+	public static final KeyMapping unlockIMEKey = new KeyMapping(
+			"key.unlockIME", Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_SHIFT, "key.categories.imblocker");
 
 	@SuppressWarnings("removal")
 	public IMBlocker() {
@@ -26,6 +35,8 @@ public class IMBlocker {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes", "removal" })
 	public IMBlocker(FMLJavaModLoadingContext context) {
+		Minecraft.getInstance().options.keyMappings = ArrayUtils.add(
+				Minecraft.getInstance().options.keyMappings, unlockIMEKey);
 		IMBlockerConfig.defaultScreenWhitelist.addAll(ForgeCommon.defaultScreenWhitelist);
 		if(IMBlockerCore.hasMod("cloth_config")) {
 			AutoConfig.register(IMBlockerAutoConfig.class, GsonConfigSerializer::new);

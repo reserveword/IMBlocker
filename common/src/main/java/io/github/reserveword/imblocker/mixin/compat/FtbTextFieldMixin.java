@@ -30,8 +30,8 @@ public abstract class FtbTextFieldMixin extends FtbWidgetMixin
 			new SinglelineCursorInfo(true, height, displayPos, cursorPos, text);
 	
 	@Override
-	public boolean isValidLayoutWidget() {
-		return true;
+	public void handleBoundsChanged() {
+		imblocker$onBoundsChanged();
 	}
 
 	@Inject(method = "setFocused", at = @At("TAIL"))

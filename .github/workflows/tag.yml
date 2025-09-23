@@ -23,7 +23,7 @@ jobs:
           - loader: fabric
             project: fabric
             java-version: 17
-            game-versions: '[1.17,)'
+            game-versions: '[1.17,1.21.8]'
 
           - loader: forge
             project: forge
@@ -38,7 +38,7 @@ jobs:
           - loader: neoforge
             project: neoforge
             java-version: 21
-            game-versions: '[1.20.6,)'
+            game-versions: '[1.20.6,1.21.8]'
 
     steps:
       - name: 签出存储库

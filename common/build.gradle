@@ -1,0 +1,49 @@
+plugins {
+	id 'eclipse'
+	id 'java'
+	id 'java-library'
+	id 'fabric-loom' version '1.11+'
+}
+
+loom {
+	mixin {
+		useLegacyMixinAp = false
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings loom.officialMojangMappings()
+
+	compileOnly "org.spongepowered:mixin:0.8.7"
+	compileOnly "org.ow2.asm:asm-tree:9.8"
+	
+	compileOnly "ca.weblite:java-objc-bridge:1.1"
+
+	compileOnlyApi "me.shedaniel.cloth:cloth-config-neoforge:$clothconfig_version"
+	compileOnlyApi "io.github.spair:imgui-java-app:$imgui_version"
+	compileOnly "io.github.cottonmc:LibGui:$cottonlibgui_version"
+	compileOnly "maven.modrinth:ixeris:$ixeris_version"
+}
+
+sourceSets {
+	shadow {
+		java {
+			srcDir 'src/shadow/java'
+		}
+	}
+	
+	main {
+		compileClasspath += sourceSets.shadow.output
+	}
+}
+
+java {
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+
+
+

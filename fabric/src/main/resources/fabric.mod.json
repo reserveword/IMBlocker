@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "${mod_id}",
+	"version": "${mod_version}",
+	"name": "${mod_name}",
+	"description": "Blocks Input Methods when you're not using it.\\n在你不打字的时候自动关闭输入法",
+	"authors": [
+		"${author}"
+	],
+	"contributors": [
+	],
+	"contact": {
+		"sources": "${mod_url}"
+	},
+	"license": "${license}",
+	"icon": "${mod_logo}",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"io.github.reserveword.imblocker.IMBlocker"
+		],
+		"modmenu": [
+			"io.github.reserveword.imblocker.IMBlockerModMenuIntegration"
+		]
+	},
+	"mixins": [
+		"imblocker.mixins.json"
+	],
+	"depends": {
+		"fabricloader": "*",
+		"minecraft": ">=1.21.9",
+		"java": ">=21"
+	},
+	"suggests": {
+		"modmenu": "*",
+		"cloth-config": "*"
+	}
+}

@@ -1,0 +1,110 @@
+package io.github.reserveword.imblocker.common;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+
+import com.google.common.collect.Lists;
+import com.sun.jna.Platform;
+
+import net.minecraft.client.gui.screens.inventory.AbstractSignEditScreen;
+
+public class IMBlockerConfig {
+	public static final Pattern classNamePattern = Pattern
+			.compile("^([\\p{L}_][\\p{L}\\p{N}_]*:)?([\\p{L}_$][\\p{L}\\p{N}_$]*\\.)*[\\p{L}_$][\\p{L}\\p{N}_$]*$");
+
+	public static final Predicate<Object> checkClassForName = str -> (str instanceof String)
+			&& classNamePattern.matcher((String) str).matches();
+
+	public static IMBlockerConfig INSTANCE = new IMBlockerConfig();
+
+	public static final List<String> defaultScreenWhitelist = Lists.newArrayList(
+			"net.mehvahdjukaar.supplementaries.client.screens.TextHolderEditScreen",
+			"com.simibubi.create.content.equipment.clipboard.ClipboardScreen",
+			AbstractSignEditScreen.class.getName());
+
+	private static final Set<Class<?>> bakedScreenWhitelist = new HashSet<>();
+
+	public void reloadScreenWhitelist(List<? extends String> newScreenWhitelist) {
+		bakedScreenWhitelist.clear();
+		for (String s : newScreenWhitelist) {
+			try {
+				if (s.contains(":")) {
+					String[] ss = s.split(":");
+					s = ss[ss.length - 1];
+				}
+				bakedScreenWhitelist.add(Class.forName(s));
+			} catch (ClassNotFoundException e) {
+				IMBlockerCore.LOGGER.warn("[IMBlocker] Class {} not found, ignored.", s);
+			} catch (Throwable e) {
+				IMBlockerCore.LOGGER.warn("[IMBlocker] Invalid screen class: " + e);
+			}
+		}
+		IMBlockerCore.LOGGER.info("[IMBlocker] bakelist {} result {}", "screenWhitelist", bakedScreenWhitelist);
+	}
+
+	public boolean isScreenInWhitelist(Object screen) {
+		return bakedScreenWhitelist.stream().anyMatch(screenCls -> screenCls.isInstance(screen));
+	}
+
+	public void recoverScreen(String screenClsName) {
+	}
+
+	public boolean isScreenRecoveringEnabled() {
+		return false;
+	}
+	
+	public EnglishStateImpl getEnglishStateImpl() {
+		return Platform.isWindows() ? EnglishStateImpl.CONVERSION_STATUS : EnglishStateImpl.DISABLE_IM;
+	}
+	
+	public EnglishState getPrimaryEnglishState() {
+		return EnglishState.CJK;
+	}
+	
+	public boolean isCharSimulationEnabled() {
+		return false;
+	}
+
+	public boolean isConversionStatusApiEnabled() {
+		return true;
+	}
+
+	public boolean isCursorPositionTrackingEnabled() {
+		return true;
+	}
+
+	public boolean isCompositionFontTweaksEnabled() {
+		return true;
+	}
+	
+	public boolean isLinuxKeyboardPatchEnabled() {
+		return true;
+	}
+	
+	public String getIBusOnArgName() {
+		return "libpinyin";
+	}
+	
+	public String getIBusOffArgName() {
+		return "xkb:us::eng";
+	}
+	
+	public String getIBusOnStateName() {
+		return getIBusOnArgName();
+	}
+	
+	public String getFcitx5OnArgName() {
+		return "-o";
+	}
+	
+	public String getFcitx5OffArgName() {
+		return "-c";
+	}
+	
+	public String getFcitx5OnStateName() {
+		return "2";
+	}
+}

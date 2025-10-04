@@ -1,0 +1,68 @@
+package io.github.reserveword.imblocker.common;
+
+import com.sun.jna.Platform;
+
+import io.github.reserveword.imblocker.common.gui.FocusManager;
+import io.github.reserveword.imblocker.common.gui.FocusableObject;
+
+public final class IMManager {
+	private static final PlatformIMManager INSTANCE;
+	
+	public interface PlatformIMManager {
+		
+		void setState(boolean on);
+		
+		void setEnglishState(boolean isEN);
+		
+		default void updateCompositionWindowPos() {}
+		
+		default void updateCompositionFontSize() {}
+	}
+	
+	private IMManager() {}
+	
+	public static void setState(boolean on) {
+		IMBlockerCore.invokeOnMainThread(() -> INSTANCE.setState(on));
+	}
+	
+	public static void setEnglishState(boolean isEN) {
+		if(IMBlockerConfig.INSTANCE.isConversionStatusApiEnabled()) {
+			IMBlockerCore.invokeOnMainThread(() -> INSTANCE.setEnglishState(isEN));
+		}
+	}
+	
+	public static void updateCompositionWindowPos() {
+		if(IMBlockerConfig.INSTANCE.isCursorPositionTrackingEnabled()) {
+			IMBlockerCore.invokeOnMainThread(() -> INSTANCE.updateCompositionWindowPos());
+		}
+	}
+	
+	public static void updateCompositionFontSize() {
+		if(IMBlockerConfig.INSTANCE.isCompositionFontTweaksEnabled()) {
+			IMBlockerCore.invokeOnMainThread(() -> INSTANCE.updateCompositionFontSize());
+		}
+	}
+	
+	public static void evaluateKeyInput(boolean isUnlockIMEKey, int action, int modifiers) {
+		if(IMBlockerConfig.INSTANCE.getEnglishStateImpl() == EnglishStateImpl.DISABLE_IM &&
+				isUnlockIMEKey && (modifiers & 14) == 0 && action == 0) {
+			FocusableObject focusOwner = FocusManager.getFocusOwner();
+			if(focusOwner != null && focusOwner.getPreferredState()) {
+				setState(true);
+			}
+		}
+	}
+	
+	static {
+		if(Platform.isWindows()) {
+			INSTANCE = new IMManagerWindows();
+		}else if(Platform.isMac()) {
+			INSTANCE = new IMManagerMac();
+		}else if(Platform.isLinux()) {
+			INSTANCE = new IMManagerLinux();
+		}else {
+			IMBlockerCore.LOGGER.warn("[IMBlocker] Unsupported platform, using stub");
+			INSTANCE = new IMManagerStub();
+		}
+	}
+}

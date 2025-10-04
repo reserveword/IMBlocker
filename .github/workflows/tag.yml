@@ -1,0 +1,68 @@
+name: Publish on tag
+
+on:
+  push:
+    tags:
+      - '*'
+
+env:
+  MODRINTH_TOKEN: ${{ secrets.PUBLISH_MODRINTH_TOKEN }}
+  CURSEFORGE_TOKEN: ${{ secrets.PUBLISH_CURSEFORGE_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - loader: fabric
+            project: fabric
+            java-version: 21
+            game-versions: '[1.21.9,)'
+
+          - loader: neoforge
+            project: neoforge
+            java-version: 21
+            game-versions: '[1.21.9,)'
+
+    steps:
+      - name: 签出存储库
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: 设置 Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java-version }}
+
+      - name: 构建
+        run: ./gradlew :${{ matrix.project }}:build
+
+      - name: 发布${{ matrix.project }}（CurseForge/Modrinth/Github）
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          curseforge-id: 483760
+          curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
+
+          modrinth-id: WMDesFsZ
+          modrinth-token: ${{ env.MODRINTH_TOKEN }}
+
+          github-token: ${{ env.GITHUB_TOKEN }}
+
+          name: IMBlocker-${{ github.ref_name }}-${{ matrix.loader }}
+          version-type: release
+          changelog-file: CHANGELOG.md
+
+          loaders: ${{ matrix.loader }}
+          game-versions: ${{ matrix.game-versions }}
+          
+          files: ${{ matrix.project }}/build/libs/!(*-@(dev|sources|javadoc)).jar
+
+          java: ${{ matrix.java-version }}

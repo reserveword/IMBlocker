@@ -77,6 +77,12 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("compat.LibGuiTextFieldMixin");
 		}
 		
+		if(IMBlockerCore.hasMod("reeses-sodium-options") || 
+				IMBlockerCore.hasMod("reeses_sodium_options")) {
+			validMixins.add("compat.RSOAbstractFrameMixin");
+			validMixins.add("compat.RSOSearchFieldMixin");
+		}
+		
 		if(IMBlockerCore.hasMod("essential")) {
 			validMixins.add("compat.EssentialUIComponentMixin");
 			validMixins.add("compat.EssentialAbstractTextInputMixin");

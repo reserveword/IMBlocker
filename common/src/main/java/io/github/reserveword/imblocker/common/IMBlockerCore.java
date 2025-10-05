@@ -25,7 +25,7 @@ public class IMBlockerCore {
 			try {
 				IxerisApi.getInstance().runLaterOnMainThread(runnable);
 			} catch (Throwable e) {
-				throw new RuntimeException("[IMBlocker] Ixeris incompatible! Please report it to developer: {}", e);
+				throw new RuntimeException("[IMBlocker] Ixeris incompatible! Please report it to developer: ", e);
 			}
 		}else {
 			Minecraft.getInstance().execute(runnable);

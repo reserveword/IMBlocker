@@ -6,9 +6,9 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import io.github.reserveword.imblocker.common.accessor.MinecraftClientUtil;
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
 import me.decce.ixeris.api.IxerisApi;
+import net.minecraft.client.Minecraft;
 
 public class IMBlockerCore {
 	public static final String MODID = "imblocker";
@@ -28,7 +28,7 @@ public class IMBlockerCore {
 				throw new RuntimeException("[IMBlocker] Ixeris incompatible! Please report it to developer: {}", e);
 			}
 		}else {
-			MinecraftClientUtil.execute(runnable);
+			Minecraft.getInstance().execute(runnable);
 		}
 	}
 	

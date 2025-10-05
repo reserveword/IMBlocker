@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker.common.accessor;
+package io.github.reserveword.imblocker.common;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -7,7 +7,6 @@ import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.platform.Window;
 
-import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.gui.Dimension;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.mixin.KeyboardHandlerAccessor;
@@ -30,10 +29,6 @@ public abstract class MinecraftClientUtil {
 				client.getWindow().handle(), new CharacterEvent(codePoint, 0));
 	}
 	
-	public static void execute(Runnable runnable) {
-		Minecraft.getInstance().execute(runnable);
-	}
-	
 	public static Rectangle getWindowBounds() {
 		Window gameWindow = Minecraft.getInstance().getWindow();
 		int[] width = new int[1], height = new int[1];
@@ -44,10 +39,6 @@ public abstract class MinecraftClientUtil {
 	public static Dimension getContentSize() {
 		Window gameWindow = Minecraft.getInstance().getWindow();
 		return new Dimension(gameWindow.getWidth(), gameWindow.getHeight());
-	}
-	
-	public static Object getCurrentScreen() {
-		return Minecraft.getInstance().screen;
 	}
 	
 	public static int getStringWidth(String text) {

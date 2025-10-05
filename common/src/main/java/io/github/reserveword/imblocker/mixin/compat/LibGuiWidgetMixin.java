@@ -10,9 +10,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
 import io.github.cottonmc.cotton.gui.widget.WWidget;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
-import io.github.reserveword.imblocker.common.accessor.MinecraftClientUtil;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 
 @Pseudo
 @Mixin(value = WWidget.class, remap = false)
@@ -36,7 +37,7 @@ public abstract class LibGuiWidgetMixin implements MinecraftFocusableWidget {
 	public Rectangle getBoundsAbs() {
 		int x = getAbsoluteX();
 		int y = getAbsoluteY();
-		Object currentScreen = MinecraftClientUtil.getCurrentScreen();
+		Screen currentScreen = Minecraft.getInstance().screen;
 		if (CottonClientScreen.class.isInstance(currentScreen)) {
 			x += ReflectionUtil.getFieldValue(CottonClientScreen.class, currentScreen, int.class, "left");
 			y += ReflectionUtil.getFieldValue(CottonClientScreen.class, currentScreen, int.class, "top");

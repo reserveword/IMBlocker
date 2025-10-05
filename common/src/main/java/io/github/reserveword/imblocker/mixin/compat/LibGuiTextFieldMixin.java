@@ -19,7 +19,7 @@ import net.minecraft.client.input.CharacterEvent;
 public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements MinecraftTextFieldWidget {
 	
 	@Shadow
-	public static final int TEXT_PADDING_X = 4;
+	public static int TEXT_PADDING_X;
 	
 	@Shadow private boolean editable;
 	
@@ -50,8 +50,10 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 		imblocker$onFocusLost();
 	}
 	
-	@Inject(method = "onCharTyped(Lnet/minecraft/class_11905;)Lio/github/cottonmc/cotton/gui/widget/data/InputResult;", 
-			at = @At("HEAD"), cancellable = true)
+	@Inject(method = {
+			"onCharTyped(Lnet/minecraft/class_11905;)Lio/github/cottonmc/cotton/gui/widget/data/InputResult;",
+			"onCharTyped(Lnet/minecraft/client/input/CharacterEvent;)Lio/github/cottonmc/cotton/gui/widget/data/InputResult;"
+			}, at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(CharacterEvent input, CallbackInfoReturnable<Object> cir) {
 		if(FocusManager.isTrackingFocus) {
 			if(editable) {

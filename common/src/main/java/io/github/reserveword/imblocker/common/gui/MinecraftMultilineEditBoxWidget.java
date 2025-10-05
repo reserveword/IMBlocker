@@ -1,7 +1,7 @@
 package io.github.reserveword.imblocker.common.gui;
 
+import io.github.reserveword.imblocker.common.MinecraftClientUtil;
 import io.github.reserveword.imblocker.common.StringUtil;
-import io.github.reserveword.imblocker.common.accessor.MinecraftClientUtil;
 
 public interface MinecraftMultilineEditBoxWidget extends MinecraftAbstractTextInputWidget<MultilineCursorInfo> {
 	

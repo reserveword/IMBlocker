@@ -1,8 +1,5 @@
 package io.github.reserveword.imblocker.common.jnastructs;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.sun.jna.Structure;
 import com.sun.jna.Structure.FieldOrder;
 import com.sun.jna.win32.W32APITypeMapper;
@@ -12,7 +9,6 @@ import com.sun.jna.win32.W32APITypeMapper;
 			"lfCharSet", "lfOutPrecision", "lfClipPrecision",
 			"lfQuality", "lfPitchAndFamily", "lfFaceName"})
 public class LOGFONTW extends Structure {
-	
 	public int lfHeight;
 	public int lfWidth;
 	public int lfEscapement;
@@ -30,14 +26,5 @@ public class LOGFONTW extends Structure {
 
 	public LOGFONTW() {
 		super(W32APITypeMapper.UNICODE);
-	}
-
-	@Override
-	protected List<String> getFieldOrder() {
-		return Arrays.asList(
-			"lfHeight", "lfWidth", "lfEscapement", "lfOrientation",
-			"lfWeight", "lfItalic", "lfUnderline", "lfStrikeOut",
-			"lfCharSet", "lfOutPrecision", "lfClipPrecision",
-			"lfQuality", "lfPitchAndFamily", "lfFaceName");
 	}
 }

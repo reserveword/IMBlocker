@@ -1,7 +1,7 @@
 package io.github.reserveword.imblocker.common.gui;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.accessor.MinecraftClientUtil;
+import io.github.reserveword.imblocker.common.MinecraftClientUtil;
 
 /**
  * <p>This class represents the focus destination of the game window. The game

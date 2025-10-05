@@ -7,7 +7,7 @@ import java.util.Optional;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.MathHelper;
-import io.github.reserveword.imblocker.common.accessor.MinecraftClientUtil;
+import io.github.reserveword.imblocker.common.MinecraftClientUtil;
 
 final class MinecraftFocusContext extends FocusContainer {
 	

@@ -40,7 +40,7 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
  
 [Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems) (waiting for update)  
 [EMI](https://github.com/emilyploszaj/emi) (waiting for update)  
-[Axiom](https://axiom.moulberry.com/) (waiting for update)  
+[Axiom](https://axiom.moulberry.com/)  
 [Replay Mod](https://www.replaymod.com/) (waiting for update)  
 [FTB Library](https://github.com/FTBTeam/FTB-Library) (waiting for update)  
 [Meteor Client](https://www.meteorclient.com/) (update soon)  

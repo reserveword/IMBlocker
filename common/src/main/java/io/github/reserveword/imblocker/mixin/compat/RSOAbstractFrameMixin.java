@@ -1,7 +1,5 @@
 package io.github.reserveword.imblocker.mixin.compat;
 
-import java.util.function.Consumer;
-
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -18,12 +16,9 @@ public abstract class RSOAbstractFrameMixin {
 	
 	@Shadow
 	private GuiEventListener focused;
-	
-	@Shadow
-	private Consumer<GuiEventListener> focusListener;
 
 	@Inject(method = {"setFocused", "method_25395"}, at = @At("HEAD"), cancellable = true)
-	public void setFocused(@Nullable GuiEventListener focused, CallbackInfo ci) {
+	public void filterInvalidFocusRequest(@Nullable GuiEventListener focused, CallbackInfo ci) {
 		if (this.focused == focused) {
 			ci.cancel();
 		}

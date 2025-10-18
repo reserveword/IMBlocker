@@ -12,6 +12,7 @@ import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.Point;
+import net.minecraft.client.input.CharacterEvent;
 
 @Pseudo
 @Mixin(targets = "meteordevelopment.meteorclient.gui.widgets.input.WTextBox", remap = false)
@@ -32,7 +33,7 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin {
 	}
 	
 	@Inject(method = "onCharTyped", at = @At("HEAD"), cancellable = true)
-	public void checkFocusTracking(char c, CallbackInfoReturnable<Boolean> cir) {
+	public void checkFocusTracking(CharacterEvent input, CallbackInfoReturnable<Boolean> cir) {
 		if(FocusManager.isTrackingFocus) {
 			if(focused) {
 				FocusContainer.MINECRAFT.switchFocus(this);

@@ -20,20 +20,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - loader: fabric
-            project: fabric
-            java-version: 17
-            game-versions: '[1.17,1.21.8]'
+          #- loader: fabric
+          #  project: fabric
+          #  java-version: 17
+          #  game-versions: '[1.17,1.21.8]'
 
           - loader: forge
             project: forge
             java-version: 17
             game-versions: '[1.17,1.20.4]'
 
-          - loader: forge
-            project: forge-legacy
-            java-version: 17
-            game-versions: '1.16.5'
+          #- loader: forge
+          #  project: forge-legacy
+          #  java-version: 17
+          #  game-versions: '1.16.5'
 
           - loader: neoforge
             project: neoforge

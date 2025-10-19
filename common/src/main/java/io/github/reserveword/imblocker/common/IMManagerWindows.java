@@ -37,7 +37,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	
 	private static native WinDef.HWND ImmGetDefaultIMEWnd(WinNT.HWND hwnd);
 
-	public static long lastIMStateOnTimestamp = System.currentTimeMillis();
+	private long lastIMStateOnTimestamp = 0;
 
 	private final SetConversionStateThread setConversionStateThread;
 	private boolean preferredEnglishState = false;
@@ -180,7 +180,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 			return Point.TOP_LEFT;
 		}
 	}
-
+	
 	private class SetConversionStateThread extends Thread {
 
 		private boolean isScheduled = false;

@@ -15,41 +15,6 @@ import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor.Mapping
 public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 	
 	private static final List<String> validMixins = new ArrayList<>();
-
-	@Override
-	public void onLoad(String mixinPackage) {
-		
-	}
-
-	@Override
-	public String getRefMapperConfig() {
-		return null;
-	}
-
-	@Override
-	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		return true;
-	}
-
-	@Override
-	public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {
-		
-	}
-
-	@Override
-	public List<String> getMixins() {
-		return validMixins;
-	}
-
-	@Override
-	public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-		
-	}
-
-	@Override
-	public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-		
-	}
 	
 	static {
 		boolean isOfficialMapping = IMBlockerCore.getMapping() == Mapping.OFFICIAL;
@@ -164,5 +129,21 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("compat.EssentialUIComponentMixin");
 			validMixins.add("compat.EssentialAbstractTextInputMixin");
 		}
+		
+		if(IMBlockerCore.hasMod("sfm")) {
+			validMixins.add("compat.SFMMultiLineEditboxMixin");
+		}
 	}
+
+	@Override
+	public List<String> getMixins() {
+		return validMixins;
+	}
+
+	public void onLoad(String mixinPackage) {}
+	public String getRefMapperConfig() { return null; }
+	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) { return true; }
+	public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {}
+	public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
+	public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
 }

@@ -7,4 +7,8 @@ public record Rectangle(int x, int y, int width, int height) {
 		this((int) (scaleFactor * x), (int) (scaleFactor * y), 
 				(int) (scaleFactor * width), (int) (scaleFactor * height));
 	}
+	
+	public Rectangle derive(double scaleFactor) {
+		return new Rectangle(scaleFactor, x, y, width, height);
+	}
 }

@@ -47,6 +47,10 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("compat.LibGuiTextFieldMixin");
 		}
 		
+		if(IMBlockerCore.hasMod("replaymod")) {
+			validMixins.add("compat.ReplayModTextFieldMixin");
+		}
+		
 		if(IMBlockerCore.hasMod("meteor-client")) {
 			validMixins.add("compat.MeteorWidgetMixin");
 			validMixins.add("compat.MeteorTextFieldMixin");

@@ -62,6 +62,10 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("compat.RSOSearchFieldMixin");
 		}
 		
+		if(IMBlockerCore.hasMod("notes")) {
+			validMixins.add("compat.NotesTextFieldMixin");
+		}
+		
 		if(IMBlockerCore.hasMod("essential")) {
 			validMixins.add("compat.EssentialUIComponentMixin");
 			validMixins.add("compat.EssentialAbstractTextInputMixin");

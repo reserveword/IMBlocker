@@ -1,12 +1,12 @@
 package io.github.reserveword.imblocker.common;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.Lists;
 import com.sun.jna.Platform;
 
 public class IMBlockerConfig {
@@ -18,7 +18,9 @@ public class IMBlockerConfig {
 
 	public static IMBlockerConfig INSTANCE = new IMBlockerConfig();
 
-	public static final List<String> defaultScreenWhitelist = new ArrayList<>();
+	public static final List<String> defaultScreenWhitelist = Lists.newArrayList(
+			"com.simibubi.create.content.equipment.clipboard.ClipboardScreen",
+			"net.mehvahdjukaar.supplementaries.client.screens.TextHolderEditScreen");
 
 	private static final Set<Class<?>> bakedScreenWhitelist = new HashSet<>();
 

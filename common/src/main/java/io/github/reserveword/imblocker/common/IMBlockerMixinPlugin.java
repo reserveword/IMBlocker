@@ -133,6 +133,11 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		if(IMBlockerCore.hasMod("sfm")) {
 			validMixins.add("compat.SFMMultiLineEditboxMixin");
 		}
+		
+		if(IMBlockerCore.hasMod("armourers_workshop")) {
+			validMixins.add("compat.AWCGGraphicsContextMixin");
+			validMixins.add("compat.AWTextStorageMixin");
+		}
 	}
 
 	@Override

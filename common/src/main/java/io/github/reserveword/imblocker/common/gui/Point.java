@@ -15,6 +15,10 @@ public class Point {
 		this.y = y;
 	}
 	
+	public Point derive(double scaleFactor) {
+		return new Point(scaleFactor, x, y);
+	}
+	
 	public int x() {
 		return x;
 	}

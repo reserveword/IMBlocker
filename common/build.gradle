@@ -13,6 +13,7 @@ dependencies {
 	compileOnly 'org.apache.logging.log4j:log4j-slf4j2-impl:2.19.0'
 	compileOnly 'ca.weblite:java-objc-bridge:1.1'
 	
+	compileOnly("com.google.guava:guava:31.1-jre")
 	compileOnly("org.spongepowered:mixin:0.8.5")
 	compileOnly("org.ow2.asm:asm-tree:9.6")
 	

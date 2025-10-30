@@ -13,8 +13,7 @@ public class ForgeCommon {
 	public static final List<String> defaultScreenWhitelist;
 
 	static {
-		defaultScreenWhitelist = Lists.newArrayList(
-				"net.mehvahdjukaar.supplementaries.client.screens.TextHolderEditScreen");
+		defaultScreenWhitelist = Lists.newArrayList();
 		
 		if(!IMBlockerCore.isGameVersionReached(771/*1.21.6*/)) {
 			defaultScreenWhitelist.add(BookEditScreen.class.getName());

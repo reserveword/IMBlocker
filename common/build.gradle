@@ -26,6 +26,7 @@ dependencies {
 	compileOnlyApi "curse.maven:ftblib-$ftblib_version"
 	compileOnly "io.github.cottonmc:LibGui:$cottonlibgui_version"
 	compileOnly "maven.modrinth:ixeris:3.2.2+1.20.1-fabric"
+	compileOnly "maven.modrinth:armourers-workshop:forge-1.16.5-3.2.7-beta"
 }
 
 sourceSets {

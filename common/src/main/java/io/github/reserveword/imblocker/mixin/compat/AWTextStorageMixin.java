@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.apple.library.coregraphics.CGGraphicsContext;
 import com.apple.library.coregraphics.CGPoint;
 import com.apple.library.coregraphics.CGRect;
+import com.apple.library.impl.TextStorageImpl;
+import com.apple.library.uikit.UIFont;
 
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.accessor.AWCGGraphicsContextAccessor;
@@ -21,15 +23,17 @@ import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 
 @Pseudo
-@Mixin(targets = "com.apple.library.impl.TextStorageImpl", remap = false)
+@Mixin(value = TextStorageImpl.class, remap = false)
 public abstract class AWTextStorageMixin implements MinecraftFocusableWidget {
 	
 	@Shadow
 	private boolean isFocused;
 	
+	@Shadow private UIFont cachedFont;
 	@Shadow private CGPoint offset;
 	@Shadow private CGRect cursorRect;
 	
+	private float imblocker$scale = 1.0f;
 	private Rectangle imblocker$bounds = Rectangle.EMPTY;
 	private Point imblocker$caretPos = Point.TOP_LEFT;
 	
@@ -57,7 +61,8 @@ public abstract class AWTextStorageMixin implements MinecraftFocusableWidget {
 	
 	@Inject(method = "render", at = @At("TAIL"))
 	public void updateCaretPos(CGPoint point, CGGraphicsContext context, CallbackInfo ci) {
-		CGRect clip = ((AWCGGraphicsContextAccessor) context).imblocker$getCurrentClip();
+		imblocker$scale = ((AWCGGraphicsContextAccessor) context).imblocker$getScale();
+		CGRect clip = context.boundingBoxOfClipPath();
 		Rectangle currentBounds = new Rectangle((int) clip.x, (int) clip.y, (int) clip.width, (int) clip.height);
 		Point currenetCaretPos = new Point(
 				(int) (offset.x + cursorRect.x), 
@@ -82,6 +87,11 @@ public abstract class AWTextStorageMixin implements MinecraftFocusableWidget {
 	
 	@Override
 	public Point getCaretPos() {
-		return imblocker$caretPos.derive(getGuiScale());
+		return imblocker$caretPos.derive(getGuiScale() * imblocker$scale);
+	}
+	
+	@Override
+	public int getFontHeight() {
+		return (int) (MinecraftFocusableWidget.super.getFontHeight() * imblocker$scale);
 	}
 }

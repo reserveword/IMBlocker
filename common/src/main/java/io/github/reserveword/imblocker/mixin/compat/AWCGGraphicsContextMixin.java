@@ -1,25 +1,28 @@
 package io.github.reserveword.imblocker.mixin.compat;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.apple.library.coregraphics.CGRect;
+import com.apple.library.coregraphics.CGAffineTransform;
+import com.apple.library.coregraphics.CGGraphicsContext;
 
 import io.github.reserveword.imblocker.common.accessor.AWCGGraphicsContextAccessor;
 
-@Mixin(targets = "com.apple.library.coregraphics.CGGraphicsContext", remap = false)
+@Pseudo
+@Mixin(value = CGGraphicsContext.class, remap = false)
 public abstract class AWCGGraphicsContextMixin implements AWCGGraphicsContextAccessor {
-	private CGRect imblocker$currentClip;
+	private float imblocker$scale = 1.0f;
 	
-	@Inject(method = "addClip(Lcom/apple/library/coregraphics/CGRect;)V", at = @At("TAIL"))
-	public void updateClip(CGRect clip, CallbackInfo ci) {
-		imblocker$currentClip = clip;
+	@Inject(method = "concatenateCTM", at = @At("TAIL"))
+	public void updateScale(CGAffineTransform transform, CallbackInfo ci) {
+		imblocker$scale *= transform.a;
 	}
 	
 	@Override
-	public CGRect imblocker$getCurrentClip() {
-		return imblocker$currentClip;
+	public float imblocker$getScale() {
+		return imblocker$scale;
 	}
 }

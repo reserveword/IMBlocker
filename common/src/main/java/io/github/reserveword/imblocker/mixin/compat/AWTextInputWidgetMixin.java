@@ -11,6 +11,7 @@ import com.apple.library.coregraphics.CGPoint;
 import com.apple.library.coregraphics.CGRect;
 import com.apple.library.impl.TextStorageImpl;
 import com.apple.library.uikit.UIEvent;
+import com.apple.library.uikit.UIScrollView;
 import com.apple.library.uikit.UITextField;
 import com.apple.library.uikit.UITextView;
 import com.apple.library.uikit.UIView;
@@ -59,9 +60,11 @@ public abstract class AWTextInputWidgetMixin implements MinecraftFocusableWidget
 		CGRect clip = context.boundingBoxOfClipPath();
 		Rectangle currentBounds = new Rectangle((int) clip.x, (int) clip.y, (int) clip.width, (int) clip.height);
 		CGRect cursorRect = storage.cursorRect();
+		CGPoint contentOffset = UIScrollView.class.isInstance(this) ? 
+				((UIScrollView) (Object) this).contentOffset() : CGPoint.ZERO;
 		Point currenetCaretPos = new Point(
-				(int) (storage.offset.x + cursorRect.x), 
-				(int) (storage.offset.y + cursorRect.y + (cursorRect.height - 1 - getFontHeight()) / 2));
+				(int) (storage.offset.x + cursorRect.x - contentOffset.x), 
+				(int) (storage.offset.y + cursorRect.y + (cursorRect.height - 1 - getFontHeight()) / 2 - contentOffset.y));
 		
 		boolean boundsChanged = false, caretPosChanged = false;
 		if(boundsChanged = !currentBounds.equals(imblocker$bounds)) {

@@ -135,8 +135,7 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		}
 		
 		if(IMBlockerCore.hasMod("armourers_workshop")) {
-			validMixins.add("compat.AWCGGraphicsContextMixin");
-			validMixins.add("compat.AWTextStorageMixin");
+			validMixins.add("compat.AWTextInputWidgetMixin");
 		}
 	}
 

@@ -49,7 +49,8 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
 [BlockUI](https://github.com/ldtteam/BlockUI)  
 [SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)  
 [Notes](https://github.com/MattCzyr/Notes)  
-[Essential Mod](https://essential.gg/)*
+[Essential Mod](https://essential.gg/)*  
+[Armourer's Workshop](https://github.com/Armourers-Workshop/Armourers-Workshop)
 
 *在 Fabric 下使用此模组时需要手动使用压缩软件将其 JAR 根目录下名为“essential-<32位序列码>”的文件提取到模组文件夹并**移除原模组文件**
 

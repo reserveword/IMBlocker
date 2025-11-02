@@ -1,72 +1,67 @@
 package io.github.reserveword.imblocker.mixin.compat;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.apple.library.coregraphics.CGGraphicsContext;
 import com.apple.library.coregraphics.CGPoint;
 import com.apple.library.coregraphics.CGRect;
 import com.apple.library.impl.TextStorageImpl;
-import com.apple.library.uikit.UIFont;
+import com.apple.library.uikit.UIEvent;
+import com.apple.library.uikit.UITextField;
+import com.apple.library.uikit.UITextView;
+import com.apple.library.uikit.UIView;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.accessor.AWCGGraphicsContextAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 
-@Pseudo
-@Mixin(value = TextStorageImpl.class, remap = false)
-public abstract class AWTextStorageMixin implements MinecraftFocusableWidget {
+@Mixin(value = {UITextField.class, UITextView.class}, remap = false)
+public abstract class AWTextInputWidgetMixin implements MinecraftFocusableWidget {
 	
-	@Shadow
-	private boolean isFocused;
-	
-	@Shadow private UIFont cachedFont;
-	@Shadow private CGPoint offset;
-	@Shadow private CGRect cursorRect;
+	@Shadow(remap = false)
+	private TextStorageImpl storage;
 	
 	private float imblocker$scale = 1.0f;
 	private Rectangle imblocker$bounds = Rectangle.EMPTY;
 	private Point imblocker$caretPos = Point.TOP_LEFT;
 	
-	@Inject(method = "setFocused", at = @At("TAIL"))
-	public void focusChanged(boolean focused, CallbackInfo ci) {
-		imblocker$onFocusChanged(focused);
+	@Inject(method = "becomeFirstResponder", at = @At("TAIL"))
+	public void focusGained(CallbackInfo ci) {
+		imblocker$onFocusGained();
 	}
 	
-	@Inject(method = "insertText", at = @At("HEAD"), cancellable = true)  
-	public void checkFocusTracking(String text, CallbackInfo ci) {
+	@Inject(method = "resignFirstResponder", at = @At("TAIL"))
+	public void focusLost(CallbackInfo ci) {
+		imblocker$onFocusLost();
+	}
+	
+	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)  
+	public void checkFocusTracking(UIEvent event, CallbackInfo ci) {
 		if(FocusManager.isTrackingFocus) {
-			if(isFocused) {
+			if(storage.isFocused()) {
 				FocusContainer.MINECRAFT.switchFocus(this);
 			}
 			ci.cancel();
 		}
 	}
 	
-	@Inject(method = "isAllowedChatCharacter", at = @At("HEAD"), cancellable = true)
-	private void skipWhenTrackingFocus(char c, CallbackInfoReturnable<Boolean> cir) {
-		if(FocusManager.isTrackingFocus) {
-			cir.setReturnValue(true);
-		}
-	}
-	
-	@Inject(method = "render", at = @At("TAIL"))
+	@Inject(method = "render", at = @At(value = "INVOKE", target = 
+			"Lcom/apple/library/impl/TextStorageImpl;render(Lcom/apple/library/coregraphics/CGPoint;Lcom/apple/library/coregraphics/CGGraphicsContext;)V",
+			shift = At.Shift.AFTER))
 	public void updateCaretPos(CGPoint point, CGGraphicsContext context, CallbackInfo ci) {
-		imblocker$scale = ((AWCGGraphicsContextAccessor) context).imblocker$getScale();
 		CGRect clip = context.boundingBoxOfClipPath();
 		Rectangle currentBounds = new Rectangle((int) clip.x, (int) clip.y, (int) clip.width, (int) clip.height);
+		CGRect cursorRect = storage.cursorRect();
 		Point currenetCaretPos = new Point(
-				(int) (offset.x + cursorRect.x), 
-				(int) (offset.y + cursorRect.y + (cursorRect.height - 1 - getFontHeight()) / 2));
+				(int) (storage.offset.x + cursorRect.x), 
+				(int) (storage.offset.y + cursorRect.y + (cursorRect.height - 1 - getFontHeight()) / 2));
 		
 		boolean boundsChanged = false, caretPosChanged = false;
 		if(boundsChanged = !currentBounds.equals(imblocker$bounds)) {
@@ -78,6 +73,13 @@ public abstract class AWTextStorageMixin implements MinecraftFocusableWidget {
 		if(boundsChanged || caretPosChanged) {
 			IMManager.updateCompositionWindowPos();
 		}
+		
+		CGRect rawBounds = ((UIView) (Object) this).bounds().insetBy(1, 1, 1, 1);
+		float currentScale = clip.height / rawBounds.height;
+		if(imblocker$scale != currentScale) {
+			imblocker$scale = currentScale;
+			IMManager.updateCompositionFontSize();
+		}
 	}
 	
 	@Override
@@ -87,7 +89,7 @@ public abstract class AWTextStorageMixin implements MinecraftFocusableWidget {
 	
 	@Override
 	public Point getCaretPos() {
-		return imblocker$caretPos.derive(getGuiScale() * imblocker$scale);
+		return imblocker$caretPos.derive(getGuiScale() *  imblocker$scale);
 	}
 	
 	@Override

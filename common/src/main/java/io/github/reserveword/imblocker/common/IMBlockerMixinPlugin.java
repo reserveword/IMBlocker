@@ -47,6 +47,10 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("compat.LibGuiTextFieldMixin");
 		}
 		
+		if(IMBlockerCore.hasMod("roughlyenoughitems")) {
+			validMixins.add("compat.ReiTextFieldMixin");
+		}
+		
 		if(IMBlockerCore.hasMod("replaymod")) {
 			validMixins.add("compat.ReplayModTextFieldMixin");
 		}

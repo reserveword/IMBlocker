@@ -6,4 +6,8 @@ public record Point(int x, int y) {
 	public Point(double scaleFactor, int x, int y) {
 		this((int) (scaleFactor * x), (int) (scaleFactor * y));
 	}
+
+	public Point derive(double scaleFactor) {
+		return new Point(scaleFactor, x, y);
+	}
 }

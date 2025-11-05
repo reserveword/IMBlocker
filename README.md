@@ -38,7 +38,7 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
 
 ## 已支持的具有自定义GUI实现的模组
 
-[Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems)（等待短期内更新）  
+[Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems)  
 [EMI](https://github.com/emilyploszaj/emi)（等待更新）  
 [Axiom](https://axiom.moulberry.com/)  
 [Replay Mod](https://www.replaymod.com/)  
@@ -47,9 +47,10 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
 [LibGui](https://github.com/CottonMC/LibGui)  
 [Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)  
 [BlockUI](https://github.com/ldtteam/BlockUI)（等待更新）  
-[SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)（等待短期内更新）  
+[SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)（等待更新）  
 [Notes](https://github.com/MattCzyr/Notes)  
-[Essential Mod](https://essential.gg/)*
+[Essential Mod](https://essential.gg/)*  
+[Armourer's Workshop](https://github.com/Armourers-Workshop/Armourers-Workshop)
 
 *在 Fabric 下使用此模组时需要手动使用压缩软件将其 JAR 根目录下名为“essential-<32位序列码>”的文件提取到模组文件夹并**移除原模组文件**
 

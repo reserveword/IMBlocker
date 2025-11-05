@@ -38,7 +38,7 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
 
 ## Supported Mods with custom GUI framework  
  
-[Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems) (waiting for update)  
+[Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems)  
 [EMI](https://github.com/emilyploszaj/emi) (waiting for update)  
 [Axiom](https://axiom.moulberry.com/)  
 [Replay Mod](https://www.replaymod.com/)   
@@ -49,6 +49,7 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
 [BlockUI](https://github.com/ldtteam/BlockUI) (waiting for update)  
 [SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib) (waiting for update)  
 [Notes](https://github.com/MattCzyr/Notes)   
-[Essential Mod](https://essential.gg/)*
+[Essential Mod](https://essential.gg/)*  
+[Armourer's Workshop](https://github.com/Armourers-Workshop/Armourers-Workshop)
 
 *On Fabric, you need to extract the file named "essential-<32-bit code>.jar" from the root directory of its mod JAR and **only** put this file into your mod folder.

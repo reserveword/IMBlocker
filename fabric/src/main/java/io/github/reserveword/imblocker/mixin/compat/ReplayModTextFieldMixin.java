@@ -59,6 +59,10 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
 
 	@Inject(method = "draw", at = @At("TAIL"))
 	public void updateCaretPos(GuiRenderer renderer, ReadableDimension size, RenderInfo renderInfo, CallbackInfo ci) {
+		if(!isTrulyFocused()) {
+			return;
+		}
+		
 		Point position = getPosition(renderer);
 		Rectangle currentBounds = new Rectangle(position.x(), position.y(), size.getWidth(), size.getHeight());
 		boolean boundsChanged;

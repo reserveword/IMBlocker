@@ -74,6 +74,10 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("compat.EssentialUIComponentMixin");
 			validMixins.add("compat.EssentialAbstractTextInputMixin");
 		}
+		
+		if(IMBlockerCore.hasMod("armourers_workshop")) {
+			validMixins.add("compat.AWTextInputWidgetMixin");
+		}
 	}
 	
 	@Override

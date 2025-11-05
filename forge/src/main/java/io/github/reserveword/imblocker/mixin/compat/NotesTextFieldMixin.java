@@ -53,6 +53,10 @@ public abstract class NotesTextFieldMixin extends AbstractWidgetMixin {
 	
 	@Inject(method = "renderCursor", at = @At("TAIL"))
 	public void updateCaretPos(CallbackInfo ci) {
+		if(!isTrulyFocused()) {
+			return;
+		}
+		
 		int caretX = margin + MinecraftClientAccessor.INSTANCE.getStringWidth(
 				StringUtil.getSubstring(getCurrentLine(), 0, getCursorX()));
 		int caretY = margin + getRenderSafeCursorY() * 9;

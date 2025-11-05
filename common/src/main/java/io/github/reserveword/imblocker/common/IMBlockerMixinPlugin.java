@@ -130,7 +130,7 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("compat.EssentialAbstractTextInputMixin");
 		}
 		
-		if(IMBlockerCore.hasMod("sfm")) {
+		if(IMBlockerCore.hasMod("sfm") && IMBlockerCore.isGameVersionReached(760/*1.19.1*/)) {
 			validMixins.add("compat.SFMMultiLineEditboxMixin");
 		}
 		

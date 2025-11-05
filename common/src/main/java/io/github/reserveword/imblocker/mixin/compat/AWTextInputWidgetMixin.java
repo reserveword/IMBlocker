@@ -57,7 +57,18 @@ public abstract class AWTextInputWidgetMixin implements MinecraftFocusableWidget
 			"Lcom/apple/library/impl/TextStorageImpl;render(Lcom/apple/library/coregraphics/CGPoint;Lcom/apple/library/coregraphics/CGGraphicsContext;)V",
 			shift = At.Shift.AFTER))
 	public void updateCaretPos(CGPoint point, CGGraphicsContext context, CallbackInfo ci) {
+		if(!isTrulyFocused()) {
+			return;
+		}
+		
 		CGRect clip = context.boundingBoxOfClipPath();
+		CGRect rawBounds = ((UIView) (Object) this).bounds().insetBy(1, 1, 1, 1);
+		float currentScale = clip.height / rawBounds.height;
+		if(imblocker$scale != currentScale) {
+			imblocker$scale = currentScale;
+			IMManager.updateCompositionFontSize();
+		}
+		
 		Rectangle currentBounds = new Rectangle((int) clip.x, (int) clip.y, (int) clip.width, (int) clip.height);
 		CGRect cursorRect = storage.cursorRect();
 		CGPoint contentOffset = UIScrollView.class.isInstance(this) ? 
@@ -76,13 +87,6 @@ public abstract class AWTextInputWidgetMixin implements MinecraftFocusableWidget
 		if(boundsChanged || caretPosChanged) {
 			IMManager.updateCompositionWindowPos();
 		}
-		
-		CGRect rawBounds = ((UIView) (Object) this).bounds().insetBy(1, 1, 1, 1);
-		float currentScale = clip.height / rawBounds.height;
-		if(imblocker$scale != currentScale) {
-			imblocker$scale = currentScale;
-			IMManager.updateCompositionFontSize();
-		}
 	}
 	
 	@Override
@@ -97,6 +101,6 @@ public abstract class AWTextInputWidgetMixin implements MinecraftFocusableWidget
 	
 	@Override
 	public int getFontHeight() {
-		return (int) (MinecraftFocusableWidget.super.getFontHeight() * imblocker$scale);
+		return (int) (8 * imblocker$scale);
 	}
 }

@@ -64,6 +64,10 @@ public class IMBlockerConfig {
 	public boolean isCharSimulationEnabled() {
 		return false;
 	}
+	
+	public boolean sfm$showLineNumber() {
+		return true;
+	}
 
 	public boolean isConversionStatusApiEnabled() {
 		return true;

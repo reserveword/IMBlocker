@@ -21,6 +21,9 @@
   "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[0]": "\u00A7lLocate the focus owner with char simulation",
   "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[1]": "This approach can locate the focus owner with 100% accuracy.\nGenerally, the probe char will be safely absorbed by the injection,\nhowever, it might leak to the screen that doesn't filter it.",
   
+  "text.autoconfig.imblocker.option.modCompatibilitySettings": "Mod Compatibility Settings",
+  "text.autoconfig.imblocker.option.modCompatibilitySettings.sfm$showLineNumber": "SFM: Show Line Number",
+  
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings": "Windows Compatibility Settings",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi": "Allow ConversionStatus API",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "The API that controls the English state.\n\u00A77If disabled, CONVERSION_STATUS English state implementation will not work.",

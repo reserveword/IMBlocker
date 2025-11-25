@@ -62,4 +62,8 @@ public abstract class MultiLineEditBoxMixin extends AbstractScrollWidgetMixin im
 	public MultilineCursorInfo getCursorInfo() {
 		return imblocker$cursorInfo;
 	}
+	
+	protected MultilineTextField imblocker$getTextField() {
+		return textField;
+	}
 }

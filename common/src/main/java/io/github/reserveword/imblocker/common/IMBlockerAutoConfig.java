@@ -23,6 +23,9 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	AdvanceSettings advanceSettings = new AdvanceSettings();
 	
 	@ConfigEntry.Gui.CollapsibleObject
+	ModCompatibilitySettings modCompatibilitySettings = new ModCompatibilitySettings();
+	
+	@ConfigEntry.Gui.CollapsibleObject
 	WindowsCompatibilitySettings windowsCompatibilitySettings = new WindowsCompatibilitySettings();
 	
 	@ConfigEntry.Gui.CollapsibleObject
@@ -58,6 +61,11 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	@Override
 	public boolean isCharSimulationEnabled() {
 		return advanceSettings.enableCharSimulation;
+	}
+	
+	@Override
+	public boolean sfm$showLineNumber() {
+		return modCompatibilitySettings.sfm$showLineNumber;
 	}
 
 	@Override
@@ -146,6 +154,10 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	static class AdvanceSettings {
 		@ConfigEntry.Gui.Tooltip(count = 2)
 		boolean enableCharSimulation = false;
+	}
+	
+	static class ModCompatibilitySettings {
+		boolean sfm$showLineNumber = true;
 	}
 
 	static class WindowsCompatibilitySettings {

@@ -137,6 +137,10 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		if(IMBlockerCore.hasMod("armourers_workshop")) {
 			validMixins.add("compat.AWTextInputWidgetMixin");
 		}
+		
+		if(IMBlockerCore.hasMod("generalfeedback")) {
+//			validMixins.add("compat.GeneralFeedbackTextareaMixin"); Unstable Internal Implementation.
+		}
 	}
 
 	@Override

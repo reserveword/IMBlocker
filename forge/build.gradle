@@ -62,6 +62,7 @@ dependencies {
 	compileOnly fg.deobf("curse.maven:reforgedplay-mod-1018692:5629283")
 	compileOnly fg.deobf("com.github.ReplayMod:lwjgl-utils:27dcd66")
     compileOnly fg.deobf("maven.modrinth:textrues-embeddium-options:0.1.1+mc1.19.2")
+    compileOnly fg.deobf("maven.modrinth:general-feedback:XihrS83D")
 
     implementation project(':common')
 }

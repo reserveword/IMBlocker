@@ -10,9 +10,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import ca.teamdman.sfm.client.screen.text_editor.SFMTextEditorUtils;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.mixin.MultiLineEditBoxMixin;
+import net.minecraft.client.Minecraft;
 
 @Pseudo
 @Mixin(targets = "ca.teamdman.sfm.client.screen.text_editor.SFMTextEditScreenV1$MyMultiLineEditBox", remap = false)
@@ -28,11 +30,17 @@ public abstract class SFMMultiLineEditboxMixin extends MultiLineEditBoxMixin {
 				return 0;
 			}
 		}else {
-			if(IMBlockerConfig.INSTANCE.sfm$showLineNumber()) {
-				return MinecraftClientAccessor.INSTANCE.getStringWidth("0".
-						repeat(String.valueOf(imblocker$getTextField().getLineCount()).length()));
-			}else {
-				return 0;
+			try {
+				// >=4.27.0
+				return SFMTextEditorUtils.getLineNumberWidth(Minecraft.getInstance().font, imblocker$getTextField().getLineCount());
+			} catch (Throwable e) {
+				// Fallback
+				if(IMBlockerConfig.INSTANCE.sfm$showLineNumber()) {
+					return MinecraftClientAccessor.INSTANCE.getStringWidth("0".
+							repeat(String.valueOf(imblocker$getTextField().getLineCount()).length()));
+				}else {
+					return 0;
+				}
 			}
 		}
 	}

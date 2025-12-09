@@ -58,11 +58,12 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	
     compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
-	compileOnly fg.deobf("curse.maven:blockui-$blockui_version")
-	compileOnly fg.deobf("curse.maven:reforgedplay-mod-1018692:5629283")
-	compileOnly fg.deobf("com.github.ReplayMod:lwjgl-utils:27dcd66")
+    compileOnly fg.deobf("curse.maven:blockui-$blockui_version")
+    compileOnly fg.deobf("curse.maven:reforgedplay-mod-1018692:5629283")
+    compileOnly fg.deobf("com.github.ReplayMod:lwjgl-utils:27dcd66")
     compileOnly fg.deobf("maven.modrinth:textrues-embeddium-options:0.1.1+mc1.19.2")
-    compileOnly fg.deobf("maven.modrinth:general-feedback:XihrS83D")
+    compileOnly fg.deobf("maven.modrinth:super-factory-manager:qDpL7Dr8")
+    compileOnly fg.deobf("maven.modrinth:general-feedback:1.0.1")
 
     implementation project(':common')
 }

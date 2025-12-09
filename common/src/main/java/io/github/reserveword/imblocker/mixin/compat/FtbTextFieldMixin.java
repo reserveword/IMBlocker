@@ -20,8 +20,12 @@ public abstract class FtbTextFieldMixin extends FtbWidgetMixin
 	implements MinecraftTextFieldWidget, FtbTextInputWidget {
 	
 	@Shadow private String text;
-	@Shadow private int displayPos;
-	@Shadow private int cursorPos;
+	
+	@Shadow(aliases = "lineScrollOffset")
+	private int displayPos;
+	
+	@Shadow(aliases = "cursorPosition")
+	private int cursorPos;
 	
 	@Shadow
 	private boolean isFocused;
@@ -52,11 +56,12 @@ public abstract class FtbTextFieldMixin extends FtbWidgetMixin
 	}
 
 	@Override
+	@Inject(method = "onClosed", at = @At("TAIL"), require = 0)
 	public void cancelFocus(CallbackInfo ci) {
 		imblocker$onFocusLost();
 	}
 
-	@Inject(method = "scrollTo", at = @At("TAIL"))
+	@Inject(method = {"scrollTo", "setSelectionPos"}, at = @At("TAIL"))
 	public void onCursorPosChanged(int pos, CallbackInfo ci) {
 		imblocker$onCursorChanged();
 	}

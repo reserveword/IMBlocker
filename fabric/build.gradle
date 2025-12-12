@@ -42,7 +42,7 @@ java {
 
 project.jar {
 	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName.get()}"}
+		rename { "${it}_${project.base.archivesName.get()}" }
 	}
 	from project(":common").sourceSets.main.output
 	from sourceSets.main.output

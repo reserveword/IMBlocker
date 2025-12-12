@@ -21,21 +21,21 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin {
 	@Shadow protected int cursor;
 	@Shadow protected double textStart;
 	
-	@Shadow
-	protected boolean focused;
+	private boolean imblocker$focused; //unaffected by internal changes
 	
 	@Shadow
 	protected abstract double getTextWidth(int pos);
 
 	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		imblocker$onFocusChanged(focused);
+		imblocker$focused = isFocused;
+		imblocker$onFocusChanged(isFocused);
 	}
 	
 	@Inject(method = "onCharTyped", at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(CharacterEvent input, CallbackInfoReturnable<Boolean> cir) {
 		if(FocusManager.isTrackingFocus) {
-			if(focused) {
+			if(imblocker$focused) {
 				FocusContainer.MINECRAFT.switchFocus(this);
 				cir.setReturnValue(true);
 			}else {

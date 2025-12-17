@@ -63,7 +63,11 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		if(IMBlockerCore.hasMod("reeses-sodium-options") || 
 				IMBlockerCore.hasMod("reeses_sodium_options")) {
 			validMixins.add("compat.RSOAbstractFrameMixin");
-			validMixins.add("compat.RSOSearchFieldMixin");
+			if(MinecraftClientUtil.isGameVersionReached(774/*1.21.11*/)) {
+				validMixins.add("compat.RSOSearchFieldMixin");
+			}else {
+				validMixins.add("compat.RSOSearchFieldLegacyMixin");
+			}
 		}
 		
 		if(IMBlockerCore.hasMod("notes")) {

@@ -13,13 +13,16 @@ import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
-import net.caffeinemc.mods.sodium.client.gui.widgets.AbstractWidget;
+import net.caffeinemc.mods.sodium.client.util.Dim2i;
 import net.minecraft.client.input.CharacterEvent;
 
 @Pseudo
 @Mixin(targets = "me.flashyreese.mods.reeses_sodium_options"
 		+ ".client.gui.frame.components.SearchTextFieldComponent", remap = false)
-public abstract class RSOSearchFieldMixin extends AbstractWidget implements MinecraftTextFieldWidget {
+public abstract class RSOSearchFieldLegacyMixin implements MinecraftTextFieldWidget {
+	
+	@Shadow 
+	protected Dim2i dim;
 	
 	@Shadow protected String text;
 	@Shadow private int firstCharacterIndex;
@@ -55,7 +58,7 @@ public abstract class RSOSearchFieldMixin extends AbstractWidget implements Mine
 	
 	@Override
 	public boolean updateCursorInfo() {
-		return imblocker$cursorInfo.updateCursorInfo(true, getHeight(), firstCharacterIndex, selectionStart, text);
+		return imblocker$cursorInfo.updateCursorInfo(true, dim.height(), firstCharacterIndex, selectionStart, text);
 	}
 	
 	@Override
@@ -65,7 +68,7 @@ public abstract class RSOSearchFieldMixin extends AbstractWidget implements Mine
 	
 	@Override
 	public Rectangle getBoundsAbs() {
-		return new Rectangle(getGuiScale(), getX(), getY(), getWidth(), getHeight());
+		return new Rectangle(getGuiScale(), dim.x(), dim.y(), dim.width(), dim.height());
 	}
 	
 	@Override

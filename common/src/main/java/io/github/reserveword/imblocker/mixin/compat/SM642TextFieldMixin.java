@@ -1,0 +1,61 @@
+package io.github.reserveword.imblocker.mixin.compat;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import com.supermartijn642.core.gui.widget.premade.TextFieldWidget;
+
+import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
+import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
+import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
+
+@Mixin(value = TextFieldWidget.class, remap = false)
+public abstract class SM642TextFieldMixin extends SM642WidgetMixin implements MinecraftTextFieldWidget {
+	
+	@Shadow private String text;
+	@Shadow protected int lineScrollOffset;
+	@Shadow protected int cursorPosition;
+	
+	private final SinglelineCursorInfo imblocker$cursorInfo = 
+			new SinglelineCursorInfo(true, height, lineScrollOffset, cursorPosition, text);
+	
+	@Shadow
+	public abstract boolean canWrite();
+	
+	@Inject(method = "setSelected", at = @At("TAIL"))
+	public void focusChanged(boolean selected, CallbackInfo ci) {
+		imblocker$onFocusChanged(canWrite());
+	}
+	
+	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
+	public void checkFocusTracking(char c, boolean hasBeenHandled, CallbackInfoReturnable<Boolean> cir) {
+		if(FocusManager.isTrackingFocus) {
+			if(canWrite()) {
+				FocusContainer.MINECRAFT.switchFocus(this);
+				cir.setReturnValue(true);
+			}else {
+				cir.setReturnValue(false);
+			}
+		}
+	}
+	
+	@Inject(method = "update", at = @At("TAIL"))
+	public void onUpdate(CallbackInfo ci) {
+		imblocker$onCursorChanged();
+	}
+	
+	@Override
+	public boolean updateCursorInfo() {
+		return imblocker$cursorInfo.updateCursorInfo(true, height, lineScrollOffset, cursorPosition, text);
+	}
+	
+	@Override
+	public SinglelineCursorInfo getCursorInfo() {
+		return imblocker$cursorInfo;
+	}
+}

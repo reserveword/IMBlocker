@@ -70,6 +70,11 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			}
 		}
 		
+		if(IMBlockerCore.hasMod("supermartijn642corelib")) {
+			validMixins.add("compat.SM642WidgetMixin");
+			validMixins.add("compat.SM642TextFieldMixin");
+		}
+		
 		if(IMBlockerCore.hasMod("notes")) {
 			validMixins.add("compat.NotesTextFieldMixin");
 		}

@@ -1,0 +1,48 @@
+{
+  "text.autoconfig.imblocker.title": "IMBlocker 設定",
+  
+  "text.autoconfig.imblocker.option.basicSettings": "基礎設定",
+  "text.autoconfig.imblocker.option.basicSettings.screenWhitelist": "螢幕白名單",
+  "text.autoconfig.imblocker.option.basicSettings.screenWhitelist.@Tooltip": "匹配的螢幕將啟用您的輸入法",
+  "text.autoconfig.imblocker.option.basicSettings.enableScreenRecovering": "啟用螢幕記錄",
+  "text.autoconfig.imblocker.option.basicSettings.recoveredScreens": "已記錄的螢幕",
+  "text.autoconfig.imblocker.option.basicSettings.recoveredScreens.@Tooltip": "列出顯示過的螢幕，方便編輯白名單",
+  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl": "英文狀態實現方式",
+  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[0]": "\u00A7l自動設定英文狀態的方式",
+  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[1]": "一般僅建議使用微軟系列輸入法時將此項設定為“CONVERSION_STATUS”",
+  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[2]": "如果你的輸入法無法正常自動切換至英文狀態\n請將此項設為「DISABLE_IM」並透過熱鍵（預設右Shift）來解鎖輸入法",
+  "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState": "首選中英文狀態",
+  "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[0]": "\u00A7l文字方塊獲得焦點時輸入法的初始中英文狀態",
+  "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[1]": "CJK - 初始狀態為中文\nENG - 初始狀態為英文",
+  "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[2]": "習慣使用 JECh 搜尋的玩家推薦將此項目設定為ENG\n此設定不影響聊天欄和搜尋元素較少的模組",
+  
+  "text.autoconfig.imblocker.option.advanceSettings": "進階設定",
+  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation": "使用模擬字元定位焦點",
+  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[0]": "\u00A7l透過發送一個模擬字元來定位焦點組件",
+  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[1]": "此方法可以絕對精準地定位到真正的焦點組件\n模擬字元通常可以被注入的回調安全吸收\n但可能洩漏至某些未過濾該字元的螢幕",
+  
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings": "Windows 相容性設定",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi": "使用轉換狀態API",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "用於切換中英文狀態的API\n\u00A77停用後CONVERSION_STATUS英文狀態實現將失效",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCursorPositionTracking": "插入符號位置追蹤",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCompositionFontTweaks": "合成字串字體格式調整",
+  
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings": "Linux 相容性設定",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch": "啟用回調級鍵盤補丁",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[0]": "該補丁從 GLFW 回調層修復了輸入法候選詞框顯示時控制按鍵會洩漏至遊戲視窗的漏洞",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[1]": "如果候選詞框因退格鍵清空了預編輯字元而關閉會導致遊戲無法處理控制按鍵\n此時請按下 Esc 或輸入任意字元以解除此狀態",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOnArgName": "IBus 開啟輸入法的指令參數",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOnArgName.@Tooltip": "確定方法：系統終端中執行 “ibus engine <此參數>” 指令能夠開啟輸入法",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOffArgName": "IBus 關閉輸入法的指令參數",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOffArgName.@Tooltip": "確定方法：系統終端中執行 “ibus engine <此參數>” 指令能夠關閉輸入法",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnArgName": "Fcitx5 開啟輸入法的指令參數",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnArgName.@Tooltip": "確定方法：系統終端中執行 “fcitx5-remote <此參數>” 指令能夠開啟輸入法",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OffArgName": "Fcitx5 關閉輸入法的指令參數",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OffArgName.@Tooltip": "確定方法：系統終端中執行 “fcitx5-remote <此參數>” 指令能夠關閉輸入法",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnStateName": "Fcitx5 輸入法開啟的狀態標識符",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnStateName.@Tooltip": "確定方法：系統終端中執行 “fcitx5-remote” 指令能夠傳回此參數",
+  
+  "key.category.imblocker.ime": "IMBlocker",
+  "key.unlockIME": "解鎖輸入法"
+}
+

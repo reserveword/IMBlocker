@@ -1,0 +1,83 @@
+plugins {
+	id 'eclipse'
+	id 'java'
+}
+
+allprojects {
+	repositories {
+		maven {
+			name = "Modrinth"
+			url = "https://api.modrinth.com/maven"
+			content {
+				includeGroup "maven.modrinth"
+			}
+		}
+		maven {
+			url = "https://www.cursemaven.com"
+			content {
+				includeGroup "curse.maven"
+			}
+		}
+		maven {
+		name = "CottonMC"
+			url = "https://server.bbkr.space/artifactory/libs-release"
+			content {
+				includeGroup "io.github.cottonmc"
+			}
+		}
+		maven {
+		url "https://maven.shedaniel.me/"
+			content {
+				includeGroupAndSubgroups "me.shedaniel"
+				includeGroup "dev.architectury"
+			}
+		}
+		maven {
+			url = "https://maven.terraformersmc.com"
+			content {
+				includeGroup "com.terraformersmc"
+				includeGroup "dev.emi"
+			}
+		}
+		mavenCentral()
+		maven {
+			name = "Jared's maven"
+			url = "https://maven.blamejared.com/"
+		}
+		maven {
+			name = "ModMaven"
+			url = "https://modmaven.dev"
+		}
+		maven {
+			url "https://repo.spongepowered.org/repository/maven-public/"
+		}
+		maven { url "https://jitpack.io" }
+	}
+
+	def all_properties = [
+		minecraft_version	: minecraft_version,
+		mod_id				: mod_id,
+		mod_name			: mod_name,
+		mod_version			: mod_version,
+		mod_logo			: mod_logo,
+		mod_url				: mod_url,
+		issues_url			: issues_url,
+		maven_group			: maven_group,
+		license				: license,
+		credits				: credits,
+		author				: author,
+		description			: mod_description
+	]
+
+	tasks.withType(ProcessResources).configureEach {
+		inputs.properties all_properties
+
+		filesMatching(['fabric.mod.json', 'META-INF/neoforge.mods.toml']) {
+			expand all_properties
+		}
+	}
+
+	tasks.withType(JavaCompile).configureEach {
+		options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+	}
+}

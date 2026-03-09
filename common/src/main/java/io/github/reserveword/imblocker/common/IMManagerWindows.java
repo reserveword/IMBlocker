@@ -1,0 +1,161 @@
+package io.github.reserveword.imblocker.common;
+
+import com.sun.jna.Native;
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.platform.win32.WinNT;
+
+import io.github.reserveword.imblocker.common.gui.FocusableObject;
+import io.github.reserveword.imblocker.common.gui.FocusableWidget;
+import io.github.reserveword.imblocker.common.gui.Point;
+import io.github.reserveword.imblocker.common.gui.Rectangle;
+
+final class IMManagerWindows implements IMManager.PlatformIMManager {
+
+	private static native WinNT.HANDLE ImmGetContext(WinDef.HWND hwnd);
+
+	private static native WinNT.HANDLE ImmAssociateContext(WinDef.HWND hwnd, WinNT.HANDLE himc);
+
+	private static native boolean ImmReleaseContext(WinDef.HWND hwnd, WinNT.HANDLE himc);
+
+	private static native WinNT.HANDLE ImmCreateContext();
+
+	private static native boolean ImmDestroyContext(WinNT.HANDLE himc);
+
+	private static native boolean ImmSetConversionStatus(WinNT.HANDLE himc, int fdwConversion, int fdwSentence);
+	
+	private static native WinDef.HWND ImmGetDefaultIMEWnd(WinNT.HWND hwnd);
+
+	public static long lastIMStateOnTimestamp = System.currentTimeMillis();
+
+	private final SetConversionStateThread setConversionStateThread;
+	private boolean preferredEnglishState = false;
+
+	static {
+		Native.register("imm32");
+	}
+
+	private static final User32 u = User32.INSTANCE;
+
+	public IMManagerWindows() {
+		setConversionStateThread = new SetConversionStateThread();
+		setConversionStateThread.start();
+	}
+
+	@Override
+	public void setState(boolean on) {
+		WinDef.HWND hwnd = getActiveWindow();
+		WinNT.HANDLE himc = ImmGetContext(hwnd);
+		if ((himc != null) != on) {
+			if (on) {
+				himc = ImmCreateContext();
+				ImmAssociateContext(hwnd, himc);
+				lastIMStateOnTimestamp = System.currentTimeMillis();
+			} else {
+				himc = ImmAssociateContext(hwnd, null);
+				ImmDestroyContext(himc);
+			}
+		}
+		ImmReleaseContext(hwnd, himc);
+	}
+
+	@Override
+	public void setEnglishState(boolean englishState) {
+		preferredEnglishState = englishState;
+		if (!setConversionStateThread.isScheduled) {
+			setConversionStateThread.awake();
+			setConversionStateThread.isScheduled = true;
+		}
+	}
+
+	private void syncEnglishState() {
+		if(getConversionStatusCooldown() <= 0) {
+			WinDef.HWND hwnd = getActiveWindow();
+			WinNT.HANDLE himc = ImmGetContext(hwnd);
+			if (himc != null) {
+				ImmSetConversionStatus(himc, preferredEnglishState ? 0 : 1, 0);
+			}
+			ImmReleaseContext(hwnd, himc);
+			setConversionStateThread.isScheduled = false;
+		}else {
+			setConversionStateThread.awake();
+		}
+	}
+
+	private long getConversionStatusCooldown() {
+		return 60 - (System.currentTimeMillis() - lastIMStateOnTimestamp);
+	}
+
+	private static WinDef.HWND getActiveWindow() {
+		try {
+			return u.GetActiveWindow();
+		} catch (NoSuchMethodError e) {
+			return u.GetForegroundWindow();
+		}
+	}
+
+	private Point calculateProperCompositionWindowPos(FocusableObject inputEntry) {
+		try {
+			double scaleFactor = inputEntry.getGuiScale();
+			Rectangle inputEntryBounds = inputEntry.getBoundsAbs();
+			Point caretPos = inputEntry.getCaretPos();
+			if(inputEntryBounds == Rectangle.EMPTY && caretPos == Point.TOP_LEFT) {
+				return Point.TOP_LEFT;
+			}
+			//Constrained to entry border.
+			int caretX = MathHelper.clamp(caretPos.x(), 0, inputEntryBounds.width());
+			int caretY = MathHelper.clamp(caretPos.y(), 0, inputEntryBounds.height());
+			caretY -= scaleFactor / 2; // Tweak yPos to fit font style.
+			int compositionWindowPosX = inputEntryBounds.x() + caretX;
+			int compositionWindowPosY = inputEntryBounds.y() + caretY;
+			if(inputEntry instanceof FocusableWidget) {
+				//Constrained to container border.
+				int margin = (int) (inputEntry.getFontHeight() * scaleFactor / 2);
+				FocusableWidget inputWidget = (FocusableWidget) inputEntry;
+				Rectangle containerBounds = inputWidget.getFocusContainer().getBoundsAbs();
+				compositionWindowPosX = MathHelper.clamp(compositionWindowPosX, 0, containerBounds.width() - margin);
+				compositionWindowPosY = MathHelper.clamp(compositionWindowPosY, 0, containerBounds.height() - margin);
+				compositionWindowPosX += containerBounds.x();
+				compositionWindowPosY += containerBounds.y();
+			}
+			return new Point(compositionWindowPosX, compositionWindowPosY);
+		} catch (Throwable e) {
+			IMBlockerCore.LOGGER.error("[IMBlocker] Failed to calculate caret position: " + e);
+			return Point.TOP_LEFT;
+		}
+	}
+
+	private class SetConversionStateThread extends Thread {
+
+		private boolean isScheduled = false;
+
+		@Override
+		public synchronized void run() {
+			while (true) {
+				await(0);
+
+				while (true) {
+					long cooldown = getConversionStatusCooldown();
+					if (cooldown <= 0) {
+						IMBlockerCore.invokeOnMainThread(() -> syncEnglishState());
+						break;
+					} else {
+						await(cooldown);
+					}
+				}
+			}
+		}
+
+		private synchronized void awake() {
+			notifyAll();
+		}
+
+		private void await(long milis) {
+			try {
+				wait(milis);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}

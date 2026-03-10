@@ -53,18 +53,15 @@ public final class IMManager {
 				return Point.TOP_LEFT;
 			}
 			//Constrained to entry border.
-			int caretX = MathHelper.clamp(caretPos.x(), 0, inputEntryBounds.width());
-			int caretY = MathHelper.clamp(caretPos.y(), 0, inputEntryBounds.height());
-			int compositionWindowPosX = inputEntryBounds.x() + caretX;
-			int compositionWindowPosY = inputEntryBounds.y() + caretY;
-			if(inputEntry instanceof FocusableWidget) {
+			int compositionWindowPosX = MathHelper.clamp(caretPos.x(), 0, inputEntryBounds.width());
+			int compositionWindowPosY = MathHelper.clamp(caretPos.y(), 0, inputEntryBounds.height());
+			if(inputEntry instanceof FocusableWidget inputWidget) {
+				compositionWindowPosX += inputEntryBounds.x();
+				compositionWindowPosY += inputEntryBounds.y();
 				//Constrained to container border.
-				FocusableWidget inputWidget = (FocusableWidget) inputEntry;
 				Rectangle containerBounds = inputWidget.getFocusContainer().getBoundsAbs();
 				compositionWindowPosX = MathHelper.clamp(compositionWindowPosX, 0, containerBounds.width());
 				compositionWindowPosY = MathHelper.clamp(compositionWindowPosY, 0, containerBounds.height());
-				compositionWindowPosX += containerBounds.x();
-				compositionWindowPosY += containerBounds.y();
 			}
 			return new Point(compositionWindowPosX, compositionWindowPosY);
 		} catch (Throwable e) {

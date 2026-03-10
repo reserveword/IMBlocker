@@ -81,17 +81,17 @@ public class EfficientIMEPreeditOverlay implements Renderable {
 	}
 
 	@Override
-	public void render(final GuiGraphics graphics, final int mouseX, final int mouseY, final float a) {
+	public void render(GuiGraphics graphics, int mouseX, int mouseY, float a) {
 		if(preEditText == null) {
 			return;
 		}
 		
 		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 
 				overlayBounds.x() - 5, overlayBounds.y() - 5, overlayBounds.width() + 10, overlayBounds.height() + 10);
-		graphics.drawString(this.font, this.preEditText, overlayBounds.x(), overlayBounds.y(), TEXT_COLOR, false);
-		if (TextCursorUtils.isCursorVisible(Util.getMillis() - this.initTimeMs)) {
+		graphics.drawString(font, preEditText, overlayBounds.x(), overlayBounds.y(), TEXT_COLOR, false);
+		if (TextCursorUtils.isCursorVisible(Util.getMillis() - initTimeMs)) {
 			TextCursorUtils.drawInsertCursor(graphics, 
-					overlayBounds.x() + this.preEditCaretPos, overlayBounds.y(), TEXT_COLOR, 10);
+					overlayBounds.x() + preEditCaretPos, overlayBounds.y(), TEXT_COLOR, 10);
 		}
 	}
 	

@@ -4,7 +4,7 @@ import org.lwjgl.glfw.GLFW;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.TextCursorUtils;
 import net.minecraft.client.input.PreeditEvent;
@@ -81,16 +81,16 @@ public class EfficientIMEPreeditOverlay implements Renderable {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float a) {
+	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
 		if(preEditText == null) {
 			return;
 		}
 		
 		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 
 				overlayBounds.x() - 5, overlayBounds.y() - 5, overlayBounds.width() + 10, overlayBounds.height() + 10);
-		graphics.drawString(font, preEditText, overlayBounds.x(), overlayBounds.y(), TEXT_COLOR, false);
+		graphics.text(font, preEditText, overlayBounds.x(), overlayBounds.y(), TEXT_COLOR, false);
 		if (TextCursorUtils.isCursorVisible(Util.getMillis() - initTimeMs)) {
-			TextCursorUtils.drawInsertCursor(graphics, 
+			TextCursorUtils.extractInsertCursor(graphics, 
 					overlayBounds.x() + preEditCaretPos, overlayBounds.y(), TEXT_COLOR, 10);
 		}
 	}

@@ -7,19 +7,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.gui.EfficientIMEPreeditOverlay;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 
-@Mixin(GuiGraphics.class)
-public abstract class GuiGraphicsMixin {
+@Mixin(GuiGraphicsExtractor.class)
+public abstract class GuiGraphicsExtractorMixin {
 	@Inject(method = "setPreeditOverlay", at = @At("HEAD"), cancellable = true)
 	public void disableVanillaPreeditOverlay(Renderable preeditOverlay, CallbackInfo ci) {
 		ci.cancel();
 	}
 	
-	@Inject(method = "renderDeferredElements", at = @At(value = "FIELD", opcode = Opcodes.GETFIELD,
-			target = "Lnet/minecraft/client/gui/GuiGraphics;preeditOverlay:Lnet/minecraft/client/gui/components/Renderable;"))
+	@Inject(method = "extractDeferredElements", at = @At(value = "FIELD", opcode = Opcodes.GETFIELD,
+			target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;preeditOverlay:Lnet/minecraft/client/gui/components/Renderable;"))
 	public void renderEfficientPreeditOverlay(int mouseX, int mouseY, float a, CallbackInfo ci) {
-		EfficientIMEPreeditOverlay.getInstance().render((GuiGraphics) (Object) this, mouseX, mouseY, a);
+		EfficientIMEPreeditOverlay.getInstance().extractRenderState((GuiGraphicsExtractor) (Object) this, mouseX, mouseY, a);
 	}
 }

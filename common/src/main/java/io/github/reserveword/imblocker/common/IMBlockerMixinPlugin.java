@@ -30,6 +30,7 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 				"MultiLineEditBoxMixin",
 				"AbstractSignEditScreenMixin",
 				"GuiGraphicsExtractorMixin",
+				"TextInputManagerMixin",
 				"KeyboardHandlerMixin");
 		
 		if(Platform.isLinux()) {

@@ -15,9 +15,4 @@ public abstract class WindowMixin {
 	public void onScaleFactorChanged(int scaleFactor, CallbackInfo ci) {
 		FocusContainer.MINECRAFT.setGuiScaleFactor(scaleFactor);
 	}
-	
-	@Inject(method = "toggleIME", at = @At("HEAD"), cancellable = true)
-	public void disableVanillaIMEControl(boolean enable, CallbackInfo ci) {
-		ci.cancel();
-	}
 }

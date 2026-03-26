@@ -5,7 +5,6 @@ import org.lwjgl.glfw.GLFW;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.TextCursorUtils;
 import net.minecraft.client.input.PreeditEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -14,8 +13,8 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
 
-public class EfficientIMEPreeditOverlay implements Renderable {
-	private static final EfficientIMEPreeditOverlay INSTANCE = new EfficientIMEPreeditOverlay();
+public class UniversalIMEPreeditOverlay {
+	private static final UniversalIMEPreeditOverlay INSTANCE = new UniversalIMEPreeditOverlay();
 	
 	private static final Identifier BACKGROUND = Identifier.withDefaultNamespace("widget/preedit");
 	private static final Style FOCUSED_STYLE = Style.EMPTY.withUnderlined(true);
@@ -30,7 +29,7 @@ public class EfficientIMEPreeditOverlay implements Renderable {
 	private int preEditCaretPos;
 	private Rectangle overlayBounds = Rectangle.EMPTY;
 
-	private EfficientIMEPreeditOverlay() {
+	private UniversalIMEPreeditOverlay() {
 		this.font = Minecraft.getInstance().font;
 		this.initTimeMs = Util.getMillis();
 	}
@@ -80,8 +79,7 @@ public class EfficientIMEPreeditOverlay implements Renderable {
 		}
 	}
 
-	@Override
-	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+	public void renderOnMinecraftSurface(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
 		if(preEditText == null) {
 			return;
 		}
@@ -95,7 +93,7 @@ public class EfficientIMEPreeditOverlay implements Renderable {
 		}
 	}
 	
-	public static EfficientIMEPreeditOverlay getInstance() {
+	public static UniversalIMEPreeditOverlay getInstance() {
 		return INSTANCE;
 	}
 }

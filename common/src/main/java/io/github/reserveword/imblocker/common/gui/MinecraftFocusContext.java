@@ -123,7 +123,6 @@ final class MinecraftFocusContext extends FocusContainer {
 	public void clearFocus() {
 		focusCandidates.clear();
 		//IMBlockerCore.LOGGER.info(focusCandidates);
-		EfficientIMEPreeditOverlay.getInstance().preeditContentUpdated(null);
 		restoreContainerFocus();
 	}
 	

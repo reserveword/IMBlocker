@@ -41,11 +41,6 @@ public abstract class MultiLineEditBoxMixin extends AbstractScrollAreaMixin impl
 		}
 	}
 	
-	@Inject(method = "scrollToCursor", at = @At("TAIL"))
-	public void onCursorChange(CallbackInfo ci) {
-		imblocker$onCursorChanged();
-	}
-	
 	@Override
 	public void onScroll(double scroll, CallbackInfo ci) {
 		imblocker$onCursorChanged();

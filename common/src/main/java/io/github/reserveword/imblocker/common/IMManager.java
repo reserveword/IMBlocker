@@ -2,7 +2,7 @@ package io.github.reserveword.imblocker.common;
 
 import com.sun.jna.Platform;
 
-import io.github.reserveword.imblocker.common.gui.EfficientIMEPreeditOverlay;
+import io.github.reserveword.imblocker.common.gui.UniversalIMEPreeditOverlay;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.FocusableObject;
 import io.github.reserveword.imblocker.common.gui.FocusableWidget;
@@ -40,7 +40,7 @@ public final class IMManager {
 		FocusableObject focusedWidget = FocusManager.getFocusOwner();
 		if (focusedWidget != null) {
 			Point caretPos = calculateCaretPos(focusedWidget);
-			EfficientIMEPreeditOverlay.getInstance().
+			UniversalIMEPreeditOverlay.getInstance().
 					updateCaretPosition(caretPos.x(), caretPos.y());
 		}
 	}

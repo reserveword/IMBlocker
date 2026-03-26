@@ -24,11 +24,6 @@ public abstract class MinecraftClientMixin {
 	
 	@Unique
 	private long lastGameRenderTime = 0;
-	
-	@Inject(method = "setWindowActive", at = @At("HEAD"))
-	public void onWindowFocusChanged(boolean isFocused, CallbackInfo ci) {
-		FocusManager.setWindowFocused(isFocused);
-	}
 
 	@Inject(method = "setScreen", at = @At("HEAD"))
 	public void onScreenChanged(Screen screen, CallbackInfo ci) {

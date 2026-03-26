@@ -19,14 +19,14 @@ allprojects {
 			}
 		}
 		maven {
-		name = "CottonMC"
+			name = "CottonMC"
 			url = "https://server.bbkr.space/artifactory/libs-release"
 			content {
 				includeGroup "io.github.cottonmc"
 			}
 		}
 		maven {
-		url "https://maven.shedaniel.me/"
+			url "https://maven.shedaniel.me/"
 			content {
 				includeGroupAndSubgroups "me.shedaniel"
 				includeGroup "dev.architectury"

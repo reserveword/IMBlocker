@@ -1,5 +1,6 @@
 package io.github.reserveword.imblocker.common.gui;
 
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.MinecraftClientUtil;
 
@@ -154,7 +155,7 @@ public abstract class FocusContainer implements FocusableObject {
 	
 	public void setGuiScaleFactor(double factor) {
 		this.guiScaleFactor = factor;
-		IMManager.updateCaretPosition();
+		IMBlockerCore.invokeLater(IMManager::updateCaretPosition);
 	}
 	
 	@Override

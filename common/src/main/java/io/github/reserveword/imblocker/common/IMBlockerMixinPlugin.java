@@ -36,6 +36,12 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		if(Platform.isLinux()) {
 			validMixins.add("LinuxKeyboardPatch");
 		}
+		
+		if(IMBlockerCore.hasMod("reeses-sodium-options") || 
+				IMBlockerCore.hasMod("reeses_sodium_options")) {
+			validMixins.add("compat.RSOAbstractFrameMixin");
+			validMixins.add("compat.RSOSearchFieldMixin");
+		}
 	}
 	
 	@Override

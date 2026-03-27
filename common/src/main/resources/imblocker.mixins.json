@@ -1,7 +1,7 @@
 {
 	"required": true,
 	"package": "io.github.reserveword.imblocker.mixin",
-	"compatibilityLevel": "JAVA_21",
+	"compatibilityLevel": "JAVA_25",
 	"plugin": "io.github.reserveword.imblocker.common.IMBlockerMixinPlugin",
 	"injectors": {
 		"defaultRequire": 1

@@ -24,8 +24,6 @@
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings": "Windows 兼容设置",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi": "使用转换状态API",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "用于切换中英文状态的API\n\u00A77禁用后CONVERSION_STATUS英文状态实现将失效",
-  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCursorPositionTracking": "文本光标位置跟踪",
-  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCompositionFontTweaks": "合成字符串字体格式调整",
   
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings": "Linux 兼容设置",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch": "启用回调级键盘补丁",

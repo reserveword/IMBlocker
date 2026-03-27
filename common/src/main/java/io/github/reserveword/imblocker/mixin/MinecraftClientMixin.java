@@ -14,6 +14,7 @@ import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 
 @Mixin(Minecraft.class)
@@ -24,6 +25,11 @@ public abstract class MinecraftClientMixin {
 	
 	@Unique
 	private long lastGameRenderTime = 0;
+	
+	@Inject(method = "onTextInputFocusChange", at = @At("HEAD"), cancellable = true)
+	public void disableVanillaFocusControl(GuiEventListener element, boolean isFocused, CallbackInfo ci) {
+		ci.cancel();
+	}
 
 	@Inject(method = "setScreen", at = @At("HEAD"))
 	public void onScreenChanged(Screen screen, CallbackInfo ci) {

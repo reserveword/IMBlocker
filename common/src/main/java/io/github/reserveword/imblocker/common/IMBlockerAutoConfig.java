@@ -65,16 +65,6 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	public boolean isConversionStatusApiEnabled() {
 		return windowsCompatibilitySettings.enableConversionStatusApi;
 	}
-
-	@Override
-	public boolean isCursorPositionTrackingEnabled() {
-		return windowsCompatibilitySettings.enableCursorPositionTracking;
-	}
-
-	@Override
-	public boolean isCompositionFontTweaksEnabled() {
-		return windowsCompatibilitySettings.enableCompositionFontTweaks;
-	}
 	
 	@Override
 	public boolean isLinuxKeyboardPatchEnabled() {
@@ -144,10 +134,6 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	static class WindowsCompatibilitySettings {
 		@ConfigEntry.Gui.Tooltip
 		boolean enableConversionStatusApi = true;
-
-		boolean enableCursorPositionTracking = true;
-
-		boolean enableCompositionFontTweaks = true;
 	}
 	
 	static class LinuxCompatibilitySettings {

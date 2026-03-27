@@ -68,14 +68,6 @@ public class IMBlockerConfig {
 	public boolean isConversionStatusApiEnabled() {
 		return true;
 	}
-
-	public boolean isCursorPositionTrackingEnabled() {
-		return true;
-	}
-
-	public boolean isCompositionFontTweaksEnabled() {
-		return true;
-	}
 	
 	public boolean isLinuxKeyboardPatchEnabled() {
 		return true;

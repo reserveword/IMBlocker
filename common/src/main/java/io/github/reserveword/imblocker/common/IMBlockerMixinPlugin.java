@@ -29,7 +29,7 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 				"MultilineTextFieldMixin",
 				"MultiLineEditBoxMixin",
 				"AbstractSignEditScreenMixin",
-				"GuiGraphicsExtractorMixin",
+				"GameRendererMixin",
 				"TextInputManagerMixin",
 				"KeyboardHandlerMixin");
 		
@@ -41,6 +41,11 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 				IMBlockerCore.hasMod("reeses_sodium_options")) {
 			validMixins.add("compat.RSOAbstractFrameMixin");
 			validMixins.add("compat.RSOSearchFieldMixin");
+		}
+		
+		if(IMBlockerCore.hasMod("essential")) {
+			validMixins.add("compat.EssentialUIComponentMixin");
+			validMixins.add("compat.EssentialAbstractTextInputMixin");
 		}
 	}
 	

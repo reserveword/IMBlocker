@@ -79,7 +79,7 @@ public class UniversalIMEPreeditOverlay {
 		}
 	}
 
-	public void renderOnMinecraftSurface(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+	public void renderOnMinecraftSurface(GuiGraphicsExtractor graphics) {
 		if(preEditText == null) {
 			return;
 		}

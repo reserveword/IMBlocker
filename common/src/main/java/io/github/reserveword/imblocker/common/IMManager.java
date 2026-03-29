@@ -2,12 +2,12 @@ package io.github.reserveword.imblocker.common;
 
 import com.sun.jna.Platform;
 
-import io.github.reserveword.imblocker.common.gui.UniversalIMEPreeditOverlay;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.FocusableObject;
 import io.github.reserveword.imblocker.common.gui.FocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import io.github.reserveword.imblocker.common.gui.UniversalIMEPreeditOverlay;
 
 public final class IMManager {
 	private static final PlatformIMManager INSTANCE;

@@ -28,7 +28,11 @@ public class IMBlockerCore {
 				throw new RuntimeException("[IMBlocker] Ixeris incompatible! Please report it to developer: ", e);
 			}
 		}else {
-			Minecraft.getInstance().execute(runnable);
+			if(Minecraft.getInstance().isSameThread()) {
+				runnable.run();
+			}else {
+				Minecraft.getInstance().execute(runnable);
+			}
 		}
 	}
 	

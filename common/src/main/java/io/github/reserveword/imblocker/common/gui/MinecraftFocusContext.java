@@ -146,11 +146,11 @@ final class MinecraftFocusContext extends FocusContainer {
 		int x = 0, y = 0;
 		Dimension contentSize = MinecraftClientUtil.getContentSize();
 		if(IS_AXIOM_LOADED) {
-			/*AxiomGuiMonitor axiomMonitor = AxiomGuiMonitor.getInstance();
+			AxiomGuiMonitor axiomMonitor = AxiomGuiMonitor.getInstance();
 			if(axiomMonitor != null && axiomMonitor.isAxiomEditorShowing()) {
 				x = axiomMonitor.getGameContentOffsetX();
 				y = axiomMonitor.getGameContentOffsetY();
-			}*/
+			}
 		}
 		return new Rectangle(x, y, contentSize.width(), contentSize.height());
 	}

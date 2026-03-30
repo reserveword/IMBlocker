@@ -24,7 +24,7 @@ public abstract class MultiLineEditBoxMixin extends AbstractScrollAreaMixin impl
 
 	private final MultilineCursorInfo imblocker$cursorInfo = new MultilineCursorInfo(0, 0, 0, 0, "");
 	
-	@Override
+	@Inject(method = "setFocused", at = @At("TAIL"))
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
 		imblocker$onFocusChanged(isFocused());
 	}

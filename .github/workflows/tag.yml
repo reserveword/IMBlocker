@@ -23,7 +23,12 @@ jobs:
           - loader: fabric
             project: fabric
             java-version: 25
-            game-versions: '[26.1-alpha.11,)'
+            game-versions: '[26.1,)'
+            
+          - loader: neoforge
+            project: neoforge
+            java-version: 25
+            game-versions: '[26.1,)'
 
     steps:
       - name: 签出存储库
@@ -52,7 +57,7 @@ jobs:
           github-token: ${{ env.GITHUB_TOKEN }}
 
           name: IMBlocker-${{ github.ref_name }}-${{ matrix.loader }}
-          version-type: release
+          version-type: beta
           changelog-file: CHANGELOG.md
 
           loaders: ${{ matrix.loader }}

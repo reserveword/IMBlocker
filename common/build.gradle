@@ -21,6 +21,7 @@ dependencies {
 	compileOnly "ca.weblite:java-objc-bridge:1.1"
 	
 	compileOnlyApi "me.shedaniel.cloth:cloth-config-neoforge:$clothconfig_version"
+	compileOnlyApi "io.github.spair:imgui-java-app:$imgui_version"
 	compileOnly "io.github.cottonmc:LibGui:$cottonlibgui_version"
 	compileOnly "maven.modrinth:ixeris:$ixeris_version"
 }

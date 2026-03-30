@@ -40,16 +40,16 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
  
 [Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems)  
 [EMI](https://github.com/emilyploszaj/emi)   
-[Axiom](https://axiom.moulberry.com/)  
+[Axiom](https://axiom.moulberry.com/) (Grinding)  
 [Replay Mod](https://www.replaymod.com/)   
 [FTB Library](https://github.com/FTBTeam/FTB-Library)   
 [Meteor Client](https://www.meteorclient.com/)   
-[LibGui](https://github.com/CottonMC/LibGui)  
-[Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)  
+[LibGui](https://github.com/CottonMC/LibGui) (Updated)  
+[Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options) (Updated)  
 [BlockUI](https://github.com/ldtteam/BlockUI)   
 [SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)   
-[Notes](https://github.com/MattCzyr/Notes)   
-[Essential Mod](https://essential.gg/)*  
+[Notes](https://github.com/MattCzyr/Notes) (Deprecated)   
+[Essential Mod](https://essential.gg/)* (Updated)  
 [Armourer's Workshop](https://github.com/Armourers-Workshop/Armourers-Workshop)
 
 *On Fabric, you need to extract the file named "essential-<32-bit code>.jar" from the root directory of its mod JAR and **only** put this file into your mod folder.

@@ -37,6 +37,11 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("LinuxKeyboardPatch");
 		}
 		
+		if(IMBlockerCore.hasMod("axiom")) {
+			validMixins.add("compat.AxiomEditorUIMixin");
+			validMixins.add("compat.ImGuiMixin");
+		}
+		
 		if(IMBlockerCore.hasMod("libgui")) {
 			validMixins.add("compat.LibGuiWidgetMixin");
 			validMixins.add("compat.LibGuiTextFieldMixin");

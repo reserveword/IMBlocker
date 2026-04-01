@@ -40,6 +40,7 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		if(IMBlockerCore.hasMod("axiom")) {
 			validMixins.add("compat.AxiomEditorUIMixin");
 			validMixins.add("compat.ImGuiMixin");
+			validMixins.add("compat.ImGuiGlfwPatch");
 		}
 		
 		if(IMBlockerCore.hasMod("libgui")) {

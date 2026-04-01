@@ -99,6 +99,10 @@ public class FocusManager {
 		focusOwner = newFocusOwner;
 	}
 	
+	public static FocusContainer getFocusedContainer() {
+		return focusedContainer;
+	}
+	
 	public static FocusableObject getFocusOwner() {
 		return focusOwner;
 	}

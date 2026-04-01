@@ -7,6 +7,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.sugar.Local;
 
+import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.UniversalIMEPreeditOverlay;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -19,6 +21,8 @@ public abstract class GameRendererMixin {
 	public void renderUniversalPreeditOverlay(DeltaTracker deltaTracker, 
 			boolean shouldRenderLevel, boolean resourcesLoaded, CallbackInfo ci, 
 			@Local GuiGraphicsExtractor graphics) {
-		UniversalIMEPreeditOverlay.getInstance().renderOnMinecraftSurface(graphics);
+		if(FocusManager.getFocusedContainer() == FocusContainer.MINECRAFT) {
+			UniversalIMEPreeditOverlay.getInstance().renderOnMinecraftSurface(graphics);
+		}
 	}
 }

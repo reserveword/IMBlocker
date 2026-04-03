@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(targets = "com.moulberry.axiom.editor.CustomImGuiImplGlfw", remap = false)
 public abstract class ImGuiGlfwPatch {
 	@Redirect(method = "init", at = @At(value = "INVOKE", target = 
-			"glfwSetCharModsCallback(JLorg/lwjgl/glfw/GLFWCharModsCallbackI;)Lorg/lwjgl/glfw/GLFWCharModsCallback;"))
+			"glfwSetCharModsCallback(JLorg/lwjgl/glfw/GLFWCharModsCallbackI;)Lorg/lwjgl/glfw/GLFWCharModsCallback;"), require = 0)
 	public GLFWCharModsCallback correctCharCallback(long window, GLFWCharModsCallbackI cbfun) {
 		GLFWCharCallback vanillaCharCallback = GLFW.glfwSetCharCallback(window, (w, c) -> cbfun.invoke(window, c, 0));
 		return GLFWCharModsCallback.create((w, c, m) -> vanillaCharCallback.invoke(w, c));

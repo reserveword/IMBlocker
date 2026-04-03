@@ -43,6 +43,7 @@ public interface FocusableObject {
 	 */
 	default void lostFocus() {
 		UniversalIMEPreeditOverlay.getInstance().preeditContentUpdated(null);
+		UniversalIMECandidateOverlay.getInstance().candidateListUpdated(null, 0);
 		FocusManager.setFocusOwner(null);
 	}
 	

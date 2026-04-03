@@ -7,6 +7,7 @@ import io.github.reserveword.imblocker.common.gui.FocusableObject;
 import io.github.reserveword.imblocker.common.gui.FocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import io.github.reserveword.imblocker.common.gui.UniversalIMECandidateOverlay;
 import io.github.reserveword.imblocker.common.gui.UniversalIMEPreeditOverlay;
 
 public final class IMManager {
@@ -17,6 +18,10 @@ public final class IMManager {
 		void setState(boolean on);
 		
 		void setEnglishState(boolean isEN);
+		
+		default void updateIMEStatus() {}
+		
+		default void updateCandidateList() {}
 	}
 	
 	private IMManager() {}
@@ -41,6 +46,8 @@ public final class IMManager {
 		if (focusedWidget != null) {
 			Point caretPos = calculateCaretPos(focusedWidget);
 			UniversalIMEPreeditOverlay.getInstance().
+					updateCaretPosition(caretPos.x(), caretPos.y());
+			UniversalIMECandidateOverlay.getInstance().
 					updateCaretPosition(caretPos.x(), caretPos.y());
 		}
 	}
@@ -68,6 +75,14 @@ public final class IMManager {
 			IMBlockerCore.LOGGER.error("[IMBlocker] Failed to calculate caret position: " + e);
 			return Point.TOP_LEFT;
 		}
+	}
+	
+	public static void updateIMEStatus() {
+		INSTANCE.updateIMEStatus();
+	}
+	
+	public static void updateCandidateList(long window, int candidatesCount, int selectedIndex, int pageStart, int pageSize) {
+		INSTANCE.updateCandidateList();
 	}
 	
 	public static void evaluateKeyInput(boolean isUnlockIMEKey, int action, int modifiers) {

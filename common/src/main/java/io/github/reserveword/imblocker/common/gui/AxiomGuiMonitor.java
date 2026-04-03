@@ -40,10 +40,6 @@ public class AxiomGuiMonitor {
 		}
 	}
 	
-	public void sendCharacter(int codepoint) {
-		axiomGuiAccessor.addInputCharactersUTF8(Character.toString(codepoint));
-	}
-	
 	public boolean isAxiomEditorShowing() {
 		return ReflectionUtil.getFieldValue(axiomEditorUIClass, null, boolean.class, "enabled");
 	}

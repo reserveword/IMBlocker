@@ -7,12 +7,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import imgui.ImDrawList;
 import imgui.ImGui;
 import imgui.ImGuiIO;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.gui.AxiomGuiMonitor;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
+import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
+import io.github.reserveword.imblocker.common.gui.UniversalIMECandidateOverlay;
 import io.github.reserveword.imblocker.common.gui.UniversalIMEPreeditOverlay;
 
 @Pseudo
@@ -35,7 +38,10 @@ public abstract class AxiomEditorUIMixin {
 	@Inject(method = "drawOverlayInternal", at = @At(value = "INVOKE", target = "Limgui/ImGui;render()V"))
 	private static void renderUniversalPreeditOverlay(CallbackInfo ci) {
 		if(FocusManager.getFocusedContainer() == FocusContainer.IMGUI) {
-			UniversalIMEPreeditOverlay.getInstance().renderOnImGuiSurface(ImGui.getForegroundDrawList());
+			ImDrawList graphics = ImGui.getForegroundDrawList();
+			UniversalIMEPreeditOverlay.getInstance().renderOnImGuiSurface(graphics);
+			UniversalIMECandidateOverlay.getInstance().renderOnImGuiSurface(graphics);
+			UniversalEnglishStateIndicator.renderOnImGuiSurface(graphics);
 		}
 	}
 }

@@ -1,14 +1,15 @@
 package io.github.reserveword.imblocker.common;
 
+import com.sun.jna.Memory;
 import com.sun.jna.Native;
+import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinNT;
+import com.sun.jna.ptr.IntByReference;
 
-import io.github.reserveword.imblocker.common.gui.FocusableObject;
-import io.github.reserveword.imblocker.common.gui.FocusableWidget;
-import io.github.reserveword.imblocker.common.gui.Point;
-import io.github.reserveword.imblocker.common.gui.Rectangle;
+import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
+import io.github.reserveword.imblocker.common.gui.UniversalIMECandidateOverlay;
 
 final class IMManagerWindows implements IMManager.PlatformIMManager {
 
@@ -21,10 +22,12 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	private static native WinNT.HANDLE ImmCreateContext();
 
 	private static native boolean ImmDestroyContext(WinNT.HANDLE himc);
+	
+	private static native boolean ImmGetConversionStatus(WinNT.HANDLE himc, IntByReference lpfdwConversion, IntByReference lpfdwSentence);
 
 	private static native boolean ImmSetConversionStatus(WinNT.HANDLE himc, int fdwConversion, int fdwSentence);
 	
-	private static native WinDef.HWND ImmGetDefaultIMEWnd(WinNT.HWND hwnd);
+	private static native int ImmGetCandidateListW(WinNT.HANDLE himc, int deIndex, Pointer lpCandList, int dwBufLen);
 
 	public static long lastIMStateOnTimestamp = System.currentTimeMillis();
 
@@ -55,6 +58,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 				himc = ImmAssociateContext(hwnd, null);
 				ImmDestroyContext(himc);
 			}
+			UniversalEnglishStateIndicator.updateIMState(on);
 		}
 		ImmReleaseContext(hwnd, himc);
 	}
@@ -93,36 +97,41 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 			return u.GetForegroundWindow();
 		}
 	}
-
-	private Point calculateProperCompositionWindowPos(FocusableObject inputEntry) {
-		try {
-			double scaleFactor = inputEntry.getGuiScale();
-			Rectangle inputEntryBounds = inputEntry.getBoundsAbs();
-			Point caretPos = inputEntry.getCaretPos();
-			if(inputEntryBounds == Rectangle.EMPTY && caretPos == Point.TOP_LEFT) {
-				return Point.TOP_LEFT;
+	
+	public void updateCandidateList() {
+		WinDef.HWND hwnd = getActiveWindow();
+		WinNT.HANDLE himc = ImmGetContext(hwnd);
+		if (himc != null) {
+			int bufferSize = ImmGetCandidateListW(himc, 0, Pointer.NULL, 0);
+			if(bufferSize != 0) {
+				Memory buffer = new Memory(bufferSize);
+				ImmGetCandidateListW(himc, 0, buffer, bufferSize);
+				int selectedIndex = buffer.getInt(12);
+				int pageStart = buffer.getInt(16);
+				int pageSize = buffer.getInt(20);
+				String[] selectedPageCandidates = new String[pageSize];
+				for(int i = pageStart; i < pageStart + pageSize; i++) {
+					selectedPageCandidates[i - pageStart] = buffer.getWideString(buffer.getInt(24 + i * 4));
+				}
+				UniversalIMECandidateOverlay.getInstance().candidateListUpdated(selectedPageCandidates, selectedIndex - pageStart);
+			}else {
+				UniversalIMECandidateOverlay.getInstance().candidateListUpdated(null, 0);
 			}
-			//Constrained to entry border.
-			int caretX = MathHelper.clamp(caretPos.x(), 0, inputEntryBounds.width());
-			int caretY = MathHelper.clamp(caretPos.y(), 0, inputEntryBounds.height());
-			caretY -= scaleFactor / 2; // Tweak yPos to fit font style.
-			int compositionWindowPosX = inputEntryBounds.x() + caretX;
-			int compositionWindowPosY = inputEntryBounds.y() + caretY;
-			if(inputEntry instanceof FocusableWidget) {
-				//Constrained to container border.
-				int margin = (int) (inputEntry.getFontHeight() * scaleFactor / 2);
-				FocusableWidget inputWidget = (FocusableWidget) inputEntry;
-				Rectangle containerBounds = inputWidget.getFocusContainer().getBoundsAbs();
-				compositionWindowPosX = MathHelper.clamp(compositionWindowPosX, 0, containerBounds.width() - margin);
-				compositionWindowPosY = MathHelper.clamp(compositionWindowPosY, 0, containerBounds.height() - margin);
-				compositionWindowPosX += containerBounds.x();
-				compositionWindowPosY += containerBounds.y();
-			}
-			return new Point(compositionWindowPosX, compositionWindowPosY);
-		} catch (Throwable e) {
-			IMBlockerCore.LOGGER.error("[IMBlocker] Failed to calculate caret position: " + e);
-			return Point.TOP_LEFT;
 		}
+		ImmReleaseContext(hwnd, himc);
+	}
+	
+	@Override
+	public void updateIMEStatus() {
+		WinDef.HWND hwnd = getActiveWindow();
+		WinNT.HANDLE himc = ImmGetContext(hwnd);
+		if(himc != null) {
+			IntByReference conversion = new IntByReference();
+			IntByReference sentence = new IntByReference();
+			ImmGetConversionStatus(himc, conversion, sentence);
+			UniversalEnglishStateIndicator.updateEnglishState(conversion.getValue() == 0);
+		}
+		ImmReleaseContext(hwnd, himc);
 	}
 
 	private class SetConversionStateThread extends Thread {

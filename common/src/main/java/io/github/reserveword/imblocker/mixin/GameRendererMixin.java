@@ -9,6 +9,8 @@ import com.llamalad7.mixinextras.sugar.Local;
 
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
+import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
+import io.github.reserveword.imblocker.common.gui.UniversalIMECandidateOverlay;
 import io.github.reserveword.imblocker.common.gui.UniversalIMEPreeditOverlay;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -23,6 +25,8 @@ public abstract class GameRendererMixin {
 			@Local GuiGraphicsExtractor graphics) {
 		if(FocusManager.getFocusedContainer() == FocusContainer.MINECRAFT) {
 			UniversalIMEPreeditOverlay.getInstance().renderOnMinecraftSurface(graphics);
+			UniversalIMECandidateOverlay.getInstance().renderOnMinecraftSurface(graphics);
+			UniversalEnglishStateIndicator.renderOnMinecraftSurface(graphics);
 		}
 	}
 }

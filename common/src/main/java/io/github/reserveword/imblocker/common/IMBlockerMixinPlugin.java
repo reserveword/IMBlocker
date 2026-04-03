@@ -33,6 +33,10 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 				"TextInputManagerMixin",
 				"KeyboardHandlerMixin");
 		
+		if(Platform.isWindows()) {
+			validMixins.add("WindowsIngameIMEInitializer");
+		}
+		
 		if(Platform.isLinux()) {
 			validMixins.add("LinuxKeyboardPatch");
 		}

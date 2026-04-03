@@ -67,6 +67,11 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	}
 	
 	@Override
+	public boolean isIngameIMEEnabled() {
+		return Platform.isWindows() && windowsCompatibilitySettings.enableIngameIME;
+	}
+	
+	@Override
 	public boolean isLinuxKeyboardPatchEnabled() {
 		return linuxCompatibilitySettings.enableKeyboardPatch;
 	}
@@ -134,6 +139,10 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	static class WindowsCompatibilitySettings {
 		@ConfigEntry.Gui.Tooltip
 		boolean enableConversionStatusApi = true;
+		
+		@ConfigEntry.Gui.RequiresRestart
+		@ConfigEntry.Gui.Tooltip(count = 2)
+		boolean enableIngameIME = false;
 	}
 	
 	static class LinuxCompatibilitySettings {

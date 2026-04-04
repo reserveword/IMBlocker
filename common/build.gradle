@@ -16,6 +16,7 @@ dependencies {
 	mappings loom.officialMojangMappings()
 
 	compileOnly "org.spongepowered:mixin:0.8.7"
+	compileOnly "io.github.llamalad7:mixinextras-fabric:0.5.0"
 	compileOnly "org.ow2.asm:asm-tree:9.8"
 	
 	compileOnly "ca.weblite:java-objc-bridge:1.1"

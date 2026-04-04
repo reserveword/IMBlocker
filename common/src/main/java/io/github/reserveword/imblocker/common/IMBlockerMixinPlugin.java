@@ -21,6 +21,7 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 				"AbstractWidgetMixin",
 				"MinecraftClientMixin",
 				"WindowMixin",
+				"GameRendererMixin",
 				"UnlockIMEKeyListener",
 				"KeyboardHandlerAccessor",
 				"TextFieldMixin",
@@ -31,6 +32,7 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		
 		if(Platform.isWindows()) {
 			validMixins.add("WindowsFullScreenPatch");
+			validMixins.add("WindowsIngameIMEInitializer");
 		}
 		
 		if(Platform.isLinux()) {

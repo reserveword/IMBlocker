@@ -42,6 +42,8 @@ public interface FocusableObject {
 	 * that because of their chaotic architectures.
 	 */
 	default void lostFocus() {
+		UniversalIMEPreeditOverlay.getInstance().preeditContentUpdated(null, 0);
+		UniversalIMECandidateOverlay.getInstance().candidateListUpdated(null, 0);
 		FocusManager.setFocusOwner(null);
 	}
 	

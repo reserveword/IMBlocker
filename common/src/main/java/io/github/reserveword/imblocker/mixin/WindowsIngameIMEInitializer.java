@@ -22,18 +22,16 @@ import net.minecraft.client.Minecraft;
 public abstract class WindowsIngameIMEInitializer {
 	@Inject(method = "_initGlfw", at = @At(value = "INVOKE", target = "Lorg/lwjgl/glfw/GLFW;glfwInit()Z"))
 	private static void applyIMEInitHint(BackendOptions options, CallbackInfoReturnable<LongSupplier> cir) {
-		if(options.exclusiveFullScreen()) {
-			try {
-				File imblockConfigFile = new File(Minecraft.getInstance().gameDirectory, "config/imblocker.json");
-				JsonObject imblockConfigRoot = JsonParser.parseReader(new FileReader(imblockConfigFile)).getAsJsonObject();
-				JsonObject windowsCompatSettings = imblockConfigRoot.getAsJsonObject("windowsCompatibilitySettings");
-				boolean enableIngameIME = windowsCompatSettings.get("enableIngameIME").getAsBoolean();
-				if(enableIngameIME) {
-					GLFW.glfwInitHint(GLFW.GLFW_MANAGE_PREEDIT_CANDIDATE, 1);
-				}
-			} catch (Throwable e) {
-				IMBlockerCore.LOGGER.error("[IMBlocker] Failed to get enableIngameIME config value: " + e);
+		try {
+			File imblockConfigFile = new File(Minecraft.getInstance().gameDirectory, "config/imblocker.json");
+			JsonObject imblockConfigRoot = JsonParser.parseReader(new FileReader(imblockConfigFile)).getAsJsonObject();
+			JsonObject windowsCompatSettings = imblockConfigRoot.getAsJsonObject("windowsCompatibilitySettings");
+			boolean enableIngameIME = windowsCompatSettings.get("enableIngameIME").getAsBoolean();
+			if(enableIngameIME) {
+				GLFW.glfwInitHint(GLFW.GLFW_MANAGE_PREEDIT_CANDIDATE, 1);
 			}
+		} catch (Throwable e) {
+			IMBlockerCore.LOGGER.error("[IMBlocker] Failed to get enableIngameIME config value: " + e);
 		}
 	}
 }

@@ -1,3 +1,9 @@
+# 7.0.0-beta.3
+
+ - Windows：使游戏内输入法兼容 Ixeris
+ 
+<br>
+
 # 7.0.0-beta.2
 
  - 通过临时补丁支持 Axiom 模组输入中文

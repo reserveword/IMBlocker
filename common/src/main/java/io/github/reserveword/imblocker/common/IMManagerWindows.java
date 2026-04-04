@@ -113,9 +113,11 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 				for(int i = pageStart; i < pageStart + pageSize; i++) {
 					selectedPageCandidates[i - pageStart] = buffer.getWideString(buffer.getInt(24 + i * 4));
 				}
-				UniversalIMECandidateOverlay.getInstance().candidateListUpdated(selectedPageCandidates, selectedIndex - pageStart);
+				IMBlockerCore.invokeOnRenderThread(() -> UniversalIMECandidateOverlay.getInstance()
+						.candidateListUpdated(selectedPageCandidates, selectedIndex - pageStart));
 			}else {
-				UniversalIMECandidateOverlay.getInstance().candidateListUpdated(null, 0);
+				IMBlockerCore.invokeOnRenderThread(() -> UniversalIMECandidateOverlay.getInstance()
+						.candidateListUpdated(null, 0));
 			}
 		}
 		ImmReleaseContext(hwnd, himc);

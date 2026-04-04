@@ -35,10 +35,11 @@ public class UniversalEnglishStateIndicator {
 		if(IMBlockerConfig.INSTANCE.isIngameIMEEnabled() &&
 				imState && englishState && ((focusOwner = FocusManager.getFocusOwner()) != null)) {
 			int fontSize = focusOwner.getFontHeight() + 1;
+			int indicatorWidth = (int) ImGui.calcTextSize("EN").x;
 			Rectangle containerBounds = focusOwner instanceof FocusableWidget ?
 					((FocusableWidget) focusOwner).getFocusContainer().getBoundsAbs() : focusOwner.getBoundsAbs();
 			int indicatorX = containerBounds.width() - fontSize * 4, indicatorY = containerBounds.height() - fontSize * 4;
-			graphics.addRectFilled(indicatorX - 4, indicatorY - 4, indicatorX + fontSize + 5, indicatorY + fontSize + 3, ImGui.getColorU32i(0xFFFFFFFF));
+			graphics.addRectFilled(indicatorX - 4, indicatorY - 4, indicatorX + indicatorWidth + 3, indicatorY + fontSize + 3, ImGui.getColorU32i(0xFFFFFFFF));
 			graphics.addText(indicatorX, indicatorY, ImGui.getColorU32i(0xFF000000), "EN");
 		}
 	}

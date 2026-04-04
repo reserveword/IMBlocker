@@ -78,11 +78,11 @@ public final class IMManager {
 	}
 	
 	public static void updateIMEStatus() {
-		INSTANCE.updateIMEStatus();
+		IMBlockerCore.invokeOnMainThread(INSTANCE::updateIMEStatus);
 	}
 	
 	public static void updateCandidateList(long window, int candidatesCount, int selectedIndex, int pageStart, int pageSize) {
-		INSTANCE.updateCandidateList();
+		IMBlockerCore.invokeOnMainThread(INSTANCE::updateCandidateList);
 	}
 	
 	public static void evaluateKeyInput(boolean isUnlockIMEKey, int action, int modifiers) {

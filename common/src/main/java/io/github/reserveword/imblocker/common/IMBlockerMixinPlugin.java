@@ -42,6 +42,13 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("compat.ImGuiMixin");
 		}
 		
+		if(IMBlockerCore.hasMod("ftblibrary")) {
+			validMixins.add("compat.FtbWidgetMixin");
+			validMixins.add("compat.FtbTextFieldMixin");
+			validMixins.add("compat.FtbPanelMixin");
+			validMixins.add("compat.FtbMultilineTextBoxMixin");
+		}
+		
 		if(IMBlockerCore.hasMod("libgui")) {
 			validMixins.add("compat.LibGuiWidgetMixin");
 			validMixins.add("compat.LibGuiTextFieldMixin");

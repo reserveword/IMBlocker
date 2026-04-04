@@ -23,12 +23,12 @@ jobs:
           - loader: fabric
             project: fabric
             java-version: 21
-            game-versions: '[1.21.9,)'
+            game-versions: '[1.21.9,1.21.11]'
 
           - loader: neoforge
             project: neoforge
             java-version: 21
-            game-versions: '[1.21.9,)'
+            game-versions: '[1.21.9,1.21.11]'
 
     steps:
       - name: 签出存储库

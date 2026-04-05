@@ -153,7 +153,6 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 
 		boolean enableCompositionFontTweaks = true;
 		
-		@ConfigEntry.Gui.RequiresRestart
 		@ConfigEntry.Gui.Tooltip(count = 2)
 		boolean enableIngameIME = false;
 	}

@@ -182,34 +182,36 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	public void initializeIngameIME(long window) {
 		WinDef.HWND hwnd = new WinDef.HWND(new Pointer(GLFWNativeWin32.glfwGetWin32Window(window)));
 		imeListener = (_hwnd, uMsg, wParam, lParam) -> {
-			switch (uMsg) {
-				case WM_IME_SETCONTEXT:
-					lParam.setValue(lParam.longValue() & ~ISC_SHOWUICANDIDATEWINDOW);
-					break;
-				case WM_IME_COMPOSITION:
-					int lpv = lParam.intValue();
-					if((lpv & (GCS_COMPSTR | GCS_CURSORPOS)) != 0) {
-						onCompositionChanged();
-						onCandidateChanged();
-					}
-					if((lpv & GCS_RESULTSTR) == 0) {
-						return new LRESULT();
-					}
-					break;
-				case WM_IME_ENDCOMPOSITION:
-					onCompositionEnd();
-					onCandidateClosed();
-					break;
-				case WM_IME_NOTIFY:
-					switch (wParam.intValue()) {
-						case IMN_SETCONVERSIONMODE:
-							onConversionStatusChanged();
-							break;
-						case IMN_CHANGECANDIDATE:
+			if(IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
+				switch (uMsg) {
+					case WM_IME_SETCONTEXT:
+						lParam.setValue(lParam.longValue() & ~ISC_SHOWUICANDIDATEWINDOW);
+						break;
+					case WM_IME_COMPOSITION:
+						int lpv = lParam.intValue();
+						if((lpv & (GCS_COMPSTR | GCS_CURSORPOS)) != 0) {
+							onCompositionChanged();
 							onCandidateChanged();
-							break;
-					}
-					break;
+						}
+						if((lpv & GCS_RESULTSTR) == 0) {
+							return new LRESULT();
+						}
+						break;
+					case WM_IME_ENDCOMPOSITION:
+						onCompositionEnd();
+						onCandidateClosed();
+						break;
+					case WM_IME_NOTIFY:
+						switch (wParam.intValue()) {
+							case IMN_SETCONVERSIONMODE:
+								onConversionStatusChanged();
+								break;
+							case IMN_CHANGECANDIDATE:
+								onCandidateChanged();
+								break;
+						}
+						break;
+				}
 			}
 			return u.CallWindowProc(originalProc, _hwnd, uMsg, wParam, lParam);
 		};

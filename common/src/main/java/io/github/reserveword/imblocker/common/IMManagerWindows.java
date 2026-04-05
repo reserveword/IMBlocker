@@ -53,11 +53,12 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	
 	private static final int WM_IME_SETCONTEXT = 0x0281;
 	private static final int WM_IME_COMPOSITION = 0x010F;
+	private static final int WM_IME_ENDCOMPOSITION = 0x010E;
 	private static final int WM_IME_NOTIFY = 0x0282;
 	
+	private static final long ISC_SHOWUICANDIDATEWINDOW = 1L;
+	
 	private static final int IMN_CHANGECANDIDATE = 0x0003;
-	private static final int IMN_CLOSECANDIDATE = 0x0004;
-	private static final int IMN_OPENCANDIDATE = 0x0005;
 	private static final int IMN_SETCONVERSIONMODE = 0x0006;
 
 	private static final int GCS_COMPSTR = 0x0008;
@@ -183,16 +184,21 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		imeListener = (_hwnd, uMsg, wParam, lParam) -> {
 			switch (uMsg) {
 				case WM_IME_SETCONTEXT:
-					return new LRESULT();
+					lParam.setValue(lParam.longValue() & ~ISC_SHOWUICANDIDATEWINDOW);
+					break;
 				case WM_IME_COMPOSITION:
 					int lpv = lParam.intValue();
 					if((lpv & (GCS_COMPSTR | GCS_CURSORPOS)) != 0) {
 						onCompositionChanged();
 						onCandidateChanged();
 					}
-					if((lpv & GCS_RESULTSTR) != 0) {
-						onCompositionEnd();
+					if((lpv & GCS_RESULTSTR) == 0) {
+						return new LRESULT();
 					}
+					break;
+				case WM_IME_ENDCOMPOSITION:
+					onCompositionEnd();
+					onCandidateClosed();
 					break;
 				case WM_IME_NOTIFY:
 					switch (wParam.intValue()) {
@@ -202,11 +208,6 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 						case IMN_CHANGECANDIDATE:
 							onCandidateChanged();
 							break;
-						case IMN_CLOSECANDIDATE:
-							//onCandidateClosed();
-							break;
-						default:
-//							System.out.println("Notify Code: " + wParam.intValue());
 					}
 					break;
 			}

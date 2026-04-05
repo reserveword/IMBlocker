@@ -29,13 +29,11 @@ public final class IMManager {
 	private IMManager() {}
 	
 	public static void setState(boolean on) {
-		IMBlockerCore.invokeOnMainThread(() -> {
-			INSTANCE.setState(on);
-			if (on) {
-				updateCompositionWindowPos();
-				updateCompositionFontSize();
-			}
-		});
+		IMBlockerCore.invokeOnMainThread(() -> INSTANCE.setState(on));
+		if (on) {
+			updateCompositionWindowPos();
+			updateCompositionFontSize();
+		}
 	}
 	
 	public static void setEnglishState(boolean isEN) {

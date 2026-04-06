@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.blaze3d.platform.Window;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
-import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.UniversalIMEPreeditOverlay;
 import net.minecraft.client.KeyboardHandler;
@@ -33,7 +32,7 @@ public abstract class KeyboardHandlerMixin {
 	private void registerPreeditCandidateCallback(Window window, CallbackInfo ci) {
 		if(IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
 			GLFW.glfwSetPreeditCandidateCallback(window.handle(), IMManager::updateCandidateList);
-			IMBlockerCore.registerClientTickEvent(IMManager::updateIMEStatus); //Temporary.
+			IMManager.initializeConversionStatusListener(window.handle());
 		}
 	}
 }

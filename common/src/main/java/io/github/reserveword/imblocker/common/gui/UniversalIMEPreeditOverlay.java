@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFW;
 
 import imgui.ImDrawList;
 import imgui.ImGui;
+import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -85,7 +86,11 @@ public class UniversalIMEPreeditOverlay {
 				compositionX = compositionBorder.width() - compositionWidth;
 			}
 			if(compositionY > compositionBorder.height()) {
-				compositionY = (int) (caretY - (4 + fontSize * 2) * guiScale);
+				if(!IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
+					compositionY = (int) (caretY - (4 + fontSize * 2) * guiScale);
+				}else {
+					compositionY = (int) (caretY - (6 + fontSize) * guiScale);
+				}
 			}
 			
 			ingameOverlayBounds = new Rectangle(1.0 / guiScale, compositionX, compositionY, compositionWidth, compositionHeight);			

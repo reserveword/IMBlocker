@@ -1,11 +1,16 @@
 package io.github.reserveword.imblocker.common;
 
+import org.lwjgl.glfw.GLFWNativeWin32;
+
+import com.sun.jna.CallbackReference;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinNT;
+import com.sun.jna.platform.win32.WinUser;
+import com.sun.jna.platform.win32.WinUser.WindowProc;
 import com.sun.jna.ptr.IntByReference;
 
 import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
@@ -29,10 +34,16 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	
 	private static native int ImmGetCandidateListW(WinNT.HANDLE himc, int deIndex, Pointer lpCandList, int dwBufLen);
 
+	private static final int WM_IME_NOTIFY = 0x0282;
+	private static final int IMN_SETCONVERSIONMODE = 0x0006;
+	
 	public static long lastIMStateOnTimestamp = System.currentTimeMillis();
 
 	private final SetConversionStateThread setConversionStateThread;
 	private boolean preferredEnglishState = false;
+
+	private Pointer originalProc;
+	private WindowProc imeListener;
 
 	static {
 		Native.register("imm32");
@@ -58,7 +69,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 				himc = ImmAssociateContext(hwnd, null);
 				ImmDestroyContext(himc);
 			}
-			UniversalEnglishStateIndicator.updateIMState(on);
+			IMBlockerCore.invokeOnRenderThread(() -> UniversalEnglishStateIndicator.updateIMState(on));
 		}
 		ImmReleaseContext(hwnd, himc);
 	}
@@ -124,14 +135,26 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	}
 	
 	@Override
-	public void updateIMEStatus() {
+	public void initializeConversionStatusListener(long window) {
+		WinDef.HWND hwnd = new WinDef.HWND(new Pointer(GLFWNativeWin32.glfwGetWin32Window(window)));
+		imeListener = (_hwnd, uMsg, wParam, lParam) -> {
+			if(uMsg == WM_IME_NOTIFY && wParam.intValue() == IMN_SETCONVERSIONMODE) {
+				onConversionStatusChanged();
+			}
+			return u.CallWindowProc(originalProc, _hwnd, uMsg, wParam, lParam);
+		};
+		originalProc = u.SetWindowLongPtr(hwnd, WinUser.GWL_WNDPROC, CallbackReference.getFunctionPointer(imeListener));
+	}
+	
+	private void onConversionStatusChanged() {
 		WinDef.HWND hwnd = getActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if(himc != null) {
 			IntByReference conversion = new IntByReference();
 			IntByReference sentence = new IntByReference();
 			ImmGetConversionStatus(himc, conversion, sentence);
-			UniversalEnglishStateIndicator.updateEnglishState(conversion.getValue() == 0);
+			IMBlockerCore.invokeOnRenderThread(() -> UniversalEnglishStateIndicator
+					.updateEnglishState(conversion.getValue() == 0));
 		}
 		ImmReleaseContext(hwnd, himc);
 	}

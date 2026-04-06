@@ -19,7 +19,7 @@ public final class IMManager {
 		
 		void setEnglishState(boolean isEN);
 		
-		default void updateIMEStatus() {}
+		default void initializeConversionStatusListener(long window) {}
 		
 		default void updateCandidateList() {}
 	}
@@ -27,12 +27,10 @@ public final class IMManager {
 	private IMManager() {}
 	
 	public static void setState(boolean on) {
-		IMBlockerCore.invokeOnMainThread(() -> {
-			INSTANCE.setState(on);
-			if(on) {
-				updateCaretPosition();
-			}
-		});
+		IMBlockerCore.invokeOnMainThread(() -> INSTANCE.setState(on));
+		if(on) {
+			updateCaretPosition();
+		}
 	}
 	
 	public static void setEnglishState(boolean isEN) {
@@ -77,8 +75,8 @@ public final class IMManager {
 		}
 	}
 	
-	public static void updateIMEStatus() {
-		IMBlockerCore.invokeOnMainThread(INSTANCE::updateIMEStatus);
+	public static void initializeConversionStatusListener(long window) {
+		IMBlockerCore.invokeOnMainThread(() -> INSTANCE.initializeConversionStatusListener(window));
 	}
 	
 	public static void updateCandidateList(long window, int candidatesCount, int selectedIndex, int pageStart, int pageSize) {

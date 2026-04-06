@@ -71,7 +71,7 @@ public class UniversalIMEPreeditOverlay {
 				compositionX = compositionBorder.width() - compositionWidth;
 			}
 			if(compositionY > compositionBorder.height()) {
-				compositionY = (int) (caretY - (4 + fontSize * 2) * guiScale);
+				compositionY = (int) (caretY - (6 + fontSize) * guiScale);
 			}
 			
 			ingameOverlayBounds = new Rectangle(1.0 / guiScale, compositionX, compositionY, compositionWidth, compositionHeight);			

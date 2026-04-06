@@ -74,14 +74,18 @@ public class UniversalIMECandidateOverlay {
 			int fontSize = focusOwner.getFontHeight() + 1;
 			Rectangle candidateBorder = focusOwner instanceof FocusableWidget ?
 					((FocusableWidget) focusOwner).getFocusContainer().getBoundsAbs() : focusOwner.getBoundsAbs();
-			int candidateX = caretX, candidateY = (int) (caretY + (fontSize + 4) * 2 * guiScale),
+			int candidateX = caretX, candidateY = (int) (caretY + (fontSize + 5) * 2 * guiScale),
 					candidateWidth = (int) (displayTextWidth * guiScale),
 					candidateHeight = (int) (fontSize * guiScale);
 			if(candidateX + candidateWidth > candidateBorder.width()) {
 				candidateX = Math.max((int) (-selectedRenderX1 * guiScale), candidateBorder.width() - candidateWidth);
 			}
 			if(candidateY > candidateBorder.height()) {
-				candidateY = (int) (caretY - fontSize * guiScale);
+				if((caretY + (fontSize + 4) * guiScale) <= candidateBorder.height()) {
+					candidateY = (int) (caretY - (3 + fontSize) * guiScale);
+				}else {
+					candidateY = (int) (caretY - (6 + fontSize) * 2 * guiScale);
+				}
 			}
 			
 			ingameOverlayBounds = new Rectangle(1.0 / guiScale, candidateX, candidateY, candidateWidth, candidateHeight);

@@ -14,8 +14,6 @@ import com.sun.jna.platform.win32.WinUser;
 import com.sun.jna.platform.win32.WinUser.WindowProc;
 import com.sun.jna.ptr.IntByReference;
 
-import io.github.reserveword.imblocker.common.gui.FocusManager;
-import io.github.reserveword.imblocker.common.gui.FocusableObject;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
 import io.github.reserveword.imblocker.common.gui.UniversalIMECandidateOverlay;
@@ -54,7 +52,10 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	private static final int WM_IME_SETCONTEXT = 0x0281;
 	private static final int WM_IME_COMPOSITION = 0x010F;
 	private static final int WM_IME_ENDCOMPOSITION = 0x010E;
+	private static final int WM_IME_STARTCOMPOSITION = 0x010D;
 	private static final int WM_IME_NOTIFY = 0x0282;
+	
+	private static final int WM_INPUTLANGCHANGE = 0x0051;
 	
 	private static final long ISC_SHOWUICANDIDATEWINDOW = 1L;
 	
@@ -130,42 +131,33 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	}
 
 	@Override
-	public void updateCompositionWindowPos() {
+	public void updateCompositionWindowPos(Point pos) {
 		WinDef.HWND hwnd = getActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if (himc != null) {
-			FocusableObject focusedWidget = FocusManager.getFocusOwner();
-			if (focusedWidget != null) {
-				Point compositionWindowPos = IMManager.calculateCaretPos(focusedWidget, false);
-				COMPOSITIONFORM cfr = new COMPOSITIONFORM();
-				ImmGetCompositionWindow(himc, cfr);
-				cfr.dwStyle = 2; // CFS_POINT
-				cfr.ptCurrentPos.x = compositionWindowPos.x();
-				cfr.ptCurrentPos.y = compositionWindowPos.y();
-				ImmSetCompositionWindow(himc, cfr);
-			}
+			COMPOSITIONFORM cfr = new COMPOSITIONFORM();
+			ImmGetCompositionWindow(himc, cfr);
+			cfr.dwStyle = 2; // CFS_POINT
+			cfr.ptCurrentPos.x = pos.x();
+			cfr.ptCurrentPos.y = pos.y();
+			ImmSetCompositionWindow(himc, cfr);
 		}
 		ImmReleaseContext(hwnd, himc);
 	}
 
 	@Override
-	public void updateCompositionFontSize() {
+	public void updateCompositionFontSize(int fontSize) {
 		WinDef.HWND hwnd = getActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if (himc != null) {
-			FocusableObject focusedWidget = FocusManager.getFocusOwner();
-			if (focusedWidget != null) {
-				int fontSize = focusedWidget.getFontHeight();
-				fontSize *= focusedWidget.getGuiScale();
-				LOGFONTW lplf = new LOGFONTW();
-				ImmGetCompositionFontW(himc, lplf);
-				lplf.lfHeight = -fontSize;
-				lplf.lfWidth = 0;
-				lplf.lfWeight = 400;
-				lplf.lfCharSet = 0; // ANSI_CHARSET
-				lplf.lfFaceName = "Arial".toCharArray();
-				ImmSetCompositionFontW(himc, lplf);
-			}
+			LOGFONTW lplf = new LOGFONTW();
+			ImmGetCompositionFontW(himc, lplf);
+			lplf.lfHeight = -fontSize;
+			lplf.lfWidth = 0;
+			lplf.lfWeight = 400;
+			lplf.lfCharSet = 0; // ANSI_CHARSET
+			lplf.lfFaceName = "Arial".toCharArray();
+			ImmSetCompositionFontW(himc, lplf);
 		}
 		ImmReleaseContext(hwnd, himc);
 	}
@@ -187,6 +179,8 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 					case WM_IME_SETCONTEXT:
 						lParam.setValue(lParam.longValue() & ~ISC_SHOWUICANDIDATEWINDOW);
 						break;
+					case WM_IME_STARTCOMPOSITION:
+						return new LRESULT();
 					case WM_IME_COMPOSITION:
 						int lpv = lParam.intValue();
 						if((lpv & (GCS_COMPSTR | GCS_CURSORPOS)) != 0) {
@@ -212,6 +206,8 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 						}
 						break;
 				}
+			}else if(uMsg == WM_INPUTLANGCHANGE) {
+				IMBlockerCore.invokeOnRenderThread(IMManager::updateCompositionFontSize);
 			}
 			return u.CallWindowProc(originalProc, _hwnd, uMsg, wParam, lParam);
 		};

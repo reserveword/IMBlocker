@@ -19,9 +19,9 @@ public final class IMManager {
 		
 		void setEnglishState(boolean isEN);
 		
-		default void updateCompositionWindowPos() {}
+		default void updateCompositionWindowPos(Point pos) {}
 		
-		default void updateCompositionFontSize() {}
+		default void updateCompositionFontSize(int fontSize) {}
 		
 		default void initializeIngameIME(long window) {}
 	}
@@ -43,24 +43,27 @@ public final class IMManager {
 	}
 	
 	public static void updateCompositionWindowPos() {
-		if(IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
-			FocusableObject focusedWidget = FocusManager.getFocusOwner();
-			if (focusedWidget != null) {
+		FocusableObject focusedWidget = FocusManager.getFocusOwner();
+		if(focusedWidget != null) {
+			if(IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
 				Point caretPos = calculateCaretPos(focusedWidget, true);
 				UniversalIMEPreeditOverlay.getInstance().
 						updateCaretPosition(caretPos.x(), caretPos.y());
 				UniversalIMECandidateOverlay.getInstance().
 						updateCaretPosition(caretPos.x(), caretPos.y());
+			}else if(IMBlockerConfig.INSTANCE.isCursorPositionTrackingEnabled()) {
+				Point caretPos = calculateCaretPos(focusedWidget, false);
+				IMBlockerCore.invokeOnMainThread(() -> INSTANCE.updateCompositionWindowPos(caretPos));
 			}
-		}else if(IMBlockerConfig.INSTANCE.isCursorPositionTrackingEnabled()) {
-			IMBlockerCore.invokeOnMainThread(() -> INSTANCE.updateCompositionWindowPos());
 		}
 	}
 	
 	public static void updateCompositionFontSize() {
-		if(IMBlockerConfig.INSTANCE.isCompositionFontTweaksEnabled() &&
-				!IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
-			IMBlockerCore.invokeOnMainThread(() -> INSTANCE.updateCompositionFontSize());
+		FocusableObject focusedWidget = FocusManager.getFocusOwner();
+		if(focusedWidget != null && !IMBlockerConfig.INSTANCE.isIngameIMEEnabled() && 
+				IMBlockerConfig.INSTANCE.isCompositionFontTweaksEnabled()) {
+			int fontSize = (int) (focusedWidget.getFontHeight() * focusedWidget.getGuiScale());
+			IMBlockerCore.invokeOnMainThread(() -> INSTANCE.updateCompositionFontSize(fontSize));
 		}
 	}
 	

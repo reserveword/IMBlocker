@@ -37,12 +37,12 @@ public abstract class FtbWidgetMixin implements MinecraftFocusableWidget {
 	}
 	
 	@Inject(method = "setWidth", at = @At("TAIL"))
-	public void handleWidthChanged(int x, CallbackInfo ci) {
+	public void handleWidthChanged(int width, CallbackInfo ci) {
 		handleBoundsChanged();
 	}
 	
 	@Inject(method = "setHeight", at = @At("TAIL"))
-	public void handleHeightChanged(int y, CallbackInfo ci) {
+	public void handleHeightChanged(int height, CallbackInfo ci) {
 		handleBoundsChanged();
 	}
 	

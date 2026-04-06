@@ -36,7 +36,9 @@ public abstract class MinecraftClientMixin {
 			IMBlockerConfig.INSTANCE.recoverScreen(screen.getClass().getName());
 		}
 
-		FocusContainer.MINECRAFT.clearFocus();
+		if(!IMBlockerCore.isFTBScreen(screen)) {
+			FocusContainer.MINECRAFT.clearFocus();
+		}
 		FocusContainer.MINECRAFT.setPreferredState(isScreenInWhiteList(screen));
 	}
 	

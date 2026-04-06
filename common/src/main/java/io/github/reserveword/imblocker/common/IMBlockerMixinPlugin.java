@@ -48,6 +48,7 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("compat.FtbWidgetMixin");
 			validMixins.add("compat.FtbTextFieldMixin");
 			validMixins.add("compat.FtbPanelMixin");
+			validMixins.add("compat.FtbBaseScreenMixin");
 			validMixins.add("compat.FtbMultilineTextBoxMixin");
 		}
 		

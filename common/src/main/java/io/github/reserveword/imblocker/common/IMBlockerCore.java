@@ -6,9 +6,11 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import dev.ftb.mods.ftblibrary.client.gui.widget.ScreenWrapper;
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
 import me.decce.ixeris.api.IxerisApi;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 
 public class IMBlockerCore {
 	public static final String MODID = "imblocker";
@@ -17,6 +19,7 @@ public class IMBlockerCore {
 	private static final ModLoaderAccessor modLoaderAccessor;
 	
 	private static final boolean IS_IXERIS_LOADED;
+	private static final boolean IS_FTBLIB_LOADED;
 	
 	private static final Set<Runnable> deferredRunnables = new LinkedHashSet<>();
 	
@@ -57,6 +60,10 @@ public class IMBlockerCore {
 		return modLoaderAccessor.hasMod(modid);
 	}
 	
+	public static boolean isFTBScreen(Screen screen) {
+		return IS_FTBLIB_LOADED && screen instanceof ScreenWrapper;
+	}
+	
 	public static void registerClientTickEvent(Runnable tickEvent) {
 		modLoaderAccessor.registerClientTickEvent(tickEvent);
 	}
@@ -70,5 +77,6 @@ public class IMBlockerCore {
 		}
 		modLoaderAccessor = (ModLoaderAccessor) ReflectionUtil.newInstance(modLoaderAccessorCls, new Class[0]);
 		IS_IXERIS_LOADED = modLoaderAccessor.hasMod("ixeris");
+		IS_FTBLIB_LOADED = modLoaderAccessor.hasMod("ftblibrary");
 	}
 }

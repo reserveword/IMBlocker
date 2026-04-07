@@ -237,11 +237,9 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 				ImmGetCompositionStringW(himc, GCS_COMPSTR, buffer, bufferSize);
 				String compositionString = new String(buffer);
 				int compositionCursorPos = ImmGetCompositionStringW(himc, GCS_CURSORPOS, null, 0);
-				IMBlockerCore.invokeOnRenderThread(() -> UniversalIMEPreeditOverlay.getInstance()
-						.preeditContentUpdated(compositionString, compositionCursorPos));
+				postPreeditContent(compositionString, compositionCursorPos);
 			}else {
-				IMBlockerCore.invokeOnRenderThread(() -> UniversalIMEPreeditOverlay.getInstance()
-						.preeditContentUpdated(null, 0));
+				postPreeditContent(null, 0);
 			}
 		}
 		ImmReleaseContext(hwnd, himc);
@@ -262,26 +260,30 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 				for(int i = pageStart; i < pageStart + pageSize; i++) {
 					selectedPageCandidates[i - pageStart] = buffer.getWideString(buffer.getInt(24 + i * 4));
 				}
-				IMBlockerCore.invokeOnRenderThread(() -> UniversalIMECandidateOverlay.getInstance()
-						.candidateListUpdated(selectedPageCandidates, selectedIndex - pageStart));
+				postCandidateList(selectedPageCandidates, selectedIndex - pageStart);
 			}else {
-				IMBlockerCore.invokeOnRenderThread(() -> UniversalIMECandidateOverlay.getInstance()
-						.candidateListUpdated(null, 0));
+				postCandidateList(null, 0);
 			}
 		}
 		ImmReleaseContext(hwnd, himc);
 	}
 	
 	private void onCompositionEnd() {
-		IMBlockerCore.invokeOnRenderThread(() -> {
-			UniversalIMEPreeditOverlay.getInstance().preeditContentUpdated(null, 0);
-		});
+		postPreeditContent(null, 0);
 	}
 	
 	private void onCandidateClosed() {
-		IMBlockerCore.invokeOnRenderThread(() -> {
-			UniversalIMECandidateOverlay.getInstance().candidateListUpdated(null, 0);
-		});
+		postCandidateList(null, 0);
+	}
+	
+	private void postPreeditContent(String compositionString, int caretPosition) {
+		IMBlockerCore.invokeOnRenderThread(() -> UniversalIMEPreeditOverlay.getInstance()
+				.preeditContentUpdated(compositionString, caretPosition));
+	}
+	
+	private void postCandidateList(String[] selectedPageCandidates, int selectIndex) {
+		IMBlockerCore.invokeOnRenderThread(() -> UniversalIMECandidateOverlay.getInstance()
+				.candidateListUpdated(selectedPageCandidates, selectIndex));
 	}
 
 	private class SetConversionStateThread extends Thread {

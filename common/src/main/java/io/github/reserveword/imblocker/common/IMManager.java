@@ -19,9 +19,9 @@ public final class IMManager {
 		
 		void setEnglishState(boolean isEN);
 		
-		default void initializeConversionStatusListener(long window) {}
+		default void initializeIngameIME(long window) {}
 		
-		default void updateCandidateList() {}
+		default void onCandidateChanged() {}
 	}
 	
 	private IMManager() {}
@@ -75,12 +75,12 @@ public final class IMManager {
 		}
 	}
 	
-	public static void initializeConversionStatusListener(long window) {
-		IMBlockerCore.invokeOnMainThread(() -> INSTANCE.initializeConversionStatusListener(window));
+	public static void initializeIngameIME(long window) {
+		IMBlockerCore.invokeOnMainThread(() -> INSTANCE.initializeIngameIME(window));
 	}
 	
-	public static void updateCandidateList(long window, int candidatesCount, int selectedIndex, int pageStart, int pageSize) {
-		IMBlockerCore.invokeOnMainThread(INSTANCE::updateCandidateList);
+	public static void onCandidateChanged() {
+		IMBlockerCore.invokeOnMainThread(() -> INSTANCE.onCandidateChanged());
 	}
 	
 	public static void evaluateKeyInput(boolean isUnlockIMEKey, int action, int modifiers) {

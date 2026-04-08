@@ -1,10 +1,5 @@
 package io.github.reserveword.imblocker.mixin;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
-
-import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import io.github.reserveword.imblocker.common.IMManager;
+import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
@@ -29,7 +25,6 @@ import net.minecraft.world.level.block.entity.SignBlockEntity;
 
 @Mixin(AbstractSignEditScreen.class)
 public abstract class AbstractSignEditScreenMixin implements MinecraftFocusableWidget {
-	private static final MethodHandle getSignTextScale_Method;
 	
 	@Shadow protected SignBlockEntity sign;
 	@Shadow private String[] messages;
@@ -111,23 +106,6 @@ public abstract class AbstractSignEditScreenMixin implements MinecraftFocusableW
 	}
 	
 	private Vector3fc imblocker$getSignTextScale() {
-		try {
-			return (Vector3fc) getSignTextScale_Method.invoke(this);
-		} catch (Throwable e) {
-			System.out.println(e);
-			return null;
-		}
-	}
-	
-	static {
-		MethodHandle getSignTextScale = null;
-		try {
-			getSignTextScale = MethodHandles.lookup().findVirtual(AbstractSignEditScreen.class, "getSignTextScale", MethodType.methodType(Vector3f.class));
-		} catch (Throwable e) {
-			try {
-				getSignTextScale = MethodHandles.lookup().findVirtual(AbstractSignEditScreen.class, "getSignTextScale", MethodType.methodType(Vector3fc.class));
-			} catch (Throwable e2) {}
-		}
-		getSignTextScale_Method = getSignTextScale;
+		return ReflectionUtil.invokeMethod(AbstractSignEditScreen.class, this, null, "getSignTextScale", new Class[0]);
 	}
 }

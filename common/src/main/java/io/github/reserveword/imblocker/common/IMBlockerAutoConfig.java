@@ -140,7 +140,6 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 		@ConfigEntry.Gui.Tooltip
 		boolean enableConversionStatusApi = true;
 		
-		@ConfigEntry.Gui.RequiresRestart
 		@ConfigEntry.Gui.Tooltip(count = 2)
 		boolean enableIngameIME = false;
 	}

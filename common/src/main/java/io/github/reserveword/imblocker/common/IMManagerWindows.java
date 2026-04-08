@@ -34,7 +34,12 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	
 	private static native int ImmGetCandidateListW(WinNT.HANDLE himc, int deIndex, Pointer lpCandList, int dwBufLen);
 
+	private static final int WM_IME_SETCONTEXT = 0x0281;
 	private static final int WM_IME_NOTIFY = 0x0282;
+	
+	private static final long ISC_SHOWUICANDIDATEWINDOW = 1L;
+	
+	private static final int IMN_CHANGECANDIDATE = 0x0003;
 	private static final int IMN_SETCONVERSIONMODE = 0x0006;
 	
 	public static long lastIMStateOnTimestamp = System.currentTimeMillis();
@@ -59,19 +64,17 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	@Override
 	public void setState(boolean on) {
 		WinDef.HWND hwnd = getActiveWindow();
-		WinNT.HANDLE himc = ImmGetContext(hwnd);
-		if ((himc != null) != on) {
-			if (on) {
-				himc = ImmCreateContext();
-				ImmAssociateContext(hwnd, himc);
-				lastIMStateOnTimestamp = System.currentTimeMillis();
-			} else {
-				himc = ImmAssociateContext(hwnd, null);
-				ImmDestroyContext(himc);
+		if (on) {
+			WinNT.HANDLE oldHimc = ImmAssociateContext(hwnd, ImmCreateContext());
+			if (oldHimc != null) {
+				ImmDestroyContext(oldHimc);
 			}
-			IMBlockerCore.invokeOnRenderThread(() -> UniversalEnglishStateIndicator.updateIMState(on));
+			lastIMStateOnTimestamp = System.currentTimeMillis();
+		} else {
+			WinNT.HANDLE himc = ImmAssociateContext(hwnd, null);
+			ImmDestroyContext(himc);
 		}
-		ImmReleaseContext(hwnd, himc);
+		IMBlockerCore.invokeOnRenderThread(() -> UniversalEnglishStateIndicator.updateIMState(on));
 	}
 
 	@Override
@@ -109,7 +112,47 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		}
 	}
 	
-	public void updateCandidateList() {
+	@Override
+	public void initializeIngameIME(long window) {
+		WinDef.HWND hwnd = new WinDef.HWND(new Pointer(GLFWNativeWin32.glfwGetWin32Window(window)));
+		imeListener = (_hwnd, uMsg, wParam, lParam) -> {
+			if(IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
+				switch (uMsg) {
+					case WM_IME_SETCONTEXT:
+						lParam.setValue(lParam.longValue() & ~ISC_SHOWUICANDIDATEWINDOW);
+						break;
+					case WM_IME_NOTIFY:
+						switch (wParam.intValue()) {
+							case IMN_SETCONVERSIONMODE:
+								onConversionStatusChanged();
+								break;
+							case IMN_CHANGECANDIDATE:
+								onCandidateChanged();
+								break;
+						}
+						break;
+				}
+			}
+			return u.CallWindowProc(originalProc, _hwnd, uMsg, wParam, lParam);
+		};
+		originalProc = u.SetWindowLongPtr(hwnd, WinUser.GWL_WNDPROC, CallbackReference.getFunctionPointer(imeListener));
+	}
+	
+	private void onConversionStatusChanged() {
+		WinDef.HWND hwnd = getActiveWindow();
+		WinNT.HANDLE himc = ImmGetContext(hwnd);
+		if(himc != null) {
+			IntByReference conversion = new IntByReference();
+			IntByReference sentence = new IntByReference();
+			ImmGetConversionStatus(himc, conversion, sentence);
+			IMBlockerCore.invokeOnRenderThread(() -> UniversalEnglishStateIndicator
+					.updateEnglishState(conversion.getValue() == 0));
+		}
+		ImmReleaseContext(hwnd, himc);
+	}
+	
+	@Override
+	public void onCandidateChanged() {
 		WinDef.HWND hwnd = getActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if (himc != null) {
@@ -130,31 +173,6 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 				IMBlockerCore.invokeOnRenderThread(() -> UniversalIMECandidateOverlay.getInstance()
 						.candidateListUpdated(null, 0));
 			}
-		}
-		ImmReleaseContext(hwnd, himc);
-	}
-	
-	@Override
-	public void initializeConversionStatusListener(long window) {
-		WinDef.HWND hwnd = new WinDef.HWND(new Pointer(GLFWNativeWin32.glfwGetWin32Window(window)));
-		imeListener = (_hwnd, uMsg, wParam, lParam) -> {
-			if(uMsg == WM_IME_NOTIFY && wParam.intValue() == IMN_SETCONVERSIONMODE) {
-				onConversionStatusChanged();
-			}
-			return u.CallWindowProc(originalProc, _hwnd, uMsg, wParam, lParam);
-		};
-		originalProc = u.SetWindowLongPtr(hwnd, WinUser.GWL_WNDPROC, CallbackReference.getFunctionPointer(imeListener));
-	}
-	
-	private void onConversionStatusChanged() {
-		WinDef.HWND hwnd = getActiveWindow();
-		WinNT.HANDLE himc = ImmGetContext(hwnd);
-		if(himc != null) {
-			IntByReference conversion = new IntByReference();
-			IntByReference sentence = new IntByReference();
-			ImmGetConversionStatus(himc, conversion, sentence);
-			IMBlockerCore.invokeOnRenderThread(() -> UniversalEnglishStateIndicator
-					.updateEnglishState(conversion.getValue() == 0));
 		}
 		ImmReleaseContext(hwnd, himc);
 	}

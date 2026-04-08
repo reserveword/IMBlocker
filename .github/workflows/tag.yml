@@ -57,7 +57,7 @@ jobs:
           github-token: ${{ env.GITHUB_TOKEN }}
 
           name: IMBlocker-${{ github.ref_name }}-${{ matrix.loader }}
-          version-type: beta
+          version-type: release
           changelog-file: CHANGELOG.md
 
           loaders: ${{ matrix.loader }}

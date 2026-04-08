@@ -36,7 +36,7 @@ public abstract class AxiomEditorUIMixin {
 	}
 	
 	@Inject(method = "drawOverlayInternal", at = @At(value = "INVOKE", target = "Limgui/ImGui;render()V"))
-	private static void renderUniversalPreeditOverlay(CallbackInfo ci) {
+	private static void renderUniversalIMEOverlays(CallbackInfo ci) {
 		if(FocusManager.getFocusedContainer() == FocusContainer.IMGUI) {
 			ImDrawList graphics = ImGui.getForegroundDrawList();
 			UniversalIMEPreeditOverlay.getInstance().renderOnImGuiSurface(graphics);

@@ -70,25 +70,37 @@ public class UniversalIMECandidateOverlay {
 	private void updateCandidateArea() {
 		FocusableObject focusOwner = FocusManager.getFocusOwner();
 		if(focusOwner != null && displayText != null) {
-			double guiScale = focusOwner.getGuiScale();
-			int fontSize = focusOwner.getFontHeight() + 1;
-			Rectangle candidateBorder = focusOwner instanceof FocusableWidget ?
-					((FocusableWidget) focusOwner).getFocusContainer().getBoundsAbs() : focusOwner.getBoundsAbs();
-			int candidateX = caretX, candidateY = (int) (caretY + (fontSize + 5) * 2 * guiScale),
-					candidateWidth = (int) (displayTextWidth * guiScale),
-					candidateHeight = (int) (fontSize * guiScale);
-			if(candidateX + candidateWidth > candidateBorder.width()) {
-				candidateX = Math.max((int) (-selectedRenderX1 * guiScale), candidateBorder.width() - candidateWidth);
+			int widgetFontSize = focusOwner.getFontHeight();
+			double widgetGuiScale = focusOwner.getGuiScale();
+			int containerFontSize;
+			double containerGuiScale;
+			Rectangle candidateBorder;
+			if(focusOwner instanceof FocusableWidget focusedWidget) {
+				containerFontSize = focusedWidget.getFocusContainer().getFontHeight();
+				containerGuiScale = focusedWidget.getFocusContainer().getGuiScale();
+				candidateBorder = focusedWidget.getFocusContainer().getBoundsAbs();
+			}else {
+				containerFontSize = widgetFontSize;
+				containerGuiScale = widgetGuiScale;
+				candidateBorder = focusOwner.getBoundsAbs();
 			}
-			if(candidateY > candidateBorder.height()) {
-				if((caretY + (fontSize + 4) * guiScale) <= candidateBorder.height()) {
-					candidateY = (int) (caretY - (3 + fontSize) * guiScale);
+			
+			int candidateX = caretX, 
+					candidateY = (int) (caretY + widgetFontSize * widgetGuiScale + (containerFontSize + 12) * containerGuiScale),
+					candidateWidth = (int) (displayTextWidth * containerGuiScale),
+					candidateHeight = (int) (containerFontSize * containerGuiScale);
+			if(candidateX + candidateWidth > candidateBorder.width()) {
+				candidateX = Math.max((int) (-selectedRenderX1 * containerGuiScale), candidateBorder.width() - candidateWidth);
+			}
+			if(candidateY + candidateHeight > candidateBorder.height()) {
+				if(caretY + widgetFontSize * widgetGuiScale + 5 * containerGuiScale + candidateHeight <= candidateBorder.height()) {
+					candidateY = (int) (caretY - (4 + containerFontSize) * containerGuiScale);
 				}else {
-					candidateY = (int) (caretY - (6 + fontSize) * 2 * guiScale);
+					candidateY = (int) (caretY - (6 + containerFontSize) * 2 * containerGuiScale);
 				}
 			}
 			
-			ingameOverlayBounds = new Rectangle(1.0 / guiScale, candidateX, candidateY, candidateWidth, candidateHeight);
+			ingameOverlayBounds = new Rectangle(1.0 / containerGuiScale, candidateX, candidateY, candidateWidth, candidateHeight);
 			candidateX += candidateBorder.x();
 			candidateY += candidateBorder.y();
 			overlayBounds = new Rectangle(candidateX, candidateY, candidateWidth, candidateHeight);

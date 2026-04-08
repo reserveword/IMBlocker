@@ -21,6 +21,7 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 				"AbstractWidgetMixin",
 				"MinecraftClientMixin",
 				"WindowMixin",
+				"GuiMixin",
 				"UnlockIMEKeyListener",
 				"KeyboardHandlerAccessor",
 				"TextFieldMixin",
@@ -29,7 +30,7 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 				"MultilineTextFieldMixin",
 				"MultiLineEditBoxMixin",
 				"AbstractSignEditScreenMixin",
-				"GameRendererMixin",
+				"GuiGraphicsExtractorMixin",
 				"TextInputManagerMixin",
 				"KeyboardHandlerMixin");
 		

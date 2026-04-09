@@ -79,6 +79,11 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	}
 	
 	@Override
+	public boolean isIngameIMEEnabled() {
+		return Platform.isWindows() && windowsCompatibilitySettings.enableIngameIME;
+	}
+	
+	@Override
 	public boolean isLinuxKeyboardPatchEnabled() {
 		return linuxCompatibilitySettings.enableKeyboardPatch;
 	}
@@ -162,6 +167,9 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 		boolean enableCursorPositionTracking = true;
 
 		boolean enableCompositionFontTweaks = true;
+		
+		@ConfigEntry.Gui.Tooltip(count = 2)
+		boolean enableIngameIME = false;
 	}
 	
 	static class LinuxCompatibilitySettings {

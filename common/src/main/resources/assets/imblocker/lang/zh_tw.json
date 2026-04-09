@@ -29,6 +29,9 @@
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "用於切換中英文狀態的API\n\u00A77停用後CONVERSION_STATUS英文狀態實現將失效",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCursorPositionTracking": "插入符號位置追蹤",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCompositionFontTweaks": "合成字串字體格式調整",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableIngameIME": "[\u00A76實驗性功能\u00A7r] 啟用遊戲內輸入法",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableIngameIME.@Tooltip[0]": "\u00A7l使用獨佔全螢幕時在遊戲內渲染候選詞框",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableIngameIME.@Tooltip[1]": "僅建議獨佔全螢幕模式下無法顯示候選詞框時啟用\n輸入法本身的候選詞框擁有更豐富的功能",
   
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings": "Linux 相容性設定",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch": "啟用回調級鍵盤補丁",

@@ -33,6 +33,18 @@ public class IMBlockerCore {
 		}
 	}
 	
+	public static void invokeOnRenderThread(Runnable runnable) {
+		if(IS_IXERIS_LOADED) {
+			try {
+				IxerisApi.getInstance().runLaterOnRenderThread(runnable);
+			} catch (Throwable e) {
+				throw new RuntimeException("[IMBlocker] Ixeris incompatible! Please report it to developer: ", e);
+			}
+		}else {
+			MinecraftClientAccessor.INSTANCE.execute(runnable);
+		}
+	}
+	
 	public static synchronized void invokeLater(Runnable runnable) {
 		deferredRunnables.add(runnable);
 	}

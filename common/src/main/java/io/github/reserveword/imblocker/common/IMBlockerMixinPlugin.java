@@ -29,6 +29,7 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		
 		if(Platform.isWindows()) {
 			validMixins.add("WindowsFullScreenPatch");
+			validMixins.add("WindowsIngameIMEInitializer");
 		}
 		
 		if(Platform.isLinux()) {

@@ -24,8 +24,8 @@ allprojects {
             }
         }
         maven {
-            name = "CottonMC"
-            url = "https://server.bbkr.space/artifactory/libs-release"
+            name = "AlexIIL"
+            url = "https://staging.alexiil.uk/maven/"
             content {
                 includeGroup "io.github.cottonmc"
             }

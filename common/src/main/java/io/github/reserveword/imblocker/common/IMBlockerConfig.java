@@ -81,6 +81,10 @@ public class IMBlockerConfig {
 		return true;
 	}
 	
+	public boolean isIngameIMEEnabled() {
+		return false;
+	}
+	
 	public boolean isLinuxKeyboardPatchEnabled() {
 		return true;
 	}

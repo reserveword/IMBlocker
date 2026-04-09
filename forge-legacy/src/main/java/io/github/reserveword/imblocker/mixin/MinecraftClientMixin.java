@@ -7,12 +7,20 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
+import io.github.reserveword.imblocker.common.gui.MinecraftRenderApi;
+import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
+import io.github.reserveword.imblocker.common.gui.UniversalIMECandidateOverlay;
+import io.github.reserveword.imblocker.common.gui.UniversalIMEPreeditOverlay;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 
 @Mixin(Minecraft.class)
@@ -20,6 +28,9 @@ public abstract class MinecraftClientMixin {
 	
 	@Shadow
 	private MainWindow window;
+	
+	@Shadow
+	public FontRenderer font;
 	
 	@Shadow
 	private boolean noRender;
@@ -59,6 +70,28 @@ public abstract class MinecraftClientMixin {
 		if(FocusManager.isGameRendering) {
 			FocusManager.isGameRendering = false;
 			FocusContainer.MINECRAFT.checkFocusCandidatesVisibility(lastGameRenderTime);
+		}
+	}
+	
+	@Inject(method = "runTick", at = @At(value = "CONSTANT", args = "stringValue=blit"))
+	public void renderIMEOverlays(boolean tick, CallbackInfo ci) {
+		MatrixStack matrixStack = new MatrixStack();
+		MinecraftRenderApi graphics = new MinecraftRenderApi() {
+			@Override
+			public void fillRect(int x1, int y1, int x2, int y2, int color) {
+				AbstractGui.fill(matrixStack, x1, y1, x2, y2, color);
+			}
+			
+			@Override
+			public void drawText(String text, int x, int y, int color) {
+				font.draw(matrixStack, text, x, y, color);
+			}
+		};
+		
+		if(FocusManager.getFocusedContainer() == FocusContainer.MINECRAFT) {
+			UniversalIMEPreeditOverlay.getInstance().renderOnMinecraftSurface(graphics);
+			UniversalIMECandidateOverlay.getInstance().renderOnMinecraftSurface(graphics);
+			UniversalEnglishStateIndicator.renderOnMinecraftSurface(graphics);
 		}
 	}
     

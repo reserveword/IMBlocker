@@ -1,5 +1,7 @@
 package io.github.reserveword.imblocker;
 
+import java.util.List;
+
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -24,6 +26,11 @@ public class ModLoaderAccessorImpl implements ModLoaderAccessor {
 	@Override
 	public Mapping getMapping() {
 		return Mapping.OFFICIAL;
+	}
+	
+	@Override
+	public void registerIMERenderMixin(List<String> validMixins) {
+		//Embedded in MinecraftClientMixin.
 	}
 	
 	@Override

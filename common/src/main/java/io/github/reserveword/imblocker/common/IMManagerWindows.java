@@ -89,19 +89,18 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 
 	@Override
 	public void setState(boolean on) {
-		WinDef.HWND hwnd = getActiveWindow();
-		WinNT.HANDLE himc = ImmGetContext(hwnd);
-		if ((himc != null) != on) {
-			if (on) {
-				himc = ImmCreateContext();
-				ImmAssociateContext(hwnd, himc);
-				lastIMStateOnTimestamp = System.currentTimeMillis();
-			} else {
-				himc = ImmAssociateContext(hwnd, null);
-				ImmDestroyContext(himc);
+		WinDef.HWND hwnd = ux.GetActiveWindow();
+		if (on) {
+			WinNT.HANDLE oldHimc = ImmAssociateContext(hwnd, ImmCreateContext());
+			if (oldHimc != null) {
+				ImmDestroyContext(oldHimc);
 			}
+			lastIMStateOnTimestamp = System.currentTimeMillis();
+		} else {
+			WinNT.HANDLE himc = ImmAssociateContext(hwnd, null);
+			ImmDestroyContext(himc);
 		}
-		ImmReleaseContext(hwnd, himc);
+		IMBlockerCore.invokeOnRenderThread(() -> UniversalEnglishStateIndicator.updateIMState(on));
 	}
 
 	@Override
@@ -115,7 +114,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 
 	private void syncEnglishState() {
 		if(getConversionStatusCooldown() <= 0) {
-			WinDef.HWND hwnd = getActiveWindow();
+			WinDef.HWND hwnd = ux.GetActiveWindow();
 			WinNT.HANDLE himc = ImmGetContext(hwnd);
 			if (himc != null) {
 				ImmSetConversionStatus(himc, preferredEnglishState ? 0 : 1, 0);
@@ -133,7 +132,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 
 	@Override
 	public void updateCompositionWindowPos(Point pos) {
-		WinDef.HWND hwnd = getActiveWindow();
+		WinDef.HWND hwnd = ux.GetActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if (himc != null) {
 			COMPOSITIONFORM cfr = new COMPOSITIONFORM();
@@ -148,7 +147,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 
 	@Override
 	public void updateCompositionFontSize(int fontSize) {
-		WinDef.HWND hwnd = getActiveWindow();
+		WinDef.HWND hwnd = ux.GetActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if (himc != null) {
 			LOGFONTW lplf = new LOGFONTW();
@@ -161,14 +160,6 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 			ImmSetCompositionFontW(himc, lplf);
 		}
 		ImmReleaseContext(hwnd, himc);
-	}
-
-	private static WinDef.HWND getActiveWindow() {
-		try {
-			return u.GetActiveWindow();
-		} catch (NoSuchMethodError e) {
-			return u.GetForegroundWindow();
-		}
 	}
 
 	@Override
@@ -216,7 +207,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	}
 	
 	private void onConversionStatusChanged() {
-		WinDef.HWND hwnd = getActiveWindow();
+		WinDef.HWND hwnd = ux.GetActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if(himc != null) {
 			IntByReference conversion = new IntByReference();
@@ -229,7 +220,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	}
 	
 	private void onCompositionChanged() {
-		WinDef.HWND hwnd = getActiveWindow();
+		WinDef.HWND hwnd = ux.GetActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if (himc != null) {
 			int bufferSize = ImmGetCompositionStringW(himc, GCS_COMPSTR, null, 0);
@@ -247,7 +238,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	}
 	
 	private void onCandidateChanged() {
-		WinDef.HWND hwnd = getActiveWindow();
+		WinDef.HWND hwnd = ux.GetActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if (himc != null) {
 			int bufferSize = ImmGetCandidateListW(himc, 0, Pointer.NULL, 0);

@@ -27,6 +27,8 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		validMixins.add("UnlockIMEKeyListener");
 		validMixins.add(isOfficialMapping ? "KeyboardHandlerAccessor" : "KeyboardAccessor");
 		
+		IMBlockerCore.registerIMERenderMixin(validMixins);
+		
 		if(Platform.isWindows()) {
 			validMixins.add("WindowsFullScreenPatch");
 			validMixins.add("WindowsIngameIMEInitializer");

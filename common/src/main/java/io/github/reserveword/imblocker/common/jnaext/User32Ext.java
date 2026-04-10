@@ -13,4 +13,6 @@ public interface User32Ext extends StdCallLibrary, WinUser, WinNT {
 	User32Ext INSTANCE = Native.loadLibrary("user32", User32Ext.class, W32APIOptions.DEFAULT_OPTIONS);
 	
 	LRESULT CallWindowProc(Pointer lpPrevWndFunc, HWND hWnd, int Msg, WPARAM wParam, LPARAM lParam);
+	
+	HWND GetActiveWindow();
 }

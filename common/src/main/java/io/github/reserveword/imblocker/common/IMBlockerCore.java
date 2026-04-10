@@ -1,6 +1,7 @@
 package io.github.reserveword.imblocker.common;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -66,6 +67,10 @@ public class IMBlockerCore {
 	
 	public static Mapping getMapping() {
 		return modLoaderAccessor.getMapping();
+	}
+	
+	static void registerIMERenderMixin(List<String> validMixins) {
+		modLoaderAccessor.registerIMERenderMixin(validMixins);
 	}
 	
 	public static boolean isFTBScreen(Object screen) {

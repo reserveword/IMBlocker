@@ -32,9 +32,6 @@ public abstract class MinecraftClientMixin {
 	@Shadow
 	public FontRenderer font;
 	
-	@Shadow
-	private boolean noRender;
-	
 	@Unique
 	private long lastGameRenderTime = 0;
 	
@@ -49,7 +46,9 @@ public abstract class MinecraftClientMixin {
     		IMBlockerConfig.INSTANCE.recoverScreen(screen.getClass().getName());
     	}
     	
-    	FocusContainer.MINECRAFT.clearFocus();
+    	if(!IMBlockerCore.isFTBScreen(screen)) {
+    		FocusContainer.MINECRAFT.clearFocus();
+    	}
     	FocusContainer.MINECRAFT.setPreferredState(isScreenInWhiteList(screen));
     }
     
@@ -75,23 +74,25 @@ public abstract class MinecraftClientMixin {
 	
 	@Inject(method = "runTick", at = @At(value = "CONSTANT", args = "stringValue=blit"))
 	public void renderIMEOverlays(boolean tick, CallbackInfo ci) {
-		MatrixStack matrixStack = new MatrixStack();
-		MinecraftRenderApi graphics = new MinecraftRenderApi() {
-			@Override
-			public void fillRect(int x1, int y1, int x2, int y2, int color) {
-				AbstractGui.fill(matrixStack, x1, y1, x2, y2, color);
-			}
-			
-			@Override
-			public void drawText(String text, int x, int y, int color) {
-				font.draw(matrixStack, text, x, y, color);
-			}
-		};
-		
 		if(FocusManager.getFocusedContainer() == FocusContainer.MINECRAFT) {
+			MatrixStack matrixStack = new MatrixStack();
+			MinecraftRenderApi graphics = new MinecraftRenderApi() {
+				@Override
+				public void fillRect(int x1, int y1, int x2, int y2, int color) {
+					AbstractGui.fill(matrixStack, x1, y1, x2, y2, color);
+				}
+				
+				@Override
+				public void drawText(String text, int x, int y, int color) {
+					font.draw(matrixStack, text, x, y, color);
+				}
+			};
+			matrixStack.translate(0.0D, 0.0D, 1000.0D);
+			matrixStack.pushPose();
 			UniversalIMEPreeditOverlay.getInstance().renderOnMinecraftSurface(graphics);
 			UniversalIMECandidateOverlay.getInstance().renderOnMinecraftSurface(graphics);
 			UniversalEnglishStateIndicator.renderOnMinecraftSurface(graphics);
+			matrixStack.popPose();
 		}
 	}
     

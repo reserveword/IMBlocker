@@ -41,6 +41,16 @@ public class MinecraftClientAccessorImpl extends MinecraftClientAccessor {
 	}
 	
 	@Override
+	public int getGuiScaledWidth() {
+		return Minecraft.getInstance().getWindow().getGuiScaledWidth();
+	}
+	
+	@Override
+	public int getGuiScaledHeight() {
+		return Minecraft.getInstance().getWindow().getGuiScaledHeight();
+	}
+	
+	@Override
 	public Object getCurrentScreen() {
 		return Minecraft.getInstance().screen;
 	}

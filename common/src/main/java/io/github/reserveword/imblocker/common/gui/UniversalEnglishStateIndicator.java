@@ -25,10 +25,8 @@ public class UniversalEnglishStateIndicator {
 		if(IMBlockerConfig.INSTANCE.isIngameIMEEnabled() &&
 				imState && englishState && ((focusOwner = FocusManager.getFocusOwner()) != null)) {
 			int fontSize = focusOwner.getFontHeight() + 1;
-			Dimension guiSize = MinecraftClientAccessor.INSTANCE.getContentSize();
-			double guiScaleFactor = FocusContainer.MINECRAFT.getGuiScale();
-			int scaledGuiWidth = (int) (guiSize.width() / guiScaleFactor);
-			int scaledGuiHeight = (int) (guiSize.height() / guiScaleFactor);
+			int scaledGuiWidth = MinecraftClientAccessor.INSTANCE.getGuiScaledWidth();
+			int scaledGuiHeight = MinecraftClientAccessor.INSTANCE.getGuiScaledHeight();
 			graphics.drawText("EN", scaledGuiWidth - fontSize * 2, scaledGuiHeight - fontSize * 2, INDICATOR_COLOR);
 		}
 	}

@@ -2,7 +2,6 @@ package io.github.reserveword.imblocker;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
 
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
@@ -32,12 +31,6 @@ public class ModLoaderAccessorImpl implements ModLoaderAccessor {
 	@Override
 	public Mapping getMapping() {
 		return Mapping.OFFICIAL;
-	}
-	
-	@Override
-	public void registerIMERenderMixin(List<String> validMixins) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	@Override

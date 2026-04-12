@@ -14,15 +14,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 
-/*Forge 1.20-1.20.4*/
 @Mixin(value = GameRenderer.class, remap = false)
 public abstract class IMEOverlayRendererV2 {
 	@Redirect(method = "m_109093_", at = @At(value = "INVOKE", target = 
-			"Lnet/minecraft/client/gui/GuiGraphics;m_280262_()V"))
+			"Lnet/minecraft/client/gui/GuiGraphics;m_280262_()V"), require = 0)
 	public void renderIMEOverlays(GuiGraphics rawGraphics) {
 		if(FocusManager.getFocusedContainer() == FocusContainer.MINECRAFT) {
 			rawGraphics.m_280168_().pushPose();
-			rawGraphics.m_280168_().translate(0.0D, 0.0D, 1000.0D);
+			rawGraphics.m_280168_().translate(0.0D, 0.0D, 9000.0D);
 			MinecraftRenderApi graphics = new MinecraftRenderApi() {
 				@Override
 				public void fillRect(int x1, int y1, int x2, int y2, int color) {
@@ -40,6 +39,31 @@ public abstract class IMEOverlayRendererV2 {
 			rawGraphics.m_280168_().popPose();
 		}
 		rawGraphics.m_280262_();
+	}
+	
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = 
+			"Lnet/minecraft/client/gui/GuiGraphics;flush()V"), require = 0)
+	public void renderIMEOverlaysUnobf(GuiGraphics rawGraphics) {
+		if(FocusManager.getFocusedContainer() == FocusContainer.MINECRAFT) {
+			rawGraphics.pose().pushPose();
+			rawGraphics.pose().translate(0.0D, 0.0D, 10000.0D);
+			MinecraftRenderApi graphics = new MinecraftRenderApi() {
+				@Override
+				public void fillRect(int x1, int y1, int x2, int y2, int color) {
+					rawGraphics.fill(x1, y1, x2, y2, color);
+				}
+				
+				@Override
+				public void drawText(String text, int x, int y, int color) {
+					rawGraphics.drawString(Minecraft.getInstance().font, text, x, y, color, false);
+				}
+			};
+			UniversalIMEPreeditOverlay.getInstance().renderOnMinecraftSurface(graphics);
+			UniversalIMECandidateOverlay.getInstance().renderOnMinecraftSurface(graphics);
+			UniversalEnglishStateIndicator.renderOnMinecraftSurface(graphics);
+			rawGraphics.pose().popPose();
+		}
+		rawGraphics.flush();
 	}
 }
 

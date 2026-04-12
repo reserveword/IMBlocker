@@ -16,7 +16,7 @@ import com.mojang.blaze3d.platform.WindowEventHandler;
 import io.github.reserveword.imblocker.common.IMManager;
 
 @Mixin(Window.class)
-public class WindowsIngameIMEInitializer {
+public abstract class WindowsIngameIMEInitializer {
 	@Shadow
 	private long window;
 	

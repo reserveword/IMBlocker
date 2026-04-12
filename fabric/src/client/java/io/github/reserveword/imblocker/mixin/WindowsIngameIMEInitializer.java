@@ -9,19 +9,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import net.minecraft.client.MainWindow;
-import net.minecraft.client.renderer.IWindowEventListener;
-import net.minecraft.client.renderer.MonitorHandler;
-import net.minecraft.client.renderer.ScreenSize;
+import net.minecraft.client.WindowEventHandler;
+import net.minecraft.client.WindowSettings;
+import net.minecraft.client.util.MonitorTracker;
+import net.minecraft.client.util.Window;
 
-@Mixin(MainWindow.class)
+@Mixin(Window.class)
 public abstract class WindowsIngameIMEInitializer {
 	@Shadow
-	private long window;
-	
+	private long handle;
+
 	@Inject(method = "<init>", at = @At("TAIL"))
-	public void initializeIngameIME(IWindowEventListener eventListener, MonitorHandler monitorHandler,
-			ScreenSize screenSize, @Nullable String string1, String string2, CallbackInfo ci) {
-		IMManager.initializeIngameIME(window);
+	public void initializeIngameIME(WindowEventHandler eventHandler, MonitorTracker monitorTracker,
+			WindowSettings settings, @Nullable String videoMode, String title, CallbackInfo ci) {
+		IMManager.initializeIngameIME(handle);
 	}
 }

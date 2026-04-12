@@ -2,12 +2,10 @@ package io.github.reserveword.imblocker;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
 
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
 import net.minecraft.DetectedVersion;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.util.GsonHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -34,16 +32,6 @@ public class ModLoaderAccessorImpl implements ModLoaderAccessor {
 	@Override
 	public Mapping getMapping() {
 		return Mapping.OFFICIAL;
-	}
-	
-	@Override
-	public void registerIMERenderMixin(List<String> validMixins) {
-		try {
-			GuiComponent.class.getName();
-			validMixins.add("IMEOverlayRendererV1");
-		} catch (Throwable e) {
-			validMixins.add("IMEOverlayRendererV2");
-		}
 	}
 	
 	@Override

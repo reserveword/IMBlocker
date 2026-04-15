@@ -26,6 +26,8 @@ dependencies {
 	
 	implementation "com.terraformersmc:modmenu:${modmenu_version}"
 	
+	compileOnly "maven.modrinth:replaymod:26.1-2.6.26"
+	
 	implementation project(':common')
 }
 

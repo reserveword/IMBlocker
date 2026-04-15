@@ -48,9 +48,21 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("compat.ImGuiGlfwPatch");
 		}
 		
+		if(IMBlockerCore.hasMod("ftblibrary")) {
+			validMixins.add("compat.FtbWidgetMixin");
+			validMixins.add("compat.FtbTextFieldMixin");
+			validMixins.add("compat.FtbPanelMixin");
+			validMixins.add("compat.FtbBaseScreenMixin");
+			validMixins.add("compat.FtbMultilineTextBoxMixin");
+		}
+		
 		if(IMBlockerCore.hasMod("libgui")) {
 			validMixins.add("compat.LibGuiWidgetMixin");
 			validMixins.add("compat.LibGuiTextFieldMixin");
+		}
+		
+		if(IMBlockerCore.hasMod("replaymod")) {
+			validMixins.add("compat.ReplayModTextFieldMixin");
 		}
 		
 		if(IMBlockerCore.hasMod("reeses-sodium-options") || 

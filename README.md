@@ -41,8 +41,8 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
 [Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems)  
 [EMI](https://github.com/emilyploszaj/emi)  
 [Axiom](https://axiom.moulberry.com/)（已更新）  
-[Replay Mod](https://www.replaymod.com/)  
-[FTB Library](https://github.com/FTBTeam/FTB-Library)  
+[Replay Mod](https://www.replaymod.com/)（已更新）  
+[FTB Library](https://github.com/FTBTeam/FTB-Library)（已更新）  
 [Meteor Client](https://www.meteorclient.com/)  
 [LibGui](https://github.com/CottonMC/LibGui)（已更新）  
 [Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)（已更新）  

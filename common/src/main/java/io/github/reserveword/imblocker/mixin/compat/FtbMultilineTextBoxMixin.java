@@ -1,0 +1,91 @@
+package io.github.reserveword.imblocker.mixin.compat;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import dev.ftb.mods.ftblibrary.client.gui.widget.MultilineTextBox;
+import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
+import io.github.reserveword.imblocker.common.gui.FtbTextInputWidget;
+import io.github.reserveword.imblocker.common.gui.MinecraftMultilineEditBoxWidget;
+import io.github.reserveword.imblocker.common.gui.MultilineCursorInfo;
+import io.github.reserveword.imblocker.common.gui.Rectangle;
+import io.github.reserveword.imblocker.mixin.StringViewAccessor;
+import net.minecraft.client.gui.components.MultilineTextField;
+import net.minecraft.client.input.CharacterEvent;
+
+@Mixin(value = MultilineTextBox.class, remap = false)
+public abstract class FtbMultilineTextBoxMixin extends FtbWidgetMixin 
+	implements MinecraftMultilineEditBoxWidget, FtbTextInputWidget {
+	
+	@Shadow
+	private boolean isFocused;
+	
+	@Shadow
+	private MultilineTextField textField;
+	
+	private final MultilineCursorInfo imblocker$cursorInfo = new MultilineCursorInfo(0, 0, 0, 0, "");
+	
+	@Override
+	public void handleBoundsChanged() {
+		imblocker$onBoundsChanged();
+	}
+	
+	@Inject(method = "setFocused", at = @At("TAIL"))
+	public void focusChanged(boolean isFocused, CallbackInfo ci) {
+		imblocker$onFocusChanged(isFocused);
+	}
+	
+	@Override
+    public void cancelFocus(CallbackInfo ci) {
+    	imblocker$onFocusLost();
+    }
+	
+	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
+	public void checkFocusTracking(CharacterEvent event, CallbackInfoReturnable<Boolean> cir) {
+		if(FocusManager.isTrackingFocus) {
+			if(isFocused) {
+				FocusContainer.MINECRAFT.switchFocus(this);
+				cir.setReturnValue(true);
+			}else {
+				cir.setReturnValue(false);
+			}
+		}
+	}
+	
+	@Inject(method = "scrollToCursor", at = @At("TAIL"))
+	public void onCursorChange(CallbackInfo ci) {
+		imblocker$onCursorChanged();
+	}
+	
+	@Inject(method = "recalculateHeight", at = @At("TAIL"))
+	public void onRecalculateHeight(CallbackInfo ci) {
+		imblocker$onCursorChanged();
+	}
+	
+	@Override
+	public Rectangle getBoundsAbs() {
+		if(parent != null) {
+			return new Rectangle(getGuiScale(), getAbsoluteX(), getAbsoluteY(), width, parent.height);
+		}
+		return super.getBoundsAbs();
+	}
+	
+	@Override
+	public boolean updateCursorInfo() {
+		double scrollY = parent != null ? parent.getScrollY() : 0;
+		int cursorLineIndex = textField.getLineAtCursor();
+		return imblocker$cursorInfo.updateCursorInfo(cursorLineIndex, scrollY, 
+				((StringViewAccessor) (Object) textField.getLineView(cursorLineIndex)).getBeginIndex(), 
+				textField.cursor(), textField.value());
+	}
+	
+	@Override
+	public MultilineCursorInfo getCursorInfo() {
+		return imblocker$cursorInfo;
+	}
+}

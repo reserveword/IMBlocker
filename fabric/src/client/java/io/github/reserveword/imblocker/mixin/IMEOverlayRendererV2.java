@@ -4,6 +4,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftRenderApi;
@@ -33,12 +34,22 @@ public abstract class IMEOverlayRendererV2 {
 					rawGraphics.method_51433(MinecraftClient.getInstance().textRenderer, text, x, y, color, false);
 				}
 			};
-			UniversalIMEPreeditOverlay.getInstance().renderOnMinecraftSurface(graphics);
-			UniversalIMECandidateOverlay.getInstance().renderOnMinecraftSurface(graphics);
-			UniversalEnglishStateIndicator.renderOnMinecraftSurface(graphics);
+			imblocker$drawManaged(rawGraphics, () -> {
+				UniversalIMEPreeditOverlay.getInstance().renderOnMinecraftSurface(graphics);
+				UniversalIMECandidateOverlay.getInstance().renderOnMinecraftSurface(graphics);
+				UniversalEnglishStateIndicator.renderOnMinecraftSurface(graphics);
+			});
 			rawGraphics.method_51448().pop();
 		}
 		rawGraphics.method_51452();
+	}
+	
+	private void imblocker$drawManaged(class_332 drawContext, Runnable runnable) {
+		if(!IMBlockerCore.isGameVersionReached(767/*1.21*/)) {
+			drawContext.method_51741(runnable);
+		}else {
+			runnable.run();
+		}
 	}
 }
 

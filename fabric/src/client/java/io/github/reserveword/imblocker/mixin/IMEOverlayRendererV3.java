@@ -12,9 +12,11 @@ import io.github.reserveword.imblocker.common.gui.MinecraftRenderApi;
 import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
 import io.github.reserveword.imblocker.common.gui.UniversalIMECandidateOverlay;
 import io.github.reserveword.imblocker.common.gui.UniversalIMEPreeditOverlay;
-import net.minecraft.class_310;
 import net.minecraft.class_332;
 import net.minecraft.class_9779;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.StringVisitable;
+import net.minecraft.util.Language;
 
 @Mixin(targets = "net.minecraft.class_757"/*net.minecraft.client.render.GameRenderer*/, remap = false)
 public abstract class IMEOverlayRendererV3 {
@@ -38,7 +40,8 @@ public abstract class IMEOverlayRendererV3 {
 				
 				@Override
 				public void drawText(String text, int x, int y, int color) {
-					imblocker$rawGraphics.method_51433(class_310.method_1551().field_1772, text, x, y, color, false);
+					imblocker$rawGraphics.method_51430(MinecraftClient.getInstance().textRenderer, 
+							Language.getInstance().reorder(StringVisitable.plain(text)), x, y, color, false);
 				}
 			};
 			UniversalIMEPreeditOverlay.getInstance().renderOnMinecraftSurface(graphics);

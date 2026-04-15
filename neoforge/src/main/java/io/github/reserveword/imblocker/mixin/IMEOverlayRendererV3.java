@@ -16,6 +16,8 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.FormattedText;
 
 @Mixin(GameRenderer.class)
 public abstract class IMEOverlayRendererV3 {
@@ -39,7 +41,8 @@ public abstract class IMEOverlayRendererV3 {
 				
 				@Override
 				public void drawText(String text, int x, int y, int color) {
-					imblocker$rawGraphics.drawString(Minecraft.getInstance().font, text, x, y, color, false);
+					imblocker$rawGraphics.drawString(Minecraft.getInstance().font, 
+							Language.getInstance().getVisualOrder(FormattedText.of(text)), x, y, color, false);
 				}
 			};
 			UniversalIMEPreeditOverlay.getInstance().renderOnMinecraftSurface(graphics);

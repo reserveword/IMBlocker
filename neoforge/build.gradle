@@ -51,6 +51,6 @@ project.jar {
         exclude '**/*LegacyMixin.class'
         exclude '**/AbstractScrollWidgetMixin.class'
         exclude '**/RSOAbstractFrameMixin.class'
-        exclude '**/IMEOverlayRendererV1*.class'
+        exclude '**/IMEOverlayRenderer*.class'
     }
 }

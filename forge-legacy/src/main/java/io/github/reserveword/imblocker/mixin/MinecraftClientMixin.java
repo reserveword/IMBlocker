@@ -87,8 +87,8 @@ public abstract class MinecraftClientMixin {
 					font.draw(matrixStack, text, x, y, color);
 				}
 			};
-			matrixStack.translate(0.0D, 0.0D, 1000.0D);
 			matrixStack.pushPose();
+			matrixStack.translate(0.0D, 0.0D, 1000.0D);
 			UniversalIMEPreeditOverlay.getInstance().renderOnMinecraftSurface(graphics);
 			UniversalIMECandidateOverlay.getInstance().renderOnMinecraftSurface(graphics);
 			UniversalEnglishStateIndicator.renderOnMinecraftSurface(graphics);

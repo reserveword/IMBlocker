@@ -21,6 +21,7 @@ public abstract class IMEOverlayRendererV2 {
 	public void renderIMEOverlaysUnobf(GuiGraphics rawGraphics) {
 		if(FocusManager.getFocusedContainer() == FocusContainer.MINECRAFT) {
 			rawGraphics.pose().pushPose();
+			rawGraphics.pose().setIdentity();
 			rawGraphics.pose().translate(0.0D, 0.0D, 10000.0D);
 			MinecraftRenderApi graphics = new MinecraftRenderApi() {
 				@Override

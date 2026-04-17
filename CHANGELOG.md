@@ -1,5 +1,4 @@
- - Windows：优化游戏内输入法叠加层的弹出位置并开始兼容 26.2
- - Windows：开关游戏内输入法现在不需要重启游戏
- - 修复了一些 NeoForge 的兼容问题
+ - 增加 ReplayMod 和 FTB Library 的兼容层
+ - 改进了预编辑光标区域的计算方式，并增加一个配置解决某些输入法与预编辑区域的冲突问题
  
 [历史更新日志](https://github.com/reserveword/IMBlocker/blob/26.1%2B/Changelog_History.md)

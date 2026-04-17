@@ -61,6 +61,10 @@ public class IMBlockerConfig {
 		return EnglishState.CJK;
 	}
 	
+	public boolean useStrictCursorRect() {
+		return false;
+	}
+	
 	public boolean isCharSimulationEnabled() {
 		return false;
 	}

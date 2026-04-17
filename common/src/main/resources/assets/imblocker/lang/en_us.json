@@ -15,6 +15,8 @@
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[0]": "\u00A7lThe initial English state of the IME when a text field focused.",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[1]": "This option is mainly for Chinese users who are used to search with JECh.",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[2]": "This option doesn't affect chat field and mods with few search scenarios.",
+  "text.autoconfig.imblocker.option.basicSettings.useStrictCursorRect": "Use Strict Pre-edit Cursor Rectangle",
+  "text.autoconfig.imblocker.option.basicSettings.useStrictCursorRect.@Tooltip": "Do not include input widget content within the cursor rectangle.\n\u00A76This option should only be enabled if pre-edit content is obscured by IME's candidate window.",
   
   "text.autoconfig.imblocker.option.advanceSettings": "Advance Settings",
   "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation": "Enable Char Simulation",

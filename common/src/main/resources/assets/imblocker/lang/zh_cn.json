@@ -15,6 +15,8 @@
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[0]": "\u00A7l文本框获得焦点时输入法的初始中英文状态",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[1]": "CJK - 初始状态为中文\nENG - 初始状态为英文",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[2]": "习惯使用拼音搜索的玩家推荐将此项设置为ENG\n此设置不影响聊天栏和搜索元素较少的模组",
+  "text.autoconfig.imblocker.option.basicSettings.useStrictCursorRect": "使用严格预编辑光标区域",
+  "text.autoconfig.imblocker.option.basicSettings.useStrictCursorRect.@Tooltip": "光标区域仅包含预编辑字符而不包含输入框内容\n\u00A76仅当候选词框会遮挡预编辑字符时才应考虑开启此选项",
   
   "text.autoconfig.imblocker.option.advanceSettings": "高级设置",
   "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation": "使用模拟字符定位焦点",

@@ -63,7 +63,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 
 	@Override
 	public void setState(boolean on) {
-		WinDef.HWND hwnd = getActiveWindow();
+		WinDef.HWND hwnd = u.GetActiveWindow();
 		if (on) {
 			WinNT.HANDLE oldHimc = ImmAssociateContext(hwnd, ImmCreateContext());
 			if (oldHimc != null) {
@@ -88,7 +88,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 
 	private void syncEnglishState() {
 		if(getConversionStatusCooldown() <= 0) {
-			WinDef.HWND hwnd = getActiveWindow();
+			WinDef.HWND hwnd = u.GetActiveWindow();
 			WinNT.HANDLE himc = ImmGetContext(hwnd);
 			if (himc != null) {
 				ImmSetConversionStatus(himc, preferredEnglishState ? 0 : 1, 0);
@@ -102,14 +102,6 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 
 	private long getConversionStatusCooldown() {
 		return 60 - (System.currentTimeMillis() - lastIMStateOnTimestamp);
-	}
-
-	private static WinDef.HWND getActiveWindow() {
-		try {
-			return u.GetActiveWindow();
-		} catch (NoSuchMethodError e) {
-			return u.GetForegroundWindow();
-		}
 	}
 	
 	@Override
@@ -139,7 +131,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	}
 	
 	private void onConversionStatusChanged() {
-		WinDef.HWND hwnd = getActiveWindow();
+		WinDef.HWND hwnd = u.GetActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if(himc != null) {
 			IntByReference conversion = new IntByReference();
@@ -153,7 +145,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	
 	@Override
 	public void onCandidateChanged() {
-		WinDef.HWND hwnd = getActiveWindow();
+		WinDef.HWND hwnd = u.GetActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if (himc != null) {
 			int bufferSize = ImmGetCandidateListW(himc, 0, Pointer.NULL, 0);

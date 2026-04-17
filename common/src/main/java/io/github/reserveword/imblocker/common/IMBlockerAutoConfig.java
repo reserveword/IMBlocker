@@ -57,6 +57,11 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	}
 	
 	@Override
+	public boolean useStrictCursorRect() {
+		return basicSettings.useStrictCursorRect;
+	}
+	
+	@Override
 	public boolean isCharSimulationEnabled() {
 		return advanceSettings.enableCharSimulation;
 	}
@@ -129,6 +134,9 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 		@ConfigEntry.Gui.Tooltip(count = 3)
 		@ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
 		EnglishState primaryEnglishState = EnglishState.CJK;
+		
+		@ConfigEntry.Gui.Tooltip
+		boolean useStrictCursorRect = false;
 	}
 	
 	static class AdvanceSettings {

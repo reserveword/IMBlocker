@@ -15,6 +15,8 @@
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[0]": "\u00A7l文字方塊獲得焦點時輸入法的初始中英文狀態",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[1]": "CJK - 初始狀態為中文\nENG - 初始狀態為英文",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[2]": "習慣使用 JECh 搜尋的玩家推薦將此項目設定為ENG\n此設定不影響聊天欄和搜尋元素較少的模組",
+  "text.autoconfig.imblocker.option.basicSettings.useStrictCursorRect": "使用嚴格預編輯遊標區域",
+  "text.autoconfig.imblocker.option.basicSettings.useStrictCursorRect.@Tooltip": "遊標區域僅包含預編輯字元而不包含輸入框内容\n\u00A76僅當候選詞框會遮擋預編輯字元時才應考慮開啟此選項",
   
   "text.autoconfig.imblocker.option.advanceSettings": "進階設定",
   "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation": "使用模擬字元定位焦點",

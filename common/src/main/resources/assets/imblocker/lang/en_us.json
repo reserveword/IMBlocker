@@ -31,6 +31,7 @@
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableIngameIME.@Tooltip[1]": "Recommended only if IME's candidate window is invisible under\nexclusive fullscreen. IME's candidate window has more features.",
   
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings": "Linux Compatibility Settings",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.linuxExtraScale": "Extra Scale",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch": "Enable callback-level Keyboard Patch",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[0]": "Apply the patch that prevent non-character keys from being sent to the game while candidates showing",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[1]": "If the candidate window is closed by pre-edit characters being cleared by Backspaces,\nthe game will not be able to process non-character keys.\nIn this case, press Esc or type any character to fix it.",

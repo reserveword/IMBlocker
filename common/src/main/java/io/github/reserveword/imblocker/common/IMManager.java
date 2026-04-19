@@ -1,5 +1,7 @@
 package io.github.reserveword.imblocker.common;
 
+import org.lwjgl.glfw.GLFW;
+
 import com.sun.jna.Platform;
 
 import io.github.reserveword.imblocker.common.gui.FocusManager;
@@ -9,6 +11,7 @@ import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.common.gui.UniversalIMECandidateOverlay;
 import io.github.reserveword.imblocker.common.gui.UniversalIMEPreeditOverlay;
+import net.minecraft.client.Minecraft;
 
 public final class IMManager {
 	private static final PlatformIMManager INSTANCE;
@@ -43,10 +46,19 @@ public final class IMManager {
 		FocusableObject focusedWidget = FocusManager.getFocusOwner();
 		if (focusedWidget != null) {
 			Point caretPos = calculateCaretPos(focusedWidget);
-			UniversalIMEPreeditOverlay.getInstance().
-					updateCaretPosition(caretPos.x(), caretPos.y());
-			UniversalIMECandidateOverlay.getInstance().
-					updateCaretPosition(caretPos.x(), caretPos.y());
+			if(!Platform.isLinux()) {
+				UniversalIMEPreeditOverlay.getInstance().updateCaretPosition(caretPos.x(), caretPos.y());
+				UniversalIMECandidateOverlay.getInstance().updateCaretPosition(caretPos.x(), caretPos.y());
+			}else {
+				float extraScale = IMBlockerConfig.INSTANCE.getLinuxExtraScale();
+				Rectangle compositionBorder = focusedWidget instanceof FocusableWidget ?
+						((FocusableWidget) focusedWidget).getFocusContainer().getBoundsAbs() : focusedWidget.getBoundsAbs();
+				int preeditX = (int) ((compositionBorder.x() + caretPos.x()) / extraScale);
+				int preeditY = (int) ((compositionBorder.y() + caretPos.y()) / extraScale);
+				int preeditHeight = (int) (focusedWidget.getFontHeight() * focusedWidget.getGuiScale() / extraScale);
+				GLFW.glfwSetPreeditCursorRectangle(Minecraft.getInstance().getWindow().handle(), 
+						preeditX, preeditY, 0, preeditHeight);
+			}
 		}
 	}
 	

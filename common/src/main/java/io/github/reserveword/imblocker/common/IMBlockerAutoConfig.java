@@ -82,6 +82,11 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	}
 	
 	@Override
+	public float getLinuxExtraScale() {
+		return linuxCompatibilitySettings.linuxExtraScale;
+	}
+	
+	@Override
 	public String getIBusOnArgName() {
 		return linuxCompatibilitySettings.ibusOnArgName;
 	}
@@ -155,6 +160,8 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	static class LinuxCompatibilitySettings {
 		@ConfigEntry.Gui.Tooltip(count = 2)
 		boolean enableKeyboardPatch = true;
+		
+		float linuxExtraScale = 1.0F;
 		
 		@ConfigEntry.Gui.Tooltip
 		String ibusOnArgName = "libpinyin";

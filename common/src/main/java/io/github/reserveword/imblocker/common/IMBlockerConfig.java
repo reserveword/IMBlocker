@@ -81,6 +81,10 @@ public class IMBlockerConfig {
 		return true;
 	}
 	
+	public float getLinuxExtraScale() {
+		return 1.0F;
+	}
+	
 	public String getIBusOnArgName() {
 		return "libpinyin";
 	}

@@ -2,6 +2,8 @@ package io.github.reserveword.imblocker.common.gui;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.sun.jna.Platform;
+
 import imgui.ImDrawList;
 import imgui.ImGui;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
@@ -108,15 +110,22 @@ public class UniversalIMEPreeditOverlay {
 			
 			if(!IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
 				int scaledMargin = (int) (HOT_AREA_MARGIN * containerGuiScale);
+				Rectangle preeditCursorRect;
+				
 				if(!IMBlockerConfig.INSTANCE.useStrictCursorRect()) {
-					GLFW.glfwSetPreeditCursorRectangle(Minecraft.getInstance().getWindow().handle(),
-							compositionX - scaledMargin, Math.min(caretY, compositionY) - scaledMargin,
+					preeditCursorRect = new Rectangle(compositionX - scaledMargin, Math.min(caretY, compositionY) - scaledMargin,
 							compositionWidth + scaledMargin * 2, compositionHeight + inputHeight + scaledMargin * 2);
 				}else {
-					GLFW.glfwSetPreeditCursorRectangle(Minecraft.getInstance().getWindow().handle(),
-							compositionX - scaledMargin, compositionY - scaledMargin,
+					preeditCursorRect = new Rectangle(compositionX - scaledMargin, compositionY - scaledMargin,
 							compositionWidth + scaledMargin * 2, compositionHeight + scaledMargin * 2);
 				}
+				
+				if(Platform.isLinux()) {
+					preeditCursorRect = preeditCursorRect.derive(1.0 / IMBlockerConfig.INSTANCE.getLinuxExtraScale());
+				}
+				
+				GLFW.glfwSetPreeditCursorRectangle(Minecraft.getInstance().getWindow().handle(), 
+						preeditCursorRect.x(), preeditCursorRect.y(), preeditCursorRect.width(), preeditCursorRect.height());
 			}
 		}
 	}

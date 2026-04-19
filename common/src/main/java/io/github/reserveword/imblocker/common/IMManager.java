@@ -46,7 +46,7 @@ public final class IMManager {
 		FocusableObject focusedWidget = FocusManager.getFocusOwner();
 		if (focusedWidget != null) {
 			Point caretPos = calculateCaretPos(focusedWidget);
-			if(!Platform.isLinux()) {
+			if(!Platform.isLinux() || !IMBlockerConfig.INSTANCE.isHeadlessPreeditMode()) {
 				UniversalIMEPreeditOverlay.getInstance().updateCaretPosition(caretPos.x(), caretPos.y());
 				UniversalIMECandidateOverlay.getInstance().updateCaretPosition(caretPos.x(), caretPos.y());
 			}else {

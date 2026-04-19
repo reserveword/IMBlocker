@@ -82,6 +82,11 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	}
 	
 	@Override
+	public boolean isHeadlessPreeditMode() {
+		return linuxCompatibilitySettings.isHeadlessPreeditMode;
+	}
+	
+	@Override
 	public float getLinuxExtraScale() {
 		return linuxCompatibilitySettings.linuxExtraScale;
 	}
@@ -161,6 +166,10 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 		@ConfigEntry.Gui.Tooltip(count = 2)
 		boolean enableKeyboardPatch = true;
 		
+		@ConfigEntry.Gui.Tooltip
+		boolean isHeadlessPreeditMode = false;
+		
+		@ConfigEntry.Gui.Tooltip
 		float linuxExtraScale = 1.0F;
 		
 		@ConfigEntry.Gui.Tooltip

@@ -81,6 +81,10 @@ public class IMBlockerConfig {
 		return true;
 	}
 	
+	public boolean isHeadlessPreeditMode() {
+		return false;
+	}
+	
 	public float getLinuxExtraScale() {
 		return 1.0F;
 	}

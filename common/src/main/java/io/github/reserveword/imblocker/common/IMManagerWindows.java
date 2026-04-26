@@ -88,19 +88,17 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	@Override
 	public void setState(boolean on) {
 		WinDef.HWND hwnd = getActiveWindow();
-		WinNT.HANDLE himc = ImmGetContext(hwnd);
-		if ((himc != null) != on) {
-			if (on) {
-				himc = ImmCreateContext();
-				ImmAssociateContext(hwnd, himc);
-				lastIMStateOnTimestamp = System.currentTimeMillis();
-			} else {
-				himc = ImmAssociateContext(hwnd, null);
-				ImmDestroyContext(himc);
+		if (on) {
+			WinNT.HANDLE oldHimc = ImmAssociateContext(hwnd, ImmCreateContext());
+			if (oldHimc != null) {
+				ImmDestroyContext(oldHimc);
 			}
-			IMBlockerCore.invokeOnRenderThread(() -> UniversalEnglishStateIndicator.updateIMState(on));
+			lastIMStateOnTimestamp = System.currentTimeMillis();
+		} else {
+			WinNT.HANDLE himc = ImmAssociateContext(hwnd, null);
+			ImmDestroyContext(himc);
 		}
-		ImmReleaseContext(hwnd, himc);
+		IMBlockerCore.invokeOnRenderThread(() -> UniversalEnglishStateIndicator.updateIMState(on));
 	}
 
 	@Override

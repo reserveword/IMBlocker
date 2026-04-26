@@ -1,7 +1,8 @@
 package io.github.reserveword.imblocker.common.gui;
 
-import imgui.ImGuiIO;
-import io.github.reserveword.imblocker.common.ReflectionUtil;
+import com.moulberry.axiom.editor.EditorUI;
+
+import imgui.moulberry92.ImGuiIO;
 
 public class AxiomGuiMonitor {
 	
@@ -11,12 +12,9 @@ public class AxiomGuiMonitor {
 	
 	private boolean axiomGuiCaptureKeyboard = false;
 	private boolean axiomTextFieldFocused = false;
-	
-	private final Class<?> axiomEditorUIClass;
 
-	public AxiomGuiMonitor(ImGuiIO axiomGuiAccessor, Class<?> axiomEditorUIClass) {
+	public AxiomGuiMonitor(ImGuiIO axiomGuiAccessor) {
 		this.axiomGuiAccessor = axiomGuiAccessor;
-		this.axiomEditorUIClass = axiomEditorUIClass;
 	}
 
 	public final void tick() {
@@ -41,19 +39,19 @@ public class AxiomGuiMonitor {
 	}
 	
 	public boolean isAxiomEditorShowing() {
-		return ReflectionUtil.getFieldValue(axiomEditorUIClass, null, boolean.class, "enabled");
+		return EditorUI.isEnabled();
 	}
 	
 	public int getGameContentOffsetX() {
-		return ReflectionUtil.getFieldValue(axiomEditorUIClass, null, int.class, "frameX");
+		return EditorUI.frameX;
 	}
 	
 	public int getGameContentOffsetY() {
-		return ReflectionUtil.getFieldValue(axiomEditorUIClass, null, int.class, "frameY");
+		return EditorUI.frameY;
 	}
 	
-	public static void createInstance(ImGuiIO axiomGuiAccessor, Class<?> axiomEditorUIClass) {
-		instance = new AxiomGuiMonitor(axiomGuiAccessor, axiomEditorUIClass);
+	public static void createInstance() {
+		instance = new AxiomGuiMonitor(EditorUI.imGuiIO);
 	}
 	
 	public static AxiomGuiMonitor getInstance() {

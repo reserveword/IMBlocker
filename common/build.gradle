@@ -22,7 +22,7 @@ dependencies {
 	compileOnly "ca.weblite:java-objc-bridge:1.1"
 
 	compileOnlyApi "me.shedaniel.cloth:cloth-config-neoforge:$clothconfig_version"
-	compileOnlyApi "io.github.spair:imgui-java-app:$imgui_version"
+	compileOnlyApi "maven.modrinth:axiom:$axiom_version"
 	compileOnly "maven.modrinth:supermartijn642s-core-lib:1.1.20-neoforge-mc1.21.11"
 	compileOnly "curse.maven:ftb-library-forge-$ftblib_version"
 	compileOnly "io.github.cottonmc:LibGui:$cottonlibgui_version"

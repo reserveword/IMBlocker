@@ -7,10 +7,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import imgui.ImGui;
-import imgui.callback.ImGuiInputTextCallback;
-import imgui.flag.ImGuiInputTextFlags;
-import imgui.type.ImString;
+import imgui.moulberry92.ImGui;
+import imgui.moulberry92.callback.ImGuiInputTextCallback;
+import imgui.moulberry92.flag.ImGuiInputTextFlags;
+import imgui.moulberry92.type.ImString;
 import io.github.reserveword.imblocker.common.gui.GenericAxiomTextField;
 
 @Pseudo
@@ -18,7 +18,7 @@ import io.github.reserveword.imblocker.common.gui.GenericAxiomTextField;
 public class ImGuiMixin {
 	
 	private static final String preInputTextMethodDescriptor = 
-			"preInputText(ZLjava/lang/String;Ljava/lang/String;Limgui/type/ImString;FFILimgui/callback/ImGuiInputTextCallback;)Z";
+			"preInputText(ZLjava/lang/String;Ljava/lang/String;Limgui/moulberry92/type/ImString;FFILimgui/moulberry92/callback/ImGuiInputTextCallback;)Z";
 	
 	@Inject(method = preInputTextMethodDescriptor, at = @At("HEAD"))
 	private static void captureArgs(boolean multiline, String label, String hint, 

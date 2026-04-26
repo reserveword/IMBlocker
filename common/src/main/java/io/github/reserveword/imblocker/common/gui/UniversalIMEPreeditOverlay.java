@@ -4,8 +4,8 @@ import org.lwjgl.glfw.GLFW;
 
 import com.sun.jna.Platform;
 
-import imgui.ImDrawList;
-import imgui.ImGui;
+import imgui.moulberry92.ImDrawList;
+import imgui.moulberry92.ImGui;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;

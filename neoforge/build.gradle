@@ -61,5 +61,8 @@ tasks.withType(JavaCompile).configureEach {
 project.jar {
     archiveFileName = "${rootProject.name}-${mod_version}-neoforge-26.1+.jar"
     from sourceSets.main.output
-    from project(":common").sourceSets.main.output
+    from (project(":common").sourceSets.main.output) {
+        exclude 'com/moulberry/**/*.class'
+    }
+
 }

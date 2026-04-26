@@ -3,12 +3,12 @@ package io.github.reserveword.imblocker.common.gui;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-import imgui.ImGui;
-import imgui.ImGuiInputTextCallbackData;
-import imgui.ImVec2;
-import imgui.callback.ImGuiInputTextCallback;
-import imgui.flag.ImGuiInputTextFlags;
-import imgui.internal.ImGuiWindow;
+import imgui.moulberry92.ImGui;
+import imgui.moulberry92.ImGuiInputTextCallbackData;
+import imgui.moulberry92.ImVec2;
+import imgui.moulberry92.callback.ImGuiInputTextCallback;
+import imgui.moulberry92.flag.ImGuiInputTextFlags;
+import imgui.moulberry92.internal.ImGuiWindow;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.StringUtil;
@@ -165,7 +165,7 @@ public class GenericAxiomTextField implements FocusableWidget {
 	
 	private static boolean hasVerticalScrollBar() {
 		try {
-			ImGuiWindow currentWindow = imgui.internal.ImGui.getCurrentWindow();
+			ImGuiWindow currentWindow = imgui.moulberry92.internal.ImGui.getCurrentWindow();
 			try {
 				return currentWindow.getScrollbarY();
 			} catch (NoSuchMethodError e) {

@@ -16,12 +16,14 @@ dependencies {
 	compileOnly("com.google.guava:guava:31.1-jre")
 	compileOnly("org.spongepowered:mixin:0.8.5")
 	compileOnly("org.ow2.asm:asm-tree:9.6")
+	compileOnly("org.lwjgl:lwjgl:3.3.4")
+	compileOnly("org.lwjgl:lwjgl-glfw:3.3.4")
 	
 	compileOnlyApi "me.shedaniel.cloth:cloth-config-forge:$clothconfig_version"
 	
 	compileOnly "me.shedaniel.cloth:basic-math:0.6.1"
 	compileOnly "maven.modrinth:rei:${rei_version}"
-	compileOnlyApi "io.github.spair:imgui-java-app:$imgui_version"
+	compileOnlyApi "maven.modrinth:axiom:${axiom_version}"
 	compileOnly "maven.modrinth:supermartijn642s-core-lib:1.1.18-forge-mc1.16"
 	compileOnlyApi "curse.maven:ftblib-$ftblib_version"
 	compileOnly "io.github.cottonmc:LibGui:$cottonlibgui_version"

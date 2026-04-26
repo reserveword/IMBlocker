@@ -10,7 +10,7 @@ public interface MinecraftScreenMonitor {
 			IMBlockerConfig.INSTANCE.recoverScreen(screen.getClass().getName());
 		}
 		
-		if(IMBlockerCore.isFTBScreen(screen)) {
+		if(!IMBlockerCore.isFTBScreen(screen)) {
 			FocusContainer.MINECRAFT.clearFocus();
 		}
 		FocusContainer.MINECRAFT.setPreferredState(IMBlockerConfig.INSTANCE.isScreenInWhitelist(screen));

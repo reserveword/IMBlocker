@@ -145,6 +145,12 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		if(IMBlockerCore.hasMod("generalfeedback")) {
 //			validMixins.add("compat.GeneralFeedbackTextareaMixin"); Unstable Internal Implementation.
 		}
+		
+		if(IMBlockerCore.hasMod("modernui")) {
+			validMixins.add("compat.ModernUISelectionMixin");
+			validMixins.add("compat.ModernUITextViewMixin");
+			validMixins.add("compat.ModernUIEditTextMixin");
+		}
 	}
 
 	@Override

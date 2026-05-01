@@ -78,7 +78,7 @@ public abstract class ModernUITextViewMixin extends View implements MinecraftFoc
 	
 	@Override
 	public Rectangle getBoundsAbs() {
-		int x = (int) getX() - getScrollX(), y = (int) getY() - getScrollY();
+		float x = getX(), y = getY();
 		for(ViewParent parent = getParent(); parent != null; parent = parent.getParent()) {
 			if(parent instanceof View) {
 				View _parent = (View) parent;
@@ -86,7 +86,7 @@ public abstract class ModernUITextViewMixin extends View implements MinecraftFoc
 				y += _parent.getY() - _parent.getScrollY();
 			}
 		}
-		return new Rectangle(x, y, getWidth(), getHeight());
+		return new Rectangle((int) x, (int) y, getWidth(), getHeight());
 	}
 	
 	@Override

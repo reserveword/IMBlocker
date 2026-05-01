@@ -1,10 +1,11 @@
 package io.github.reserveword.imblocker.common;
 
 public abstract class LinuxKeyCallbackMonitor {
+	private static boolean imState;
 	private static boolean isKeyConsistentWithChar = true;
 	
 	public static boolean evaluateKey(int key, int action, int modifiers) {
-		if(!IMBlockerConfig.INSTANCE.isLinuxKeyboardPatchEnabled()) {
+		if(!IMBlockerConfig.INSTANCE.isLinuxKeyboardPatchEnabled() || !imState) {
 			return true;
 		}
 		
@@ -21,6 +22,10 @@ public abstract class LinuxKeyCallbackMonitor {
 			}
 		}
 		return isAlphabet || isKeyConsistentWithChar;
+	}
+	
+	static void syncIMState(boolean state) {
+		imState = state;
 	}
 	
 	public static void resetConsistency() {

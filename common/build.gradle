@@ -25,6 +25,7 @@ dependencies {
 	compileOnly "curse.maven:ftb-library-forge-$ftblib_version"
 	compileOnly "io.github.cottonmc:LibGui:$cottonlibgui_version"
 	compileOnly "maven.modrinth:ixeris:$ixeris_version"
+	compileOnly "icyllis.modernui:ModernUI-Core:$modernui_version"
 }
 
 sourceSets {

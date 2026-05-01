@@ -75,6 +75,12 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("compat.EssentialUIComponentMixin");
 			validMixins.add("compat.EssentialAbstractTextInputMixin");
 		}
+
+		if(IMBlockerCore.hasMod("modernui")) {
+			validMixins.add("compat.ModernUISelectionMixin");
+			validMixins.add("compat.ModernUITextViewMixin");
+			validMixins.add("compat.ModernUIEditTextMixin");
+		}
 	}
 	
 	@Override

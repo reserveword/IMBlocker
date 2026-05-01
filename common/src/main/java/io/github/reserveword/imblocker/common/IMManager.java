@@ -31,6 +31,7 @@ public final class IMManager {
 	
 	public static void setState(boolean on) {
 		IMBlockerCore.invokeOnMainThread(() -> INSTANCE.setState(on));
+		LinuxKeyCallbackMonitor.syncIMState(on);
 		if(on) {
 			updateCaretPosition();
 		}

@@ -4,6 +4,7 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import icyllis.modernui.widget.EditText;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.MathHelper;
@@ -12,6 +13,7 @@ import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 final class MinecraftFocusContext extends FocusContainer {
 	
 	private static final boolean IS_AXIOM_LOADED = IMBlockerCore.hasMod("axiom");
+	private static final boolean IS_MODERNUI_LOADED = IMBlockerCore.hasMod("modernui");
 	
 	/**
 	 * While there can be only one {@code focusedWidget} at most, multiple
@@ -31,6 +33,14 @@ final class MinecraftFocusContext extends FocusContainer {
 				MinecraftClientAccessor.INSTANCE.sendSafeCharForFocusTracking(0);
 			} catch (Throwable e) {
 				IMBlockerCore.LOGGER.warn("[IMBlocker] Failed to locate focus with char simulation");
+			}
+			if(!FocusManager.isFocusLocated && IS_MODERNUI_LOADED) {
+				Optional<FocusableWidget> modernuiFocusCandidate = focusCandidates.keySet().stream()
+						.filter(w -> (w instanceof EditText)).findFirst();
+				if(modernuiFocusCandidate.isPresent()) {
+					switchFocus(modernuiFocusCandidate.get());
+					FocusManager.isFocusLocated = true;
+				}
 			}
 			if(!FocusManager.isFocusLocated) {
 				restoreContainerFocus();

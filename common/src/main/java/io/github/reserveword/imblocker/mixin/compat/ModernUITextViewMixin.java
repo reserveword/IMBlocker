@@ -99,7 +99,7 @@ public abstract class ModernUITextViewMixin extends View implements MinecraftFoc
 		FloatArrayList cursorInfo = new FloatArrayList();
 		mLayout.getCursorPath(getSelectionStart(), cursorInfo, mText);
 		return new Point((int) cursorInfo.getFloat(0) + getTotalPaddingLeft(), 
-				(int) cursorInfo.getFloat(3) + getTotalPaddingTop() - getFontHeight());
+				(int) cursorInfo.getFloat(3) + getTotalPaddingTop() - getFontHeight() - getScrollY());
 	}
 	
 	@Override

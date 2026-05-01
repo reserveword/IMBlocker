@@ -28,6 +28,7 @@ dependencies {
 	compileOnly "io.github.cottonmc:LibGui:$cottonlibgui_version"
 	compileOnly "maven.modrinth:ixeris:$ixeris_version"
 	compileOnly "maven.modrinth:armourers-workshop:forge-1.21.1-3.2.7-beta"
+	compileOnly "icyllis.modernui:ModernUI-Core:$modernui_version"
 }
 
 sourceSets {

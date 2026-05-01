@@ -97,6 +97,12 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		if(IMBlockerCore.hasMod("armourers_workshop")) {
 			validMixins.add("compat.AWTextInputWidgetMixin");
 		}
+		
+		if(IMBlockerCore.hasMod("modernui")) {
+			validMixins.add("compat.ModernUISelectionMixin");
+			validMixins.add("compat.ModernUITextViewMixin");
+			validMixins.add("compat.ModernUIEditTextMixin");
+		}
 	}
 	
 	@Override

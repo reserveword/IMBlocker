@@ -52,6 +52,10 @@ allprojects {
 			url "https://repo.spongepowered.org/repository/maven-public/"
 		}
 		maven { url "https://jitpack.io" }
+		maven {
+			name = "IzzelAliz Maven"
+			url = "https://maven.izzel.io/releases/"
+		}
 	}
 
 	def all_properties = [

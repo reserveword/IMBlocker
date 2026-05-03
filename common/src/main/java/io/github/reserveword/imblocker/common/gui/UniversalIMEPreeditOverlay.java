@@ -2,9 +2,11 @@ package io.github.reserveword.imblocker.common.gui;
 
 import imgui.moulberry92.ImDrawList;
 import imgui.moulberry92.ImGui;
+import io.github.reserveword.imblocker.common.IMManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import xyz.rrtt217.HDRMod.compat.imblocker.IMManagerLinuxEnhanced;
 
 public class UniversalIMEPreeditOverlay {
 	private static final UniversalIMEPreeditOverlay INSTANCE = new UniversalIMEPreeditOverlay();
@@ -74,8 +76,9 @@ public class UniversalIMEPreeditOverlay {
 				containerGuiScale = widgetGuiScale;
 				compositionBorder = focusOwner.getBoundsAbs();
 			}
-			
-			int compositionX = caretX, compositionY = (int) (caretY + widgetFontSize * widgetGuiScale + 5 * containerGuiScale),
+
+			int inputHeight = (int) (widgetFontSize * widgetGuiScale + 5 * containerGuiScale);
+			int compositionX = caretX, compositionY = caretY + inputHeight,
 					compositionWidth = (int) (preEditTextWidth * containerGuiScale),
 					compositionHeight = (int) (containerFontSize * containerGuiScale);
 			if(compositionX + compositionWidth > compositionBorder.width()) {
@@ -89,6 +92,13 @@ public class UniversalIMEPreeditOverlay {
 			compositionX += compositionBorder.x();
 			compositionY += compositionBorder.y();
 			overlayBounds = new Rectangle(compositionX, compositionY, compositionWidth, compositionHeight);
+			
+			if(IMManager.isEnhancedLinuxImplPresent()) {
+				int scaledMargin = (int) (2 * containerGuiScale);
+				IMManagerLinuxEnhanced.updatePreeditCursorRectanglePosition(
+						compositionX - scaledMargin, Math.min(caretY, compositionY) - scaledMargin,
+						compositionWidth + scaledMargin * 2, compositionHeight + inputHeight + scaledMargin * 2);
+			}
 		}
 	}
 

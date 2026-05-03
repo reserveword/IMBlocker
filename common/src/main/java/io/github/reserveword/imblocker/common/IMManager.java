@@ -26,6 +26,8 @@ public final class IMManager {
 		default void initializeIngameIME(long window) {}
 	}
 	
+	private static boolean isEnhancedLinuxImplPresent = false;
+	
 	private IMManager() {}
 	
 	public static void setState(boolean on) {
@@ -115,13 +117,25 @@ public final class IMManager {
 		}
 	}
 	
+	public static boolean isEnhancedLinuxImplPresent() {
+		return isEnhancedLinuxImplPresent;
+	}
+	
 	static {
 		if(Platform.isWindows()) {
 			INSTANCE = new IMManagerWindows();
 		}else if(Platform.isMac()) {
 			INSTANCE = new IMManagerMac();
 		}else if(Platform.isLinux()) {
-			INSTANCE = new IMManagerLinux();
+			PlatformIMManager linuxImpl;
+			try {
+				Class<?> enhancedImplClass = Class.forName("xyz.rrtt217.HDRMod.compat.imblocker.IMManagerLinuxEnhanced");
+				linuxImpl = (PlatformIMManager) ReflectionUtil.newInstance(enhancedImplClass, new Class[0]);
+				isEnhancedLinuxImplPresent = true;
+			} catch (ClassNotFoundException e) {
+				linuxImpl = new IMManagerLinux();
+			}
+			INSTANCE = linuxImpl;
 		}else {
 			IMBlockerCore.LOGGER.warn("[IMBlocker] Unsupported platform, using stub");
 			INSTANCE = new IMManagerStub();

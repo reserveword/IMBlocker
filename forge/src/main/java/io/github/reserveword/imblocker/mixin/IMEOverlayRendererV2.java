@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
+import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftRenderApi;
@@ -20,7 +21,7 @@ public abstract class IMEOverlayRendererV2 {
 	@Redirect(method = "m_109093_", at = @At(value = "INVOKE", target = 
 			"Lnet/minecraft/client/gui/GuiGraphics;m_280262_()V"))
 	public void renderIMEOverlays(GuiGraphics rawGraphics) {
-		if(IMBlockerConfig.INSTANCE.isIngameIMEEnabled() && 
+		if((IMBlockerConfig.INSTANCE.isIngameIMEEnabled() || IMManager.isEnhancedLinuxImplPresent()) && 
 				FocusManager.getFocusedContainer() == FocusContainer.MINECRAFT) {
 			GuiGraphics privateGraphics = new GuiGraphics(Minecraft.getInstance(), 
 					Minecraft.getInstance().renderBuffers().bufferSource());

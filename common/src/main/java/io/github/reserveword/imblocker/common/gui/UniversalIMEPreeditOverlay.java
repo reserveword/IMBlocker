@@ -2,7 +2,9 @@ package io.github.reserveword.imblocker.common.gui;
 
 import imgui.moulberry92.ImDrawList;
 import imgui.moulberry92.ImGui;
+import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
+import xyz.rrtt217.HDRMod.compat.imblocker.IMManagerLinuxEnhanced;
 
 public class UniversalIMEPreeditOverlay {
 	private static final UniversalIMEPreeditOverlay INSTANCE = new UniversalIMEPreeditOverlay();
@@ -85,6 +87,13 @@ public class UniversalIMEPreeditOverlay {
 			compositionX += compositionBorder.x();
 			compositionY += compositionBorder.y();
 			overlayBounds = new Rectangle(compositionX, compositionY, compositionWidth, compositionHeight);
+			
+			if(IMManager.isEnhancedLinuxImplPresent()) {
+				int scaledMargin = (int) (2 * containerGuiScale);
+				IMManagerLinuxEnhanced.updatePreeditCursorRectanglePosition(
+						compositionX - scaledMargin, compositionY - scaledMargin,
+						compositionWidth + scaledMargin * 2, compositionHeight + scaledMargin * 2);
+			}
 		}
 	}
 

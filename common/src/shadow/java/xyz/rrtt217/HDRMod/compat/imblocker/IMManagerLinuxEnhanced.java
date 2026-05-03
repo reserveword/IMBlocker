@@ -1,0 +1,5 @@
+package xyz.rrtt217.HDRMod.compat.imblocker;
+
+public abstract class IMManagerLinuxEnhanced {
+	public static void updatePreeditCursorRectanglePosition(int x, int y, int w, int h) {}
+}

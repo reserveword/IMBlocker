@@ -112,7 +112,14 @@ public final class IMManager {
 		}else if(Platform.isMac()) {
 			INSTANCE = new IMManagerMac();
 		}else if(Platform.isLinux()) {
-			INSTANCE = new IMManagerLinux();
+			PlatformIMManager linuxImpl;
+			try {
+				Class<?> enhancedImplClass = Class.forName("xyz.rrtt217.HDRMod.compat.imblocker.IMManagerLinuxEnhanced");
+				linuxImpl = (PlatformIMManager) ReflectionUtil.newInstance(enhancedImplClass, new Class[0]);
+			} catch (ClassNotFoundException e) {
+				linuxImpl = new IMManagerLinux();
+			}
+			INSTANCE = linuxImpl;
 		}else {
 			IMBlockerCore.LOGGER.warn("[IMBlocker] Unsupported platform, using stub");
 			INSTANCE = new IMManagerStub();

@@ -72,8 +72,9 @@ public class UniversalIMEPreeditOverlay {
 				containerGuiScale = widgetGuiScale;
 				compositionBorder = focusOwner.getBoundsAbs();
 			}
-			
-			int compositionX = caretX, compositionY = (int) (caretY + widgetFontSize * widgetGuiScale + 5 * containerGuiScale),
+
+			int inputHeight = (int) (widgetFontSize * widgetGuiScale + 5 * containerGuiScale);
+			int compositionX = caretX, compositionY = caretY + inputHeight,
 					compositionWidth = (int) (preEditTextWidth * containerGuiScale),
 					compositionHeight = (int) (containerFontSize * containerGuiScale);
 			if(compositionX + compositionWidth > compositionBorder.width()) {
@@ -91,8 +92,8 @@ public class UniversalIMEPreeditOverlay {
 			if(IMManager.isEnhancedLinuxImplPresent()) {
 				int scaledMargin = (int) (2 * containerGuiScale);
 				IMManagerLinuxEnhanced.updatePreeditCursorRectanglePosition(
-						compositionX - scaledMargin, compositionY - scaledMargin,
-						compositionWidth + scaledMargin * 2, compositionHeight + scaledMargin * 2);
+						compositionX - scaledMargin, Math.min(caretY, compositionY) - scaledMargin,
+						compositionWidth + scaledMargin * 2, compositionHeight + inputHeight + scaledMargin * 2);
 			}
 		}
 	}

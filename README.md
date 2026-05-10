@@ -36,20 +36,19 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
     - GLFW 窗口系统在 Windows 下有一个已知漏洞：如果游戏窗口被创建时未获得焦点则第一次获得焦点不会触发焦点回调，此时可能出现锁键现象。解决方法：使游戏窗口失去再获得一次焦点
     - 欢迎提出建议或反馈
 
-## 支持过的具有自定义GUI实现的模组
+## 已支持的具有自定义GUI实现的模组
 
-[Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems)  
-[EMI](https://github.com/emilyploszaj/emi)  
-[Axiom](https://axiom.moulberry.com/)（已更新）  
-[Replay Mod](https://www.replaymod.com/)（已更新）  
-[FTB Library](https://github.com/FTBTeam/FTB-Library)（已更新）  
+[Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems)（等待更新）  
+[EMI](https://github.com/emilyploszaj/emi)（等待更新）  
+[Axiom](https://axiom.moulberry.com/)  
+[Replay Mod](https://www.replaymod.com/)  
+[FTB Library](https://github.com/FTBTeam/FTB-Library)  
 [Meteor Client](https://www.meteorclient.com/)  
-[LibGui](https://github.com/CottonMC/LibGui)（已更新）  
-[Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)（已更新）  
-[BlockUI](https://github.com/ldtteam/BlockUI)  
-[SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)  
-[Notes](https://github.com/MattCzyr/Notes)（已基于原版多行文本框）  
-[Essential Mod](https://essential.gg/)*（已更新）  
+[LibGui](https://github.com/CottonMC/LibGui)  
+[Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)  
+[BlockUI](https://github.com/ldtteam/BlockUI)（等待更新）  
+[SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)（等待更新）    
+[Essential Mod](https://essential.gg/)*  
 [Armourer's Workshop](https://github.com/Armourers-Workshop/Armourers-Workshop)  
 [ModernUI](https://github.com/BloCamLimb/ModernUI-MC)
 

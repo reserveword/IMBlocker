@@ -1,3 +1,8 @@
+# 7.1.4
+ - 增加 Meteor Client 的兼容层
+ 
+<br>
+
 # 7.1.3
  - Linux：支持特定环境下定制的输入法控制增强实现（[#143](https://github.com/reserveword/IMBlocker/issues/143)）
  

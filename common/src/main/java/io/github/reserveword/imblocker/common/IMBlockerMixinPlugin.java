@@ -65,6 +65,11 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("compat.ReplayModTextFieldMixin");
 		}
 		
+		if(IMBlockerCore.hasMod("meteor-client")) {
+			validMixins.add("compat.MeteorWidgetMixin");
+			validMixins.add("compat.MeteorTextFieldMixin");
+		}
+		
 		if(IMBlockerCore.hasMod("reeses-sodium-options") || 
 				IMBlockerCore.hasMod("reeses_sodium_options")) {
 			validMixins.add("compat.RSOAbstractFrameMixin");
@@ -74,6 +79,10 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		if(IMBlockerCore.hasMod("essential")) {
 			validMixins.add("compat.EssentialUIComponentMixin");
 			validMixins.add("compat.EssentialAbstractTextInputMixin");
+		}
+		
+		if(IMBlockerCore.hasMod("armourers_workshop")) {
+			validMixins.add("compat.AWTextInputWidgetMixin");
 		}
 
 		if(IMBlockerCore.hasMod("modernui")) {

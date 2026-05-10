@@ -36,20 +36,19 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
     - There's a known bug in GLFW's window management: if the game window is created without focus, focus callbacks will not be triggered on the first time it gains the focus, which may cause input locking. Solution: make the game window lost and gain the focus again.
     - Suggestions and feedbacks are welcomed  
 
-## Previously supported Mods with custom GUI framework  
+## Supported Mods with custom GUI framework  
  
-[Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems)  
-[EMI](https://github.com/emilyploszaj/emi)   
-[Axiom](https://axiom.moulberry.com/) (Updated)  
-[Replay Mod](https://www.replaymod.com/) (Updated)   
-[FTB Library](https://github.com/FTBTeam/FTB-Library) (Updated)   
+[Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems) (waiting for update)  
+[EMI](https://github.com/emilyploszaj/emi) (waiting for update)  
+[Axiom](https://axiom.moulberry.com/)  
+[Replay Mod](https://www.replaymod.com/)   
+[FTB Library](https://github.com/FTBTeam/FTB-Library)   
 [Meteor Client](https://www.meteorclient.com/)   
-[LibGui](https://github.com/CottonMC/LibGui) (Updated)  
-[Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options) (Updated)  
-[BlockUI](https://github.com/ldtteam/BlockUI)   
-[SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)   
-[Notes](https://github.com/MattCzyr/Notes) (Deprecated)   
-[Essential Mod](https://essential.gg/)* (Updated)  
+[LibGui](https://github.com/CottonMC/LibGui)  
+[Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)  
+[BlockUI](https://github.com/ldtteam/BlockUI) (waiting for update)  
+[SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib) (waiting for update)     
+[Essential Mod](https://essential.gg/)*  
 [Armourer's Workshop](https://github.com/Armourers-Workshop/Armourers-Workshop)  
 [ModernUI](https://github.com/BloCamLimb/ModernUI-MC)
 

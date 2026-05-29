@@ -58,6 +58,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 
 	public IMManagerWindows() {
 		setConversionStateThread = new SetConversionStateThread();
+		setConversionStateThread.setDaemon(true);
 		setConversionStateThread.start();
 	}
 

@@ -20,13 +20,17 @@ public class IMBlockerConfig {
 
 	public static final List<String> defaultScreenWhitelist = Lists.newArrayList(
 			"com.simibubi.create.content.equipment.clipboard.ClipboardScreen",
-			"net.mehvahdjukaar.supplementaries.client.screens.TextHolderEditScreen");
+			"net.mehvahdjukaar.supplementaries.client.screens.TextHolderEditScreen",
+			"dev.simulated_team.simulated.content.blocks.nameplate.NameplateScreen",
+			"com.enxv.aeronauticsstructuretool.ToolModeScreen");
 
 	private static final Set<Class<?>> bakedScreenWhitelist = new HashSet<>();
 
-	public void reloadScreenWhitelist(List<? extends String> newScreenWhitelist) {
+	public void reloadScreenWhitelist(List<String> newScreenWhitelist) {
 		bakedScreenWhitelist.clear();
-		for (String s : newScreenWhitelist) {
+		Set<String> rawScreenWhitelist = new HashSet<>(defaultScreenWhitelist);
+		rawScreenWhitelist.addAll(newScreenWhitelist);
+		for (String s : rawScreenWhitelist) {
 			try {
 				if (s.contains(":")) {
 					String[] ss = s.split(":");

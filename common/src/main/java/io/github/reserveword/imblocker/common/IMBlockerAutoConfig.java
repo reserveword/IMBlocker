@@ -123,7 +123,7 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 
 	static class BasicSettings {
 		@ConfigEntry.Gui.Tooltip
-		ArrayList<String> screenWhitelist = new ArrayList<>(defaultScreenWhitelist);
+		ArrayList<String> screenWhitelist = new ArrayList<>();
 
 		boolean enableScreenRecovering = false;
 

@@ -55,7 +55,7 @@ public final class IMManager {
 				UniversalIMECandidateOverlay.getInstance().
 						updateCaretPosition(caretPos.x(), caretPos.y());
 			}else if(IMBlockerConfig.INSTANCE.isCursorPositionTrackingEnabled()) {
-				Point caretPos = calculateCaretPos(focusedWidget, false);
+				Point caretPos = calculateCaretPos(focusedWidget, isEnhancedLinuxImplPresent);
 				IMBlockerCore.invokeOnMainThread(() -> INSTANCE.updateCompositionWindowPos(caretPos));
 			}
 		}

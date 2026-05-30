@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import io.github.reserveword.imblocker.common.gui.CurrentScreenInfoOverlay;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftRenderApi;
@@ -43,6 +44,7 @@ public abstract class IMEOverlayRendererV1 {
 			UniversalIMEPreeditOverlay.getInstance().renderOnMinecraftSurface(graphics);
 			UniversalIMECandidateOverlay.getInstance().renderOnMinecraftSurface(graphics);
 			UniversalEnglishStateIndicator.renderOnMinecraftSurface(graphics);
+			CurrentScreenInfoOverlay.renderScreenClassName(graphics);
 			poseStack.popPose();
 			modelViewStack.popPose();
 			RenderSystem.applyModelViewMatrix();

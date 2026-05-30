@@ -1,6 +1,7 @@
 package io.github.reserveword.imblocker;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.lwjgl.glfw.GLFW;
 
@@ -42,7 +43,7 @@ public class IMBlocker {
 			ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, 
 					() -> (client, parent) -> IMBlockerAutoConfig.getConfigScreen(parent, Screen.class));
 		}else {
-            IMBlockerConfig.INSTANCE.reloadScreenWhitelist(IMBlockerConfig.defaultScreenWhitelist);
+            IMBlockerConfig.INSTANCE.reloadScreenWhitelist(Collections.emptyList());
 		}
     }
 }

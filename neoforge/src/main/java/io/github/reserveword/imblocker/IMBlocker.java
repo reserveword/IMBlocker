@@ -1,5 +1,7 @@
 package io.github.reserveword.imblocker;
 
+import java.util.Collections;
+
 import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.platform.InputConstants.Type;
@@ -48,7 +50,7 @@ public class IMBlocker {
 				}
 			});
 		}else {
-			IMBlockerConfig.INSTANCE.reloadScreenWhitelist(IMBlockerConfig.defaultScreenWhitelist);
+			IMBlockerConfig.INSTANCE.reloadScreenWhitelist(Collections.emptyList());
 		}
 	}
 }

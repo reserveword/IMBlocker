@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
+import io.github.reserveword.imblocker.common.gui.CurrentScreenInfoOverlay;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftRenderApi;
@@ -22,7 +23,8 @@ public abstract class IMEOverlayRendererV2 {
 	@Redirect(method = "method_3192", at = @At(value = "INVOKE", target = 
 			"Lnet/minecraft/class_332;method_51452()V"))
 	public void renderIMEOverlays(class_332 rawGraphics) {
-		if((IMBlockerConfig.INSTANCE.isIngameIMEEnabled() || IMManager.isEnhancedLinuxImplPresent()) &&
+		if((IMBlockerConfig.INSTANCE.isIngameIMEEnabled() || IMManager.isEnhancedLinuxImplPresent() ||
+				IMBlockerConfig.INSTANCE.isScreenRecoveringEnabled()) &&
 				FocusManager.getFocusedContainer() == FocusContainer.MINECRAFT) {
 			class_332 privateGraphics = new class_332(MinecraftClient.getInstance(), 
 					MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers());
@@ -44,6 +46,7 @@ public abstract class IMEOverlayRendererV2 {
 				UniversalIMEPreeditOverlay.getInstance().renderOnMinecraftSurface(graphics);
 				UniversalIMECandidateOverlay.getInstance().renderOnMinecraftSurface(graphics);
 				UniversalEnglishStateIndicator.renderOnMinecraftSurface(graphics);
+				CurrentScreenInfoOverlay.renderScreenClassName(graphics);
 			});
 			privateGraphics.method_51448().pop();
 		}

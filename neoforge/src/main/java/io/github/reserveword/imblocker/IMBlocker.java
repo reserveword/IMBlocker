@@ -1,5 +1,7 @@
 package io.github.reserveword.imblocker;
 
+import java.util.Collections;
+
 import io.github.reserveword.imblocker.common.IMBlockerAutoConfig;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
@@ -28,6 +30,8 @@ public class IMBlocker {
 			IMBlockerConfig.INSTANCE = AutoConfig.getConfigHolder(IMBlockerAutoConfig.class).getConfig();
 			container.registerExtensionPoint(IConfigScreenFactory.class, 
 					(modContainer, modListScreen) -> IMBlockerAutoConfig.getConfigScreen(modListScreen));
+		}else {
+			IMBlockerConfig.INSTANCE.reloadScreenWhitelist(Collections.emptyList());
 		}
 	}
 }

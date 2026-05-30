@@ -5,9 +5,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
@@ -36,12 +36,6 @@ public abstract class AbstractSignEditScreenMixin implements MinecraftFocusableW
 	
 	@Shadow
 	protected abstract float getSignYOffset();
-	
-	@Inject(method = "init", at = @At("TAIL"))
-	public void requestFocus(CallbackInfo ci) {
-		imblocker$onFocusGained();
-		imblocker$updateCaretPos();
-	}
 	
 	@Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(CharacterEvent event, CallbackInfoReturnable<Boolean> cir) {
@@ -75,6 +69,12 @@ public abstract class AbstractSignEditScreenMixin implements MinecraftFocusableW
 		if(caretChanged) {
 			IMManager.updateCaretPosition();
 		}
+	}
+	
+	@Override
+	public void imblocker$onFocusGained() {
+		MinecraftFocusableWidget.super.imblocker$onFocusGained();
+		IMBlockerCore.invokeLater(this::imblocker$updateCaretPos);
 	}
 	
 	@Override

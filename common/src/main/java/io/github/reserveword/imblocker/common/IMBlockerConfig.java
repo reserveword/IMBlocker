@@ -26,7 +26,9 @@ public class IMBlockerConfig {
 
 	public void reloadScreenWhitelist(List<? extends String> newScreenWhitelist) {
 		bakedScreenWhitelist.clear();
-		for (String s : newScreenWhitelist) {
+		Set<String> rawScreenWhitelist = new HashSet<>(defaultScreenWhitelist);
+		rawScreenWhitelist.addAll(newScreenWhitelist);
+		for (String s : rawScreenWhitelist) {
 			try {
 				if (s.contains(":")) {
 					String[] ss = s.split(":");

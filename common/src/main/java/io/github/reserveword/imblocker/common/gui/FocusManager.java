@@ -47,7 +47,7 @@ public class FocusManager {
 	 */
 	private static FocusableObject focusOwner;
 	
-	private static boolean isWindowFocused = true;
+	private static boolean isWindowFocused = false;
 	
 	/**The focus destination of game window.*/
 	private static FocusContainer focusedContainer = FocusContainer.MINECRAFT;

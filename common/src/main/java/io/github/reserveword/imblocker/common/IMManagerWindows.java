@@ -13,6 +13,7 @@ import com.sun.jna.platform.win32.WinUser;
 import com.sun.jna.platform.win32.WinUser.WindowProc;
 import com.sun.jna.ptr.IntByReference;
 
+import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
 import io.github.reserveword.imblocker.common.gui.UniversalIMECandidateOverlay;
 
@@ -129,6 +130,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 			return u.CallWindowProc(originalProc, _hwnd, uMsg, wParam, lParam);
 		};
 		originalProc = u.SetWindowLongPtr(hwnd, WinUser.GWL_WNDPROC, CallbackReference.getFunctionPointer(imeListener));
+		IMBlockerCore.invokeLater(() -> FocusManager.setWindowFocused(true));
 	}
 	
 	private void onConversionStatusChanged() {

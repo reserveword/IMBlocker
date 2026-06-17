@@ -1,0 +1,70 @@
+package io.github.reserveword.imblocker;
+
+import java.util.Collections;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.lwjgl.glfw.GLFW;
+
+import com.mojang.blaze3d.platform.InputConstants.Type;
+
+import io.github.reserveword.imblocker.common.IMBlockerAutoConfig;
+import io.github.reserveword.imblocker.common.IMBlockerConfig;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
+import io.github.reserveword.imblocker.common.ReflectionUtil;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+public class IMBlockerClient {
+
+	public static final KeyMapping unlockIMEKey = new KeyMapping(
+			"key.unlockIME", Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_SHIFT, "key.categories.imblocker");
+
+	private IMBlockerClient() {}
+
+	@SuppressWarnings({ "unchecked", "rawtypes", "removal" })
+	public static void initialize(FMLJavaModLoadingContext context) {
+		Minecraft.getInstance().options.keyMappings = ArrayUtils.add(
+				Minecraft.getInstance().options.keyMappings, unlockIMEKey);
+		IMBlockerConfig.defaultScreenWhitelist.addAll(ForgeCommon.defaultScreenWhitelist);
+		if(IMBlockerCore.hasMod("cloth_config")) {
+			AutoConfig.register(IMBlockerAutoConfig.class, GsonConfigSerializer::new);
+			IMBlockerConfig.INSTANCE = AutoConfig.getConfigHolder(IMBlockerAutoConfig.class).getConfig();
+			Class configFactoryCls = null;
+			try {
+				// 1.19+
+				configFactoryCls = Class.forName(
+						"net.minecraftforge.client.ConfigScreenHandler$ConfigScreenFactory");
+			} catch (ClassNotFoundException e) {
+				try {
+					// 1.18.x
+					configFactoryCls = Class.forName(
+							"net.minecraftforge.client.ConfigGuiHandler$ConfigGuiFactory");
+				} catch (ClassNotFoundException e1) {
+					try {
+						// 1.17.x
+						configFactoryCls = Class.forName(
+								"net.minecraftforge.fmlclient.ConfigGuiHandler$ConfigGuiFactory");
+					} catch (ClassNotFoundException e2) {}
+				}
+			}
+			Class _configFactoryCls = configFactoryCls;
+			Supplier configFactorySupplier = () -> ReflectionUtil.newInstance(_configFactoryCls,
+					new Class[] {BiFunction.class}, new BiFunction<Minecraft, Screen, Screen>() {
+						@Override
+						public Screen apply(Minecraft client, Screen parent) {
+							return IMBlockerAutoConfig.getConfigScreen(parent, Screen.class);
+						}
+					});
+			ModLoadingContext.get().registerExtensionPoint(configFactoryCls, configFactorySupplier);
+		}else {
+			IMBlockerConfig.INSTANCE.reloadScreenWhitelist(Collections.emptyList());
+		}
+	}
+}

@@ -1,56 +1,28 @@
 package io.github.reserveword.imblocker;
 
-import java.util.Collections;
-
-import org.lwjgl.glfw.GLFW;
-
-import com.mojang.blaze3d.platform.InputConstants.Type;
-
-import io.github.reserveword.imblocker.common.IMBlockerAutoConfig;
-import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
-import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.ModContainer;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(IMBlockerCore.MODID)
 public class IMBlocker {
 
-	public static final KeyMapping unlockIMEKey = new KeyMapping(
-			"key.unlockIME", Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_SHIFT, "key.categories.imblocker");
-	
-    public IMBlocker(ModContainer container) {
-    	container.getEventBus().register(new Object() {
-    		@SubscribeEvent
-    		public void registerKeyBindings(RegisterKeyMappingsEvent event) {
-    			event.register(unlockIMEKey);
-    		}
-    	});
-    	
-		IMBlockerConfig.defaultScreenWhitelist.addAll(ForgeCommon.defaultScreenWhitelist);
-		if(IMBlockerCore.hasMod("cloth_config")) {
-			AutoConfig.register(IMBlockerAutoConfig.class, GsonConfigSerializer::new);
-			IMBlockerConfig.INSTANCE = AutoConfig.getConfigHolder(IMBlockerAutoConfig.class).getConfig();
-			container.registerExtensionPoint(IConfigScreenFactory.class, new IConfigScreenFactory() {
-				public Screen createScreen(Minecraft minecraft, Screen modListScreen) {
-					return IMBlockerAutoConfig.getConfigScreen(modListScreen, Screen.class);
-				}
+	public IMBlocker(ModContainer container) {
+		if(FMLLoader.getDist() == Dist.CLIENT || FMLEnvironment.dist == Dist.CLIENT) {
+			initializeClient(container);
+		}
+	}
 
-				@SuppressWarnings("unused")
-				public Screen createScreen(ModContainer container, Screen modListScreen) {
-					return IMBlockerAutoConfig.getConfigScreen(modListScreen, Screen.class);
-				}
-			});
-		}else {
-			IMBlockerConfig.INSTANCE.reloadScreenWhitelist(Collections.emptyList());
+	private static void initializeClient(ModContainer container) {
+		try {
+			Class.forName("io.github.reserveword.imblocker.IMBlockerClient")
+					.getMethod("initialize", ModContainer.class)
+					.invoke(null, container);
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException("Failed to initialize IMBlocker client hooks", e);
 		}
 	}
 }

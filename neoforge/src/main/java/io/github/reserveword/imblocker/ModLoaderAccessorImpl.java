@@ -2,15 +2,13 @@ package io.github.reserveword.imblocker;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
 import net.minecraft.DetectedVersion;
 import net.minecraft.util.GsonHelper;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.loading.FMLLoader;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.common.NeoForge;
 
 public class ModLoaderAccessorImpl implements ModLoaderAccessor {
 
@@ -35,12 +33,18 @@ public class ModLoaderAccessorImpl implements ModLoaderAccessor {
 	
 	@Override
 	public void registerClientTickEvent(Runnable tickEvent) {
-		NeoForge.EVENT_BUS.register(new Object() {
-			@SubscribeEvent
-			public void onStartTick(ClientTickEvent.Pre e) {
-				tickEvent.run();
-			}
-		});
+		registerClientTickEventReflectively(tickEvent);
+	}
+
+	private static void registerClientTickEventReflectively(Runnable tickEvent) {
+		try {
+			Method method = Class.forName("io.github.reserveword.imblocker.ModLoaderClientHooks")
+					.getDeclaredMethod("registerClientTickEvent", Runnable.class);
+			method.setAccessible(true);
+			method.invoke(null, tickEvent);
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException("Failed to register IMBlocker client tick event", e);
+		}
 	}
 	
 	static {

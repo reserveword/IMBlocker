@@ -3,6 +3,7 @@ package io.github.reserveword.imblocker.common;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 final class IMManagerLinux implements IMManager.PlatformIMManager {
 	private LinuxIMFramework imFramework = LinuxIMFramework.IBUS;
@@ -11,8 +12,15 @@ final class IMManagerLinux implements IMManager.PlatformIMManager {
 	@Override
 	public void setState(boolean on) {
 		if(state != on) {
-			checkIMFramework();
-			imFramework.setState(on);
+			switch (IMBlockerConfig.INSTANCE.getLinuxIMCommandType()) {
+				case DEFAULT:
+					checkIMFramework();
+					imFramework.setState(on);
+					break;
+				case FULL:
+					setStateWithFullCommand(on);
+					break;
+			}
 			IMManagerLinux.state = on;
 		}
 	}
@@ -33,5 +41,15 @@ final class IMManagerLinux implements IMManager.PlatformIMManager {
 		}
 		
 		imFramework = fcitx5State == null ? LinuxIMFramework.IBUS : LinuxIMFramework.FCITX5;
+	}
+	
+	private void setStateWithFullCommand(boolean on) {
+		String[] command = (on ? IMBlockerConfig.INSTANCE.getFullEnableCommand() : 
+					IMBlockerConfig.INSTANCE.getFullDisableCommand()).split(" ");
+		try {
+			Runtime.getRuntime().exec(command);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

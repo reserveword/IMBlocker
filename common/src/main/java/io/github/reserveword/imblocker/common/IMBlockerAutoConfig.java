@@ -89,6 +89,21 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	}
 	
 	@Override
+	public LinuxIMCommandType getLinuxIMCommandType() {
+		return linuxCompatibilitySettings.linuxIMCommandType;
+	}
+	
+	@Override
+	public String getFullEnableCommand() {
+		return linuxCompatibilitySettings.fullEnableCommand;
+	}
+	
+	@Override
+	public String getFullDisableCommand() {
+		return linuxCompatibilitySettings.fullDisableCommand;
+	}
+	
+	@Override
 	public String getIBusOnArgName() {
 		return linuxCompatibilitySettings.ibusOnArgName;
 	}
@@ -175,6 +190,13 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	static class LinuxCompatibilitySettings {
 		@ConfigEntry.Gui.Tooltip(count = 2)
 		boolean enableKeyboardPatch = true;
+		
+		@ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
+		LinuxIMCommandType linuxIMCommandType = LinuxIMCommandType.DEFAULT;
+		
+		String fullEnableCommand = "";
+		
+		String fullDisableCommand = "";
 		
 		@ConfigEntry.Gui.Tooltip
 		String ibusOnArgName = "libpinyin";

@@ -93,6 +93,18 @@ public class IMBlockerConfig {
 		return true;
 	}
 	
+	public LinuxIMCommandType getLinuxIMCommandType() {
+		return LinuxIMCommandType.DEFAULT;
+	}
+	
+	public String getFullEnableCommand() {
+		return "";
+	}
+	
+	public String getFullDisableCommand() {
+		return "";
+	}
+	
 	public String getIBusOnArgName() {
 		return "libpinyin";
 	}

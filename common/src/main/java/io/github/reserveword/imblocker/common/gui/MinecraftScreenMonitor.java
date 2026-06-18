@@ -4,9 +4,11 @@ import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import net.minecraft.client.gui.screens.Screen;
 
-public interface MinecraftScreenMonitor {
+public abstract class MinecraftScreenMonitor {
+	private static Screen currentScreen;
+	
 	public static void onScreenChanged(Screen screen) {
-		CurrentScreenInfoOverlay.currentScreen = screen;
+		currentScreen = screen;
 		
 		if(IMBlockerConfig.INSTANCE.isScreenRecoveringEnabled() && screen != null) {
 			IMBlockerConfig.INSTANCE.recoverScreen(screen.getClass().getName());
@@ -20,5 +22,9 @@ public interface MinecraftScreenMonitor {
 		if(screen instanceof MinecraftFocusableWidget _screen) {
 			_screen.imblocker$onFocusGained();
 		}
+	}
+	
+	public static Screen getCurrentScreen() {
+		return currentScreen;
 	}
 }

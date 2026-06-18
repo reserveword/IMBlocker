@@ -11,8 +11,8 @@ import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
 import io.github.cottonmc.cotton.gui.widget.WWidget;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
+import io.github.reserveword.imblocker.common.gui.MinecraftScreenMonitor;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 
 @Pseudo
@@ -37,7 +37,7 @@ public abstract class LibGuiWidgetMixin implements MinecraftFocusableWidget {
 	public Rectangle getBoundsAbs() {
 		int x = getAbsoluteX();
 		int y = getAbsoluteY();
-		Screen currentScreen = Minecraft.getInstance().screen;
+		Screen currentScreen = MinecraftScreenMonitor.getCurrentScreen();
 		if (CottonClientScreen.class.isInstance(currentScreen)) {
 			x += ReflectionUtil.getFieldValue(CottonClientScreen.class, currentScreen, int.class, "left");
 			y += ReflectionUtil.getFieldValue(CottonClientScreen.class, currentScreen, int.class, "top");

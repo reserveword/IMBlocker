@@ -46,7 +46,8 @@ public class FocusManager {
 	 * eventually processed.
 	 */
 	private static FocusableObject focusOwner;
-	
+
+	private static boolean isWindowInitialized = !Platform.isWindows();
 	private static boolean isWindowFocused = false;
 	
 	/**The focus destination of game window.*/
@@ -56,6 +57,12 @@ public class FocusManager {
 	public static boolean isTrackingFocus = false;
 	public static boolean isFocusLocated = false;
 	public static boolean isGameRendering = false;
+	
+	/*Windows Only.*/
+	public static void initializeWindowFocus() {
+		isWindowInitialized = true;
+		setWindowFocused(true);
+	}
 	
 	/**
 	 * <p>Request to change {@code FocusContainer} focus transfer node.
@@ -81,13 +88,15 @@ public class FocusManager {
 	 *        otherwise deliver the focus through the transfer path.
 	 */
 	public static void setWindowFocused(boolean windowFocused) {
-		isWindowFocused = windowFocused;
-		if(isWindowFocused) {
-			focusedContainer.deliverFocus();
-		}else {
-			focusedContainer.lostFocus();
-			if(Platform.isLinux()) {
-				LinuxKeyCallbackMonitor.resetConsistency();
+		if(isWindowInitialized) {
+			isWindowFocused = windowFocused;
+			if(isWindowFocused) {
+				focusedContainer.deliverFocus();
+			}else {
+				focusedContainer.lostFocus();
+				if(Platform.isLinux()) {
+					LinuxKeyCallbackMonitor.resetConsistency();
+				}
 			}
 		}
 	}

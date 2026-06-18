@@ -130,7 +130,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 			return u.CallWindowProc(originalProc, _hwnd, uMsg, wParam, lParam);
 		};
 		originalProc = u.SetWindowLongPtr(hwnd, WinUser.GWL_WNDPROC, CallbackReference.getFunctionPointer(imeListener));
-		IMBlockerCore.invokeLater(() -> FocusManager.setWindowFocused(true));
+		IMBlockerCore.invokeLater(FocusManager::initializeWindowFocus);
 	}
 	
 	private void onConversionStatusChanged() {

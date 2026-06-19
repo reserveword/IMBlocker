@@ -3,7 +3,6 @@ package io.github.reserveword.imblocker.common;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 final class IMManagerLinux implements IMManager.PlatformIMManager {
 	private LinuxIMFramework imFramework = LinuxIMFramework.IBUS;
@@ -44,12 +43,12 @@ final class IMManagerLinux implements IMManager.PlatformIMManager {
 	}
 	
 	private void setStateWithFullCommand(boolean on) {
-		String[] command = (on ? IMBlockerConfig.INSTANCE.getFullEnableCommand() : 
-					IMBlockerConfig.INSTANCE.getFullDisableCommand()).split(" ");
+		String command = on ? IMBlockerConfig.INSTANCE.getFullEnableCommand() : 
+					IMBlockerConfig.INSTANCE.getFullDisableCommand();
 		try {
-			Runtime.getRuntime().exec(command);
+			Runtime.getRuntime().exec(command.split(" "));
 		} catch (IOException e) {
-			e.printStackTrace();
+			IMBlockerCore.LOGGER.error("[IMBlocker] Invalid Command: {}", command);
 		}
 	}
 }

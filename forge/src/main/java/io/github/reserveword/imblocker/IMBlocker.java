@@ -30,7 +30,10 @@ public class IMBlocker {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes", "removal" })
 	public IMBlocker(FMLJavaModLoadingContext context) {
-		if(FMLEnvironment.dist != Dist.CLIENT) return;
+		if(FMLEnvironment.dist != Dist.CLIENT) {
+			IMBlockerCore.printRunningOnServerWarning();
+			return;
+		}
 		
 		Minecraft.getInstance().options.keyMappings = ArrayUtils.add(
 				Minecraft.getInstance().options.keyMappings, IMBlockerKeyBindings.unlockIMEKey);

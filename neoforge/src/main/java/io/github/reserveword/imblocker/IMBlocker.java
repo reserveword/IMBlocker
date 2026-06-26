@@ -21,7 +21,10 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 @Mod(IMBlockerCore.MODID)
 public class IMBlocker {
     public IMBlocker(ModContainer container) {
-    	if(FMLEnvironment.dist != Dist.CLIENT) return;
+    	if(FMLEnvironment.dist != Dist.CLIENT) {
+    		IMBlockerCore.printRunningOnServerWarning();
+    		return;
+    	}
     	
     	container.getEventBus().register(new Object() {
     		@SubscribeEvent

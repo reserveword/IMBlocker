@@ -11,22 +11,21 @@ final class IMManagerLinux implements IMManager.PlatformIMManager {
 	@Override
 	public void setState(boolean on) {
 		if(state != on) {
-			switch (IMBlockerConfig.INSTANCE.getLinuxIMCommandType()) {
-				case DEFAULT:
-					checkIMFramework();
-					imFramework.setState(on);
-					break;
-				case FULL:
-					setStateWithFullCommand(on);
-					break;
-			}
+			checkIMFramework();
+			imFramework.setState(on);
 			IMManagerLinux.state = on;
 		}
 	}
 
 	@Override
 	public void setEnglishState(boolean isEN) {
-		
+		String command = isEN ? IMBlockerConfig.INSTANCE.getEnglishStateOnCommand() : 
+			IMBlockerConfig.INSTANCE.getEnglishStateOffCommand();
+		try {
+			Runtime.getRuntime().exec(command.split(" "));
+		} catch (IOException e) {
+			IMBlockerCore.LOGGER.error("[IMBlocker] Invalid Command: {}", command);
+		}
 	}
 	
 	private void checkIMFramework() {
@@ -40,15 +39,5 @@ final class IMManagerLinux implements IMManager.PlatformIMManager {
 		}
 		
 		imFramework = fcitx5State == null ? LinuxIMFramework.IBUS : LinuxIMFramework.FCITX5;
-	}
-	
-	private void setStateWithFullCommand(boolean on) {
-		String command = on ? IMBlockerConfig.INSTANCE.getFullEnableCommand() : 
-					IMBlockerConfig.INSTANCE.getFullDisableCommand();
-		try {
-			Runtime.getRuntime().exec(command.split(" "));
-		} catch (IOException e) {
-			IMBlockerCore.LOGGER.error("[IMBlocker] Invalid Command: {}", command);
-		}
 	}
 }

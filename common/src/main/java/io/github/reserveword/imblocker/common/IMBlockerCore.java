@@ -76,6 +76,10 @@ public class IMBlockerCore {
 		modLoaderAccessor.registerClientTickEvent(tickEvent);
 	}
 	
+	public static void printRunningOnServerWarning() {
+		LOGGER.fatal("[IMBlocker] This is a client-side only mod, but it's running on a dedicated server!");
+	}
+	
 	static {
 		Class<?> modLoaderAccessorCls = null;
 		try {

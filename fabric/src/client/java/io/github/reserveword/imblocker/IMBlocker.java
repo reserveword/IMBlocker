@@ -1,7 +1,5 @@
 package io.github.reserveword.imblocker;
 
-import java.util.Collections;
-
 import org.lwjgl.glfw.GLFW;
 
 import io.github.reserveword.imblocker.common.IMBlockerAutoConfig;
@@ -27,7 +25,7 @@ public class IMBlocker implements ClientModInitializer {
 			AutoConfig.register(IMBlockerAutoConfig.class, GsonConfigSerializer::new);
 			IMBlockerConfig.INSTANCE = AutoConfig.getConfigHolder(IMBlockerAutoConfig.class).getConfig();
 		} else {
-			IMBlockerConfig.INSTANCE.reloadScreenWhitelist(Collections.emptyList());
+			IMBlockerConfig.INSTANCE.reloadConfig();
 		}
 	}
 

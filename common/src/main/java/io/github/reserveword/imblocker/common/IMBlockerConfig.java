@@ -1,9 +1,9 @@
 package io.github.reserveword.imblocker.common;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,8 +20,14 @@ public class IMBlockerConfig {
 			"com.enxv.aeronauticsstructuretool.ToolModeScreen");
 
 	private static final Set<Class<?>> bakedScreenWhitelist = new HashSet<>();
+	
+	private static Matcher commandPrefixRegexMatcher = Pattern.compile("^/").matcher("");
 
-	public void reloadScreenWhitelist(List<String> newScreenWhitelist) {
+	public void reloadConfig() {
+		reloadScreenWhitelist(Collections.emptyList());
+	}
+	
+	void reloadScreenWhitelist(List<String> newScreenWhitelist) {
 		bakedScreenWhitelist.clear();
 		Set<String> rawScreenWhitelist = new HashSet<>(defaultScreenWhitelist);
 		rawScreenWhitelist.addAll(newScreenWhitelist);
@@ -43,6 +49,15 @@ public class IMBlockerConfig {
 
 	public boolean isScreenInWhitelist(Object screen) {
 		return bakedScreenWhitelist.stream().anyMatch(screenCls -> screenCls.isInstance(screen));
+	}
+	
+	void reloadCommandPrefixRegex(String prefixRegex) {
+		commandPrefixRegexMatcher = Pattern.compile(prefixRegex).matcher("");
+	}
+	
+	public boolean isCommand(String text) {
+		commandPrefixRegexMatcher.reset(text.trim());
+		return commandPrefixRegexMatcher.find();
 	}
 
 	public void recoverScreen(String screenClsName) {

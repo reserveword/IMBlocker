@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.gui.ChatState;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -29,7 +30,7 @@ public abstract class ChatScreenMixin {
 	
     @Inject(method = "onEdited(Ljava/lang/String;)V", at = @At("HEAD"))
     public void updateChatState(String chatText, CallbackInfo ci) {
-    	ChatState currentChatState = input.getValue().trim().startsWith("/") ? 
+    	ChatState currentChatState = IMBlockerConfig.INSTANCE.isCommand(input.getValue()) ? 
     			ChatState.COMMAND : ChatState.CHAT;
     	if(chatState != currentChatState) {
     		boolean engState = currentChatState == ChatState.COMMAND;

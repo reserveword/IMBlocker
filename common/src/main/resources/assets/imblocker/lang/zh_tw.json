@@ -20,6 +20,7 @@
   "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation": "使用模擬字元定位焦點",
   "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[0]": "\u00A7l透過發送一個模擬字元來定位焦點組件",
   "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[1]": "此方法可以絕對精準地定位到真正的焦點組件\n模擬字元通常可以被注入的回調安全吸收\n但可能洩漏至某些未過濾該字元的螢幕",
+  "text.autoconfig.imblocker.option.advanceSettings.commandPrefixRegex": "指令前綴正規表示式",
   
   "text.autoconfig.imblocker.option.modCompatibilitySettings": "模組相容性設定",
   "text.autoconfig.imblocker.option.modCompatibilitySettings.sfm$showLineNumber": "SFM：顯示行號",
@@ -37,6 +38,8 @@
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch": "啟用回調級鍵盤補丁",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[0]": "該補丁從 GLFW 回調層修復了輸入法候選詞框顯示時控制按鍵會洩漏至遊戲視窗的漏洞",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[1]": "如果候選詞框因退格鍵清空了預編輯字元而關閉會導致遊戲無法處理控制按鍵\n此時請按下 Esc 或輸入任意字元以解除此狀態",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.englishStateOnCommand": "進入臨時英文狀態的指令",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.englishStateOffCommand": "退出臨時英文狀態的指令",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOnArgName": "IBus 開啟輸入法的指令參數",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOnArgName.@Tooltip": "確定方法：系統終端中執行 “ibus engine <此參數>” 指令能夠開啟輸入法",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOffArgName": "IBus 關閉輸入法的指令參數",

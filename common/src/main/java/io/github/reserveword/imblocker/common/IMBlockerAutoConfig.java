@@ -33,7 +33,13 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	
 	@Override
 	public void validatePostLoad() {
+		reloadConfig();
+	}
+	
+	@Override
+	public void reloadConfig() {
 		reloadScreenWhitelist(basicSettings.screenWhitelist);
+		reloadCommandPrefixRegex(advanceSettings.commandPrefixRegex);
 	}
 
 	@Override
@@ -164,6 +170,8 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	static class AdvanceSettings {
 		@ConfigEntry.Gui.Tooltip(count = 2)
 		boolean enableCharSimulation = false;
+
+		String commandPrefixRegex = "^/";
 	}
 	
 	static class ModCompatibilitySettings {

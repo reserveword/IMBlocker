@@ -1,6 +1,5 @@
 package io.github.reserveword.imblocker;
 
-import java.util.Collections;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -69,7 +68,7 @@ public class IMBlocker {
 					});
 			ModLoadingContext.get().registerExtensionPoint(configFactoryCls, configFactorySupplier);
 		}else {
-			IMBlockerConfig.INSTANCE.reloadScreenWhitelist(Collections.emptyList());
+			IMBlockerConfig.INSTANCE.reloadConfig();
 		}
 	}
 }

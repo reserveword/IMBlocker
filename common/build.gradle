@@ -2,7 +2,7 @@ plugins {
 	id 'eclipse'
 	id 'java'
 	id 'java-library'
-	id 'net.fabricmc.fabric-loom' version '1.15+'
+	id 'net.fabricmc.fabric-loom' version '1.16+'
 }
 
 loom {
@@ -34,10 +34,11 @@ sourceSets {
 		java {
 			srcDir 'src/shadow/java'
 		}
+		compileClasspath += sourceSets.main.compileClasspath
 	}
 	
 	main {
-		compileClasspath += sourceSets.shadow.output
+		compileClasspath = files(sourceSets.shadow.output) + compileClasspath
 	}
 }
 

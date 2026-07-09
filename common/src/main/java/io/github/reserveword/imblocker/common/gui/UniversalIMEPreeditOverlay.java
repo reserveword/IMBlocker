@@ -2,11 +2,13 @@ package io.github.reserveword.imblocker.common.gui;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.sun.jna.Platform;
 
 import imgui.moulberry92.ImDrawList;
 import imgui.moulberry92.ImGui;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
+import io.github.reserveword.imblocker.common.ReflectionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -21,7 +23,7 @@ import net.minecraft.util.Util;
 public class UniversalIMEPreeditOverlay {
 	private static final UniversalIMEPreeditOverlay INSTANCE = new UniversalIMEPreeditOverlay();
 	
-	private static final Identifier BACKGROUND = Identifier.withDefaultNamespace("widget/preedit");
+	private static final BackgroundBlitter backgroundBlitter;
 	private static final Style FOCUSED_STYLE = Style.EMPTY.withUnderlined(true);
 	private static final int TEXT_COLOR = -16777216;
 	private static final int HOT_AREA_MARGIN = 2;
@@ -135,8 +137,8 @@ public class UniversalIMEPreeditOverlay {
 			return;
 		}
 		
-		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 
-				ingameOverlayBounds.x() - 5, ingameOverlayBounds.y() - 5, ingameOverlayBounds.width() + 10, ingameOverlayBounds.height() + 10);
+		backgroundBlitter.blit(graphics, ingameOverlayBounds.x() - 5, ingameOverlayBounds.y() - 5, 
+				ingameOverlayBounds.width() + 10, ingameOverlayBounds.height() + 10);
 		graphics.text(font, preEditTextFormatted, ingameOverlayBounds.x(), ingameOverlayBounds.y(), TEXT_COLOR, false);
 		if (TextCursorUtils.isCursorVisible(Util.getMillis() - initTimeMs)) {
 			TextCursorUtils.extractInsertCursor(graphics, 
@@ -171,5 +173,24 @@ public class UniversalIMEPreeditOverlay {
 	
 	public static UniversalIMEPreeditOverlay getInstance() {
 		return INSTANCE;
+	}
+	
+	@FunctionalInterface
+	private static interface BackgroundBlitter {
+		void blit(GuiGraphicsExtractor graphics, int x, int y, int width, int height);
+	}
+	
+	static {
+		Identifier background = Identifier.withDefaultNamespace("widget/preedit");
+		BackgroundBlitter backgroundBlitterImpl;
+		try {
+			RenderPipeline guiTexturedPipeline = RenderPipelines.GUI_TEXTURED;
+			backgroundBlitterImpl = (graphics, x, y, width, height) -> graphics.blitSprite(guiTexturedPipeline, background, x, y, width, height);
+		} catch (Throwable e) {
+			com.mojang.renderpearl.api.pipeline.RenderPipeline guiTexturedPipeline = 
+					ReflectionUtil.getFieldValue(RenderPipelines.class, null, null, "GUI_TEXTURED");
+			backgroundBlitterImpl = (graphics, x, y, width, height) -> graphics.blitSprite(guiTexturedPipeline, background, x, y, width, height);
+		}
+		backgroundBlitter = backgroundBlitterImpl;
 	}
 }

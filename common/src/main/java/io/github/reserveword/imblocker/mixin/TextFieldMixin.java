@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
@@ -63,9 +64,9 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
 		}
 	}
 	
-	@Inject(method = "scrollTo", at = @At("TAIL"))
+	@Inject(method = "scrollTo", at = @At("HEAD"), order = 1)
 	public void onTextChanged(int pos, CallbackInfo ci) {
-		imblocker$onCursorChanged();
+		IMBlockerCore.invokeLater(() -> imblocker$onCursorChanged());
 	}
 	
 	@Override

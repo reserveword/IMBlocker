@@ -25,7 +25,7 @@ public final class InputSystem {
 	}
 	
 	static {
-		if(MinecraftClientUtil.isGameVersionReached(777/*26.3*/)) {
+		if(MinecraftClientUtil.isGameVersionReached(777/*26.3*/) || IMBlockerCore.hasMod("blazesdl")) {
 			INSTANCE = new InputSystemWrapper() {
 				@Override
 				public void setPreeditCursorRectangle(long window, int x, int y, int width, int height) {

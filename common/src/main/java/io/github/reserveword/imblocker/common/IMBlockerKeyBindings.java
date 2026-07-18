@@ -9,10 +9,22 @@ import net.minecraft.client.KeyMapping.Category;
 import net.minecraft.resources.Identifier;
 
 public final class IMBlockerKeyBindings {
-	public static final KeyMapping unlockIMEKey = new KeyMapping(
-			"key.unlockIME", Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_SHIFT, createCategory());
+	public static final KeyMapping unlockIMEKey;
 	
 	private static Category createCategory() {
 		return Category.register(Identifier.fromNamespaceAndPath("imblocker", "ime"));
+	}
+	
+	static {
+		KeyMapping _unlockIMEKey;
+		try {
+			_unlockIMEKey = new KeyMapping(
+					"key.unlockIME", Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_SHIFT, createCategory());
+		} catch (Throwable e) {
+			_unlockIMEKey = ReflectionUtil.newInstance(KeyMapping.class, 
+					new Class[] { String.class, int.class, Category.class}, 
+					"key.unlockIME", 229, createCategory());
+		}
+		unlockIMEKey = _unlockIMEKey;
 	}
 }

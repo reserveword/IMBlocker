@@ -1,13 +1,12 @@
 package io.github.reserveword.imblocker.common.gui;
 
-import org.lwjgl.glfw.GLFW;
-
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.sun.jna.Platform;
 
 import imgui.moulberry92.ImDrawList;
 import imgui.moulberry92.ImGui;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
+import io.github.reserveword.imblocker.common.InputSystem;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -126,7 +125,7 @@ public class UniversalIMEPreeditOverlay {
 					preeditCursorRect = preeditCursorRect.derive(1.0 / IMBlockerConfig.INSTANCE.getLinuxExtraScale());
 				}
 				
-				GLFW.glfwSetPreeditCursorRectangle(Minecraft.getInstance().getWindow().handle(), 
+				InputSystem.setPreeditCursorRectangle(Minecraft.getInstance().getWindow().handle(), 
 						preeditCursorRect.x(), preeditCursorRect.y(), preeditCursorRect.width(), preeditCursorRect.height());
 			}
 		}

@@ -107,22 +107,26 @@ public final class IMManager {
 	}
 	
 	static {
-		if(Platform.isWindows()) {
-			INSTANCE = new IMManagerWindows();
-		}else if(Platform.isMac()) {
-			INSTANCE = new IMManagerMac();
-		}else if(Platform.isLinux()) {
-			PlatformIMManager linuxImpl;
-			try {
-				Class<?> enhancedImplClass = Class.forName("xyz.rrtt217.HDRMod.compat.imblocker.IMManagerLinuxEnhanced");
-				linuxImpl = (PlatformIMManager) ReflectionUtil.newInstance(enhancedImplClass, new Class[0]);
-			} catch (ClassNotFoundException e) {
-				linuxImpl = new IMManagerLinux();
-			}
-			INSTANCE = linuxImpl;
+		if(MinecraftClientUtil.isGameVersionReached(777/*26.3*/) || IMBlockerCore.hasMod("blazesdl")) {
+			INSTANCE = new IMManagerSDL(Minecraft.getInstance().getWindow().handle());
 		}else {
-			IMBlockerCore.LOGGER.warn("[IMBlocker] Unsupported platform, using stub");
-			INSTANCE = new IMManagerStub();
+			if(Platform.isWindows()) {
+				INSTANCE = new IMManagerWindows();
+			}else if(Platform.isMac()) {
+				INSTANCE = new IMManagerMac();
+			}else if(Platform.isLinux()) {
+				PlatformIMManager linuxImpl;
+				try {
+					Class<?> enhancedImplClass = Class.forName("xyz.rrtt217.HDRMod.compat.imblocker.IMManagerLinuxEnhanced");
+					linuxImpl = (PlatformIMManager) ReflectionUtil.newInstance(enhancedImplClass, new Class[0]);
+				} catch (ClassNotFoundException e) {
+					linuxImpl = new IMManagerLinux();
+				}
+				INSTANCE = linuxImpl;
+			}else {
+				IMBlockerCore.LOGGER.warn("[IMBlocker] Unsupported platform, using stub");
+				INSTANCE = new IMManagerStub();
+			}
 		}
 	}
 }

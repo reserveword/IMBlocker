@@ -14,7 +14,7 @@ import net.minecraft.client.input.PreeditEvent;
 
 @Mixin(KeyboardHandler.class)
 public abstract class KeyboardHandlerMixin {
-	@Inject(method = "preeditCallback", at = @At("HEAD"), cancellable = true)
+	@Inject(method = { "preeditCallback", "textEditing" }, at = @At("HEAD"), cancellable = true)
 	private void overwritePreeditCallback(long handle, PreeditEvent event, CallbackInfo ci) {
 		if(handle == Minecraft.getInstance().getWindow().handle()) {
 			UniversalIMEPreeditOverlay.getInstance().preeditContentUpdated(event);

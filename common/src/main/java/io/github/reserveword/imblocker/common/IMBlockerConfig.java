@@ -73,7 +73,7 @@ public class IMBlockerConfig {
 	}
 	
 	public EnglishStateImpl getEnglishStateImpl() {
-		return Platform.isWindows() ? EnglishStateImpl.CONVERSION_STATUS : EnglishStateImpl.DISABLE_IM;
+		return false ? EnglishStateImpl.CONVERSION_STATUS : EnglishStateImpl.DISABLE_IM;
 	}
 	
 	public EnglishState getPrimaryEnglishState() {

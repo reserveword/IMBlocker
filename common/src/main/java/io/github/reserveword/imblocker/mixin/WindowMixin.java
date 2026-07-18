@@ -16,12 +16,18 @@ public abstract class WindowMixin {
 	@Shadow
 	private long handle;
 	
-	@Inject(method = "onFocus", at = @At("TAIL"))
+	@Inject(method = "onFocus(JZ)V", at = @At("TAIL"), require = 0)
 	public void onFocusChanged(long handle, boolean focused, CallbackInfo ci) {
 		if(this.handle == handle) {
 			FocusManager.setWindowFocused(focused);
 		}
 	}
+	
+	@Inject(method = "onFocus(Z)V", at = @At("TAIL"), require = 0)
+	public void onFocusChanged(boolean focused, CallbackInfo ci) {
+		FocusManager.setWindowFocused(focused);
+	}
+	
 	
 	@Inject(method = "setGuiScale(I)V", at = @At("TAIL"))
 	public void onScaleFactorChanged(int scaleFactor, CallbackInfo ci) {

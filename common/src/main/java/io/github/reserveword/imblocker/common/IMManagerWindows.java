@@ -10,6 +10,7 @@ import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinNT;
 import com.sun.jna.platform.win32.WinUser;
+import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinUser.WindowProc;
 import com.sun.jna.ptr.IntByReference;
 
@@ -108,7 +109,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	
 	@Override
 	public void initializeIngameIME(long window) {
-		WinDef.HWND hwnd = new WinDef.HWND(new Pointer(GLFWNativeWin32.glfwGetWin32Window(window)));
+		WinDef.HWND hwnd = new HWND(new Pointer(GLFWNativeWin32.glfwGetWin32Window(window)));
 		imeListener = (_hwnd, uMsg, wParam, lParam) -> {
 			if(IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
 				switch (uMsg) {

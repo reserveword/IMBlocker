@@ -9,8 +9,18 @@ import com.mojang.blaze3d.platform.TextInputManager;
 
 @Mixin(TextInputManager.class)
 public abstract class TextInputManagerMixin {
-	@Inject(method = "setIMEInputMode", at = @At("HEAD"), cancellable = true)
-	public void disableVanillaIMEControl(boolean value, CallbackInfo ci) {
+	@Inject(method = "setTextInputArea", at = @At("HEAD"), cancellable = true)
+	public void disableVanillaCaretControl(CallbackInfo ci) {
+		ci.cancel();
+	}
+	
+	@Inject(method = "startTextInput", at = @At("HEAD"), cancellable = true)
+	public void disableVanillaIMEControlH(CallbackInfo ci) {
+		ci.cancel();
+	}
+	
+	@Inject(method = "stopTextInput()V", at = @At("HEAD"), cancellable = true)
+	public void disableVanillaIMEControlT(CallbackInfo ci) {
 		ci.cancel();
 	}
 }

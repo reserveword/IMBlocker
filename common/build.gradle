@@ -17,6 +17,7 @@ dependencies {
 	compileOnly "org.spongepowered:mixin:0.8.7"
 	compileOnly "io.github.llamalad7:mixinextras-fabric:0.5.3"
 	compileOnly "org.ow2.asm:asm-tree:9.9"
+	compileOnly "org.lwjgl:lwjgl-sdl:3.4.1"
 	
 	compileOnly "ca.weblite:java-objc-bridge:1.1"
 	

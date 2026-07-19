@@ -18,6 +18,8 @@ public class IMBlockerCore {
 	
 	private static final ModLoaderAccessor modLoaderAccessor;
 	
+	public static final boolean IS_SDL_PRESENT;
+	
 	private static final boolean IS_IXERIS_LOADED;
 	private static final boolean IS_FTBLIB_LOADED;
 	
@@ -84,6 +86,7 @@ public class IMBlockerCore {
 			e.printStackTrace();
 		}
 		modLoaderAccessor = (ModLoaderAccessor) ReflectionUtil.newInstance(modLoaderAccessorCls, new Class[0]);
+		IS_SDL_PRESENT = MinecraftClientUtil.isGameVersionReached(777/*26.3*/) || modLoaderAccessor.hasMod("blazesdl");
 		IS_IXERIS_LOADED = modLoaderAccessor.hasMod("ixeris");
 		IS_FTBLIB_LOADED = modLoaderAccessor.hasMod("ftblibrary");
 	}

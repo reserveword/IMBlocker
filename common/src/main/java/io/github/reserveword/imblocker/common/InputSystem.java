@@ -1,17 +1,10 @@
 package io.github.reserveword.imblocker.common;
 
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWNativeWin32;
 import org.lwjgl.sdl.SDLKeyboard;
-import org.lwjgl.sdl.SDLProperties;
-import org.lwjgl.sdl.SDLVideo;
 import org.lwjgl.sdl.SDL_Rect;
 import org.lwjgl.sdl.SDL_Rect.Buffer;
 import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.MemoryUtil;
-
-import com.sun.jna.Pointer;
-import com.sun.jna.platform.win32.WinDef.HWND;
 
 public final class InputSystem {
 	private static final InputSystemWrapper INSTANCE;
@@ -25,7 +18,7 @@ public final class InputSystem {
 	}
 	
 	static {
-		if(MinecraftClientUtil.isGameVersionReached(777/*26.3*/) || IMBlockerCore.hasMod("blazesdl")) {
+		if(IMBlockerCore.IS_SDL_PRESENT) {
 			INSTANCE = new InputSystemWrapper() {
 				@Override
 				public void setPreeditCursorRectangle(long window, int x, int y, int width, int height) {

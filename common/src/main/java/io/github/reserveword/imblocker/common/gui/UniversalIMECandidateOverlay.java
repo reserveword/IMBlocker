@@ -2,6 +2,7 @@ package io.github.reserveword.imblocker.common.gui;
 
 import imgui.moulberry92.ImDrawList;
 import imgui.moulberry92.ImGui;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -46,7 +47,9 @@ public class UniversalIMECandidateOverlay {
 				if(i == selectedIndex) {
 					selectedStartIndex = displayTextBuilder.length();
 				}
-				displayTextBuilder.append(" " + (i + 1) + " " + selectedPageCandidates[i] + "  ");
+				displayTextBuilder.append(IMBlockerCore.IS_SDL_PRESENT ? 
+						" " + selectedPageCandidates[i] + "   " : 
+						" " + (i + 1) + " " + selectedPageCandidates[i] + "  ");
 				if(i == selectedIndex) {
 					selectedEndIndex = displayTextBuilder.length();
 				}

@@ -79,7 +79,7 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	
 	@Override
 	public boolean isIngameIMEEnabled() {
-		return Platform.isWindows() && windowsCompatibilitySettings.enableIngameIME;
+		return advanceSettings.enableIngameIME;
 	}
 	
 	@Override
@@ -160,14 +160,14 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 		boolean enableCharSimulation = false;
 		
 		String commandPrefixRegex = "^/";
+		
+		@ConfigEntry.Gui.Tooltip(count = 2)
+		boolean enableIngameIME = false;
 	}
 
 	static class WindowsCompatibilitySettings {
 		@ConfigEntry.Gui.Tooltip
 		boolean enableConversionStatusApi = true;
-		
-		@ConfigEntry.Gui.Tooltip(count = 2)
-		boolean enableIngameIME = false;
 	}
 	
 	static class LinuxCompatibilitySettings {

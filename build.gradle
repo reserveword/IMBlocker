@@ -56,6 +56,10 @@ allprojects {
 			name = "IzzelAliz Maven"
 			url = "https://maven.izzel.io/releases/"
 		}
+		maven {
+			name = "fifthLightMaven"
+			url = "https://maven.fifthlight.top/releases"
+		}
 	}
 
 	def all_properties = [

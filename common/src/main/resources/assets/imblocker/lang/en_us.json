@@ -23,13 +23,13 @@
   "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[0]": "\u00A7lLocate the focus owner with char simulation",
   "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[1]": "This approach can locate the focus owner with 100% accuracy.\nGenerally, the probe char will be safely absorbed by the injection,\nhowever, it might leak to the screen that doesn't filter it.",
   "text.autoconfig.imblocker.option.advanceSettings.commandPrefixRegex": "Command Prefix Regex",
+  "text.autoconfig.imblocker.option.advanceSettings.enableIngameIME": "Enable Ingame IME",
+  "text.autoconfig.imblocker.option.advanceSettings.enableIngameIME.@Tooltip[0]": "\u00A7lRender Candidates Manually If Exclusive FS Enabled",
+  "text.autoconfig.imblocker.option.advanceSettings.enableIngameIME.@Tooltip[1]": "Recommended only if IME's candidate window is invisible under\nexclusive fullscreen. IME's candidate window has more features.",
   
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings": "Windows Compatibility Settings",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi": "Allow ConversionStatus API",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "The API that controls the English state.\n\u00A77If disabled, CONVERSION_STATUS English state implementation will not work.",
-  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableIngameIME": "[\u00A76Experimental\u00A7r] Enable Ingame IME",
-  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableIngameIME.@Tooltip[0]": "\u00A7lRender Candidates Manually If Exclusive FS Enabled",
-  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableIngameIME.@Tooltip[1]": "Recommended only if IME's candidate window is invisible under\nexclusive fullscreen. IME's candidate window has more features.",
   
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings": "Linux Compatibility Settings",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch": "Enable callback-level Keyboard Patch",

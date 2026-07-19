@@ -8,6 +8,10 @@ public class IMManagerSDL implements IMManager.PlatformIMManager {
 	
 	public IMManagerSDL(long window) {
 		this.window = window;
+
+		if(IMBlockerCore.hasMod("blazesdl")) {
+			BlazeSDLBridge.registerEventListener();
+		}
 	}
 
 	@Override
@@ -22,10 +26,5 @@ public class IMManagerSDL implements IMManager.PlatformIMManager {
 	@Override
 	public void setEnglishState(boolean isEN) {
 		//TODO Windows/Linux.
-	}
-	
-	@Override
-	public void initializeIngameIME(long window) {
-		//TODO Inject com.mojang.blaze3d.platform.Window.handleEvent(SDL_Event)
 	}
 }

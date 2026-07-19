@@ -107,7 +107,7 @@ public final class IMManager {
 	}
 	
 	static {
-		if(MinecraftClientUtil.isGameVersionReached(777/*26.3*/) || IMBlockerCore.hasMod("blazesdl")) {
+		if(IMBlockerCore.IS_SDL_PRESENT) {
 			INSTANCE = new IMManagerSDL(Minecraft.getInstance().getWindow().handle());
 		}else {
 			if(Platform.isWindows()) {

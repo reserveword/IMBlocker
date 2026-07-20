@@ -68,6 +68,11 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	}
 	
 	@Override
+	public float getExtraScale() {
+		return basicSettings.extraScale;
+	}
+	
+	@Override
 	public boolean isCharSimulationEnabled() {
 		return advanceSettings.enableCharSimulation;
 	}
@@ -79,7 +84,7 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	
 	@Override
 	public boolean isIngameIMEEnabled() {
-		return advanceSettings.enableIngameIME;
+		return Platform.isWindows() && windowsCompatibilitySettings.enableIngameIME;
 	}
 	
 	@Override
@@ -90,11 +95,6 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	@Override
 	public boolean isHeadlessPreeditMode() {
 		return linuxCompatibilitySettings.isHeadlessPreeditMode;
-	}
-	
-	@Override
-	public float getLinuxExtraScale() {
-		return linuxCompatibilitySettings.linuxExtraScale;
 	}
 	
 	@Override
@@ -153,6 +153,9 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 		
 		@ConfigEntry.Gui.Tooltip
 		boolean useStrictCursorRect = false;
+		
+		@ConfigEntry.Gui.Tooltip
+		float extraScale = 1.0F;
 	}
 	
 	static class AdvanceSettings {
@@ -160,14 +163,14 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 		boolean enableCharSimulation = false;
 		
 		String commandPrefixRegex = "^/";
-		
-		@ConfigEntry.Gui.Tooltip(count = 2)
-		boolean enableIngameIME = false;
 	}
 
 	static class WindowsCompatibilitySettings {
 		@ConfigEntry.Gui.Tooltip
 		boolean enableConversionStatusApi = true;
+		
+		@ConfigEntry.Gui.Tooltip(count = 2)
+		boolean enableIngameIME = false;
 	}
 	
 	static class LinuxCompatibilitySettings {
@@ -176,9 +179,6 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 		
 		@ConfigEntry.Gui.Tooltip
 		boolean isHeadlessPreeditMode = false;
-		
-		@ConfigEntry.Gui.Tooltip
-		float linuxExtraScale = 1.0F;
 		
 		@ConfigEntry.Gui.Tooltip
 		String ibusOnArgName = "libpinyin";

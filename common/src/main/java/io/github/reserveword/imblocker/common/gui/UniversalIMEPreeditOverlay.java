@@ -1,11 +1,11 @@
 package io.github.reserveword.imblocker.common.gui;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.sun.jna.Platform;
 
 import imgui.moulberry92.ImDrawList;
 import imgui.moulberry92.ImGui;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.InputSystem;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
 import net.minecraft.client.Minecraft;
@@ -121,8 +121,8 @@ public class UniversalIMEPreeditOverlay {
 							compositionWidth + scaledMargin * 2, compositionHeight + scaledMargin * 2);
 				}
 				
-				if(Platform.isLinux()) {
-					preeditCursorRect = preeditCursorRect.derive(1.0 / IMBlockerConfig.INSTANCE.getLinuxExtraScale());
+				if(!IMBlockerCore.IS_SDL_PRESENT) {
+					preeditCursorRect = preeditCursorRect.derive(1.0 / IMBlockerConfig.INSTANCE.getExtraScale());
 				}
 				
 				InputSystem.setPreeditCursorRectangle(Minecraft.getInstance().getWindow().handle(), 

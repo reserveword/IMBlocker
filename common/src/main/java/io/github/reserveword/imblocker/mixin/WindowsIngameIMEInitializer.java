@@ -33,4 +33,12 @@ public abstract class WindowsIngameIMEInitializer {
 			MonitorManager monitorManager, GpuBackend backend, CallbackInfo ci) {
 		IMManager.initializeIngameIME(handle);
 	}
+	
+	@Inject(method = "<init>(Lcom/mojang/blaze3d/platform/WindowEventHandler;Lcom/mojang/blaze3d/platform/DisplayData;Ljava/lang/String;ZLjava/lang/String;Lcom/mojang/blaze3d/platform/MonitorManager;Lcom/mojang/renderpearl/api/device/GpuBackend;)V",
+			at = @At("TAIL"), require = 0)
+	private void initializeIngameIME(WindowEventHandler eventHandler, DisplayData displayData,
+			String fullscreenVideoModeString, boolean exclusiveFullscreen, String title,
+			MonitorManager monitorManager, com.mojang.renderpearl.api.device.GpuBackend backend, CallbackInfo ci) {
+		IMManager.initializeIngameIME(handle);
+	}
 }

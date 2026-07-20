@@ -2,16 +2,12 @@ package io.github.reserveword.imblocker.common;
 
 import org.lwjgl.sdl.SDLKeyboard;
 
-public class IMManagerSDL implements IMManager.PlatformIMManager {
+public final class IMManagerSDL implements IMManager.PlatformIMManager {
 	
 	private final long window;
 	
 	public IMManagerSDL(long window) {
 		this.window = window;
-
-		if(IMBlockerCore.hasMod("blazesdl")) {
-			BlazeSDLBridge.registerEventListener();
-		}
 	}
 
 	@Override

@@ -34,17 +34,12 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 				"TextInputManagerMixin",
 				"KeyboardHandlerMixin");
 		
-		if(MinecraftClientUtil.isGameVersionReached(777/*26.3*/)) {
-			validMixins.add("SDLEventRedirector");
-			validMixins.add("SDLIngameIMEInitializer");
-		}else {
-			if(Platform.isWindows()) {
-				validMixins.add("WindowsIngameIMEInitializer");
-			}
-			
-			if(Platform.isLinux()) {
-				validMixins.add("LinuxKeyboardPatch");
-			}
+		if(Platform.isWindows()) {
+			validMixins.add("WindowsIngameIMEInitializer");
+		}
+		
+		if(!MinecraftClientUtil.isGameVersionReached(777/*26.3*/) && Platform.isLinux()) {
+			validMixins.add("LinuxKeyboardPatch");
 		}
 		
 		if(IMBlockerCore.hasMod("axiom")) {

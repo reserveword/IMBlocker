@@ -1,6 +1,6 @@
 package io.github.reserveword.imblocker.common;
 
-final class IMManagerStub implements IMManager.PlatformIMManager {
+public final class IMManagerStub implements IMManager.PlatformIMManager {
 	private static boolean state = true;
 
 	@Override

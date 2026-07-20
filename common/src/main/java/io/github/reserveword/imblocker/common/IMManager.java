@@ -51,7 +51,7 @@ public final class IMManager {
 				UniversalIMEPreeditOverlay.getInstance().updateCaretPosition(caretPos.x(), caretPos.y());
 				UniversalIMECandidateOverlay.getInstance().updateCaretPosition(caretPos.x(), caretPos.y());
 			}else {
-				float extraScale = IMBlockerConfig.INSTANCE.getLinuxExtraScale();
+				float extraScale = IMBlockerConfig.INSTANCE.getExtraScale();
 				Rectangle compositionBorder = focusedWidget instanceof FocusableWidget ?
 						((FocusableWidget) focusedWidget).getFocusContainer().getBoundsAbs() : focusedWidget.getBoundsAbs();
 				int preeditX = (int) ((compositionBorder.x() + caretPos.x()) / extraScale);
@@ -107,25 +107,27 @@ public final class IMManager {
 	}
 	
 	static {
-		if(IMBlockerCore.IS_SDL_PRESENT) {
-			INSTANCE = new IMManagerSDL(Minecraft.getInstance().getWindow().handle());
+		if(Platform.isWindows()) {
+			INSTANCE = new IMManagerWindows();
 		}else {
-			if(Platform.isWindows()) {
-				INSTANCE = new IMManagerWindows();
-			}else if(Platform.isMac()) {
-				INSTANCE = new IMManagerMac();
-			}else if(Platform.isLinux()) {
-				PlatformIMManager linuxImpl;
-				try {
-					Class<?> enhancedImplClass = Class.forName("xyz.rrtt217.HDRMod.compat.imblocker.IMManagerLinuxEnhanced");
-					linuxImpl = (PlatformIMManager) ReflectionUtil.newInstance(enhancedImplClass, new Class[0]);
-				} catch (ClassNotFoundException e) {
-					linuxImpl = new IMManagerLinux();
-				}
-				INSTANCE = linuxImpl;
+			if(IMBlockerCore.IS_SDL_PRESENT) {
+				INSTANCE = new IMManagerSDL(Minecraft.getInstance().getWindow().handle());
 			}else {
-				IMBlockerCore.LOGGER.warn("[IMBlocker] Unsupported platform, using stub");
-				INSTANCE = new IMManagerStub();
+				if(Platform.isMac()) {
+					INSTANCE = new IMManagerMac();
+				}else if(Platform.isLinux()) {
+					PlatformIMManager linuxImpl;
+					try {
+						Class<?> enhancedImplClass = Class.forName("xyz.rrtt217.HDRMod.compat.imblocker.IMManagerLinuxEnhanced");
+						linuxImpl = (PlatformIMManager) ReflectionUtil.newInstance(enhancedImplClass, new Class[0]);
+					} catch (ClassNotFoundException e) {
+						linuxImpl = new IMManagerLinux();
+					}
+					INSTANCE = linuxImpl;
+				}else {
+					IMBlockerCore.LOGGER.warn("[IMBlocker] Unsupported platform, using stub");
+					INSTANCE = new IMManagerStub();
+				}
 			}
 		}
 	}

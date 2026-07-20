@@ -84,6 +84,10 @@ public class IMBlockerConfig {
 		return false;
 	}
 	
+	public float getExtraScale() {
+		return 1.0F;
+	}
+	
 	public boolean isCharSimulationEnabled() {
 		return false;
 	}
@@ -102,10 +106,6 @@ public class IMBlockerConfig {
 	
 	public boolean isHeadlessPreeditMode() {
 		return false;
-	}
-	
-	public float getLinuxExtraScale() {
-		return 1.0F;
 	}
 	
 	public String getIBusOnArgName() {

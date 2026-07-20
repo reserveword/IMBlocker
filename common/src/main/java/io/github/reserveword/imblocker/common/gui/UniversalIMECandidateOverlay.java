@@ -47,9 +47,7 @@ public class UniversalIMECandidateOverlay {
 				if(i == selectedIndex) {
 					selectedStartIndex = displayTextBuilder.length();
 				}
-				displayTextBuilder.append(IMBlockerCore.IS_SDL_PRESENT ? 
-						" " + selectedPageCandidates[i] + "   " : 
-						" " + (i + 1) + " " + selectedPageCandidates[i] + "  ");
+				displayTextBuilder.append(" " + (i + 1) + " " + selectedPageCandidates[i] + "  ");
 				if(i == selectedIndex) {
 					selectedEndIndex = displayTextBuilder.length();
 				}

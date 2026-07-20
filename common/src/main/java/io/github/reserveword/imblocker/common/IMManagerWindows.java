@@ -1,6 +1,6 @@
 package io.github.reserveword.imblocker.common;
 
-import org.lwjgl.glfw.GLFWNativeWin32;
+import org.lwjgl.sdl.SDLKeyboard;
 
 import com.sun.jna.CallbackReference;
 import com.sun.jna.Memory;
@@ -10,7 +10,6 @@ import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinNT;
 import com.sun.jna.platform.win32.WinUser;
-import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinUser.WindowProc;
 import com.sun.jna.ptr.IntByReference;
 
@@ -45,6 +44,8 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	private static final int IMN_SETCONVERSIONMODE = 0x0006;
 	
 	public static long lastIMStateOnTimestamp = System.currentTimeMillis();
+	
+	private long window;
 
 	private final SetConversionStateThread setConversionStateThread;
 	private boolean preferredEnglishState = false;
@@ -72,6 +73,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 			if (oldHimc != null) {
 				ImmDestroyContext(oldHimc);
 			}
+			SDLKeyboard.SDL_StartTextInput(window);
 			lastIMStateOnTimestamp = System.currentTimeMillis();
 		} else {
 			WinNT.HANDLE himc = ImmAssociateContext(hwnd, null);
@@ -109,7 +111,8 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	
 	@Override
 	public void initializeIngameIME(long window) {
-		WinDef.HWND hwnd = new HWND(new Pointer(GLFWNativeWin32.glfwGetWin32Window(window)));
+		this.window = window;
+		WinDef.HWND hwnd = InputSystem.getHWND(window);
 		imeListener = (_hwnd, uMsg, wParam, lParam) -> {
 			if(IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
 				switch (uMsg) {

@@ -21,7 +21,8 @@ public final class Key2CharTransformer {
 	
 	private static void transformKeyEvent(int scancode, short modifiers) {
 		FocusableObject focusOwner = FocusManager.getFocusOwner();
-		if(!imState && (focusOwner != null) && focusOwner.getPreferredState()) {
+		if(!imState && (focusOwner != null) && focusOwner.getPreferredState() &&
+				((modifiers & SDLKeycode.SDL_KMOD_CTRL) == 0)) {
 			int realKey = SDLKeyboard.SDL_GetKeyFromScancode(scancode, modifiers, false);
 			char translated = 0;
 			if(realKey >= 32 && realKey <= 126) {

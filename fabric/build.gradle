@@ -24,8 +24,6 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 	
-	implementation "com.terraformersmc:modmenu:${modmenu_version}"
-	
 	compileOnly "maven.modrinth:replaymod:26.1-2.6.26"
 	
 	implementation project(':common')
@@ -34,6 +32,19 @@ dependencies {
 loom {
 	mixin {
 		useLegacyMixinAp = false
+	}
+}
+
+sourceSets {
+	shadow {
+		java {
+			srcDir 'src/shadow/java'
+		}
+		compileClasspath += sourceSets.main.compileClasspath
+	}
+	
+	main {
+		compileClasspath = files(sourceSets.shadow.output) + compileClasspath
 	}
 }
 

@@ -23,7 +23,7 @@ public abstract class MinecraftClientUtil {
 		return currentProtocolVersion >= protocolVersion;
 	}
 	
-	public static void sendSafeCharForFocusTracking(int codePoint) {
+	public static void sendChar(int codePoint) {
 		Minecraft client = Minecraft.getInstance();
 		((KeyboardHandlerAccessor) client.keyboardHandler).invokeCharTyped(
 				client.getWindow().handle(), new CharacterEvent(codePoint));

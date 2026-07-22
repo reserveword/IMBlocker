@@ -30,7 +30,7 @@ final class MinecraftFocusContext extends FocusContainer {
 		if(!focusCandidates.isEmpty()) {
 			FocusManager.isTrackingFocus = true;
 			try {
-				MinecraftClientUtil.sendSafeCharForFocusTracking(0);
+				MinecraftClientUtil.sendChar(0);
 			} catch (Throwable e) {
 				IMBlockerCore.LOGGER.warn("[IMBlocker] Failed to locate focus with char simulation");
 			}

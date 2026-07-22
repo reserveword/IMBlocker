@@ -8,9 +8,6 @@ import org.lwjgl.sdl.SDL_KeyboardEvent;
 
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.FocusableObject;
-import io.github.reserveword.imblocker.mixin.KeyboardHandlerAccessor;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.input.CharacterEvent;
 
 public final class Key2CharTransformer {
 	private static boolean imState;
@@ -40,9 +37,7 @@ public final class Key2CharTransformer {
 			}
 			
 			if(translated != 0) {
-				Minecraft client = Minecraft.getInstance();
-				((KeyboardHandlerAccessor) client.keyboardHandler).invokeCharTyped(
-						client.getWindow().handle(), new CharacterEvent(translated));
+				MinecraftClientUtil.sendChar(translated);
 			}
 		}
 	}

@@ -36,9 +36,11 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		
 		if(Platform.isWindows()) {
 			validMixins.add("WindowsIngameIMEInitializer");
+		}else if(MinecraftClientUtil.isGameVersionReached(777/*26.3*/)) {
+			validMixins.add("SDLKey2CharPatch");
 		}
 		
-		if(!MinecraftClientUtil.isGameVersionReached(777/*26.3*/) && Platform.isLinux()) {
+		if(!IMBlockerCore.IS_SDL_PRESENT && Platform.isLinux()) {
 			validMixins.add("LinuxKeyboardPatch");
 		}
 		

@@ -19,7 +19,7 @@ final class IMManagerLinux implements IMManager.PlatformIMManager {
 
 	@Override
 	public void setEnglishState(boolean isEN) {
-		
+		LinuxEnglishStateManager.setEnglishState(isEN);
 	}
 	
 	private void checkIMFramework() {

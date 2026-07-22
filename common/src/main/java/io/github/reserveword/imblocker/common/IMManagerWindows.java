@@ -73,7 +73,9 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 			if (oldHimc != null) {
 				ImmDestroyContext(oldHimc);
 			}
-			SDLKeyboard.SDL_StartTextInput(window);
+			if (IMBlockerCore.IS_SDL_PRESENT) {
+				SDLKeyboard.SDL_StartTextInput(window); // For enabling SDL_EVENT_TEXT* events.
+			}
 			lastIMStateOnTimestamp = System.currentTimeMillis();
 		} else {
 			WinNT.HANDLE himc = ImmAssociateContext(hwnd, null);

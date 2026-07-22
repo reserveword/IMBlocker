@@ -2,12 +2,18 @@ package io.github.reserveword.imblocker.common;
 
 import org.lwjgl.sdl.SDLKeyboard;
 
+import com.sun.jna.Platform;
+
 public final class IMManagerSDL implements IMManager.PlatformIMManager {
 	
 	private final long window;
 	
 	public IMManagerSDL(long window) {
 		this.window = window;
+		
+		if(IMBlockerCore.hasMod("blazesdl")) {
+			BlazeSDLBridge.registerSDLEventListener();
+		}
 	}
 
 	@Override
@@ -21,6 +27,8 @@ public final class IMManagerSDL implements IMManager.PlatformIMManager {
 
 	@Override
 	public void setEnglishState(boolean isEN) {
-		//TODO Windows/Linux.
+		if(Platform.isLinux()) {
+			LinuxEnglishStateManager.setEnglishState(isEN);
+		}
 	}
 }

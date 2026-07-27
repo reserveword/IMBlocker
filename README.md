@@ -38,7 +38,7 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
 
 ## 已支持的具有自定义GUI实现的模组
 
-[Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems)（等待更新）  
+[Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems)  
 [EMI](https://github.com/emilyploszaj/emi)（等待更新）  
 [Axiom](https://axiom.moulberry.com/)  
 [Replay Mod](https://www.replaymod.com/)  

@@ -190,8 +190,10 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 		@ConfigEntry.Gui.Tooltip
 		boolean isHeadlessPreeditMode = false;
 		
+		@ConfigEntry.Gui.Tooltip
 		String englishStateOnCommand = "";
 		
+		@ConfigEntry.Gui.Tooltip
 		String englishStateOffCommand = "";
 		
 		@ConfigEntry.Gui.Tooltip

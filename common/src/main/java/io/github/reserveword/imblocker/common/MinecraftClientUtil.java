@@ -2,8 +2,10 @@ package io.github.reserveword.imblocker.common;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.IntBuffer;
 
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.sdl.SDLVideo;
 
 import com.mojang.blaze3d.platform.Window;
 
@@ -32,7 +34,11 @@ public abstract class MinecraftClientUtil {
 	public static Rectangle getWindowBounds() {
 		Window gameWindow = Minecraft.getInstance().getWindow();
 		int[] width = new int[1], height = new int[1];
-		GLFW.glfwGetWindowSize(gameWindow.handle(), width, height);
+		if(IMBlockerCore.IS_SDL_PRESENT) {
+			SDLVideo.SDL_GetWindowSize(gameWindow.handle(), IntBuffer.wrap(width), IntBuffer.wrap(height));
+		}else {
+			GLFW.glfwGetWindowSize(gameWindow.handle(), width, height);
+		}
 		return new Rectangle(gameWindow.getX(), gameWindow.getY(), width[0], height[0]);
 	}
 	

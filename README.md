@@ -15,8 +15,9 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
 ## 功能（26.1以后）
 
 - 近乎完全精准的焦点管理，只在正确的环境下激活输入法
+- 为大量自定义界面框架的模组提供完整的输入法支持
 - 监测聊天栏文本是否为命令格式并自动切换中英文状态
-- 支持 Linux 基本输入法控制并修复候选词显示时控制按键泄漏至游戏的问题
+- 支持 Linux 基本输入法控制并修复候选词显示时控制按键泄漏至游戏的问题（26.3原版已修复）
 
 ## 原理
 
@@ -47,7 +48,7 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
 [LibGui](https://github.com/CottonMC/LibGui)  
 [Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)  
 [BlockUI](https://github.com/ldtteam/BlockUI)（等待更新）  
-[SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)（等待更新）    
+[SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)    
 [Essential Mod](https://essential.gg/)*  
 [Armourer's Workshop](https://github.com/Armourers-Workshop/Armourers-Workshop)  
 [ModernUI](https://github.com/BloCamLimb/ModernUI-MC)

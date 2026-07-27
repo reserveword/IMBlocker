@@ -15,8 +15,9 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
 ## Features (26.1+)
 
 - Very precise focus management, only activate IME if it's actually needed.
+- Provide complete IME features for mods with custom GUI framework.
 - Monitor the chat field and automatically set the conversion state when detected command syntax
-- Support basic IME switching and fix non-character keys leaking to the game while candidates showing on Linux
+- Support basic IME switching and fix non-character keys leaking to the game while candidates showing on Linux (Fixed after 26.3)
 
 ## How it works
 
@@ -38,7 +39,7 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
 
 ## Supported Mods with custom GUI framework  
  
-[Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems) (waiting for update)  
+[Roughly Enough Items](https://github.com/shedaniel/RoughlyEnoughItems)  
 [EMI](https://github.com/emilyploszaj/emi) (waiting for update)  
 [Axiom](https://axiom.moulberry.com/)  
 [Replay Mod](https://www.replaymod.com/)   
@@ -47,7 +48,7 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
 [LibGui](https://github.com/CottonMC/LibGui)  
 [Reese's Sodium Options](https://github.com/FlashyReese/reeses-sodium-options)  
 [BlockUI](https://github.com/ldtteam/BlockUI) (waiting for update)  
-[SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib) (waiting for update)     
+[SuperMartijn642's Core Lib](https://github.com/SuperMartijn642/SuperMartijn642sCoreLib)     
 [Essential Mod](https://essential.gg/)*  
 [Armourer's Workshop](https://github.com/Armourers-Workshop/Armourers-Workshop)  
 [ModernUI](https://github.com/BloCamLimb/ModernUI-MC)

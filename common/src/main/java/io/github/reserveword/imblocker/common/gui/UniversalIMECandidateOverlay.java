@@ -2,7 +2,6 @@ package io.github.reserveword.imblocker.common.gui;
 
 import imgui.moulberry92.ImDrawList;
 import imgui.moulberry92.ImGui;
-import io.github.reserveword.imblocker.common.IMBlockerCore;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

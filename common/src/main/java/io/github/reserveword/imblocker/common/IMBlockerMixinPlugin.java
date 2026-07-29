@@ -40,7 +40,9 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("SDLKey2CharPatch");
 		}
 		
-		if(!IMBlockerCore.IS_SDL_PRESENT && Platform.isLinux()) {
+		if(IMBlockerCore.IS_SDL_PRESENT) {
+			validMixins.add("SDLIMEHintTweaker");
+		}else if(Platform.isLinux()) {
 			validMixins.add("LinuxKeyboardPatch");
 		}
 		

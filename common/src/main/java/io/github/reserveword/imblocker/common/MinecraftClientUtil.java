@@ -15,6 +15,9 @@ import io.github.reserveword.imblocker.mixin.KeyboardHandlerAccessor;
 import net.minecraft.DetectedVersion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FontDescription;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 
 public abstract class MinecraftClientUtil {
@@ -49,6 +52,10 @@ public abstract class MinecraftClientUtil {
 	
 	public static int getStringWidth(String text) {
 		return Minecraft.getInstance().font.width(text);
+	}
+	
+	public static int getStringWidth(String text, Identifier font) {
+		return Minecraft.getInstance().font.width(Component.literal(text).withStyle(style -> style.withFont(new FontDescription.Resource(font))));
 	}
 	
 	static {

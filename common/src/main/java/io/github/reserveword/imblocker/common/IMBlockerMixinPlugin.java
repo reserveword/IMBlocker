@@ -151,6 +151,12 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("compat.ModernUITextViewMixin");
 			validMixins.add("compat.ModernUIEditTextMixin");
 		}
+		
+		if(IMBlockerCore.hasMod("ldlib2")) {
+			validMixins.add("compat.LDLibUIElementMixin");
+			validMixins.add("compat.LDLibTextFieldMixin");
+			validMixins.add("compat.LDLibTextAreaMixin");
+		}
 	}
 
 	@Override

@@ -8,6 +8,8 @@ import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.mixin.KeyboardAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Window;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 public class MinecraftClientAccessorImpl extends MinecraftClientAccessor {
 	
@@ -57,5 +59,11 @@ public class MinecraftClientAccessorImpl extends MinecraftClientAccessor {
 	@Override
 	public int getStringWidth(String text) {
 		return MinecraftClient.getInstance().textRenderer.getWidth(text);
+	}
+	
+	@Override
+	public int getStringWidth(String text, Object font) {
+		if(!(font instanceof Identifier)) return 0;
+		return MinecraftClient.getInstance().textRenderer.getWidth(Text.literal(text).styled(style -> style.withFont((Identifier) font)));
 	}
 }

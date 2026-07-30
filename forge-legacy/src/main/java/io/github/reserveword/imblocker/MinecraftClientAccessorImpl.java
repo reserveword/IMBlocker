@@ -58,4 +58,9 @@ public class MinecraftClientAccessorImpl extends MinecraftClientAccessor {
 	public int getStringWidth(String text) {
 		return Minecraft.getInstance().font.width(text);
 	}
+	
+	@Override
+	public int getStringWidth(String text, Object font) {
+		return 0; //useless
+	}
 }

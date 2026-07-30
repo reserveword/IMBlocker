@@ -73,7 +73,7 @@ public class IMBlockerConfig {
 	}
 	
 	public EnglishStateImpl getEnglishStateImpl() {
-		return false ? EnglishStateImpl.CONVERSION_STATUS : EnglishStateImpl.DISABLE_IM; //FIXME 26.3 testing.
+		return Platform.isWindows() ? EnglishStateImpl.CONVERSION_STATUS : EnglishStateImpl.DISABLE_IM;
 	}
 	
 	public EnglishState getPrimaryEnglishState() {

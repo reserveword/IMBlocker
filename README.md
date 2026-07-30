@@ -33,7 +33,6 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
     - 我们将这些屏幕（Screen）视为等效焦点组件并放入白名单，显示与关闭时显式产生焦点变化请求。如果你需要开启输入法的地方看起来像一个屏幕而非文本框类组件，请尝试使用屏幕记录功能识别并将其添加到白名单
 - 问题
     - 未被注入的文本框组件无法被焦点管理系统监听，若某模组拥有自己的组件框架实现本模组可能无法自动为其调整输入法状态，此时请将它们提交到 [#13](https://github.com/reserveword/IMBlocker/issues/13) 供开发者处理
-    - GLFW 窗口系统在 Windows 下有一个已知漏洞：如果游戏窗口被创建时未获得焦点则第一次获得焦点不会触发焦点回调，此时可能出现锁键现象。解决方法：使游戏窗口失去再获得一次焦点
     - 欢迎提出建议或反馈
 
 ## 已支持的具有自定义GUI实现的模组
@@ -51,7 +50,8 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
 [Notes](https://github.com/MattCzyr/Notes)  
 [Essential Mod](https://essential.gg/)*  
 [Armourer's Workshop](https://github.com/Armourers-Workshop/Armourers-Workshop)  
-[ModernUI](https://github.com/BloCamLimb/ModernUI-MC)
+[ModernUI](https://github.com/BloCamLimb/ModernUI-MC)  
+[LDLib2](https://github.com/Low-Drag-MC/LDLib2)
 
 *在 Fabric 下使用此模组时需要手动使用压缩软件将其 JAR 根目录下名为“essential-<32位序列码>”的文件提取到模组文件夹并**移除原模组文件**
 

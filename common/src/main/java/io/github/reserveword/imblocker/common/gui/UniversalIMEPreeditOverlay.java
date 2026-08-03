@@ -1,6 +1,7 @@
 package io.github.reserveword.imblocker.common.gui;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.sun.jna.Platform;
 
 import imgui.moulberry92.ImDrawList;
 import imgui.moulberry92.ImGui;
@@ -121,7 +122,7 @@ public class UniversalIMEPreeditOverlay {
 							compositionWidth + scaledMargin * 2, compositionHeight + scaledMargin * 2);
 				}
 				
-				if(!IMBlockerCore.IS_SDL_PRESENT) {
+				if(!IMBlockerCore.IS_SDL_PRESENT && !Platform.isWindows()) {
 					preeditCursorRect = preeditCursorRect.derive(1.0 / IMBlockerConfig.INSTANCE.getExtraScale());
 				}
 				

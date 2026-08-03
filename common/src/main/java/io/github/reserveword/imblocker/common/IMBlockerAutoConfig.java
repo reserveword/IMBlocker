@@ -83,6 +83,11 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	}
 	
 	@Override
+	public boolean isClassicCompositionStyle() {
+		return windowsCompatibilitySettings.isClassicCompositionStyle;
+	}
+	
+	@Override
 	public boolean isIngameIMEEnabled() {
 		return Platform.isWindows() && windowsCompatibilitySettings.enableIngameIME;
 	}
@@ -178,6 +183,9 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	static class WindowsCompatibilitySettings {
 		@ConfigEntry.Gui.Tooltip
 		boolean enableConversionStatusApi = true;
+		
+		@ConfigEntry.Gui.Tooltip
+		boolean isClassicCompositionStyle = false;
 		
 		@ConfigEntry.Gui.Tooltip(count = 2)
 		boolean enableIngameIME = false;

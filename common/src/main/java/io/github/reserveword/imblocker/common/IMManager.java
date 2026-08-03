@@ -1,7 +1,5 @@
 package io.github.reserveword.imblocker.common;
 
-import org.lwjgl.glfw.GLFW;
-
 import com.sun.jna.Platform;
 
 import io.github.reserveword.imblocker.common.gui.FocusManager;
@@ -22,6 +20,9 @@ public final class IMManager {
 		
 		void setEnglishState(boolean isEN);
 		
+		/**Windows specific method.*/
+		default void updateCompositionFontSize(int fontSize) {}
+		
 		default void initializeIngameIME(long window) {}
 		
 		default void onCandidateChanged() {}
@@ -35,6 +36,7 @@ public final class IMManager {
 		Key2CharTransformer.syncIMState(on);
 		if(on) {
 			updateCaretPosition();
+			updateCompositionFontSize();
 		}
 	}
 	
@@ -47,24 +49,33 @@ public final class IMManager {
 	public static void updateCaretPosition() {
 		FocusableObject focusedWidget = FocusManager.getFocusOwner();
 		if (focusedWidget != null) {
-			Point caretPos = calculateCaretPos(focusedWidget);
-			if(!Platform.isLinux() || !IMBlockerConfig.INSTANCE.isHeadlessPreeditMode()) {
+			if((Platform.isLinux() && IMBlockerConfig.INSTANCE.isHeadlessPreeditMode())) {
+				Point caretPos = calculateCaretPos(focusedWidget, false);
+				InputSystem.setPreeditCursorRectangle(Minecraft.getInstance().getWindow().handle(), 
+						caretPos.x(), caretPos.y(), 1, (int) (focusedWidget.getFontHeight() * focusedWidget.getGuiScale()));
+			}else if(Platform.isWindows() && IMBlockerConfig.INSTANCE.isClassicCompositionStyle() &&
+					!IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
+				Point caretPos = calculateCaretPos(focusedWidget, false);
+				IMBlockerCore.invokeOnMainThread(() -> IMManagerWindows.updateCompositionWindowPos(caretPos));
+			}else {
+				Point caretPos = calculateCaretPos(focusedWidget, true);
 				UniversalIMEPreeditOverlay.getInstance().updateCaretPosition(caretPos.x(), caretPos.y());
 				UniversalIMECandidateOverlay.getInstance().updateCaretPosition(caretPos.x(), caretPos.y());
-			}else {
-				float extraScale = IMBlockerConfig.INSTANCE.getExtraScale();
-				Rectangle compositionBorder = focusedWidget instanceof FocusableWidget ?
-						((FocusableWidget) focusedWidget).getFocusContainer().getBoundsAbs() : focusedWidget.getBoundsAbs();
-				int preeditX = (int) ((compositionBorder.x() + caretPos.x()) / extraScale);
-				int preeditY = (int) ((compositionBorder.y() + caretPos.y()) / extraScale);
-				int preeditHeight = (int) (focusedWidget.getFontHeight() * focusedWidget.getGuiScale() / extraScale);
-				GLFW.glfwSetPreeditCursorRectangle(Minecraft.getInstance().getWindow().handle(), 
-						preeditX, preeditY, 0, preeditHeight);
 			}
 		}
 	}
 	
-	private static Point calculateCaretPos(FocusableObject inputEntry) {
+	public static void updateCompositionFontSize() {
+		FocusableObject focusedWidget = FocusManager.getFocusOwner();
+		if(focusedWidget != null && Platform.isWindows() &&
+				IMBlockerConfig.INSTANCE.isClassicCompositionStyle() &&
+				!IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
+			int fontSize = (int) (focusedWidget.getFontHeight() * focusedWidget.getGuiScale());
+			IMBlockerCore.invokeOnMainThread(() -> INSTANCE.updateCompositionFontSize(fontSize));
+		}
+	}
+	
+	private static Point calculateCaretPos(FocusableObject inputEntry, boolean isIngameIME) {
 		try {
 			Rectangle inputEntryBounds = inputEntry.getBoundsAbs();
 			Point caretPos = inputEntry.getCaretPos();
@@ -74,6 +85,9 @@ public final class IMManager {
 			//Constrained to entry border.
 			int compositionWindowPosX = MathHelper.clamp(caretPos.x(), 0, inputEntryBounds.width());
 			int compositionWindowPosY = MathHelper.clamp(caretPos.y(), 0, inputEntryBounds.height());
+			if(!isIngameIME) {
+				compositionWindowPosY -= inputEntry.getGuiScale() / 2; // Tweak yPos to fit font style.
+			}
 			if(inputEntry instanceof FocusableWidget inputWidget) {
 				compositionWindowPosX += inputEntryBounds.x();
 				compositionWindowPosY += inputEntryBounds.y();
@@ -81,6 +95,10 @@ public final class IMManager {
 				Rectangle containerBounds = inputWidget.getFocusContainer().getBoundsAbs();
 				compositionWindowPosX = MathHelper.clamp(compositionWindowPosX, 0, containerBounds.width());
 				compositionWindowPosY = MathHelper.clamp(compositionWindowPosY, 0, containerBounds.height());
+				if(!isIngameIME) {
+					compositionWindowPosX += containerBounds.x();
+					compositionWindowPosY += containerBounds.y();
+				}
 			}
 			return new Point(compositionWindowPosX, compositionWindowPosY);
 		} catch (Throwable e) {

@@ -8,14 +8,20 @@ import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.platform.win32.WinDef.DWORD;
+import com.sun.jna.platform.win32.WinDef.LRESULT;
 import com.sun.jna.platform.win32.WinNT;
 import com.sun.jna.platform.win32.WinUser;
+import com.sun.jna.platform.win32.WinUser.INPUT;
 import com.sun.jna.platform.win32.WinUser.WindowProc;
 import com.sun.jna.ptr.IntByReference;
 
 import io.github.reserveword.imblocker.common.gui.FocusManager;
+import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
 import io.github.reserveword.imblocker.common.gui.UniversalIMECandidateOverlay;
+import io.github.reserveword.imblocker.common.jnastructs.COMPOSITIONFORM;
+import io.github.reserveword.imblocker.common.jnastructs.LOGFONTW;
 
 final class IMManagerWindows implements IMManager.PlatformIMManager {
 
@@ -33,11 +39,25 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 
 	private static native boolean ImmSetConversionStatus(WinNT.HANDLE himc, int fdwConversion, int fdwSentence);
 	
+	private static native boolean ImmGetCompositionWindow(WinNT.HANDLE himc, COMPOSITIONFORM cfr);
+
+	private static native boolean ImmSetCompositionWindow(WinNT.HANDLE himc, COMPOSITIONFORM cfr);
+	
+	private static native boolean ImmGetCompositionFontW(WinNT.HANDLE himc, LOGFONTW lplf);
+
+	private static native boolean ImmSetCompositionFontW(WinNT.HANDLE himc, LOGFONTW lplf);
+	
 	private static native int ImmGetCandidateListW(WinNT.HANDLE himc, int deIndex, Pointer lpCandList, int dwBufLen);
 
 	private static final int WM_IME_SETCONTEXT = 0x0281;
+	private static final int WM_IME_COMPOSITION = 0x010F;
+	private static final int WM_IME_ENDCOMPOSITION = 0x010E;
+	private static final int WM_IME_STARTCOMPOSITION = 0x010D;
 	private static final int WM_IME_NOTIFY = 0x0282;
+
+	private static final int WM_INPUTLANGCHANGE = 0x0051;
 	
+	private static final long ISC_SHOWUICOMPOSITIONWINDOW = 0x80000000L;
 	private static final long ISC_SHOWUICANDIDATEWINDOW = 1L;
 	
 	private static final int IMN_CHANGECANDIDATE = 0x0003;
@@ -111,6 +131,37 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		return 60 - (System.currentTimeMillis() - lastIMStateOnTimestamp);
 	}
 	
+	public static void updateCompositionWindowPos(Point pos) {
+		WinDef.HWND hwnd = u.GetActiveWindow();
+		WinNT.HANDLE himc = ImmGetContext(hwnd);
+		if (himc != null) {
+			COMPOSITIONFORM cfr = new COMPOSITIONFORM();
+			ImmGetCompositionWindow(himc, cfr);
+			cfr.dwStyle = 2; // CFS_POINT
+			cfr.ptCurrentPos.x = pos.x();
+			cfr.ptCurrentPos.y = pos.y();
+			ImmSetCompositionWindow(himc, cfr);
+		}
+		ImmReleaseContext(hwnd, himc);
+	}
+	
+	@Override
+	public void updateCompositionFontSize(int fontSize) {
+		WinDef.HWND hwnd = u.GetActiveWindow();
+		WinNT.HANDLE himc = ImmGetContext(hwnd);
+		if (himc != null) {
+			LOGFONTW lplf = new LOGFONTW();
+			ImmGetCompositionFontW(himc, lplf);
+			lplf.lfHeight = -fontSize;
+			lplf.lfWidth = 0;
+			lplf.lfWeight = 400;
+			lplf.lfCharSet = 0; // ANSI_CHARSET
+			lplf.lfFaceName = "Arial".toCharArray();
+			ImmSetCompositionFontW(himc, lplf);
+		}
+		ImmReleaseContext(hwnd, himc);
+	}
+	
 	@Override
 	public void initializeIngameIME(long window) {
 		this.window = window;
@@ -130,6 +181,20 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 								onCandidateChanged();
 								break;
 						}
+						break;
+				}
+			}else if(IMBlockerConfig.INSTANCE.isClassicCompositionStyle()) {
+				switch (uMsg) {
+					case WM_IME_SETCONTEXT:
+						LRESULT ret = u.CallWindowProc(originalProc, _hwnd, uMsg, wParam, lParam);
+						lParam.setValue(lParam.longValue() | ISC_SHOWUICOMPOSITIONWINDOW);
+						return ret;
+					case WM_IME_COMPOSITION:
+					case WM_IME_STARTCOMPOSITION:
+					case WM_IME_ENDCOMPOSITION:
+						return u.DefWindowProc(hwnd, uMsg, wParam, lParam);
+					case WM_INPUTLANGCHANGE:
+						IMBlockerCore.invokeLater(IMManager::updateCompositionFontSize);
 						break;
 				}
 			}

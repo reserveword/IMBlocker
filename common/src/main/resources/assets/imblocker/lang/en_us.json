@@ -29,6 +29,8 @@
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings": "Windows Compatibility Settings",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi": "Allow ConversionStatus API",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "The API that controls the English state.\n\u00A77If disabled, CONVERSION_STATUS English state implementation will not work.",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.isClassicCompositionStyle": "Use Classic Composition Style",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.isClassicCompositionStyle.@Tooltip": "Use the pre-edit style prior to 26.1.",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableIngameIME": "Enable Ingame IME",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableIngameIME.@Tooltip[0]": "\u00A7lRender Candidates Manually If Exclusive FS Enabled",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableIngameIME.@Tooltip[1]": "Recommended only if IME's candidate window is invisible under\nexclusive fullscreen. IME's candidate window has more features.",

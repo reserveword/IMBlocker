@@ -67,6 +67,7 @@ public abstract class AWTextInputWidgetMixin implements MinecraftFocusableWidget
 		if(imblocker$scale != currentScale) {
 			imblocker$scale = currentScale;
 			IMManager.updateCaretPosition();
+			IMManager.updateCompositionFontSize();
 		}
 		
 		Rectangle currentBounds = new Rectangle((int) clip.x, (int) clip.y, (int) clip.width, (int) clip.height);

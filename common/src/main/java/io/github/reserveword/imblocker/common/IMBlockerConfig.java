@@ -96,6 +96,10 @@ public class IMBlockerConfig {
 		return true;
 	}
 	
+	public boolean isClassicCompositionStyle() {
+		return false;
+	}
+	
 	public boolean isIngameIMEEnabled() {
 		return false;
 	}

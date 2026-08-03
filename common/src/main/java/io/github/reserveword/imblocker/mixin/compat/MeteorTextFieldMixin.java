@@ -57,7 +57,7 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin {
 	@Override
 	public void onLayoutWidget(CallbackInfo ci) {
 		imblocker$onBoundsChanged();
-		IMManager.updateCaretPosition();
+		IMManager.updateCompositionFontSize();
 	}
 	
 	@Override

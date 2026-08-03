@@ -121,6 +121,7 @@ public class GenericAxiomTextField implements FocusableWidget {
 		if(fontHeight != currentFontHeight) {
 			fontHeight = currentFontHeight;
 			IMManager.updateCaretPosition();
+			IMManager.updateCompositionFontSize();
 		}
 	}
 	

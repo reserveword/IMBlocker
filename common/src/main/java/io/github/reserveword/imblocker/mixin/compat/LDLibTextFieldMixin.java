@@ -11,7 +11,6 @@ import com.lowdragmc.lowdraglib2.gui.ui.elements.TextField.TextFieldStyle;
 import com.lowdragmc.lowdraglib2.gui.ui.event.UIEvent;
 
 import io.github.reserveword.imblocker.common.IMManager;
-import io.github.reserveword.imblocker.common.MinecraftClientUtil;
 import io.github.reserveword.imblocker.common.StringUtil;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
@@ -53,8 +52,8 @@ public abstract class LDLibTextFieldMixin extends LDLibUIElementMixin {
 	@Override
 	public Point getCaretPos() {
 		float fontSize = textFieldStyle.fontSize();
-		int caretX = (int) (MinecraftClientUtil.getStringWidth(
-				StringUtil.getSubstring(rawText, 0, cursorPos), textFieldStyle.font()) * fontSize / 9.0F - displayOffset);
+		int caretX = (int) (imblocker$getStringWidth(StringUtil.getSubstring(
+				rawText, 0, cursorPos), textFieldStyle.font()) * fontSize / 9.0F - displayOffset);
 		int caretY = (int) ((getContentHeight() - fontSize) / 2);
 		return new Point(getGuiScale(), caretX, caretY);
 	}

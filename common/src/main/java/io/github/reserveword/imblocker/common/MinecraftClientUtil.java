@@ -7,6 +7,7 @@ import java.nio.IntBuffer;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.sdl.SDLVideo;
 
+import com.lowdragmc.lowdraglib2.client.font.LDFonts;
 import com.mojang.blaze3d.platform.Window;
 
 import io.github.reserveword.imblocker.common.gui.Dimension;
@@ -52,10 +53,6 @@ public abstract class MinecraftClientUtil {
 	
 	public static int getStringWidth(String text) {
 		return Minecraft.getInstance().font.width(text);
-	}
-	
-	public static int getStringWidth(String text, Identifier font) {
-		return Minecraft.getInstance().font.width(Component.literal(text).withStyle(style -> style.withFont(new FontDescription.Resource(font))));
 	}
 	
 	static {

@@ -1,4 +1,10 @@
-# v7.2.0
+# 7.2.1
+ - Windows: 增加回退 26.1 以前的预编辑风格的配置项
+ - LDLib2: 文本光标跟踪适配近期引入的平滑字体渲染器
+ 
+<br>
+
+# 7.2.0
 此版本兼容 26.x 正式版以及最新快照版本
 ## 新功能
  - 适配 BlazeSDL 模组以及原版最新快照的 SDL 后端（[#154](https://github.com/reserveword/IMBlocker/issues/154)）

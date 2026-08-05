@@ -75,7 +75,8 @@ public abstract class LDLibTextAreaMixin extends LDLibUIElementMixin {
 	public Point getCaretPos() {
 		float fontSize = textAreaStyle.fontSize();
 		int caretX = (int) (MinecraftClientAccessor.INSTANCE.getStringWidth(
-				StringUtil.getSubstring(lines.get(cursorLine), 0, cursorCol), imblocker$getFont()) * fontSize / 9.0F - scrollX);
+				imblocker$getDedicatedFontRenderer(), StringUtil.getSubstring(lines.get(cursorLine), 0, cursorCol), imblocker$getFont()
+				) * fontSize / 9.0F - scrollX);
 		int caretY = (int) (cursorLine * (fontSize + textAreaStyle.lineSpacing()) - scrollY);
 		return new Point(getGuiScale(), caretX, caretY);
 	}

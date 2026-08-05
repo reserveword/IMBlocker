@@ -10,13 +10,14 @@ public abstract class MinecraftClientAccessor {
 	
 	public abstract void sendSafeCharForFocusTracking(int codePoint);
 	public abstract void execute(Runnable runnable);
+	public abstract long getWindowHandle();
 	public abstract Rectangle getWindowBounds();
 	public abstract Dimension getContentSize();
 	public abstract int getGuiScaledWidth();
 	public abstract int getGuiScaledHeight();
 	public abstract Object getCurrentScreen();
 	public abstract int getStringWidth(String text);
-	public abstract int getStringWidth(String text, Object font);
+	public abstract int getStringWidth(Object presentFontRenderer, String text, Object font);
 	
 	static {
 		Class<?> minecraftClientAccessorCls = null;

@@ -7,6 +7,7 @@ import io.github.reserveword.imblocker.common.gui.Dimension;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.mixin.KeyboardAccessor;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.Window;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -25,6 +26,11 @@ public class MinecraftClientAccessorImpl extends MinecraftClientAccessor {
 	@Override
 	public void execute(Runnable runnable) {
 		MinecraftClient.getInstance().execute(runnable);
+	}
+	
+	@Override
+	public long getWindowHandle() {
+		return MinecraftClient.getInstance().getWindow().getHandle();
 	}
 	
 	@Override
@@ -62,8 +68,10 @@ public class MinecraftClientAccessorImpl extends MinecraftClientAccessor {
 	}
 	
 	@Override
-	public int getStringWidth(String text, Object font) {
+	public int getStringWidth(Object presentFontRenderer, String text, Object font) {
 		if(!(font instanceof Identifier)) return 0;
-		return MinecraftClient.getInstance().textRenderer.getWidth(Text.literal(text).styled(style -> style.withFont((Identifier) font)));
+		TextRenderer fontRenderer = presentFontRenderer instanceof TextRenderer ? 
+				(TextRenderer) presentFontRenderer : MinecraftClient.getInstance().textRenderer;
+		return fontRenderer.getWidth(Text.literal(text).styled(style -> style.withFont((Identifier) font)));
 	}
 }

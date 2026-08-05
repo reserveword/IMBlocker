@@ -7,8 +7,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.lowdragmc.lowdraglib2.gui.LDLibFonts;
 import com.lowdragmc.lowdraglib2.gui.ui.UIElement;
 
+import io.github.reserveword.imblocker.common.ReflectionUtil;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 
@@ -44,6 +46,14 @@ public abstract class LDLibUIElementMixin implements MinecraftFocusableWidget {
 	}
 	
 	public void imblocker$onFocusFactorsChanged() {}
+	
+	protected Object imblocker$getDedicatedFontRenderer() {
+		try {
+			return ReflectionUtil.invokeMethod(LDLibFonts.class, null, null, "font", new Class[0]);
+		} catch (Throwable e) {
+			return null;
+		}
+	}
 	
 	@Override
 	public Rectangle getBoundsAbs() {

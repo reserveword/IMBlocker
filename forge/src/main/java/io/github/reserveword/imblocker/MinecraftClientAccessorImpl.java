@@ -9,6 +9,7 @@ import io.github.reserveword.imblocker.common.gui.Dimension;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.mixin.KeyboardHandlerAccessor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -26,6 +27,11 @@ public class MinecraftClientAccessorImpl extends MinecraftClientAccessor {
 	@Override
 	public void execute(Runnable runnable) {
 		Minecraft.getInstance().execute(runnable);
+	}
+	
+	@Override
+	public long getWindowHandle() {
+		return Minecraft.getInstance().getWindow().getWindow();
 	}
 	
 	@Override
@@ -63,8 +69,10 @@ public class MinecraftClientAccessorImpl extends MinecraftClientAccessor {
 	}
 	
 	@Override
-	public int getStringWidth(String text, Object font) {
+	public int getStringWidth(Object presentFontRenderer, String text, Object font) {
 		if(!(font instanceof ResourceLocation)) return 0;
-		return Minecraft.getInstance().font.width(Component.literal(text).withStyle(style -> style.withFont((ResourceLocation) font)));
+		Font fontRenderer = presentFontRenderer instanceof Font ?
+				(Font) presentFontRenderer : Minecraft.getInstance().font;
+		return fontRenderer.width(Component.literal(text).withStyle(style -> style.withFont((ResourceLocation) font)));
 	}
 }

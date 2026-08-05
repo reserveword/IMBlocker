@@ -55,7 +55,8 @@ public abstract class LDLibTextFieldMixin extends LDLibUIElementMixin {
 	public Point getCaretPos() {
 		float fontSize = textFieldStyle.fontSize();
 		int caretX = (int) (MinecraftClientAccessor.INSTANCE.getStringWidth(
-				StringUtil.getSubstring(rawText, 0, cursorPos), imblocker$getFont()) * fontSize / 9.0F - displayOffset);
+				imblocker$getDedicatedFontRenderer(), StringUtil.getSubstring(rawText, 0, cursorPos), imblocker$getFont()
+				) * fontSize / 9.0F - displayOffset);
 		int caretY = (int) ((getContentHeight() - fontSize) / 2);
 		return new Point(getGuiScale(), caretX, caretY);
 	}

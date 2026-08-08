@@ -133,7 +133,9 @@ public final class IMManager {
 				linuxImpl = (PlatformIMManager) ReflectionUtil.newInstance(enhancedImplClass, new Class[0]);
 				isEnhancedLinuxImplPresent = true;
 			} catch (ClassNotFoundException e) {
-				linuxImpl = new IMManagerLinux();
+				String sessionType = System.getenv("XDG_SESSION_TYPE");
+				boolean isX11 = sessionType != null && sessionType.equals("x11");
+				linuxImpl = isX11 ? new IMManagerX11() : new IMManagerLinux();
 			}
 			INSTANCE = linuxImpl;
 		}else {

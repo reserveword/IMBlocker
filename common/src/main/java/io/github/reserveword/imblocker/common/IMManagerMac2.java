@@ -1,5 +1,8 @@
 package io.github.reserveword.imblocker.common;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.lwjgl.glfw.GLFWNativeCocoa;
 
 import com.sun.jna.Callback;
@@ -7,6 +10,7 @@ import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
+import com.sun.jna.Structure.FieldOrder;
 
 import ca.weblite.objc.Proxy;
 import ca.weblite.objc.Runtime;
@@ -14,7 +18,6 @@ import ca.weblite.objc.RuntimeUtils;
 import ca.weblite.objc.foundation.NSRange;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.Point;
-import io.github.reserveword.imblocker.common.jnastructs.NSRect;
 
 final class IMManagerMac2 implements IMManager.PlatformIMManager {
 	private static boolean state = false;
@@ -176,6 +179,33 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 			return new NSRect((Pointer) obj);
 		} else {
 			return new NSRect();
+		}
+	}
+	
+	@FieldOrder({"x", "y", "width", "height"})
+	public static class NSRect extends Structure implements Structure.ByValue {
+		public double x;
+		public double y;
+		public double width;
+		public double height;
+
+		public NSRect() {}
+		
+		public NSRect(Pointer peer) {
+			super(peer);
+			read();
+		}
+
+		public NSRect(double x, double y, double width, double height) {
+			this.x = x;
+			this.y = y;
+			this.width = width;
+			this.height = height;
+		}
+
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("x", "y", "width", "height");
 		}
 	}
 }

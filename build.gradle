@@ -97,29 +97,30 @@ allprojects {
     tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
     }
+}
 
-    tasks.register('feedbackClass', Copy) {
-        dependsOn "jar"
-        mustRunAfter ":forge:reobfJar"
-        mustRunAfter ":fabric:remapJar"
-        from (zipTree(new File(buildDir, "libs/${project.name}.jar"))) {
-            include '**/*.class'
-        }
-        into new File(rootProject.buildDir, 'classes/java/main')
-    }
-
-    tasks.register('feedbackResource', Copy) {
-        dependsOn "jar"
-        mustRunAfter ":forge:reobfJar"
-        mustRunAfter ":fabric:remapJar"
-        from (zipTree(new File(buildDir, "libs/${project.name}.jar"))) {
-            exclude '**/*.class'
-        }
-        into new File(rootProject.buildDir, 'resources/main')
-    }
-
-    tasks.register('feedback') {
-        dependsOn("feedbackClass")
-        dependsOn("feedbackResource")
-    }
+tasks.register('buildAll', Copy) {
+    group = 'build'
+    description = 'Build all sub-projects and collect their artifacts.'
+    	
+    dependsOn ':forge-legacy:build', ':forge:build', ':fabric:build', ':neoforge:build'
+    
+    from (project(':forge-legacy').layout.buildDirectory.dir('libs')) {
+    	include '*.jar'
+    	exclude '*-sources.jar'
+	}
+	from (project(':forge').layout.buildDirectory.dir('libs')) {
+    	include '*.jar'
+    	exclude '*-sources.jar'
+	}
+	from (project(':fabric').layout.buildDirectory.dir('libs')) {
+    	include '*.jar'
+    	exclude '*-sources.jar'
+	}
+	from (project(':neoforge').layout.buildDirectory.dir('libs')) {
+    	include '*.jar'
+    	exclude '*-sources.jar'
+	}
+	
+    into layout.buildDirectory.dir('libs')
 }

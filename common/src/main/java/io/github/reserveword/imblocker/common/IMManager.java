@@ -1,7 +1,10 @@
 package io.github.reserveword.imblocker.common;
 
+import org.lwjgl.glfw.GLFWNativeX11;
+
 import com.sun.jna.Platform;
 
+import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.FocusableObject;
 import io.github.reserveword.imblocker.common.gui.FocusableWidget;
@@ -133,9 +136,9 @@ public final class IMManager {
 				linuxImpl = (PlatformIMManager) ReflectionUtil.newInstance(enhancedImplClass, new Class[0]);
 				isEnhancedLinuxImplPresent = true;
 			} catch (ClassNotFoundException e) {
-				String sessionType = System.getenv("XDG_SESSION_TYPE");
-				boolean isX11 = sessionType != null && sessionType.equals("x11");
-				linuxImpl = isX11 ? new IMManagerX11() : new IMManagerLinux();
+				long glfwWindow = MinecraftClientAccessor.INSTANCE.getWindowHandle();
+				long x11Window = GLFWNativeX11.glfwGetX11Window(glfwWindow);
+				linuxImpl = x11Window != 0 ? new IMManagerX11(glfwWindow, x11Window) : new IMManagerLinux();
 			}
 			INSTANCE = linuxImpl;
 		}else {

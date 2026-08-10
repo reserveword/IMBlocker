@@ -7,7 +7,6 @@ import java.nio.IntBuffer;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.sdl.SDLVideo;
 
-import com.lowdragmc.lowdraglib2.client.font.LDFonts;
 import com.mojang.blaze3d.platform.Window;
 
 import io.github.reserveword.imblocker.common.gui.Dimension;
@@ -16,9 +15,6 @@ import io.github.reserveword.imblocker.mixin.KeyboardHandlerAccessor;
 import net.minecraft.DetectedVersion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FontDescription;
-import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 
 public abstract class MinecraftClientUtil {

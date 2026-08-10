@@ -51,6 +51,9 @@ configurations {
 
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
+    
+	compileOnly "maven.modrinth:ldlib:mc26.1.x-26.1.2.31-neoforge"
+	
     implementation project(':common')
 }
 

@@ -14,7 +14,7 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
 
 ## Features (26.1+)
 
-- Very precise focus management, only activate IME if it's actually needed.
+- Almost absolutely precise focus management, only activate IME if it's actually needed.
 - Provide complete IME features for mods with custom GUI framework.
 - Monitor the chat field and automatically set the conversion state when detected command syntax
 - Support basic IME switching and fix non-character keys leaking to the game while candidates showing on Linux (Fixed after 26.3)

@@ -1,6 +1,6 @@
 # IMBlocker: 智能屏蔽输入法
 
-[English version](https://github.com/reserveword/IMBlocker/blob/master/README.en.md)
+[English version](https://github.com/reserveword/IMBlocker/blob/26.1%2B/README.en.md)
 
 ## 简介
 

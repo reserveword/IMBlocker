@@ -8,11 +8,9 @@ import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
-import com.sun.jna.platform.win32.WinDef.DWORD;
 import com.sun.jna.platform.win32.WinDef.LRESULT;
 import com.sun.jna.platform.win32.WinNT;
 import com.sun.jna.platform.win32.WinUser;
-import com.sun.jna.platform.win32.WinUser.INPUT;
 import com.sun.jna.platform.win32.WinUser.WindowProc;
 import com.sun.jna.ptr.IntByReference;
 

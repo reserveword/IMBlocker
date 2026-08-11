@@ -22,9 +22,6 @@ import net.minecraft.resources.Identifier;
 
 @Mixin(value = UIElement.class, remap = false)
 public abstract class LDLibUIElementMixin implements MinecraftFocusableWidget {
-	@Shadow
-	private UIElement parent;
-	
 	@Shadow public abstract float getContentX();
 	@Shadow public abstract float getContentY();
 	@Shadow public abstract float getContentWidth();

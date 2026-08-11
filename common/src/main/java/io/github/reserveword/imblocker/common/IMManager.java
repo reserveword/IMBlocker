@@ -1,5 +1,7 @@
 package io.github.reserveword.imblocker.common;
 
+import org.lwjgl.glfw.GLFWNativeX11;
+
 import com.sun.jna.Platform;
 
 import io.github.reserveword.imblocker.common.gui.FocusManager;
@@ -140,7 +142,9 @@ public final class IMManager {
 						Class<?> enhancedImplClass = Class.forName("xyz.rrtt217.HDRMod.compat.imblocker.IMManagerLinuxEnhanced");
 						linuxImpl = (PlatformIMManager) ReflectionUtil.newInstance(enhancedImplClass, new Class[0]);
 					} catch (ClassNotFoundException e) {
-						linuxImpl = new IMManagerLinux();
+						long glfwWindow = Minecraft.getInstance().getWindow().handle();
+						long x11Window = GLFWNativeX11.glfwGetX11Window(glfwWindow);
+						linuxImpl = x11Window != 0 ? new IMManagerX11(glfwWindow, x11Window) : new IMManagerLinux();
 					}
 					INSTANCE = linuxImpl;
 				}else {

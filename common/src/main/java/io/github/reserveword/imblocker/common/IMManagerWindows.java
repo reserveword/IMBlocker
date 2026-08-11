@@ -63,13 +63,12 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	
 	public static long lastIMStateOnTimestamp = System.currentTimeMillis();
 	
-	private long window;
+	private static long window;
+	private static Pointer originalProc;
+	private static WindowProc imeListener;
 
 	private final SetConversionStateThread setConversionStateThread;
 	private boolean preferredEnglishState = false;
-
-	private Pointer originalProc;
-	private WindowProc imeListener;
 
 	static {
 		Native.register("imm32");
@@ -143,8 +142,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		ImmReleaseContext(hwnd, himc);
 	}
 	
-	@Override
-	public void updateCompositionFontSize(int fontSize) {
+	public static void updateCompositionFontSize(int fontSize) {
 		WinDef.HWND hwnd = u.GetActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if (himc != null) {
@@ -160,9 +158,8 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		ImmReleaseContext(hwnd, himc);
 	}
 	
-	@Override
-	public void initializeIngameIME(long window) {
-		this.window = window;
+	static void initializeIngameIME(long window) {
+		IMManagerWindows.window = window;
 		WinDef.HWND hwnd = InputSystem.getHWND(window);
 		imeListener = (_hwnd, uMsg, wParam, lParam) -> {
 			if(IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
@@ -202,7 +199,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		IMBlockerCore.invokeLater(FocusManager::initializeWindowFocus);
 	}
 	
-	private void onConversionStatusChanged() {
+	private static void onConversionStatusChanged() {
 		WinDef.HWND hwnd = u.GetActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if(himc != null) {
@@ -215,8 +212,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		ImmReleaseContext(hwnd, himc);
 	}
 	
-	@Override
-	public void onCandidateChanged() {
+	static void onCandidateChanged() {
 		WinDef.HWND hwnd = u.GetActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if (himc != null) {

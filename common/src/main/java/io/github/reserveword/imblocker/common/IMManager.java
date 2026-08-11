@@ -21,13 +21,6 @@ public final class IMManager {
 		void setState(boolean on);
 		
 		void setEnglishState(boolean isEN);
-		
-		/**Windows specific method.*/
-		default void updateCompositionFontSize(int fontSize) {}
-		
-		default void initializeIngameIME(long window) {}
-		
-		default void onCandidateChanged() {}
 	}
 	
 	private IMManager() {}
@@ -53,10 +46,11 @@ public final class IMManager {
 		if (focusedWidget != null) {
 			if((Platform.isLinux() && IMBlockerConfig.INSTANCE.isHeadlessPreeditMode())) {
 				Point caretPos = calculateCaretPos(focusedWidget, false);
+				double extraScale = IMBlockerConfig.INSTANCE.getExtraScale();
 				InputSystem.setPreeditCursorRectangle(Minecraft.getInstance().getWindow().handle(), 
-						caretPos.x(), caretPos.y(), 1, (int) (focusedWidget.getFontHeight() * focusedWidget.getGuiScale()));
-			}else if(Platform.isWindows() && IMBlockerConfig.INSTANCE.isClassicCompositionStyle() &&
-					!IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
+						caretPos.x() / extraScale, caretPos.y() / extraScale, 
+						1, focusedWidget.getFontHeight() * focusedWidget.getGuiScale() / extraScale);
+			}else if(hasCompositionWindow()) {
 				Point caretPos = calculateCaretPos(focusedWidget, false);
 				IMBlockerCore.invokeOnMainThread(() -> IMManagerWindows.updateCompositionWindowPos(caretPos));
 			}else {
@@ -69,12 +63,14 @@ public final class IMManager {
 	
 	public static void updateCompositionFontSize() {
 		FocusableObject focusedWidget = FocusManager.getFocusOwner();
-		if(focusedWidget != null && Platform.isWindows() &&
-				IMBlockerConfig.INSTANCE.isClassicCompositionStyle() &&
-				!IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
+		if(focusedWidget != null && hasCompositionWindow()) {
 			int fontSize = (int) (focusedWidget.getFontHeight() * focusedWidget.getGuiScale());
-			IMBlockerCore.invokeOnMainThread(() -> INSTANCE.updateCompositionFontSize(fontSize));
+			IMBlockerCore.invokeOnMainThread(() -> IMManagerWindows.updateCompositionFontSize(fontSize));
 		}
+	}
+	
+	private static boolean hasCompositionWindow() {
+		return Platform.isWindows() && IMBlockerConfig.INSTANCE.isClassicCompositionStyle() && !IMBlockerConfig.INSTANCE.isIngameIMEEnabled();
 	}
 	
 	private static Point calculateCaretPos(FocusableObject inputEntry, boolean isIngameIME) {
@@ -110,11 +106,11 @@ public final class IMManager {
 	}
 	
 	public static void initializeIngameIME(long window) {
-		IMBlockerCore.invokeOnMainThread(() -> INSTANCE.initializeIngameIME(window));
+		IMBlockerCore.invokeOnMainThread(() -> IMManagerWindows.initializeIngameIME(window));
 	}
 	
 	public static void onCandidateChanged() {
-		IMBlockerCore.invokeOnMainThread(() -> INSTANCE.onCandidateChanged());
+		IMBlockerCore.invokeOnMainThread(() -> IMManagerWindows.onCandidateChanged());
 	}
 	
 	public static void evaluateKeyInput(boolean isUnlockIMEKey, int action, int modifiers) {

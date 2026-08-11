@@ -23,6 +23,10 @@ public final class InputSystem {
 		WinDef.HWND getHWND(long window);
 	}
 	
+	public static void setPreeditCursorRectangle(long window, double x, double y, double width, double height) {
+		INSTANCE.setPreeditCursorRectangle(window, (int) x, (int) y, (int) width, (int) height);
+	}
+	
 	public static void setPreeditCursorRectangle(long window, int x, int y, int width, int height) {
 		INSTANCE.setPreeditCursorRectangle(window, x, y, width, height);
 	}

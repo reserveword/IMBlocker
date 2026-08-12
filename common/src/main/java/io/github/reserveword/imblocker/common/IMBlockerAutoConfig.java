@@ -76,7 +76,7 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 
 	@Override
 	public boolean isCursorPositionTrackingEnabled() {
-		return windowsCompatibilitySettings.enableCursorPositionTracking;
+		return !Platform.isWindows() || windowsCompatibilitySettings.enableCursorPositionTracking;
 	}
 
 	@Override

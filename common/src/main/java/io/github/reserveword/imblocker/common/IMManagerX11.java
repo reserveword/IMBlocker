@@ -56,7 +56,7 @@ final class IMManagerX11 extends IMManagerLinux {
 	@Override
 	public void updateCompositionWindowPos(Point pos) {
 		checkXIC();
-		XPoint spot = new XPoint(pos.x(), pos.y() - 12 + fontSize);
+		XPoint spot = new XPoint(pos.x(), pos.y() + fontSize);
 		spot.write();
 		Pointer nested = Xlib.INSTANCE.XVaCreateNestedList(0, XNSpotLocation, spot.getPointer(), null);
 		if(nested != null) {

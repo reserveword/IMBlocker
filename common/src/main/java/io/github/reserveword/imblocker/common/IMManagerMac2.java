@@ -85,18 +85,17 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 			// state == true: full IME path
 			Imp.invoke(self, sel, eventArray);
 		};
-
 		ObjC.INSTANCE.class_replaceMethod(viewClass, selector, NewImp, "v@:@");
 		
 		Pointer firstRectSel = RuntimeUtils.sel("firstRectForCharacterRange:actualRange:");
 		NewFirstRectImp = (self, sel, rangePtr, actualRange) -> {
-			if (actualRange != null && Pointer.nativeValue(actualRange) != 0) {
-				actualRange.setLong(0, 0);
-				actualRange.setLong(8, 0);
-			}
-			return new NSRect(caretX, caretY, 1, fontSize);
+			Proxy window = new Proxy(new Pointer(GLFWNativeCocoa.glfwGetCocoaWindow(
+					MinecraftClientAccessor.INSTANCE.getWindowHandle())));
+			NSRect contentRect = toNSRect(window.send("contentRectForFrameRect:", toNSRect(window.send("frame"))));
+			double caretScreenX = contentRect.x + caretX;
+			double caretScreenY = contentRect.y + contentRect.height - caretY - fontSize;
+			return new NSRect(caretScreenX, caretScreenY, 0, fontSize);
 		};
-		
 		ObjC.INSTANCE.class_replaceMethod(viewClass, firstRectSel, NewFirstRectImp,
 				"{CGRect={CGPoint=dd}{CGSize=dd}}@:{_NSRange=QQ}^{_NSRange=QQ}");
 	}
@@ -152,16 +151,8 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 	
 	@Override
 	public void updateCompositionWindowPos(Point pos) {
-		Proxy window = new Proxy(new Pointer(GLFWNativeCocoa.glfwGetCocoaWindow(
-				MinecraftClientAccessor.INSTANCE.getWindowHandle())));
-		NSRect contentRect = toNSRect(window.send("contentRectForFrameRect:", toNSRect(window.send("frame"))));
-		caretX = contentRect.x + pos.x();
-		caretY = contentRect.y + contentRect.height - pos.y() - fontSize;
-		Pointer ctxCls = RuntimeUtils.cls("NSTextInputContext");
-		Pointer current = RuntimeUtils.msgPointer(ctxCls, "currentInputContext");
-		if (current != null && Pointer.nativeValue(current) != 0) {
-			RuntimeUtils.msg(current, "invalidateCharacterCoordinates");
-		}
+		caretX = pos.x();
+		caretY = pos.y();
 	}
 	
 	@Override

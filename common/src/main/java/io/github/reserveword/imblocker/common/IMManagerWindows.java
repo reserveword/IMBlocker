@@ -14,8 +14,8 @@ import com.sun.jna.platform.win32.WinUser;
 import com.sun.jna.platform.win32.WinUser.WindowProc;
 import com.sun.jna.ptr.IntByReference;
 
+import io.github.reserveword.imblocker.common.gui.CaretInfo;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
-import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
 import io.github.reserveword.imblocker.common.gui.UniversalIMECandidateOverlay;
 import io.github.reserveword.imblocker.common.jnastructs.COMPOSITIONFORM;
@@ -128,15 +128,15 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 		return 60 - (System.currentTimeMillis() - lastIMStateOnTimestamp);
 	}
 	
-	public static void updateCompositionWindowPos(Point pos) {
+	public static void updateCompositionWindowPos(CaretInfo caretInfo) {
 		WinDef.HWND hwnd = u.GetActiveWindow();
 		WinNT.HANDLE himc = ImmGetContext(hwnd);
 		if (himc != null) {
 			COMPOSITIONFORM cfr = new COMPOSITIONFORM();
 			ImmGetCompositionWindow(himc, cfr);
 			cfr.dwStyle = 2; // CFS_POINT
-			cfr.ptCurrentPos.x = pos.x();
-			cfr.ptCurrentPos.y = pos.y();
+			cfr.ptCurrentPos.x = caretInfo.caretX();
+			cfr.ptCurrentPos.y = caretInfo.caretY();
 			ImmSetCompositionWindow(himc, cfr);
 		}
 		ImmReleaseContext(hwnd, himc);

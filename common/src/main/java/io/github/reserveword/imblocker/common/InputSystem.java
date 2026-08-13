@@ -19,12 +19,13 @@ public final class InputSystem {
 	private static final InputSystemWrapper INSTANCE;
 	
 	public interface InputSystemWrapper {
+		float getWindowPixelDensity();
 		void setPreeditCursorRectangle(long window, int x, int y, int width, int height);
 		WinDef.HWND getHWND(long window);
 	}
 	
-	public static void setPreeditCursorRectangle(long window, double x, double y, double width, double height) {
-		INSTANCE.setPreeditCursorRectangle(window, (int) x, (int) y, (int) width, (int) height);
+	public static float getWindowPixelDensity() {
+		return INSTANCE.getWindowPixelDensity();
 	}
 	
 	public static void setPreeditCursorRectangle(long window, int x, int y, int width, int height) {
@@ -39,15 +40,14 @@ public final class InputSystem {
 		if(IMBlockerCore.IS_SDL_PRESENT) {
 			INSTANCE = new InputSystemWrapper() {
 				@Override
+				public float getWindowPixelDensity() {
+					long window = Minecraft.getInstance().getWindow().handle();
+					float pixelDensity = SDLVideo.SDL_GetWindowPixelDensity(window);
+					return pixelDensity > 0 ? pixelDensity : 1.0f;
+				}
+				
+				@Override
 				public void setPreeditCursorRectangle(long window, int x, int y, int width, int height) {
-					float pixelDensity = SDLVideo.SDL_GetWindowPixelDensity(Minecraft.getInstance().getWindow().handle());
-					if(pixelDensity > 0) {
-						x = Math.round(x / pixelDensity);
-						y = Math.round(y / pixelDensity);
-						width = Math.round(width / pixelDensity);
-						height = Math.round(height / pixelDensity);
-					}
-					
 					try (MemoryStack stack = MemoryStack.stackPush()) {
 						Buffer rect = SDL_Rect.malloc(1, stack).x(x).y(y).w(width).h(height);
 						SDLKeyboard.SDL_SetTextInputArea(window, rect, -1);
@@ -64,6 +64,15 @@ public final class InputSystem {
 			};
 		}else {
 			INSTANCE = new InputSystemWrapper() {
+				@Override
+				public float getWindowPixelDensity() {
+					long window = Minecraft.getInstance().getWindow().handle();
+					int[] windowWidth = new int[1], frameBufferWidth = new int[1];
+					GLFW.glfwGetFramebufferSize(window, frameBufferWidth, new int[1]);
+					GLFW.glfwGetWindowSize(window, windowWidth, new int[1]);
+					return windowWidth[0] > 0 ? (float) frameBufferWidth[0] / (float) windowWidth[0] : 1.0f;
+				}
+				
 				@Override
 				public void setPreeditCursorRectangle(long window, int x, int y, int width, int height) {
 					GLFW.glfwSetPreeditCursorRectangle(window, x, y, width, height);

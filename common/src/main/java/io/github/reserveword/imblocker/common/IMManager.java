@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFWNativeX11;
 
 import com.sun.jna.Platform;
 
+import io.github.reserveword.imblocker.common.gui.CaretInfo;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.FocusableObject;
 import io.github.reserveword.imblocker.common.gui.FocusableWidget;
@@ -45,18 +46,16 @@ public final class IMManager {
 		FocusableObject focusedWidget = FocusManager.getFocusOwner();
 		if (focusedWidget != null) {
 			if((Platform.isLinux() && IMBlockerConfig.INSTANCE.isHeadlessPreeditMode())) {
-				Point caretPos = calculateCaretPos(focusedWidget, false);
-				double extraScale = IMBlockerConfig.INSTANCE.getExtraScale();
+				CaretInfo caretInfo = calculateCaretInfo(focusedWidget, false);
 				InputSystem.setPreeditCursorRectangle(Minecraft.getInstance().getWindow().handle(), 
-						caretPos.x() / extraScale, caretPos.y() / extraScale, 
-						1, focusedWidget.getFontHeight() * focusedWidget.getGuiScale() / extraScale);
+						caretInfo.caretX(), caretInfo.caretY(), 0, caretInfo.inputHeight());
 			}else if(hasCompositionWindow()) {
-				Point caretPos = calculateCaretPos(focusedWidget, false);
-				IMBlockerCore.invokeOnMainThread(() -> IMManagerWindows.updateCompositionWindowPos(caretPos));
+				CaretInfo caretInfo = calculateCaretInfo(focusedWidget, false);
+				IMBlockerCore.invokeOnMainThread(() -> IMManagerWindows.updateCompositionWindowPos(caretInfo));
 			}else {
-				Point caretPos = calculateCaretPos(focusedWidget, true);
-				UniversalIMEPreeditOverlay.getInstance().updateCaretPosition(caretPos.x(), caretPos.y());
-				UniversalIMECandidateOverlay.getInstance().updateCaretPosition(caretPos.x(), caretPos.y());
+				CaretInfo caretInfo = calculateCaretInfo(focusedWidget, true);
+				UniversalIMEPreeditOverlay.getInstance().updateCaretPosition(caretInfo);
+				UniversalIMECandidateOverlay.getInstance().updateCaretPosition(caretInfo);
 			}
 		}
 	}
@@ -73,12 +72,13 @@ public final class IMManager {
 		return Platform.isWindows() && IMBlockerConfig.INSTANCE.isClassicCompositionStyle() && !IMBlockerConfig.INSTANCE.isIngameIMEEnabled();
 	}
 	
-	private static Point calculateCaretPos(FocusableObject inputEntry, boolean isIngameIME) {
+	private static CaretInfo calculateCaretInfo(FocusableObject inputEntry, boolean isIngameIME) {
 		try {
 			Rectangle inputEntryBounds = inputEntry.getBoundsAbs();
 			Point caretPos = inputEntry.getCaretPos();
+			int inputHeight = (int) (inputEntry.getFontHeight() * inputEntry.getGuiScale());
 			if(inputEntryBounds == Rectangle.EMPTY && caretPos == Point.TOP_LEFT) {
-				return Point.TOP_LEFT;
+				return new CaretInfo(0, 0, inputHeight);
 			}
 			//Constrained to entry border.
 			int compositionWindowPosX = MathHelper.clamp(caretPos.x(), 0, inputEntryBounds.width());
@@ -94,14 +94,20 @@ public final class IMManager {
 				compositionWindowPosX = MathHelper.clamp(compositionWindowPosX, 0, containerBounds.width());
 				compositionWindowPosY = MathHelper.clamp(compositionWindowPosY, 0, containerBounds.height());
 				if(!isIngameIME) {
+					float pixelDensity = InputSystem.getWindowPixelDensity();
+					if(pixelDensity != 1.0f && FocusManager.isMinecraftContextFocused()) {
+						compositionWindowPosX = (int) ((float) compositionWindowPosX / pixelDensity);
+						compositionWindowPosY = (int) ((float) compositionWindowPosY / pixelDensity);
+						inputHeight = (int) ((float) inputHeight / pixelDensity);
+					}
 					compositionWindowPosX += containerBounds.x();
 					compositionWindowPosY += containerBounds.y();
 				}
 			}
-			return new Point(compositionWindowPosX, compositionWindowPosY);
+			return new CaretInfo(compositionWindowPosX, compositionWindowPosY, inputHeight);
 		} catch (Throwable e) {
 			IMBlockerCore.LOGGER.error("[IMBlocker] Failed to calculate caret position: " + e);
-			return Point.TOP_LEFT;
+			return CaretInfo.EMPTY;
 		}
 	}
 	

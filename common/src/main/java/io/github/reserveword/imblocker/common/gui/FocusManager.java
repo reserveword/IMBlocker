@@ -48,7 +48,7 @@ public class FocusManager {
 	private static FocusableObject focusOwner;
 
 	private static boolean isWindowInitialized = !Platform.isWindows();
-	private static boolean isWindowFocused = false;
+	private static boolean isWindowFocused = !Platform.isWindows();
 	
 	/**The focus destination of game window.*/
 	private static FocusContainer focusedContainer = FocusContainer.MINECRAFT;
@@ -110,6 +110,10 @@ public class FocusManager {
 	
 	public static FocusContainer getFocusedContainer() {
 		return focusedContainer;
+	}
+	
+	public static boolean isMinecraftContextFocused() {
+		return focusedContainer == FocusContainer.MINECRAFT;
 	}
 	
 	public static FocusableObject getFocusOwner() {

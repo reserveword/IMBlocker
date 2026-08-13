@@ -17,6 +17,7 @@ public class UniversalIMECandidateOverlay {
 	
 	private int caretX;
 	private int caretY;
+	private int inputHeight;
 	
 	private String displayText;
 	private int selectedStartIndex;
@@ -26,16 +27,16 @@ public class UniversalIMECandidateOverlay {
 	private int displayTextWidth;
 	private int selectedRenderX1;
 	private int selectedRenderX2;
-	private Rectangle ingameOverlayBounds = Rectangle.EMPTY;
 	private Rectangle overlayBounds = Rectangle.EMPTY;
 
 	private UniversalIMECandidateOverlay() {
 		this.font = Minecraft.getInstance().font;
 	}
 	
-	public void updateCaretPosition(int caretX, int caretY) {
-		this.caretX = caretX;
-		this.caretY = caretY;
+	public void updateCaretPosition(CaretInfo caretInfo) {
+		this.caretX = caretInfo.caretX();
+		this.caretY = caretInfo.caretY();
+		this.inputHeight = caretInfo.inputHeight();
 		updateCandidateArea();
 	}
 	
@@ -53,7 +54,7 @@ public class UniversalIMECandidateOverlay {
 			}
 			displayText = displayTextBuilder.toString();
 			
-			if(FocusManager.getFocusedContainer() == FocusContainer.MINECRAFT) {
+			if(FocusManager.isMinecraftContextFocused()) {
 				displayTextWidth = font.width(displayText);
 				selectedRenderX1 = font.width(displayText.substring(0, selectedStartIndex));
 				selectedRenderX2 = font.width(displayText.substring(0, selectedEndIndex));
@@ -70,8 +71,6 @@ public class UniversalIMECandidateOverlay {
 	private void updateCandidateArea() {
 		FocusableObject focusOwner = FocusManager.getFocusOwner();
 		if(focusOwner != null && displayText != null) {
-			int widgetFontSize = focusOwner.getFontHeight();
-			double widgetGuiScale = focusOwner.getGuiScale();
 			int containerFontSize;
 			double containerGuiScale;
 			Rectangle candidateBorder;
@@ -80,30 +79,31 @@ public class UniversalIMECandidateOverlay {
 				containerGuiScale = focusedWidget.getFocusContainer().getGuiScale();
 				candidateBorder = focusedWidget.getFocusContainer().getBoundsAbs();
 			}else {
-				containerFontSize = widgetFontSize;
-				containerGuiScale = widgetGuiScale;
+				containerFontSize = inputHeight;
+				containerGuiScale = focusOwner.getGuiScale();
 				candidateBorder = focusOwner.getBoundsAbs();
 			}
 			
 			int candidateX = caretX, 
-					candidateY = (int) (caretY + widgetFontSize * widgetGuiScale + (containerFontSize + 12) * containerGuiScale),
+					candidateY = (int) (caretY + inputHeight + (containerFontSize + 12) * containerGuiScale),
 					candidateWidth = (int) (displayTextWidth * containerGuiScale),
 					candidateHeight = (int) (containerFontSize * containerGuiScale);
 			if(candidateX + candidateWidth > candidateBorder.width()) {
 				candidateX = Math.max((int) (-selectedRenderX1 * containerGuiScale), candidateBorder.width() - candidateWidth);
 			}
 			if(candidateY + candidateHeight > candidateBorder.height()) {
-				if(caretY + widgetFontSize * widgetGuiScale + 5 * containerGuiScale + candidateHeight <= candidateBorder.height()) {
+				if(caretY + inputHeight + 5 * containerGuiScale + candidateHeight <= candidateBorder.height()) {
 					candidateY = (int) (caretY - (4 + containerFontSize) * containerGuiScale);
 				}else {
 					candidateY = (int) (caretY - (6 + containerFontSize) * 2 * containerGuiScale);
 				}
 			}
 			
-			ingameOverlayBounds = new Rectangle(1.0 / containerGuiScale, candidateX, candidateY, candidateWidth, candidateHeight);
-			candidateX += candidateBorder.x();
-			candidateY += candidateBorder.y();
-			overlayBounds = new Rectangle(candidateX, candidateY, candidateWidth, candidateHeight);
+			if(FocusManager.isMinecraftContextFocused()) {
+				overlayBounds = new Rectangle(1.0 / containerGuiScale, candidateX, candidateY, candidateWidth, candidateHeight);
+			}else{
+				overlayBounds = new Rectangle(candidateX, candidateY, candidateWidth, candidateHeight);
+			}
 		}
 	}
 	
@@ -112,13 +112,13 @@ public class UniversalIMECandidateOverlay {
 			return;
 		}
 		
-		graphics.fill(ingameOverlayBounds.x() - 4, ingameOverlayBounds.y() - 4, 
-				ingameOverlayBounds.x() + ingameOverlayBounds.width() + 4, ingameOverlayBounds.y() + ingameOverlayBounds.height() + 4, -1);
-		graphics.fill(ingameOverlayBounds.x() + selectedRenderX1, ingameOverlayBounds.y() - 2, 
-				ingameOverlayBounds.x() + selectedRenderX2, ingameOverlayBounds.y() + ingameOverlayBounds.height() + 2, FOCUSED_COLOR);
-		graphics.fill(ingameOverlayBounds.x() + selectedRenderX1, ingameOverlayBounds.y(), 
-				ingameOverlayBounds.x() + selectedRenderX1 + 1, ingameOverlayBounds.y() + ingameOverlayBounds.height(), INDICATOR_COLOR);
-		graphics.text(font, displayText, ingameOverlayBounds.x(), ingameOverlayBounds.y(), TEXT_COLOR, false);
+		graphics.fill(overlayBounds.x() - 4, overlayBounds.y() - 4, 
+				overlayBounds.x() + overlayBounds.width() + 4, overlayBounds.y() + overlayBounds.height() + 4, -1);
+		graphics.fill(overlayBounds.x() + selectedRenderX1, overlayBounds.y() - 2, 
+				overlayBounds.x() + selectedRenderX2, overlayBounds.y() + overlayBounds.height() + 2, FOCUSED_COLOR);
+		graphics.fill(overlayBounds.x() + selectedRenderX1, overlayBounds.y(), 
+				overlayBounds.x() + selectedRenderX1 + 1, overlayBounds.y() + overlayBounds.height(), INDICATOR_COLOR);
+		graphics.text(font, displayText, overlayBounds.x(), overlayBounds.y(), TEXT_COLOR, false);
 	}
 	
 	public void renderOnImGuiSurface(ImDrawList graphics) {

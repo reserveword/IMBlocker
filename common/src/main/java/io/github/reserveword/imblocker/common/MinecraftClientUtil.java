@@ -10,6 +10,7 @@ import org.lwjgl.sdl.SDLVideo;
 import com.mojang.blaze3d.platform.Window;
 
 import io.github.reserveword.imblocker.common.gui.Dimension;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.mixin.KeyboardHandlerAccessor;
 import net.minecraft.DetectedVersion;
@@ -44,7 +45,9 @@ public abstract class MinecraftClientUtil {
 	
 	public static Dimension getContentSize() {
 		Window gameWindow = Minecraft.getInstance().getWindow();
-		return new Dimension(gameWindow.getWidth(), gameWindow.getHeight());
+		float windowPixelDensity = FocusManager.getWindowPixelDensity();
+		return new Dimension(Math.round((float)gameWindow.getWidth() / windowPixelDensity), 
+				Math.round((float) gameWindow.getHeight() / windowPixelDensity));
 	}
 	
 	public static int getStringWidth(String text) {

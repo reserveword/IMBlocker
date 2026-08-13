@@ -91,8 +91,8 @@ public class UniversalIMEPreeditOverlay {
 				compositionBorder = focusOwner.getBoundsAbs();
 			}
 			
-			int scaledInputHeight = (int) (inputHeight + 5 * containerGuiScale);
-			int compositionX = caretX, compositionY = caretY + scaledInputHeight,
+			int paddedInputHeight = (int) (inputHeight + 5 * containerGuiScale);
+			int compositionX = caretX, compositionY = caretY + paddedInputHeight,
 					compositionWidth = (int) (preEditTextWidth * containerGuiScale),
 					compositionHeight = (int) (containerFontSize * containerGuiScale);
 			if(compositionX + compositionWidth > compositionBorder.width()) {
@@ -109,18 +109,8 @@ public class UniversalIMEPreeditOverlay {
 			}
 			
 			if(!IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
-				float pixelDensity = InputSystem.getWindowPixelDensity();
 				int scaledMargin = (int) (HOT_AREA_MARGIN * containerGuiScale), 
 						compositionMinY = Math.min(caretY, compositionY);
-				if(pixelDensity != 1.0f && FocusManager.isMinecraftContextFocused()) {
-					scaledMargin = (int) ((float) scaledMargin / pixelDensity);
-					scaledInputHeight = (int) ((float) scaledInputHeight / pixelDensity);
-					compositionX = (int) ((float) compositionX / pixelDensity);
-					compositionY = (int) ((float) compositionY / pixelDensity);
-					compositionMinY = (int) ((float) compositionMinY / pixelDensity);
-					compositionWidth = (int) ((float) compositionWidth / pixelDensity);
-					compositionHeight = (int) ((float) compositionHeight / pixelDensity);
-				}
 				compositionX += compositionBorder.x();
 				compositionY += compositionBorder.y();
 				compositionMinY += compositionBorder.y();
@@ -128,7 +118,7 @@ public class UniversalIMEPreeditOverlay {
 				Rectangle preeditCursorRect;
 				if(!IMBlockerConfig.INSTANCE.useStrictCursorRect()) {
 					preeditCursorRect = new Rectangle(compositionX - scaledMargin, compositionMinY - scaledMargin,
-							compositionWidth + scaledMargin * 2, compositionHeight + scaledInputHeight + scaledMargin * 2);
+							compositionWidth + scaledMargin * 2, compositionHeight + paddedInputHeight + scaledMargin * 2);
 				}else {
 					preeditCursorRect = new Rectangle(compositionX - scaledMargin, compositionY - scaledMargin,
 							compositionWidth + scaledMargin * 2, compositionHeight + scaledMargin * 2);

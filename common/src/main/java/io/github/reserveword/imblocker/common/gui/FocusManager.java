@@ -2,6 +2,7 @@ package io.github.reserveword.imblocker.common.gui;
 
 import com.sun.jna.Platform;
 
+import io.github.reserveword.imblocker.common.InputSystem;
 import io.github.reserveword.imblocker.common.LinuxKeyCallbackMonitor;
 
 /**
@@ -46,12 +47,14 @@ public class FocusManager {
 	 * eventually processed.
 	 */
 	private static FocusableObject focusOwner;
+	
+	/**The focus destination of game window.*/
+	private static FocusContainer focusedContainer = FocusContainer.MINECRAFT;
 
 	private static boolean isWindowInitialized = !Platform.isWindows();
 	private static boolean isWindowFocused = !Platform.isWindows();
 	
-	/**The focus destination of game window.*/
-	private static FocusContainer focusedContainer = FocusContainer.MINECRAFT;
+	private static float windowPixelDensity;
 	
 	/*Utility fields for focus tracking*/
 	public static boolean isTrackingFocus = false;
@@ -118,5 +121,13 @@ public class FocusManager {
 	
 	public static FocusableObject getFocusOwner() {
 		return focusOwner;
+	}
+	
+	public static void updateWindowPixelDensity() {
+		windowPixelDensity = InputSystem.getWindowPixelDensity();
+	}
+	
+	public static float getWindowPixelDensity() {
+		return windowPixelDensity;
 	}
 }

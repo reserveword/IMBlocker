@@ -36,6 +36,7 @@ public interface FocusableWidget extends FocusableObject {
 		return true;
 	}
 	
+	@Override
 	default double getGuiScale() {
 		return getFocusContainer().getGuiScale();
 	}

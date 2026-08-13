@@ -45,6 +45,7 @@ public final class IMManager {
 	public static void updateCaretPosition() {
 		FocusableObject focusedWidget = FocusManager.getFocusOwner();
 		if (focusedWidget != null) {
+			FocusManager.updateWindowPixelDensity();
 			if((Platform.isLinux() && IMBlockerConfig.INSTANCE.isHeadlessPreeditMode())) {
 				CaretInfo caretInfo = calculateCaretInfo(focusedWidget, false);
 				InputSystem.setPreeditCursorRectangle(Minecraft.getInstance().getWindow().handle(), 
@@ -94,12 +95,6 @@ public final class IMManager {
 				compositionWindowPosX = MathHelper.clamp(compositionWindowPosX, 0, containerBounds.width());
 				compositionWindowPosY = MathHelper.clamp(compositionWindowPosY, 0, containerBounds.height());
 				if(!isIngameIME) {
-					float pixelDensity = InputSystem.getWindowPixelDensity();
-					if(pixelDensity != 1.0f && FocusManager.isMinecraftContextFocused()) {
-						compositionWindowPosX = (int) ((float) compositionWindowPosX / pixelDensity);
-						compositionWindowPosY = (int) ((float) compositionWindowPosY / pixelDensity);
-						inputHeight = (int) ((float) inputHeight / pixelDensity);
-					}
 					compositionWindowPosX += containerBounds.x();
 					compositionWindowPosY += containerBounds.y();
 				}

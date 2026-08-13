@@ -161,8 +161,12 @@ public abstract class FocusContainer implements FocusableObject {
 		});
 	}
 	
+	public double getInternalGuiScale() {
+		return guiScaleFactor;
+	}
+	
 	@Override
 	public double getGuiScale() {
-		return guiScaleFactor;
+		return getInternalGuiScale();
 	}
 }

@@ -7,6 +7,7 @@ import com.sun.jna.Pointer;
 
 import ca.weblite.objc.Runtime;
 import ca.weblite.objc.RuntimeUtils;
+import ca.weblite.objc.foundation.NSRange;
 
 final class IMManagerMac implements IMManager.PlatformIMManager {
 	private static boolean state = false;
@@ -25,12 +26,31 @@ final class IMManagerMac implements IMManager.PlatformIMManager {
 		Pointer selector = RuntimeUtils.sel("interpretKeyEvents:");
 		Pointer method = Runtime.INSTANCE.class_getInstanceMethod(viewClass, selector);
 		Imp = ObjC.INSTANCE.method_getImplementation(method);
+		final NSRange emptyRange = new NSRange();
+		emptyRange.location = Long.MAX_VALUE;
+		emptyRange.length = 0;
 		NewImp = (self, sel, eventArray) -> {
 			if (view == null) view = self;
 			if (!state) {
-				Pointer textInputContext = RuntimeUtils.cls("NSTextInputContext");
-				Pointer current = RuntimeUtils.msgPointer(textInputContext, "currentInputContext");
-				RuntimeUtils.msg(current, "discardMarkedText");
+				Pointer textInputContextCls = RuntimeUtils.cls("NSTextInputContext");
+				Pointer currentCtx = RuntimeUtils.msgPointer(textInputContextCls, "currentInputContext");
+				if (currentCtx != null && Pointer.nativeValue(currentCtx) != 0) {
+					RuntimeUtils.msg(currentCtx, "discardMarkedText");
+				}
+				if (eventArray != null && Pointer.nativeValue(eventArray) != 0) {
+					long count = RuntimeUtils.msg(eventArray, "count");
+					for (long i = 0; i < count; i++) {
+						Pointer event = RuntimeUtils.msgPointer(eventArray, "objectAtIndex:", i);
+						if (event == null || Pointer.nativeValue(event) == 0) {
+							continue;
+						}
+						Pointer characters = RuntimeUtils.msgPointer(event, "characters");
+						if (characters == null || Pointer.nativeValue(characters) == 0) {
+							continue;
+						}
+						RuntimeUtils.msg(self, "insertText:replacementRange:", characters, emptyRange);
+					}
+				}
 				return;
 			}
 			Imp.invoke(self, sel, eventArray);

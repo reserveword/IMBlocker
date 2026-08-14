@@ -141,7 +141,16 @@ public final class IMManager {
 					} catch (ClassNotFoundException e) {
 						long glfwWindow = Minecraft.getInstance().getWindow().handle();
 						long x11Window = GLFWNativeX11.glfwGetX11Window(glfwWindow);
-						linuxImpl = x11Window != 0 ? new IMManagerX11(glfwWindow, x11Window) : new IMManagerLinux();
+						if(x11Window != 0) {
+							try {
+								linuxImpl = new IMManagerX11(glfwWindow, x11Window);
+							} catch (RuntimeException re) {
+								IMBlockerCore.LOGGER.error(re.getMessage());
+								linuxImpl = new IMManagerLinux();
+							}
+						}else {
+							linuxImpl = new IMManagerLinux();
+						}
 					}
 					INSTANCE = linuxImpl;
 				}else {

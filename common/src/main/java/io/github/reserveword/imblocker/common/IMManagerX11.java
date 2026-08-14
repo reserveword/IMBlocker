@@ -18,26 +18,26 @@ final class IMManagerX11 extends IMManagerLinux {
 		
 		void XSetICFocus(Pointer ic);
 		void XUnsetICFocus(Pointer ic);
-		Pointer XVaCreateNestedList(int unused, Object... args);
-		void XFree(Pointer p);
-		String XSetICValues(Pointer ic, Object... args);
 		void XFlush(Pointer display);
 	}
 
 	private final long glfwWindow;
 	private final long x11Window;
 	private final Pointer display;
-	private Pointer xic;
+	private final Pointer xic;
 	
-	public IMManagerX11(long glfwWindow, long x11Window) {
+	public IMManagerX11(long glfwWindow, long x11Window) throws RuntimeException {
 		this.glfwWindow = glfwWindow;
 		this.x11Window = x11Window;
 		this.display = new Pointer(GLFWNativeX11.glfwGetX11Display());
+		this.xic = retrieveXIC();
+		if(xic == null) {
+			throw new RuntimeException("[IMBlocker] Failed to retrieve XIC, fallback to basic IMManager.");
+		}
 	}
 	
 	@Override
 	public void setState(boolean on) {
-		checkXIC();
 		if(on) {
 			Xlib.INSTANCE.XSetICFocus(xic);
 		}else {
@@ -46,9 +46,7 @@ final class IMManagerX11 extends IMManagerLinux {
 		Xlib.INSTANCE.XFlush(display);
 	}
 	
-	private void checkXIC() {
-		if(xic != null) return;
-		
+	private Pointer retrieveXIC() {
 		Pointer base = new Pointer(glfwWindow);
 		int handleOffset = -1, pointerSize = Native.POINTER_SIZE;
 		
@@ -62,11 +60,11 @@ final class IMManagerX11 extends IMManagerLinux {
 		}
 		
 		if(handleOffset == -1) {
-			throw new RuntimeException("[IMBlocker] Failed to retrieve XIC.");
+			return null;
 		}
 		
 		long candidate = safeReadLong(base, handleOffset + pointerSize * 2);
-		xic = new Pointer(candidate);
+		return candidate != 0 ? new Pointer(candidate) : null;
 	}
 	
 	private long safeReadLong(Pointer pointer, int offset) {

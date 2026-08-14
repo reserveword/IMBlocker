@@ -40,7 +40,7 @@ public enum LinuxIMFramework {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			stateName = reader.readLine();
 		} catch (IOException e) {
-			e.printStackTrace();
+			IMBlockerCore.LOGGER.error(e);
 		}
 		return stateName != null && stateName.equals(onStateSupplier.get());
 	}
@@ -51,7 +51,7 @@ public enum LinuxIMFramework {
 		try {
 			Runtime.getRuntime().exec(command);
 		} catch (IOException e) {
-			e.printStackTrace();
+			IMBlockerCore.LOGGER.error(e);
 		}
 	}
 }

@@ -3,6 +3,7 @@ package io.github.reserveword.imblocker.common;
 import java.util.Arrays;
 import java.util.List;
 
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWNativeX11;
 
 import com.sun.jna.Library;
@@ -32,7 +33,7 @@ final class IMManagerX11 extends IMManagerLinux {
 	private final long glfwWindow;
 	private final long x11Window;
 	private final Pointer display;
-	private Pointer xic;
+	private final Pointer xic;
 	
 	private int fontSize;
 	
@@ -40,11 +41,14 @@ final class IMManagerX11 extends IMManagerLinux {
 		this.glfwWindow = glfwWindow;
 		this.x11Window = x11Window;
 		this.display = new Pointer(GLFWNativeX11.glfwGetX11Display());
+		this.xic = retrieveXIC();
+		if(xic == null) {
+			throw new RuntimeException("[IMBlocker] Failed to retrieve XIC, fallback to basic IMManager.");
+		}
 	}
 	
 	@Override
 	public void setState(boolean on) {
-		checkXIC();
 		if(on) {
 			Xlib.INSTANCE.XSetICFocus(xic);
 		}else {
@@ -55,7 +59,6 @@ final class IMManagerX11 extends IMManagerLinux {
 	
 	@Override
 	public void updateCompositionWindowPos(Point pos) {
-		checkXIC();
 		XPoint spot = new XPoint(pos.x(), pos.y() + fontSize);
 		spot.write();
 		Pointer nested = Xlib.INSTANCE.XVaCreateNestedList(0, XNSpotLocation, spot.getPointer(), null);
@@ -72,9 +75,7 @@ final class IMManagerX11 extends IMManagerLinux {
 		IMBlockerCore.invokeOnRenderThread(IMManager::updateCompositionWindowPos);
 	}
 	
-	private void checkXIC() {
-		if(xic != null) return;
-		
+	private Pointer retrieveXIC() {
 		Pointer base = new Pointer(glfwWindow);
 		int handleOffset = -1, pointerSize = Native.POINTER_SIZE;
 		
@@ -88,7 +89,7 @@ final class IMManagerX11 extends IMManagerLinux {
 		}
 		
 		if(handleOffset == -1) {
-			throw new RuntimeException("[IMBlocker] Failed to retrieve XIC.");
+			return null;
 		}
 		
 		/* 
@@ -113,14 +114,17 @@ final class IMManagerX11 extends IMManagerLinux {
 		 *         ...
 		 *     }_GLFWwindowX11
 		 */
-		// get the value of the fourth pointer
-		long candidate = safeReadLong(base, handleOffset + pointerSize * 2);
-		// boolean distinguish
-		if(candidate == 0 || candidate == 1) {
+		int[][] glfwVersion = new int[3][1];
+		GLFW.glfwGetVersion(glfwVersion[0], glfwVersion[1], glfwVersion[2]);
+		int glfwVersionNum = glfwVersion[0][0] * 100 + glfwVersion[1][0] * 10 + glfwVersion[2][0];
+		long candidate;
+		if(glfwVersionNum > 330) {
+			candidate = safeReadLong(base, handleOffset + pointerSize * 2);
+		}else {
 			candidate = safeReadLong(base, handleOffset + pointerSize);
 		}
 		
-		xic = new Pointer(candidate);
+		return candidate != 0 ? new Pointer(candidate) : null;
 	}
 	
 	private long safeReadLong(Pointer pointer, int offset) {

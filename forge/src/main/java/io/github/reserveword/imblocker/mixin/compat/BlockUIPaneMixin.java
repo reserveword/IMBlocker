@@ -12,6 +12,7 @@ import com.ldtteam.blockui.views.ScrollingContainer;
 import com.ldtteam.blockui.views.View;
 
 import io.github.reserveword.imblocker.common.MathHelper;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 
@@ -45,11 +46,12 @@ public abstract class BlockUIPaneMixin implements MinecraftFocusableWidget {
 			yAbs += parent.getY() + ((BlockUIViewAccessor) parent).getPadding();
 		}
 		
-		double renderScale = window.getScreen().getRenderScale();
+		double renderScale = getInternalGuiScale();
 		xAbs = (int) (xAbs * renderScale + ((BlockUIBOScreenAccessor) window.getScreen()).getX());
 		yAbs = (int) (yAbs * renderScale + ((BlockUIBOScreenAccessor) window.getScreen()).getY());
 		
-		return new Rectangle(xAbs, yAbs, (int) (width * renderScale), (int) (height * renderScale));
+		return new Rectangle(1.0 / FocusManager.getWindowPixelDensity(), 
+				xAbs, yAbs, (int) (width * renderScale), (int) (height * renderScale));
 	}
 	
 	@Override

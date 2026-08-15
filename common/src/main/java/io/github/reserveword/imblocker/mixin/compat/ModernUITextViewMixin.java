@@ -90,7 +90,7 @@ public abstract class ModernUITextViewMixin extends View implements MinecraftFoc
 	}
 	
 	@Override
-	public double getGuiScale() {
+	public double getInternalGuiScale() {
 		return 1.0;
 	}
 	

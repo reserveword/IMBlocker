@@ -170,4 +170,9 @@ final class MinecraftFocusContext extends FocusContainer {
 		Dimension contentSize = MinecraftClientAccessor.INSTANCE.getContentSize();
 		return new Point(contentSize.width() / 3, contentSize.height() / 2);
 	}
+	
+	@Override
+	public double getGuiScale() {
+		return getInternalGuiScale() / FocusManager.getWindowPixelDensity();
+	}
 }

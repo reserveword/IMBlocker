@@ -46,7 +46,7 @@ public abstract class BlockUITextFieldMixin extends BlockUIPaneMixin implements 
 	
 	@Inject(method = "onUpdate", at = @At("TAIL"))
 	public void onUpdate(CallbackInfo ci) {
-		double currentGuiScale = super.getGuiScale();
+		double currentGuiScale = super.getInternalGuiScale();
 		if(imblocker$guiScale != currentGuiScale) {
 			imblocker$guiScale = currentGuiScale;
 			IMManager.updateCompositionFontSize();
@@ -74,7 +74,7 @@ public abstract class BlockUITextFieldMixin extends BlockUIPaneMixin implements 
 	}
 	
 	@Override
-	public double getGuiScale() {
+	public double getInternalGuiScale() {
 		return imblocker$guiScale;
 	}
 }

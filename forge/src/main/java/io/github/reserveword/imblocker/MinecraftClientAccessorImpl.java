@@ -6,6 +6,7 @@ import com.mojang.blaze3d.platform.Window;
 
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.Dimension;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.mixin.KeyboardHandlerAccessor;
 import net.minecraft.client.Minecraft;
@@ -45,7 +46,9 @@ public class MinecraftClientAccessorImpl extends MinecraftClientAccessor {
 	@Override
 	public Dimension getContentSize() {
 		Window gameWindow = Minecraft.getInstance().getWindow();
-		return new Dimension(gameWindow.getWidth(), gameWindow.getHeight());
+		float windowPixelDensity = FocusManager.getWindowPixelDensity();
+		return new Dimension(Math.round((float) gameWindow.getWidth() / windowPixelDensity), 
+				Math.round((float) gameWindow.getHeight() / windowPixelDensity));
 	}
 	
 	@Override

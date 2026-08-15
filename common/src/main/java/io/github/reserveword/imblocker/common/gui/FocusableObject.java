@@ -85,20 +85,28 @@ public interface FocusableObject {
 	}
 	
 	/**
-	 * Get the bounds of this element relative to the game window. Used to calculate
-	 * the position of IME's composition window.
+	 * Get the bounds of this element relative to parent focus transfer node, in <b>physical pixels</b>.
+	 * Used to calculate the position of IME's composition window.
 	 */
 	Rectangle getBoundsAbs();
 	
 	/**
 	 * Get the caret position (i.e. the position that insert characters) of this element
-	 * relative to itself. Used to calculate the position of IME's composition window.
+	 * relative to itself, in <b>physical pixels</b>. Used to calculate the position of IME's 
+	 * composition window.
 	 */
 	Point getCaretPos();
 	
+	/**
+	 * Get the height of the text in this element, in <b>UI pixels</b>.
+	 */
 	default int getFontHeight() {
 		return 8;
 	}
 	
+	/**
+	 * Get the <b>global</b> scale used by this element. This means that this scale should
+	 * be applied to all transformations to physical pixel coordinates within the element.
+	 */
 	double getGuiScale();
 }

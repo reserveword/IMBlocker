@@ -1,8 +1,11 @@
 package io.github.reserveword.imblocker.common.gui;
 
+import org.lwjgl.glfw.GLFW;
+
 import com.sun.jna.Platform;
 
 import io.github.reserveword.imblocker.common.LinuxKeyCallbackMonitor;
+import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 
 /**
  * <p>This class is the core of <b>IMBlocker's focus management system</b>,
@@ -49,6 +52,8 @@ public class FocusManager {
 	
 	private static boolean isWindowInitialized = !Platform.isWindows();
 	private static boolean isWindowFocused = false;
+	
+	private static float windowPixelDensity;
 	
 	/**The focus destination of game window.*/
 	private static FocusContainer focusedContainer = FocusContainer.MINECRAFT;
@@ -112,7 +117,23 @@ public class FocusManager {
 		return focusedContainer;
 	}
 	
+	public static boolean isMinecraftContextFocused() {
+		return focusedContainer == FocusContainer.MINECRAFT;
+	}
+	
 	public static FocusableObject getFocusOwner() {
 		return focusOwner;
+	}
+	
+	public static void updateWindowPixelDensity() {
+		long window = MinecraftClientAccessor.INSTANCE.getWindowHandle();
+		int[] windowWidth = new int[1], frameBufferWidth = new int[1];
+		GLFW.glfwGetFramebufferSize(window, frameBufferWidth, new int[1]);
+		GLFW.glfwGetWindowSize(window, windowWidth, new int[1]);
+		windowPixelDensity = windowWidth[0] > 0 ? (float) frameBufferWidth[0] / (float) windowWidth[0] : 1.0f;
+	}
+	
+	public static float getWindowPixelDensity() {
+		return windowPixelDensity;
 	}
 }

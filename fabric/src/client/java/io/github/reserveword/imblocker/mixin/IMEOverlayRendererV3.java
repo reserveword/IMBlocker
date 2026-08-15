@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.gui.CurrentScreenInfoOverlay;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftRenderApi;
 import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
@@ -32,7 +31,7 @@ public abstract class IMEOverlayRendererV3 {
 	@Inject(method = "method_3192", at = @At(value = "INVOKE", target = 
 			"Lnet/minecraft/class_11228;method_70890(Lcom/mojang/blaze3d/buffers/GpuBufferSlice;)V"))
 	public void renderIMEOverlays(class_9779 tracker, boolean tick, CallbackInfo ci) {
-		if(FocusManager.getFocusedContainer() == FocusContainer.MINECRAFT) {
+		if(FocusManager.isMinecraftContextFocused()) {
 			MinecraftRenderApi graphics = new MinecraftRenderApi() {
 				@Override
 				public void fillRect(int x1, int y1, int x2, int y2, int color) {

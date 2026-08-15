@@ -29,4 +29,13 @@ public interface MinecraftFocusableWidget extends FocusableWidget {
 			IMManager.updateCompositionWindowPos();
 		}
 	}
+	
+	default double getInternalGuiScale() {
+		return getFocusContainer().getInternalGuiScale();
+	}
+	
+	@Override
+	default double getGuiScale() {
+		return getInternalGuiScale() / FocusManager.getWindowPixelDensity();
+	}
 }

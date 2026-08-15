@@ -75,7 +75,7 @@ public abstract class MinecraftClientMixin {
 	
 	@Inject(method = "runTick", at = @At(value = "CONSTANT", args = "stringValue=blit"))
 	public void renderIMEOverlays(boolean tick, CallbackInfo ci) {
-		if(FocusManager.getFocusedContainer() == FocusContainer.MINECRAFT) {
+		if(FocusManager.isMinecraftContextFocused()) {
 			MatrixStack matrixStack = new MatrixStack();
 			MinecraftRenderApi graphics = new MinecraftRenderApi() {
 				@Override

@@ -53,7 +53,7 @@ public abstract class BlockUIPaneMixin implements MinecraftFocusableWidget {
 	}
 	
 	@Override
-	public double getGuiScale() {
+	public double getInternalGuiScale() {
 		return window.getScreen().getRenderScale();
 	}
 }

@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFWNativeX11;
 import com.sun.jna.Platform;
 
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
+import io.github.reserveword.imblocker.common.gui.CaretInfo;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.FocusableObject;
 import io.github.reserveword.imblocker.common.gui.FocusableWidget;
@@ -51,14 +52,14 @@ public final class IMManager {
 	public static void updateCompositionWindowPos() {
 		FocusableObject focusedWidget = FocusManager.getFocusOwner();
 		if(focusedWidget != null) {
+			FocusManager.updateWindowPixelDensity();
 			if(IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
-				Point caretPos = calculateCaretPos(focusedWidget, true);
-				UniversalIMEPreeditOverlay.getInstance().
-						updateCaretPosition(caretPos.x(), caretPos.y());
-				UniversalIMECandidateOverlay.getInstance().
-						updateCaretPosition(caretPos.x(), caretPos.y());
+				CaretInfo caretInfo = calculateCaretPos(focusedWidget, true);
+				UniversalIMEPreeditOverlay.getInstance().updateCaretPosition(caretInfo);
+				UniversalIMECandidateOverlay.getInstance().updateCaretPosition(caretInfo);
 			}else if(IMBlockerConfig.INSTANCE.isCursorPositionTrackingEnabled()) {
-				Point caretPos = calculateCaretPos(focusedWidget, isEnhancedLinuxImplPresent);
+				CaretInfo caretInfo = calculateCaretPos(focusedWidget, isEnhancedLinuxImplPresent);
+				Point caretPos = new Point(caretInfo.caretX(), caretInfo.caretY());
 				IMBlockerCore.invokeOnMainThread(() -> INSTANCE.updateCompositionWindowPos(caretPos));
 			}
 		}
@@ -87,12 +88,13 @@ public final class IMManager {
 		}
 	}
 	
-	public static Point calculateCaretPos(FocusableObject inputEntry, boolean isIngameIME) {
+	public static CaretInfo calculateCaretPos(FocusableObject inputEntry, boolean isIngameIME) {
 		try {
 			Rectangle inputEntryBounds = inputEntry.getBoundsAbs();
 			Point caretPos = inputEntry.getCaretPos();
+			int inputHeight = (int) (inputEntry.getFontHeight() * inputEntry.getGuiScale());
 			if(inputEntryBounds == Rectangle.EMPTY && caretPos == Point.TOP_LEFT) {
-				return Point.TOP_LEFT;
+				return new CaretInfo(0, 0, inputHeight);
 			}
 			//Constrained to entry border.
 			int compositionWindowPosX = MathHelper.clamp(caretPos.x(), 0, inputEntryBounds.width());
@@ -113,10 +115,10 @@ public final class IMManager {
 					compositionWindowPosY += containerBounds.y();
 				}
 			}
-			return new Point(compositionWindowPosX, compositionWindowPosY);
+			return new CaretInfo(compositionWindowPosX, compositionWindowPosY, inputHeight);
 		} catch (Throwable e) {
 			IMBlockerCore.LOGGER.error("[IMBlocker] Failed to calculate caret position: " + e);
-			return Point.TOP_LEFT;
+			return CaretInfo.EMPTY;
 		}
 	}
 	

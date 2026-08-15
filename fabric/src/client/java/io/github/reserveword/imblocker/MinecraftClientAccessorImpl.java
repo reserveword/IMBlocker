@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFW;
 
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.Dimension;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.mixin.KeyboardAccessor;
 import net.minecraft.client.MinecraftClient;
@@ -44,7 +45,9 @@ public class MinecraftClientAccessorImpl extends MinecraftClientAccessor {
 	@Override
 	public Dimension getContentSize() {
 		Window gameWindow = MinecraftClient.getInstance().getWindow();
-		return new Dimension(gameWindow.getFramebufferWidth(), gameWindow.getFramebufferHeight());
+		float windowPixelDensity = FocusManager.getWindowPixelDensity();
+		return new Dimension(Math.round((float) gameWindow.getFramebufferWidth() / windowPixelDensity), 
+				Math.round((float) gameWindow.getFramebufferHeight() / windowPixelDensity));
 	}
 	
 	@Override

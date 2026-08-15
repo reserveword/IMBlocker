@@ -8,7 +8,6 @@ import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.CurrentScreenInfoOverlay;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftRenderApi;
 import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
@@ -25,7 +24,7 @@ public abstract class IMEOverlayRendererV2 {
 	public void renderIMEOverlays(class_332 rawGraphics) {
 		if((IMBlockerConfig.INSTANCE.isIngameIMEEnabled() || IMManager.isEnhancedLinuxImplPresent() ||
 				IMBlockerConfig.INSTANCE.isScreenRecoveringEnabled()) &&
-				FocusManager.getFocusedContainer() == FocusContainer.MINECRAFT) {
+				FocusManager.isMinecraftContextFocused()) {
 			class_332 privateGraphics = new class_332(MinecraftClient.getInstance(), 
 					MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers());
 			privateGraphics.method_51448().push();

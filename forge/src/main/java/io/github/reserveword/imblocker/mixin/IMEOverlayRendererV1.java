@@ -9,7 +9,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import io.github.reserveword.imblocker.common.gui.CurrentScreenInfoOverlay;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftRenderApi;
 import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
@@ -22,7 +21,7 @@ import net.minecraft.client.gui.GuiComponent;
 public abstract class IMEOverlayRendererV1 {
 	@Inject(method = "runTick", at = @At(value = "CONSTANT", args = "stringValue=blit"))
 	public void renderIMEOverlays(boolean tick, CallbackInfo ci) {
-		if(FocusManager.getFocusedContainer() == FocusContainer.MINECRAFT) {
+		if(FocusManager.isMinecraftContextFocused()) {
 			PoseStack modelViewStack = RenderSystem.getModelViewStack();
 			modelViewStack.pushPose();
 			modelViewStack.setIdentity();

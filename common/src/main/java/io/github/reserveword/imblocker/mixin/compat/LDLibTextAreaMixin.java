@@ -2,6 +2,7 @@ package io.github.reserveword.imblocker.mixin.compat;
 
 import java.util.List;
 
+import org.joml.Matrix3x2f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,7 +21,6 @@ import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.Point;
-import io.github.reserveword.imblocker.common.gui.Rectangle;
 
 @Mixin(value = TextArea.class, remap = false)
 public abstract class LDLibTextAreaMixin extends LDLibUIElementMixin {
@@ -65,19 +65,22 @@ public abstract class LDLibTextAreaMixin extends LDLibUIElementMixin {
 	}
 	
 	@Override
-	public Rectangle getBoundsAbs() {
-		return new Rectangle(getGuiScale(), 
-				(int) contentView.getContentX(), (int) contentView.getContentY(), 
-				(int) contentView.getContentWidth(), (int) contentView.getContentHeight());
+	protected UIElement imblocker$getAnchorWidget() {
+		return contentView;
 	}
 	
 	@Override
 	public Point getCaretPos() {
 		float fontSize = textAreaStyle.fontSize();
-		int caretX = (int) (MinecraftClientAccessor.INSTANCE.getStringWidth(
+		float caretX = (int) (MinecraftClientAccessor.INSTANCE.getStringWidth(
 				imblocker$getDedicatedFontRenderer(), StringUtil.getSubstring(lines.get(cursorLine), 0, cursorCol), imblocker$getFont()
 				) * fontSize / 9.0F - scrollX);
-		int caretY = (int) (cursorLine * (fontSize + textAreaStyle.lineSpacing()) - scrollY);
+		float caretY = (int) (cursorLine * (fontSize + textAreaStyle.lineSpacing()) - scrollY);
+		if(!imblocker$isPoseIdentity()) {
+			Matrix3x2f t = imblocker$currentPose;
+			caretX = t.m00 * caretX;
+			caretY = t.m11 * caretY;
+		}
 		return new Point(getGuiScale(), caretX, caretY);
 	}
 	
@@ -87,6 +90,6 @@ public abstract class LDLibTextAreaMixin extends LDLibUIElementMixin {
 	
 	@Override
 	public int getFontHeight() {
-		return (int) textAreaStyle.fontSize();
+		return (int) (textAreaStyle.fontSize() * imblocker$currentPose.m00);
 	}
 }

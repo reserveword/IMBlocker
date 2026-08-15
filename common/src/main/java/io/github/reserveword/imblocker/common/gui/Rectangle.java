@@ -8,7 +8,7 @@ public class Rectangle {
 	private final int width;
 	private final int height;
 	
-	public Rectangle(double scaleFactor, int x, int y, int width, int height) {
+	public Rectangle(double scaleFactor, double x, double y, double width, double height) {
 		this((int) (scaleFactor * x), (int) (scaleFactor * y), 
 				(int) (scaleFactor * width), (int) (scaleFactor * height));
 	}

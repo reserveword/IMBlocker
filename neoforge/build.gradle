@@ -37,6 +37,19 @@ dependencies {
     implementation project(':forge')
 }
 
+sourceSets {
+	shadow {
+		java {
+			srcDir 'src/shadow/java'
+		}
+		compileClasspath += sourceSets.main.compileClasspath
+	}
+	
+	main {
+		compileClasspath += files(sourceSets.shadow.output)
+	}
+}
+
 project.jar {
     archiveFileName = "${rootProject.name}-${mod_version}-neoforge+1.20.6-1.21.8.jar"
     exclude 'net/minecraft/**/*.class'

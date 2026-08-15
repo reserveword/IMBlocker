@@ -1,5 +1,6 @@
 package io.github.reserveword.imblocker.mixin.compat;
 
+import org.joml.Matrix3x2f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -54,10 +55,15 @@ public abstract class LDLibTextFieldMixin extends LDLibUIElementMixin {
 	@Override
 	public Point getCaretPos() {
 		float fontSize = textFieldStyle.fontSize();
-		int caretX = (int) (MinecraftClientAccessor.INSTANCE.getStringWidth(
+		float caretX = (int) (MinecraftClientAccessor.INSTANCE.getStringWidth(
 				imblocker$getDedicatedFontRenderer(), StringUtil.getSubstring(rawText, 0, cursorPos), imblocker$getFont()
 				) * fontSize / 9.0F - displayOffset);
-		int caretY = (int) ((getContentHeight() - fontSize) / 2);
+		float caretY = (int) ((getContentHeight() - fontSize) / 2);
+		if(!imblocker$isPoseIdentity()) {
+			Matrix3x2f t = imblocker$currentPose;
+			caretX = t.m00 * caretX;
+			caretY = t.m11 * caretY;
+		}
 		return new Point(getGuiScale(), caretX, caretY);
 	}
 	
@@ -67,6 +73,6 @@ public abstract class LDLibTextFieldMixin extends LDLibUIElementMixin {
 	
 	@Override
 	public int getFontHeight() {
-		return (int) textFieldStyle.fontSize();
+		return (int) (textFieldStyle.fontSize() * imblocker$currentPose.m00);
 	}
 }

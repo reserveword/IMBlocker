@@ -6,7 +6,7 @@ public class Point {
 	private final int x;
 	private final int y;
 	
-	public Point(double scaleFactor, int x, int y) {
+	public Point(double scaleFactor, double x, double y) {
 		this((int) (scaleFactor * x), (int) (scaleFactor * y));
 	}
 

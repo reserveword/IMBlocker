@@ -18,6 +18,7 @@ dependencies {
 	compileOnly("org.ow2.asm:asm-tree:9.6")
 	compileOnly("org.lwjgl:lwjgl:3.3.4")
 	compileOnly("org.lwjgl:lwjgl-glfw:3.3.4")
+	compileOnly("org.joml:joml:1.10.5")
 	
 	compileOnlyApi "me.shedaniel.cloth:cloth-config-forge:$clothconfig_version"
 	
@@ -37,13 +38,13 @@ sourceSets {
 		java {
 			srcDir 'src/shadow/java'
 		}
+		compileClasspath += sourceSets.main.compileClasspath
 	}
 	
 	main {
-		compileClasspath += sourceSets.shadow.output
+		compileClasspath += files(sourceSets.shadow.output)
 	}
 }
-
 
 
 java {

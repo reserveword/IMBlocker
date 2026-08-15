@@ -68,6 +68,19 @@ dependencies {
     implementation project(':common')
 }
 
+sourceSets {
+	shadow {
+		java {
+			srcDir 'src/shadow/java'
+		}
+		compileClasspath += sourceSets.main.compileClasspath
+	}
+	
+	main {
+		compileClasspath += files(sourceSets.shadow.output)
+	}
+}
+
 mixin {
     disableTargetValidator = true
     overwriteErrorLevel = 'warn'

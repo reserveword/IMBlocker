@@ -153,6 +153,7 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		}
 		
 		if(IMBlockerCore.hasMod("ldlib2")) {
+			validMixins.add("compat.LDLibGUIContextMixin");
 			validMixins.add("compat.LDLibUIElementMixin");
 			validMixins.add("compat.LDLibTextFieldMixin");
 			validMixins.add("compat.LDLibTextAreaMixin");

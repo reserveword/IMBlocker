@@ -79,7 +79,7 @@ public class UniversalIMECandidateOverlay {
 				containerGuiScale = focusedWidget.getFocusContainer().getGuiScale();
 				candidateBorder = focusedWidget.getFocusContainer().getBoundsAbs();
 			}else {
-				containerFontSize = inputHeight;
+				containerFontSize = focusOwner.getFontHeight();
 				containerGuiScale = focusOwner.getGuiScale();
 				candidateBorder = focusOwner.getBoundsAbs();
 			}

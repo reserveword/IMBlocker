@@ -46,7 +46,7 @@ public abstract class MinecraftClientUtil {
 	public static Dimension getContentSize() {
 		Window gameWindow = Minecraft.getInstance().getWindow();
 		float windowPixelDensity = FocusManager.getWindowPixelDensity();
-		return new Dimension(Math.round((float)gameWindow.getWidth() / windowPixelDensity), 
+		return new Dimension(Math.round((float) gameWindow.getWidth() / windowPixelDensity), 
 				Math.round((float) gameWindow.getHeight() / windowPixelDensity));
 	}
 	

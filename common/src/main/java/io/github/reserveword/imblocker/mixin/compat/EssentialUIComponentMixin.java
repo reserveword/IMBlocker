@@ -38,6 +38,6 @@ public abstract class EssentialUIComponentMixin implements MinecraftFocusableWid
 
 	@Override
 	public Rectangle getBoundsAbs() {
-		return new Rectangle(getGuiScale(), (int) getLeft(), (int) getTop(), (int) getWidth(), (int) getHeight());
+		return new Rectangle(getGuiScale(), getLeft(), getTop(), getWidth(), getHeight());
 	}
 }

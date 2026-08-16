@@ -63,7 +63,7 @@ public abstract class EssentialAbstractTextInputMixin extends EssentialUICompone
 	@Override
 	public Point getCaretPos() {
 		Pair<Float, Float> caretPos = cursor.toScreenPos();
-		return new Point(getGuiScale(), caretPos.getFirst().intValue(), caretPos.getSecond().intValue());
+		return new Point(getGuiScale(), caretPos.getFirst().floatValue(), caretPos.getSecond().floatValue());
 	}
 	
 	@Override

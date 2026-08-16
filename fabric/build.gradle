@@ -71,7 +71,6 @@ project.jar {
 		rename { "${it}_${project.base.archivesName.get()}"}
 	}
 
-	exclude 'net/minecraft/**/*.class'
 	from (project(":common").sourceSets.main.output) {
 		exclude 'imblocker-old.png'
 	}

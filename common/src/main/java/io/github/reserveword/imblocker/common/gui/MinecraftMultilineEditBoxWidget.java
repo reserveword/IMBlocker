@@ -9,7 +9,7 @@ public interface MinecraftMultilineEditBoxWidget extends MinecraftAbstractTextIn
 		MultilineCursorInfo cursorInfo = getCursorInfo();
 		int caretX = imblocker$getContentOffsetX() + MinecraftClientAccessor.INSTANCE.getStringWidth(
 				StringUtil.getSubstring(cursorInfo.text, cursorInfo.cursorLineBeginIndex, cursorInfo.cursor));
-		int caretY = (int) (imblocker$getContentOffsetY() + cursorInfo.cursorLineIndex * 9 - cursorInfo.scrollY);
+		double caretY = imblocker$getContentOffsetY() + cursorInfo.cursorLineIndex * 9 - cursorInfo.scrollY;
 		return new Point(getGuiScale(), caretX, caretY);
 	}
 	

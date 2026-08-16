@@ -101,9 +101,9 @@ java {
 
 project.jar {
     archiveFileName = "${rootProject.name}-${mod_version}-forge+1.17-1.20.4.jar"
-    exclude 'net/minecraft/**/*.class'
     from (project(":common").sourceSets.main.output) {
         exclude 'imblocker-old.png'
+        exclude '**/LDLib*.class'
     }
 
     manifest {

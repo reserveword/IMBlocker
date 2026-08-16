@@ -27,7 +27,7 @@ public abstract class MeteorWidgetMixin implements MinecraftFocusableWidget {
 	
 	@Override
 	public Rectangle getBoundsAbs() {
-		return new Rectangle((int) x, (int) y, (int) width, (int) height);
+		return new Rectangle(getGuiScale(), (int) x, (int) y, (int) width, (int) height);
 	}
 	
 	@Override

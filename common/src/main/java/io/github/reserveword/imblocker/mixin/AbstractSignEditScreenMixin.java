@@ -101,8 +101,8 @@ public abstract class AbstractSignEditScreenMixin implements MinecraftFocusableW
 		float cursorY = (line - 2) * sign.getTextLineHeight();
 		Vector3fc signTextScale = imblocker$getSignTextScale();
 		return new Point(getGuiScale(), 
-				(int) (offsetX + cursorX * signTextScale.x()), 
-				(int) (offsetY + cursorY * signTextScale.y()));
+				offsetX + cursorX * signTextScale.x(), 
+				offsetY + cursorY * signTextScale.y());
 	}
 	
 	private Vector3fc imblocker$getSignTextScale() {

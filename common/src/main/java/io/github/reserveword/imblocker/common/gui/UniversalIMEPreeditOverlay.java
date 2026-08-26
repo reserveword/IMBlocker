@@ -1,5 +1,7 @@
 package io.github.reserveword.imblocker.common.gui;
 
+import java.util.Objects;
+
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 
 import imgui.moulberry92.ImDrawList;
@@ -57,17 +59,21 @@ public class UniversalIMEPreeditOverlay {
 	
 	public void preeditContentUpdated(PreeditEvent preeditContents) {
 		if(preeditContents != null) {
-			preEditText = preeditContents.fullText();
-			preEditCaretPos = preeditContents.caretPosition();
-			
-			if(FocusManager.isMinecraftContextFocused()) {
-				preEditTextFormatted = preeditContents.toFormattedText(FOCUSED_STYLE).withColor(TEXT_COLOR);
-				preEditTextWidth = font.width(preEditTextFormatted);
-				preEditCaretRenderX = font.width(preEditText.substring(0, preEditCaretPos));
-				updatePreeditArea();
-			}else {
-				preEditContentUpdated = true;
-			}	
+			String compositionString = preeditContents.fullText();
+			int caretPosition = preeditContents.caretPosition();
+			if(!Objects.equals(preEditText, compositionString) || (preEditCaretPos != caretPosition)) {
+				preEditText = preeditContents.fullText();
+				preEditCaretPos = preeditContents.caretPosition();
+				
+				if(FocusManager.isMinecraftContextFocused()) {
+					preEditTextFormatted = preeditContents.toFormattedText(FOCUSED_STYLE).withColor(TEXT_COLOR);
+					preEditTextWidth = font.width(preEditTextFormatted);
+					preEditCaretRenderX = font.width(preEditText.substring(0, preEditCaretPos));
+					updatePreeditArea();
+				}else {
+					preEditContentUpdated = true;
+				}
+			}
 		}else {
 			preEditText = null;
 			preEditTextFormatted = null;

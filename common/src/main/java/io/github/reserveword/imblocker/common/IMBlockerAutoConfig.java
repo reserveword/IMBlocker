@@ -37,6 +37,7 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	@Override
 	public void reloadConfig() {
 		reloadScreenWhitelist(basicSettings.screenWhitelist);
+		reloadCharSimulationScreens(advanceSettings.charSimulationScreens);
 		reloadCommandPrefixRegex(advanceSettings.commandPrefixRegex);
 	}
 
@@ -70,11 +71,6 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	@Override
 	public float getExtraScale() {
 		return basicSettings.extraScale;
-	}
-	
-	@Override
-	public boolean isCharSimulationEnabled() {
-		return advanceSettings.enableCharSimulation;
 	}
 
 	@Override
@@ -175,7 +171,7 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	
 	static class AdvanceSettings {
 		@ConfigEntry.Gui.Tooltip(count = 2)
-		boolean enableCharSimulation = false;
+		ArrayList<String> charSimulationScreens = new ArrayList<>();
 		
 		String commandPrefixRegex = "^/";
 	}

@@ -21,9 +21,9 @@
   "text.autoconfig.imblocker.option.basicSettings.extraScale.@Tooltip": "You may tweak this value if the candidate window is offset by a constant ratio (usually display scaling).\nThis value should be equal to candidate window X / caret X, where X is relative to the game window.",
   
   "text.autoconfig.imblocker.option.advanceSettings": "Advance Settings",
-  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation": "Enable Char Simulation",
-  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[0]": "\u00A7lLocate the focus owner with char simulation",
-  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[1]": "This approach can locate the focus owner with 100% accuracy.\nGenerally, the probe char will be safely absorbed by the injection,\nhowever, it might leak to the screen that doesn't filter it.",
+  "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens": "Char Simulation-preferred Screens",
+  "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens.@Tooltip[0]": "\u00A7lScreens that preferred to locate focus through char simulation.",
+  "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens.@Tooltip[1]": "Listed screens will locate focus owner within them through\nchar simulation, an approach with 100% accuracy.\nGenerally, the probe char will be safely absorbed by the injection,\nbut might has compatibility issues in certain scenarios.",
   "text.autoconfig.imblocker.option.advanceSettings.commandPrefixRegex": "Command Prefix Regex",
   
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings": "Windows Compatibility Settings",

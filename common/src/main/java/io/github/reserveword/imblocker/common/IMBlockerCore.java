@@ -23,6 +23,8 @@ public class IMBlockerCore {
 	private static final boolean IS_IXERIS_LOADED;
 	private static final boolean IS_FTBLIB_LOADED;
 	
+	private static final String IXERIS_INCOMPAT_MSG = "[IMBlocker] Ixeris incompatible! Please report it to developer: ";
+	
 	private static final Set<Runnable> deferredRunnables = new LinkedHashSet<>();
 	
 	public static void invokeOnMainThread(Runnable runnable) {
@@ -30,14 +32,22 @@ public class IMBlockerCore {
 			try {
 				IxerisApi.getInstance().runLaterOnMainThread(runnable);
 			} catch (Throwable e) {
-				throw new RuntimeException("[IMBlocker] Ixeris incompatible! Please report it to developer: ", e);
+				throw new RuntimeException(IXERIS_INCOMPAT_MSG, e);
 			}
 		}else {
-			if(Minecraft.getInstance().isSameThread()) {
-				runnable.run();
-			}else {
-				Minecraft.getInstance().execute(runnable);
+			vanillaExecute(runnable);
+		}
+	}
+	
+	public static void invokeAsyncOnMainThread(Runnable runnable) {
+		if(IS_IXERIS_LOADED) {
+			try {
+				IxerisApi.getInstance().runNowOnMainThread(runnable);
+			} catch (Throwable e) {
+				throw new RuntimeException(IXERIS_INCOMPAT_MSG, e);
 			}
+		}else {
+			vanillaExecute(runnable);
 		}
 	}
 	
@@ -46,14 +56,18 @@ public class IMBlockerCore {
 			try {
 				IxerisApi.getInstance().runLaterOnRenderThread(runnable);
 			} catch (Throwable e) {
-				throw new RuntimeException("[IMBlocker] Ixeris incompatible! Please report it to developer: ", e);
+				throw new RuntimeException(IXERIS_INCOMPAT_MSG, e);
 			}
 		}else {
-			if(Minecraft.getInstance().isSameThread()) {
-				runnable.run();
-			}else {
-				Minecraft.getInstance().execute(runnable);
-			}
+			vanillaExecute(runnable);
+		}
+	}
+	
+	private static void vanillaExecute(Runnable runnable) {
+		if(Minecraft.getInstance().isSameThread()) {
+			runnable.run();
+		}else {
+			Minecraft.getInstance().execute(runnable);
 		}
 	}
 	

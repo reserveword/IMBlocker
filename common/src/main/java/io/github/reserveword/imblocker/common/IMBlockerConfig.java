@@ -126,14 +126,6 @@ public class IMBlockerConfig {
 		return false;
 	}
 	
-	public String getEnglishStateOnCommand() {
-		return "";
-	}
-	
-	public String getEnglishStateOffCommand() {
-		return "";
-	}
-	
 	public String getIBusOnArgName() {
 		return "libpinyin";
 	}

@@ -99,16 +99,6 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	}
 	
 	@Override
-	public String getEnglishStateOnCommand() {
-		return linuxCompatibilitySettings.englishStateOnCommand;
-	}
-	
-	@Override
-	public String getEnglishStateOffCommand() {
-		return linuxCompatibilitySettings.englishStateOffCommand;
-	}
-	
-	@Override
 	public String getIBusOnArgName() {
 		return linuxCompatibilitySettings.ibusOnArgName;
 	}
@@ -193,12 +183,6 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 		
 		@ConfigEntry.Gui.Tooltip
 		boolean isHeadlessPreeditMode = false;
-		
-		@ConfigEntry.Gui.Tooltip
-		String englishStateOnCommand = "";
-		
-		@ConfigEntry.Gui.Tooltip
-		String englishStateOffCommand = "";
 		
 		@ConfigEntry.Gui.Tooltip
 		String ibusOnArgName = "libpinyin";

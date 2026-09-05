@@ -6,6 +6,7 @@ import java.util.List;
 import org.lwjgl.glfw.GLFWNativeCocoa;
 
 import com.sun.jna.Callback;
+import com.sun.jna.CallbackReference;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
@@ -23,8 +24,15 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 	private static boolean state = false;
 	static private final Pointer viewClass = Runtime.INSTANCE.objc_getClass("GLFWContentView");
 	static private Pointer view = null;
-	static private final InterpretKeyEventsCallback Imp;
-	static private final InterpretKeyEventsCallback NewImp;
+	
+	private static final KeyDownCallback KeyDownImp;
+	private static final KeyDownCallback NewKeyDownImp;
+	
+	static private final InterpretKeyEventsCallback InterpretKeyImp;
+	static private final InterpretKeyEventsCallback NewInterpretKeyImp;
+	
+	private static final InsertTextCallback InsertTextImp;
+	private static final InsertTextCallback NewInsertTextImp;
 	
 	private static final FirstRectForCharacterRangeCallback NewFirstRectImp;
 	private static int fontSize;
@@ -37,13 +45,28 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 		// state
 		// see reference for objc_runtime's dynamic manipulation at
 		// https://developer.apple.com/documentation/objectivec/objective-c_runtime
-		Pointer selector = RuntimeUtils.sel("interpretKeyEvents:");
-		Pointer method = Runtime.INSTANCE.class_getInstanceMethod(viewClass, selector);
-		Imp = ObjC.INSTANCE.method_getImplementation(method);
+		Pointer keyDownSelector = RuntimeUtils.sel("keyDown:");
+		Pointer interpretKeySelector = RuntimeUtils.sel("interpretKeyEvents:");
+		Pointer keyDownMethod = Runtime.INSTANCE.class_getInstanceMethod(viewClass, keyDownSelector);
+		KeyDownImp = (KeyDownCallback) CallbackReference.getCallback(
+				KeyDownCallback.class, ObjC.INSTANCE.method_getImplementation(keyDownMethod));
+		NewKeyDownImp = (self, _cmd, event) -> {
+			if (RuntimeUtils.msg(self, RuntimeUtils.sel("hasMarkedText")) == 0) {
+				KeyDownImp.invoke(self, _cmd, event);
+			} else {
+				long events = RuntimeUtils.msg(RuntimeUtils.cls("NSArray"), RuntimeUtils.sel("arrayWithObject:"), event);
+				RuntimeUtils.msg(self, interpretKeySelector, events);
+			}
+		};
+		ObjC.INSTANCE.class_replaceMethod(viewClass, keyDownSelector, NewKeyDownImp, "v@:@");
+		
+		Pointer interpretKeyMethod = Runtime.INSTANCE.class_getInstanceMethod(viewClass, interpretKeySelector);
+		InterpretKeyImp = (InterpretKeyEventsCallback) CallbackReference.getCallback(
+				InterpretKeyEventsCallback.class, ObjC.INSTANCE.method_getImplementation(interpretKeyMethod));
 		final NSRange emptyRange = new NSRange();
 		emptyRange.location = Long.MAX_VALUE;
 		emptyRange.length = 0;
-		NewImp = (self, sel, eventArray) -> {
+		NewInterpretKeyImp = (self, sel, eventArray) -> {
 			if (view == null) view = self;
 			if (!state) {
 				Pointer textInputContextCls = RuntimeUtils.cls("NSTextInputContext");
@@ -63,9 +86,19 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 				}
 				return;
 			}
-			Imp.invoke(self, sel, eventArray);
+			InterpretKeyImp.invoke(self, sel, eventArray);
 		};
-		ObjC.INSTANCE.class_replaceMethod(viewClass, selector, NewImp, "v@:@");
+		ObjC.INSTANCE.class_replaceMethod(viewClass, interpretKeySelector, NewInterpretKeyImp, "v@:@");
+		
+		Pointer insertTextSelector = RuntimeUtils.sel("insertText:replacementRange:");
+		Pointer insertTextMethod = Runtime.INSTANCE.class_getInstanceMethod(viewClass, insertTextSelector);
+		InsertTextImp = (InsertTextCallback) CallbackReference.getCallback(
+				InsertTextCallback.class, ObjC.INSTANCE.method_getImplementation(insertTextMethod));
+		NewInsertTextImp = (self, _cmd, string, location, length) -> {
+			InsertTextImp.invoke(self, _cmd, string, location, length);
+			RuntimeUtils.msg(self, RuntimeUtils.sel("unmarkText"));
+		};
+		ObjC.INSTANCE.class_replaceMethod(viewClass, insertTextSelector, NewInsertTextImp, "v@:@{_NSRange=QQ}");
 		
 		Pointer firstRectSel = RuntimeUtils.sel("firstRectForCharacterRange:actualRange:");
 		NewFirstRectImp = (self, sel, rangePtr, actualRange) -> {
@@ -90,7 +123,11 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 
 		void class_replaceMethod(Pointer cls, Pointer selector, Callback imp, String types);
 
-		InterpretKeyEventsCallback method_getImplementation(Pointer selector);
+		Pointer method_getImplementation(Pointer selector);
+	}
+	
+	private interface KeyDownCallback extends Callback {
+		void invoke(Pointer self, Pointer _cmd, Pointer event);
 	}
 
 	/**
@@ -111,6 +148,10 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 		 * @param eventArray an array of NSEvent objects
 		 */
 		void invoke(Pointer self, Pointer selector, Pointer eventArray);
+	}
+	
+	private interface InsertTextCallback extends Callback {
+		void invoke(Pointer self, Pointer _cmd, Pointer string, long location, long length);
 	}
 	
 	private interface FirstRectForCharacterRangeCallback extends Callback {

@@ -63,7 +63,7 @@ public abstract class NotesTextFieldMixin extends ClickableWidgetMixin {
 		Point currentCaretPos = new Point(getGuiScale(), caretX, caretY);
 		if(!imblocker$caretPos.equals(currentCaretPos)) {
 			imblocker$caretPos = currentCaretPos;
-			IMManager.updateCompositionWindowPos();
+			IMManager.updateCaretPosition();
 		}
 	}
 	

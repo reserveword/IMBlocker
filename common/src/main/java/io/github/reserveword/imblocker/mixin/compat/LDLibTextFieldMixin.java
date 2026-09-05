@@ -44,7 +44,7 @@ public abstract class LDLibTextFieldMixin extends LDLibUIElementMixin {
 	
 	@Inject(method = "updateDisplayOffset", at = @At("TAIL"))
 	public void onDisplayOffsetUpdated(CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		IMManager.updateCaretPosition();
 	}
 	
 	@Override

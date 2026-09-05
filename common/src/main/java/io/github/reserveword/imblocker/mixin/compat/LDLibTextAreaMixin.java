@@ -51,12 +51,12 @@ public abstract class LDLibTextAreaMixin extends LDLibUIElementMixin {
 	
 	@Inject(method = "updateScrollers", at = @At("TAIL"))
 	public void onScrollersUpdated(CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		IMManager.updateCaretPosition();
 	}
 	
 	@Inject(method = { "onHorizontalScroll", "onVerticalScroll" }, at = @At("TAIL"))
 	public void onScrolling(float value, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		IMManager.updateCaretPosition();
 	}
 	
 	@Override

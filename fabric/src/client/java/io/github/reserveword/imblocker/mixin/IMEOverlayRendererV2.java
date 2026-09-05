@@ -4,6 +4,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import com.sun.jna.Platform;
+
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMManager;
@@ -22,7 +24,8 @@ public abstract class IMEOverlayRendererV2 {
 	@Redirect(method = "method_3192", at = @At(value = "INVOKE", target = 
 			"Lnet/minecraft/class_332;method_51452()V"))
 	public void renderIMEOverlays(class_332 rawGraphics) {
-		if((IMBlockerConfig.INSTANCE.isIngameIMEEnabled() || IMManager.isEnhancedLinuxImplPresent() ||
+		if((IMBlockerConfig.INSTANCE.isIngameIMEEnabled() || Platform.isMac() ||
+				IMManager.isEnhancedLinuxImplPresent() ||
 				IMBlockerConfig.INSTANCE.isScreenRecoveringEnabled()) &&
 				FocusManager.isMinecraftContextFocused()) {
 			class_332 privateGraphics = new class_332(MinecraftClient.getInstance(), 

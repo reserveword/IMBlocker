@@ -52,7 +52,7 @@ public abstract class GeneralFeedbackTextareaMixin extends AbstractWidgetMixin {
 		Point currentCaretPos = new Point(getGuiScale(), caretX, caretY);
 		if(!imblocker$caretPos.equals(currentCaretPos)) {
 			imblocker$caretPos = currentCaretPos;
-			IMManager.updateCompositionWindowPos();
+			IMManager.updateCaretPosition();
 		}
 	}
 	

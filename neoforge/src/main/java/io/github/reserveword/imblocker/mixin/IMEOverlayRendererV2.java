@@ -4,6 +4,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import com.sun.jna.Platform;
+
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.CurrentScreenInfoOverlay;
@@ -21,7 +23,8 @@ public abstract class IMEOverlayRendererV2 {
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = 
 			"Lnet/minecraft/client/gui/GuiGraphics;flush()V"))
 	public void renderIMEOverlaysUnobf(GuiGraphics rawGraphics) {
-		if((IMBlockerConfig.INSTANCE.isIngameIMEEnabled() || IMManager.isEnhancedLinuxImplPresent() ||
+		if((IMBlockerConfig.INSTANCE.isIngameIMEEnabled() || Platform.isMac() || 
+				IMManager.isEnhancedLinuxImplPresent() ||
 				IMBlockerConfig.INSTANCE.isScreenRecoveringEnabled()) &&
 				FocusManager.isMinecraftContextFocused()) {
 			GuiGraphics privateGraphics = new GuiGraphics(Minecraft.getInstance(), 

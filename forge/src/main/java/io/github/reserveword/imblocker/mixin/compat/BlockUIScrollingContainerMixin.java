@@ -16,7 +16,7 @@ public abstract class BlockUIScrollingContainerMixin {
 	@Inject(method = "setScrollY", at = @At("TAIL"))
 	public void onScroll(double scroll, CallbackInfoReturnable<Boolean> cir) {
 		if(FocusManager.getFocusOwner() instanceof TextField) {
-			IMManager.updateCompositionWindowPos();
+			IMManager.updateCaretPosition();
 		}
 	}
 }

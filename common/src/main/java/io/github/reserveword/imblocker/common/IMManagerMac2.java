@@ -13,12 +13,12 @@ import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.Structure.FieldOrder;
 
+import ca.weblite.objc.Proxy;
 import ca.weblite.objc.Runtime;
 import ca.weblite.objc.RuntimeUtils;
 import ca.weblite.objc.foundation.NSRange;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
-import io.github.reserveword.imblocker.common.gui.Point;
-import io.github.reserveword.imblocker.common.gui.Rectangle;
+import io.github.reserveword.imblocker.common.gui.UniversalIMEPreeditOverlay;
 
 final class IMManagerMac2 implements IMManager.PlatformIMManager {
 	private static final boolean IS_X86 = "x86_64".equalsIgnoreCase(System.getProperty("os.arch")) || 
@@ -38,21 +38,17 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 	private static final InsertTextCallback NewInsertTextImp;
 	
 	private static final FirstRectForCharacterRangeCallback NewFirstRectImp;
-	private static int fontSize;
-	private static double caretX, caretY;
+	private static double preeditX, preeditY, preeditW, preeditH;
+	
+	private static final SetMarkedTextCallback SetMarkedTextImp;
+	private static final SetMarkedTextCallback NewSetMarkedTextImp;
 
 	static {
-		// see
-		// https://github.com/glfw/glfw/blob/b4c3ef9d0fdf46845f3e81e5d989dab06e71e6c1/src/cocoa_window.m#L571
-		// Replacing the method dynamically to determine whether to send text based on
-		// state
-		// see reference for objc_runtime's dynamic manipulation at
-		// https://developer.apple.com/documentation/objectivec/objective-c_runtime
+		// keyDown replacement \\
 		Pointer keyDownSelector = RuntimeUtils.sel("keyDown:");
 		Pointer interpretKeySelector = RuntimeUtils.sel("interpretKeyEvents:");
 		Pointer keyDownMethod = Runtime.INSTANCE.class_getInstanceMethod(viewClass, keyDownSelector);
-		KeyDownImp = (KeyDownCallback) CallbackReference.getCallback(
-				KeyDownCallback.class, ObjC.INSTANCE.method_getImplementation(keyDownMethod));
+		KeyDownImp = getImp(KeyDownCallback.class, keyDownMethod);
 		NewKeyDownImp = (self, _cmd, event) -> {
 			if (RuntimeUtils.msg(self, RuntimeUtils.sel("hasMarkedText")) == 0) {
 				KeyDownImp.invoke(self, _cmd, event);
@@ -63,9 +59,9 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 		};
 		ObjC.INSTANCE.class_replaceMethod(viewClass, keyDownSelector, NewKeyDownImp, "v@:@");
 		
+		// interpretKey replacement \\
 		Pointer interpretKeyMethod = Runtime.INSTANCE.class_getInstanceMethod(viewClass, interpretKeySelector);
-		InterpretKeyImp = (InterpretKeyEventsCallback) CallbackReference.getCallback(
-				InterpretKeyEventsCallback.class, ObjC.INSTANCE.method_getImplementation(interpretKeyMethod));
+		InterpretKeyImp = getImp(InterpretKeyEventsCallback.class, interpretKeyMethod);
 		final NSRange emptyRange = new NSRange();
 		emptyRange.location = Long.MAX_VALUE;
 		emptyRange.length = 0;
@@ -93,29 +89,89 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 		};
 		ObjC.INSTANCE.class_replaceMethod(viewClass, interpretKeySelector, NewInterpretKeyImp, "v@:@");
 		
+		// insertText replacement \\
 		Pointer insertTextSelector = RuntimeUtils.sel("insertText:replacementRange:");
 		Pointer insertTextMethod = Runtime.INSTANCE.class_getInstanceMethod(viewClass, insertTextSelector);
-		InsertTextImp = (InsertTextCallback) CallbackReference.getCallback(
-				InsertTextCallback.class, ObjC.INSTANCE.method_getImplementation(insertTextMethod));
-		NewInsertTextImp = (self, _cmd, string, location, length) -> {
-			InsertTextImp.invoke(self, _cmd, string, location, length);
+		InsertTextImp = getImp(InsertTextCallback.class, insertTextMethod);
+		NewInsertTextImp = (self, selector, string, location, length) -> {
+			InsertTextImp.invoke(self, selector, string, location, length);
 			RuntimeUtils.msg(self, RuntimeUtils.sel("unmarkText"));
+			postPreeditContent(null, 0);
 		};
 		ObjC.INSTANCE.class_replaceMethod(viewClass, insertTextSelector, NewInsertTextImp, "v@:@{_NSRange=QQ}");
 		
+		// firstRectForCharacterRange replacement \\
 		Pointer firstRectSel = RuntimeUtils.sel("firstRectForCharacterRange:actualRange:");
 		NewFirstRectImp = (self, sel, rangePtr, actualRange) -> {
 			Pointer window = new Pointer(GLFWNativeCocoa.glfwGetCocoaWindow(
 					MinecraftClientAccessor.INSTANCE.getWindowHandle()));
 			NSRect contentRect = getContentRect(window, getWindowFrame(window));
-			double caretScreenX = contentRect.x + caretX;
-			double caretScreenY = contentRect.y + contentRect.height - caretY - fontSize;
-			NSRect cursorRect = new NSRect(caretScreenX, caretScreenY, 0, fontSize);
+			double caretScreenX = contentRect.x + preeditX;
+			double caretScreenY = contentRect.y + contentRect.height - preeditY - preeditH;
+			NSRect cursorRect = new NSRect(caretScreenX, caretScreenY, preeditW, preeditH);
 			cursorRect.write();
 			return cursorRect;
 		};
 		ObjC.INSTANCE.class_replaceMethod(viewClass, firstRectSel, NewFirstRectImp,
 				"{CGRect={CGPoint=dd}{CGSize=dd}}@:{_NSRange=QQ}^{_NSRange=QQ}");
+		
+		// setMarkedText replacement \\
+		Pointer setMarkedTextSelector = RuntimeUtils.sel("setMarkedText:selectedRange:replacementRange:");
+		Pointer setMarkedTextMethod = Runtime.INSTANCE.class_getInstanceMethod(viewClass, setMarkedTextSelector);
+		SetMarkedTextImp = getImp(SetMarkedTextCallback.class, setMarkedTextMethod);
+		NewSetMarkedTextImp = (self, sel, stringPtr, selectedRange, replacementRange) -> {
+			SetMarkedTextImp.invoke(self, setMarkedTextSelector, stringPtr, selectedRange, replacementRange);
+			
+			if (stringPtr == null) {
+				postPreeditContent(null, 0);
+				return;
+			}
+			
+			Proxy string = Proxy.load(stringPtr);
+			boolean isAttributed = string.sendBoolean("isKindOfClass:", RuntimeUtils.cls("NSAttributedString"));
+			String text = null; 
+			try {
+				text = isAttributed ? string.sendString("string") : string.sendString("description");
+			} catch (Throwable e) {}
+			
+			if (text == null || text.isEmpty()) {
+				postPreeditContent(null, 0);
+				return;
+			}
+			
+			int selectedLocation = clampUtf16Index(selectedRange.location, text.length());
+			if (!isAttributed) {
+				StringBuilder result = new StringBuilder(text.length());
+				appendVisibleText(result, text, 0, text.length());
+				postPreeditContent(result.toString(), selectedLocation);
+			} else {
+				StringBuilder result = new StringBuilder(text.length() + 8);
+				int searchLocation = 0;
+				NSRange.ByReference effectiveRange = new NSRange.ByReference();
+				try {
+					while (searchLocation < text.length()) {
+						effectiveRange.location = 0;
+						effectiveRange.length = 0;
+						string.send("attributesAtIndex:effectiveRange:", searchLocation, effectiveRange);
+						effectiveRange.read();
+						
+						int blockLocation = effectiveRange.getLocation(), blockLength = effectiveRange.getLength();
+						if (blockLength <= 0 || blockLocation > text.length()) break;
+						long end = blockLocation + blockLength;
+						if (end <= searchLocation) break;
+						int blockEnd = (int) Math.min(end, text.length());
+						if (result.length() > 0) result.append(' ');
+						appendVisibleText(result, text, blockLocation, blockEnd);
+						searchLocation = blockEnd;
+					}
+					postPreeditContent(result.toString(), selectedLocation);
+				} finally {
+					effectiveRange.clear();
+				}
+			}
+		};
+		ObjC.INSTANCE.class_replaceMethod(viewClass, setMarkedTextSelector, NewSetMarkedTextImp, 
+				ObjC.INSTANCE.method_getTypeEncoding(setMarkedTextMethod));
 	}
 
 	/**
@@ -129,6 +185,8 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 		void class_replaceMethod(Pointer cls, Pointer selector, Callback imp, String types);
 
 		Pointer method_getImplementation(Pointer selector);
+		
+		String method_getTypeEncoding(Pointer selector);
 		
 		NSRect objc_msgSend(Pointer receiver, Pointer selector);
 		NSRect objc_msgSend(Pointer receiver, Pointer selector, NSRect frame);
@@ -161,11 +219,15 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 	}
 	
 	private interface InsertTextCallback extends Callback {
-		void invoke(Pointer self, Pointer _cmd, Pointer string, long location, long length);
+		void invoke(Pointer self, Pointer selector, Pointer string, long location, long length);
 	}
 	
 	private interface FirstRectForCharacterRangeCallback extends Callback {
 		NSRect invoke(Pointer self, Pointer selector, NSRange.ByValue range, Pointer actualRange);
+	}
+	
+	private interface SetMarkedTextCallback extends Callback {
+		void invoke(Pointer self, Pointer selector, Pointer string, NSRange.ByValue selectedRange, NSRange.ByValue replacementRange);
 	}
 
 	@Override
@@ -181,14 +243,16 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 	}
 	
 	@Override
-	public void updateCompositionWindowPos(Point pos) {
-		caretX = pos.x();
-		caretY = pos.y();
+	public void setPreeditCursorRectangle(int x, int y, int width, int height) {
+		preeditX = x;
+		preeditY = y;
+		preeditW = width;
+		preeditH = height;
 	}
 	
-	@Override
-	public void updateCompositionFontSize(int newFontSize) {
-		fontSize = newFontSize;
+	@SuppressWarnings("unchecked")
+	private static <T extends Callback> T getImp(Class<T> callbackClass, Pointer selector) {
+		return (T) CallbackReference.getCallback(callbackClass, ObjC.INSTANCE.method_getImplementation(selector));
 	}
 	
 	private static NSRect getWindowFrame(Pointer window) {
@@ -216,6 +280,26 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 		ObjC.INSTANCE.objc_msgSend_stret(result.getPointer(), window, sel, frame);
 		result.read();
 		return result;
+	}
+	
+	private static void postPreeditContent(String compositionString, int caretPosition) {
+		IMBlockerCore.invokeOnRenderThread(() -> UniversalIMEPreeditOverlay.getInstance()
+				.preeditContentUpdated(compositionString, caretPosition));
+	}
+	
+	private static void appendVisibleText(StringBuilder out, String text, int start, int end) {
+		int codePoint, charCount;
+		for (int i = start; i < end; i += charCount) {
+			codePoint = text.codePointAt(i);
+			charCount = Character.charCount(codePoint);
+			if (codePoint < 0xF700 || codePoint > 0xF7FF) {
+				out.appendCodePoint(codePoint);
+			}
+		}
+	}
+
+	private static int clampUtf16Index(long value, int textLength) {
+		return value <= 0 ? 0 : (value >= textLength ? textLength : (int) value);
 	}
 	
 	@FieldOrder({"x", "y", "width", "height"})

@@ -45,7 +45,7 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin {
 	
 	@Inject(method = "cursorChanged", at = @At("TAIL"))
 	public void onCursorChanged(CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		IMManager.updateCaretPosition();
 	}
 	
 	@Inject(method = "move", at = @At("TAIL"))

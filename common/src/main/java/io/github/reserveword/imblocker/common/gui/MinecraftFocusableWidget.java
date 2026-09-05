@@ -26,7 +26,7 @@ public interface MinecraftFocusableWidget extends FocusableWidget {
 	
 	default void imblocker$onBoundsChanged() {
 		if(isTrulyFocused()) {
-			IMManager.updateCompositionWindowPos();
+			IMManager.updateCaretPosition();
 		}
 	}
 	

@@ -69,7 +69,7 @@ public abstract class ReplayModTextFieldMixin implements MinecraftTextFieldWidge
 			bounds = currentBounds;
 		}
 		if(updateCursorInfo() || boundsChanged) {
-			IMManager.updateCompositionWindowPos();
+			IMManager.updateCaretPosition();
 		}
 	}
 

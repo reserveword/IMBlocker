@@ -24,7 +24,7 @@ public abstract class ModernUIEditTextMixin extends ModernUITextViewMixin {
 	@Override
 	public void imblocker$onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter, CallbackInfo ci) {
 		if(isTrulyFocused()) {
-			IMManager.updateCompositionWindowPos();
+			IMManager.updateCaretPosition();
 		}
 	}
 }

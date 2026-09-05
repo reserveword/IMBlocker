@@ -25,6 +25,8 @@ public final class IMManager {
 		
 		default void updateCompositionWindowPos(Point pos) {}
 		
+		default void setPreeditCursorRectangle(int x, int y, int width, int height) {}
+		
 		default void updateCompositionFontSize(int fontSize) {}
 		
 		default void initializeIngameIME(long window) {}
@@ -38,7 +40,7 @@ public final class IMManager {
 		IMBlockerCore.invokeOnMainThread(() -> INSTANCE.setState(on));
 		LinuxKeyCallbackMonitor.syncIMState(on);
 		if (on) {
-			updateCompositionWindowPos();
+			updateCaretPosition();
 			updateCompositionFontSize();
 		}
 	}
@@ -53,20 +55,25 @@ public final class IMManager {
 		IMBlockerCore.invokeOnMainThread(() -> RimeAsciiModeManager.setAsciiMode(isEN));
 	}
 	
-	public static void updateCompositionWindowPos() {
+	public static void updateCaretPosition() {
 		FocusableObject focusedWidget = FocusManager.getFocusOwner();
 		if(focusedWidget != null) {
 			FocusManager.updateWindowPixelDensity();
-			if(IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
+			if(IMBlockerConfig.INSTANCE.isIngameIMEEnabled() || 
+					Platform.isMac() || isEnhancedLinuxImplPresent) {
 				CaretInfo caretInfo = calculateCaretPos(focusedWidget, true);
 				UniversalIMEPreeditOverlay.getInstance().updateCaretPosition(caretInfo);
 				UniversalIMECandidateOverlay.getInstance().updateCaretPosition(caretInfo);
 			}else if(IMBlockerConfig.INSTANCE.isCursorPositionTrackingEnabled()) {
-				CaretInfo caretInfo = calculateCaretPos(focusedWidget, isEnhancedLinuxImplPresent);
+				CaretInfo caretInfo = calculateCaretPos(focusedWidget, false);
 				Point caretPos = new Point(caretInfo.caretX(), caretInfo.caretY());
 				IMBlockerCore.invokeOnMainThread(() -> INSTANCE.updateCompositionWindowPos(caretPos));
 			}
 		}
+	}
+	
+	public static void setPreeditCursorRectangle(int x, int y, int width, int height) {
+		IMBlockerCore.invokeOnMainThread(() -> INSTANCE.setPreeditCursorRectangle(x, y, width, height));
 	}
 	
 	public static void updateCompositionFontSize() {

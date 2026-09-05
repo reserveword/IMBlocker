@@ -72,7 +72,7 @@ final class IMManagerX11 extends IMManagerLinux {
 	@Override
 	public void updateCompositionFontSize(int fontSize) {
 		this.fontSize = fontSize;
-		IMBlockerCore.invokeOnRenderThread(IMManager::updateCompositionWindowPos);
+		IMBlockerCore.invokeOnRenderThread(IMManager::updateCaretPosition);
 	}
 	
 	private Pointer retrieveXIC() {

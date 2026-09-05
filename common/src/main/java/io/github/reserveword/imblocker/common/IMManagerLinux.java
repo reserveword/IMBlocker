@@ -19,13 +19,7 @@ class IMManagerLinux implements IMManager.PlatformIMManager {
 
 	@Override
 	public void setEnglishState(boolean isEN) {
-		String command = isEN ? IMBlockerConfig.INSTANCE.getEnglishStateOnCommand() : 
-			IMBlockerConfig.INSTANCE.getEnglishStateOffCommand();
-		try {
-			Runtime.getRuntime().exec(command.split(" "));
-		} catch (IOException e) {
-			IMBlockerCore.LOGGER.error("[IMBlocker] Invalid Command: {}", command);
-		}
+		
 	}
 	
 	private void checkIMFramework() {

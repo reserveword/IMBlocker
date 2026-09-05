@@ -91,16 +91,6 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	}
 	
 	@Override
-	public String getEnglishStateOnCommand() {
-		return linuxCompatibilitySettings.englishStateOnCommand;
-	}
-	
-	@Override
-	public String getEnglishStateOffCommand() {
-		return linuxCompatibilitySettings.englishStateOffCommand;
-	}
-	
-	@Override
 	public String getIBusOnArgName() {
 		return linuxCompatibilitySettings.ibusOnArgName;
 	}
@@ -189,10 +179,6 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	static class LinuxCompatibilitySettings {
 		@ConfigEntry.Gui.Tooltip(count = 2)
 		boolean enableKeyboardPatch = true;
-		
-		String englishStateOnCommand = "";
-		
-		String englishStateOffCommand = "";
 		
 		@ConfigEntry.Gui.Tooltip
 		String ibusOnArgName = "libpinyin";

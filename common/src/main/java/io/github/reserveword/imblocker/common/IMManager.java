@@ -49,6 +49,10 @@ public final class IMManager {
 		}
 	}
 	
+	public static void setRimeAsciiMode(boolean isEN) {
+		IMBlockerCore.invokeOnMainThread(() -> RimeAsciiModeManager.setAsciiMode(isEN));
+	}
+	
 	public static void updateCompositionWindowPos() {
 		FocusableObject focusedWidget = FocusManager.getFocusOwner();
 		if(focusedWidget != null) {

@@ -42,6 +42,7 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 	
 	private static final SetMarkedTextCallback SetMarkedTextImp;
 	private static final SetMarkedTextCallback NewSetMarkedTextImp;
+	private static boolean markedTextProcessed = false;
 
 	static {
 		// keyDown replacement \\
@@ -53,8 +54,13 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 			if (RuntimeUtils.msg(self, RuntimeUtils.sel("hasMarkedText")) == 0) {
 				KeyDownImp.invoke(self, _cmd, event);
 			} else {
+				markedTextProcessed = false;
 				long events = RuntimeUtils.msg(RuntimeUtils.cls("NSArray"), RuntimeUtils.sel("arrayWithObject:"), event);
 				RuntimeUtils.msg(self, interpretKeySelector, events);
+				if (!markedTextProcessed) {
+					RuntimeUtils.msg(self, RuntimeUtils.sel("unmarkText"));
+					postPreeditContent(null, 0);
+				}
 			}
 		};
 		ObjC.INSTANCE.class_replaceMethod(viewClass, keyDownSelector, NewKeyDownImp, "v@:@");
@@ -121,6 +127,7 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 		SetMarkedTextImp = getImp(SetMarkedTextCallback.class, setMarkedTextMethod);
 		NewSetMarkedTextImp = (self, sel, stringPtr, selectedRange, replacementRange) -> {
 			SetMarkedTextImp.invoke(self, setMarkedTextSelector, stringPtr, selectedRange, replacementRange);
+			markedTextProcessed = true;
 			
 			if (stringPtr == null) {
 				postPreeditContent(null, 0);

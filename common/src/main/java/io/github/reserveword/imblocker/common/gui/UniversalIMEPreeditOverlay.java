@@ -31,14 +31,6 @@ public class UniversalIMEPreeditOverlay {
 	private UniversalIMEPreeditOverlay() {
 		this.initTimeMs = System.currentTimeMillis();
 	}
-	
-	public void updateCaretPosition(int caretX, int caretY) {
-		this.caretX = caretX;
-		this.caretY = caretY;
-		FocusableObject focusOwner = FocusManager.getFocusOwner();
-		this.inputHeight = focusOwner != null ? (int) (focusOwner.getFontHeight() * focusOwner.getGuiScale()) : 0;
-		updatePreeditArea();
-	}
 
 	public void updateCaretPosition(CaretInfo caretInfo) {
 		this.caretX = caretInfo.caretX();
@@ -50,6 +42,7 @@ public class UniversalIMEPreeditOverlay {
 	public void preeditContentUpdated(String compositionString, int caretPosition) {
 		if(compositionString != null) {
 			if(!Objects.equals(preEditText, compositionString) || (preEditCaretPos != caretPosition)) {
+				boolean startComposition = preEditText == null;
 				preEditText = compositionString;
 				preEditCaretPos = caretPosition;
 				
@@ -58,6 +51,10 @@ public class UniversalIMEPreeditOverlay {
 					preEditCaretRenderX = MinecraftClientAccessor.INSTANCE.getStringWidth(preEditText.substring(0, preEditCaretPos));
 					updatePreeditArea();
 				}else {
+					if(startComposition) {
+						preEditTextWidth = 0;
+						updatePreeditArea(); // On macOS, we must provide preedit area immediately.
+					}
 					preEditContentUpdated = true;
 				}
 			}

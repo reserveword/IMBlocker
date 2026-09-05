@@ -17,9 +17,9 @@
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[2]": "習慣使用 JECh 搜尋的玩家推薦將此項目設定為ENG\n此設定不影響聊天欄和搜尋元素較少的模組",
   
   "text.autoconfig.imblocker.option.advanceSettings": "進階設定",
-  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation": "使用模擬字元定位焦點",
-  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[0]": "\u00A7l透過發送一個模擬字元來定位焦點組件",
-  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[1]": "此方法可以絕對精準地定位到真正的焦點組件\n模擬字元通常可以被注入的回調安全吸收\n但可能洩漏至某些未過濾該字元的螢幕",
+  "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens": "模擬字元輔助螢幕",
+  "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens.@Tooltip[0]": "\u00A7l透過傳送模擬字元輔助定位焦點的螢幕列表",
+  "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens.@Tooltip[1]": "模擬字元可以絕對精準地定位到真正的焦點組件\n探針字元通常可以被注入的回調安全吸收\n但仍可能在某些場景下出現相容問題",
   "text.autoconfig.imblocker.option.advanceSettings.commandPrefixRegex": "指令前綴正規表示式",
   
   "text.autoconfig.imblocker.option.modCompatibilitySettings": "模組相容性設定",

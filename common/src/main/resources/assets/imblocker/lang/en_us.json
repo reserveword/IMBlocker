@@ -17,9 +17,9 @@
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[2]": "This option doesn't affect chat field and mods with few search scenarios.",
   
   "text.autoconfig.imblocker.option.advanceSettings": "Advance Settings",
-  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation": "Enable Char Simulation",
-  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[0]": "\u00A7lLocate the focus owner with char simulation",
-  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[1]": "This approach can locate the focus owner with 100% accuracy.\nGenerally, the probe char will be safely absorbed by the injection,\nhowever, it might leak to the screen that doesn't filter it.",
+  "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens": "Char Simulation-preferred Screens",
+  "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens.@Tooltip[0]": "\u00A7lScreens that preferred to locate focus through char simulation.",
+  "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens.@Tooltip[1]": "Listed screens will locate focus owner within them through\nchar simulation, an approach with 100% accuracy.\nGenerally, the probe char will be safely absorbed by the injection,\nbut might has compatibility issues in certain scenarios.",
   "text.autoconfig.imblocker.option.advanceSettings.commandPrefixRegex": "Command Prefix Regex",
   
   "text.autoconfig.imblocker.option.modCompatibilitySettings": "Mod Compatibility Settings",

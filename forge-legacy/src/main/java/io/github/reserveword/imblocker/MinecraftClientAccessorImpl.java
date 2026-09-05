@@ -58,11 +58,6 @@ public class MinecraftClientAccessorImpl extends MinecraftClientAccessor {
 	}
 	
 	@Override
-	public Object getCurrentScreen() {
-		return Minecraft.getInstance().screen;
-	}
-	
-	@Override
 	public int getStringWidth(String text) {
 		return Minecraft.getInstance().font.width(text);
 	}

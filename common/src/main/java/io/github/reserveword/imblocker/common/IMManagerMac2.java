@@ -32,57 +32,37 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 
 	static {
 		// see
-		// https://github.com/glfw/glfw/blob/master/src/cocoa_window.m
-		// keyDown: → interpretKeyEvents: → NSTextInputClient
-		// (insertText:/setMarkedText:)
-		// When state == false we discard marked text and feed characters via
-		// insertText:
-		// so _glfwInputChar still fires (plain ASCII/etc input works while IME is
-		// blocked).
+		// https://github.com/glfw/glfw/blob/b4c3ef9d0fdf46845f3e81e5d989dab06e71e6c1/src/cocoa_window.m#L571
+		// Replacing the method dynamically to determine whether to send text based on
+		// state
+		// see reference for objc_runtime's dynamic manipulation at
+		// https://developer.apple.com/documentation/objectivec/objective-c_runtime
 		Pointer selector = RuntimeUtils.sel("interpretKeyEvents:");
 		Pointer method = Runtime.INSTANCE.class_getInstanceMethod(viewClass, selector);
 		Imp = ObjC.INSTANCE.method_getImplementation(method);
-
-		// NSNotFound on 64-bit == NSIntegerMax == Long.MAX_VALUE
 		final NSRange emptyRange = new NSRange();
 		emptyRange.location = Long.MAX_VALUE;
 		emptyRange.length = 0;
-
 		NewImp = (self, sel, eventArray) -> {
-			if (view == null) {
-				view = self;
-			}
-
+			if (view == null) view = self;
 			if (!state) {
-				// 1. Clear any in-progress composition
 				Pointer textInputContextCls = RuntimeUtils.cls("NSTextInputContext");
 				Pointer currentCtx = RuntimeUtils.msgPointer(textInputContextCls, "currentInputContext");
-				if (currentCtx != null && Pointer.nativeValue(currentCtx) != 0) {
+				if (Pointer.nativeValue(currentCtx) != 0) {
 					RuntimeUtils.msg(currentCtx, "discardMarkedText");
 				}
-
-				// 2. Manually insert characters from each NSEvent
-				// (same effect as maintainer's keyDown + insertText path)
-				if (eventArray != null && Pointer.nativeValue(eventArray) != 0) {
+				if (Pointer.nativeValue(eventArray) != 0) {
 					long count = RuntimeUtils.msg(eventArray, "count");
 					for (long i = 0; i < count; i++) {
 						Pointer event = RuntimeUtils.msgPointer(eventArray, "objectAtIndex:", i);
-						if (event == null || Pointer.nativeValue(event) == 0) {
-							continue;
-						}
 						Pointer characters = RuntimeUtils.msgPointer(event, "characters");
-						if (characters == null || Pointer.nativeValue(characters) == 0) {
-							continue;
+						if (Pointer.nativeValue(characters) != 0) {
+							RuntimeUtils.msg(self, "insertText:replacementRange:", characters, emptyRange);
 						}
-						// [self insertText:characters replacementRange:{NSNotFound, 0}]
-						// → GLFWContentView insertText: → _glfwInputChar
-						RuntimeUtils.msg(self, "insertText:replacementRange:", characters, emptyRange);
 					}
 				}
 				return;
 			}
-
-			// state == true: full IME path
 			Imp.invoke(self, sel, eventArray);
 		};
 		ObjC.INSTANCE.class_replaceMethod(viewClass, selector, NewImp, "v@:@");
@@ -91,7 +71,7 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 		NewFirstRectImp = (self, sel, rangePtr, actualRange) -> {
 			Proxy window = new Proxy(new Pointer(GLFWNativeCocoa.glfwGetCocoaWindow(
 					MinecraftClientAccessor.INSTANCE.getWindowHandle())));
-			NSRect contentRect = toNSRect(window.send("contentRectForFrameRect:", toNSRect(window.send("frame"))));
+			NSRect contentRect = new NSRect(0, 0, 0, 0); //toNSRect(window.send("contentRectForFrameRect:", toNSRect(window.send("frame"))));
 			double caretScreenX = contentRect.x + caretX;
 			double caretScreenY = contentRect.y + contentRect.height - caretY - fontSize;
 			return new NSRect(caretScreenX, caretScreenY, 0, fontSize);
@@ -134,7 +114,7 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 	}
 	
 	private interface FirstRectForCharacterRangeCallback extends Callback {
-		NSRect invoke(Pointer self, Pointer selector, Pointer range, Pointer actualRange);
+		NSRect invoke(Pointer self, Pointer selector, NSRange.ByValue range, Pointer actualRange);
 	}
 
 	@Override

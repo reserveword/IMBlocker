@@ -17,38 +17,58 @@ public class IMBlockerConfig {
 			"com.simibubi.create.content.equipment.clipboard.ClipboardScreen",
 			"net.mehvahdjukaar.supplementaries.client.screens.TextHolderEditScreen",
 			"dev.simulated_team.simulated.content.blocks.nameplate.NameplateScreen",
-			"com.enxv.aeronauticsstructuretool.ToolModeScreen");
-
+			"com.enxv.aeronauticsstructuretool.ToolModeScreen",
+			"me.desht.pneumaticcraft.client.gui.AphorismTileScreen");
 	private static final Set<Class<?>> bakedScreenWhitelist = new HashSet<>();
+	
+	private static final List<String> defaultCharSimulationScreens = Lists.newArrayList(
+			"journeymap.client.ui.fullscreen.Fullscreen");
+	private static final Set<Class<?>> bakedCharSimulationScreens = new HashSet<>();
 	
 	private static Matcher commandPrefixRegexMatcher = Pattern.compile("^/").matcher("");
 
 	public void reloadConfig() {
 		reloadScreenWhitelist(Collections.emptyList());
+		reloadCharSimulationScreens(Collections.emptyList());
 	}
 	
-	void reloadScreenWhitelist(List<String> newScreenWhitelist) {
-		bakedScreenWhitelist.clear();
-		Set<String> rawScreenWhitelist = new HashSet<>(defaultScreenWhitelist);
-		rawScreenWhitelist.addAll(newScreenWhitelist);
+	void reloadScreenWhitelist(List<? extends String> customScreenWhitelist) {
+		bakeList(defaultScreenWhitelist, customScreenWhitelist, bakedScreenWhitelist, "screenWhitelist");
+	}
+	
+	void reloadCharSimulationScreens(List<? extends String> customCharSimulationScreens) {
+		bakeList(defaultCharSimulationScreens, customCharSimulationScreens, bakedCharSimulationScreens, "charSimulationScreens");
+	}
+	
+	private void bakeList(List<String> defaultList, List<? extends String> customList,
+			Set<Class<?>> dest, String listName) {
+		dest.clear();
+		Set<String> rawScreenWhitelist = new HashSet<>(defaultList);
+		rawScreenWhitelist.addAll(customList);
+		ClassLoader classLoader = getClass().getClassLoader();
 		for (String s : rawScreenWhitelist) {
 			try {
 				if (s.contains(":")) {
 					String[] ss = s.split(":");
 					s = ss[ss.length - 1];
 				}
-				bakedScreenWhitelist.add(Class.forName(s));
+				dest.add(Class.forName(s, false, classLoader));
 			} catch (ClassNotFoundException e) {
 				IMBlockerCore.LOGGER.warn("[IMBlocker] Class {} not found, ignored.", s);
 			} catch (Throwable e) {
 				IMBlockerCore.LOGGER.warn("[IMBlocker] Invalid screen class: " + e);
 			}
 		}
-		IMBlockerCore.LOGGER.info("[IMBlocker] bakelist {} result {}", "screenWhitelist", bakedScreenWhitelist);
+		IMBlockerCore.LOGGER.info("[IMBlocker] bakelist {} result {}", listName, dest);
 	}
+
 
 	public boolean isScreenInWhitelist(Object screen) {
 		return bakedScreenWhitelist.stream().anyMatch(screenCls -> screenCls.isInstance(screen));
+	}
+	
+	public boolean isCharSimulationPreferred(Object screen) {
+		return screen != null && bakedCharSimulationScreens.contains(screen.getClass());
 	}
 	
 	void reloadCommandPrefixRegex(String prefixRegex) {
@@ -73,10 +93,6 @@ public class IMBlockerConfig {
 	
 	public EnglishState getPrimaryEnglishState() {
 		return EnglishState.CJK;
-	}
-	
-	public boolean isCharSimulationEnabled() {
-		return false;
 	}
 	
 	public boolean sfm$showLineNumber() {

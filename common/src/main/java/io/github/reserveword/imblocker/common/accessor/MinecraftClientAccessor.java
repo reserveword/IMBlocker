@@ -15,7 +15,6 @@ public abstract class MinecraftClientAccessor {
 	public abstract Dimension getContentSize();
 	public abstract int getGuiScaledWidth();
 	public abstract int getGuiScaledHeight();
-	public abstract Object getCurrentScreen();
 	public abstract int getStringWidth(String text);
 	public abstract int getStringWidth(Object presentFontRenderer, String text, Object font);
 	

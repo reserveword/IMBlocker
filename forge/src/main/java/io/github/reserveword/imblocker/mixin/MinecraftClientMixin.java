@@ -9,10 +9,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.platform.Window;
 
-import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
+import io.github.reserveword.imblocker.common.gui.MinecraftScreenMonitor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 
@@ -32,14 +32,7 @@ public abstract class MinecraftClientMixin {
 
 	@Inject(method = "setScreen", at = @At("HEAD"))
 	public void onScreenChanged(Screen screen, CallbackInfo ci) {
-		if(IMBlockerConfig.INSTANCE.isScreenRecoveringEnabled() && screen != null) {
-			IMBlockerConfig.INSTANCE.recoverScreen(screen.getClass().getName());
-		}
-
-		if(!IMBlockerCore.isFTBScreen(screen)) {
-			FocusContainer.MINECRAFT.clearFocus();
-		}
-		FocusContainer.MINECRAFT.setPreferredState(isScreenInWhiteList(screen));
+		MinecraftScreenMonitor.onScreenChanged(screen);
 	}
 	
 	@Inject(method = "runTick", at = @At("HEAD"))
@@ -60,9 +53,5 @@ public abstract class MinecraftClientMixin {
 			FocusManager.isGameRendering = false;
 			FocusContainer.MINECRAFT.checkFocusCandidatesVisibility(lastGameRenderTime);
 		}
-	}
-
-	private boolean isScreenInWhiteList(Screen screen) {
-		return IMBlockerConfig.INSTANCE.isScreenInWhitelist(screen);
 	}
 }

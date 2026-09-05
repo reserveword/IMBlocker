@@ -13,14 +13,17 @@ import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.Structure.FieldOrder;
 
-import ca.weblite.objc.Proxy;
 import ca.weblite.objc.Runtime;
 import ca.weblite.objc.RuntimeUtils;
 import ca.weblite.objc.foundation.NSRange;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.Point;
+import io.github.reserveword.imblocker.common.gui.Rectangle;
 
 final class IMManagerMac2 implements IMManager.PlatformIMManager {
+	private static final boolean IS_X86 = "x86_64".equalsIgnoreCase(System.getProperty("os.arch")) || 
+			"amd64".equalsIgnoreCase(System.getProperty("os.arch"));
+	
 	private static boolean state = false;
 	static private final Pointer viewClass = Runtime.INSTANCE.objc_getClass("GLFWContentView");
 	static private Pointer view = null;
@@ -102,12 +105,14 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 		
 		Pointer firstRectSel = RuntimeUtils.sel("firstRectForCharacterRange:actualRange:");
 		NewFirstRectImp = (self, sel, rangePtr, actualRange) -> {
-			Proxy window = new Proxy(new Pointer(GLFWNativeCocoa.glfwGetCocoaWindow(
-					MinecraftClientAccessor.INSTANCE.getWindowHandle())));
-			NSRect contentRect = new NSRect(0, 0, 0, 0); //toNSRect(window.send("contentRectForFrameRect:", toNSRect(window.send("frame"))));
+			Pointer window = new Pointer(GLFWNativeCocoa.glfwGetCocoaWindow(
+					MinecraftClientAccessor.INSTANCE.getWindowHandle()));
+			NSRect contentRect = getContentRect(window, getWindowFrame(window));
 			double caretScreenX = contentRect.x + caretX;
 			double caretScreenY = contentRect.y + contentRect.height - caretY - fontSize;
-			return new NSRect(caretScreenX, caretScreenY, 0, fontSize);
+			NSRect cursorRect = new NSRect(caretScreenX, caretScreenY, 0, fontSize);
+			cursorRect.write();
+			return cursorRect;
 		};
 		ObjC.INSTANCE.class_replaceMethod(viewClass, firstRectSel, NewFirstRectImp,
 				"{CGRect={CGPoint=dd}{CGSize=dd}}@:{_NSRange=QQ}^{_NSRange=QQ}");
@@ -124,6 +129,11 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 		void class_replaceMethod(Pointer cls, Pointer selector, Callback imp, String types);
 
 		Pointer method_getImplementation(Pointer selector);
+		
+		NSRect objc_msgSend(Pointer receiver, Pointer selector);
+		NSRect objc_msgSend(Pointer receiver, Pointer selector, NSRect frame);
+		void objc_msgSend_stret(Pointer result, Pointer receiver, Pointer selector);
+		void objc_msgSend_stret(Pointer result, Pointer receiver, Pointer slector, NSRect frame);
 	}
 	
 	private interface KeyDownCallback extends Callback {
@@ -181,17 +191,31 @@ final class IMManagerMac2 implements IMManager.PlatformIMManager {
 		fontSize = newFontSize;
 	}
 	
-	private static NSRect toNSRect(Object obj) {
-		if (obj instanceof NSRect) {
-			return (NSRect) obj;
-		} else if (obj instanceof Structure) {
-			NSRect rect = new NSRect(((Structure) obj).getPointer());
-			return rect;
-		} else if (obj instanceof Pointer) {
-			return new NSRect((Pointer) obj);
-		} else {
-			return new NSRect();
+	private static NSRect getWindowFrame(Pointer window) {
+		Pointer sel = RuntimeUtils.sel("frame");
+		
+		if (!IS_X86) {
+			return ObjC.INSTANCE.objc_msgSend(window, sel);
 		}
+		
+		NSRect result = new NSRect();
+		ObjC.INSTANCE.objc_msgSend_stret(result.getPointer(), window, sel);
+		result.read();
+		return result;
+	}
+	
+	private static NSRect getContentRect(Pointer window, NSRect frame) {
+		Pointer sel = RuntimeUtils.sel("contentRectForFrameRect:");
+		frame.write();
+		
+		if (!IS_X86) {
+			return ObjC.INSTANCE.objc_msgSend(window, sel, frame);
+		}
+		
+		NSRect result = new NSRect();
+		ObjC.INSTANCE.objc_msgSend_stret(result.getPointer(), window, sel, frame);
+		result.read();
+		return result;
 	}
 	
 	@FieldOrder({"x", "y", "width", "height"})

@@ -11,16 +11,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
-import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
-import net.caffeinemc.mods.sodium.client.gui.widgets.AbstractWidget;
 import net.minecraft.client.input.CharacterEvent;
 
 @Pseudo
-@Mixin(targets = "me.flashyreese.mods.reeses_sodium_options"
-		+ ".client.gui.frame.components.SearchTextFieldComponent", remap = false)
-public abstract class RSOSearchFieldMixin extends AbstractWidget implements MinecraftTextFieldWidget {
-	
+@Mixin(targets = "me.flashyreese.mods.reeses_sodium_options.client.gui.widget.TextFieldWidget", remap = false)
+public abstract class RSOTextFieldMixin extends RSOBaseWidgetMixin implements MinecraftTextFieldWidget {
 	@Shadow protected String text;
 	@Shadow private int firstCharacterIndex;
 	@Shadow private int selectionStart;
@@ -28,18 +24,18 @@ public abstract class RSOSearchFieldMixin extends AbstractWidget implements Mine
 	private final SinglelineCursorInfo imblocker$cursorInfo = 
 			new SinglelineCursorInfo(true, 0, firstCharacterIndex, selectionStart, text);
 	
-	@Shadow(aliases = "method_37303")
-	public abstract boolean isActive();
+	@Shadow
+	public abstract boolean canConsumeTextInput();
 	
-	@Inject(method = {"setFocused", "method_25365"}, at = @At("TAIL"))
+	@Override
 	public void focusChanged(boolean isFocused, CallbackInfo ci) {
-		imblocker$onFocusChanged(isActive());
+		imblocker$onFocusChanged(canConsumeTextInput());
 	}
 	
-	@Inject(method = {"charTyped", "method_25400"}, at = @At("HEAD"), cancellable = true)
+	@Inject(method = { "charTyped", "method_25400" }, at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(CharacterEvent characterEvent, CallbackInfoReturnable<Boolean> cir) {
 		if(FocusManager.isTrackingFocus) {
-			if(isActive()) {
+			if(canConsumeTextInput()) {
 				FocusContainer.MINECRAFT.switchFocus(this);
 				cir.setReturnValue(true);
 			}else {
@@ -48,8 +44,13 @@ public abstract class RSOSearchFieldMixin extends AbstractWidget implements Mine
 		}
 	}
 	
-	@Inject(method = "onChanged", at = @At("TAIL"))
-	public void onTextChanged(String newText, CallbackInfo ci) {
+	@Inject(method = "setSelectionStart", at = @At("TAIL"))
+	public void onCursorChanged(int cursor, CallbackInfo ci) {
+		imblocker$onCursorChanged();
+	}
+	
+	@Inject(method = "clearText", at = @At("TAIL"))
+	public void onTextCleared(CallbackInfo ci) {
 		imblocker$onCursorChanged();
 	}
 	
@@ -61,11 +62,6 @@ public abstract class RSOSearchFieldMixin extends AbstractWidget implements Mine
 	@Override
 	public SinglelineCursorInfo getCursorInfo() {
 		return imblocker$cursorInfo;
-	}
-	
-	@Override
-	public Rectangle getBoundsAbs() {
-		return new Rectangle(getGuiScale(), getX(), getY(), getWidth(), getHeight());
 	}
 	
 	@Override

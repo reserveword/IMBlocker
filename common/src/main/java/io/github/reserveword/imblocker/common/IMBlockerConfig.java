@@ -22,7 +22,8 @@ public class IMBlockerConfig {
 	private static final Set<Class<?>> bakedScreenWhitelist = new HashSet<>();
 	
 	private static final List<String> defaultCharSimulationScreens = Lists.newArrayList(
-			"journeymap.client.ui.fullscreen.Fullscreen");
+			"journeymap.client.ui.fullscreen.Fullscreen",
+			"net.pedroksl.advanced_ae.client.gui.QuantumCrafterConfigPatternScreen");
 	private static final Set<Class<?>> bakedCharSimulationScreens = new HashSet<>();
 	
 	private static Matcher commandPrefixRegexMatcher = Pattern.compile("^/").matcher("");

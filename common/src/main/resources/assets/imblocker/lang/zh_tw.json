@@ -35,8 +35,8 @@
   
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings": "Linux 相容性設定",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch": "啟用回調級鍵盤補丁",
-  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[0]": "該補丁從 GLFW 回調層修復了輸入法候選詞框顯示時控制按鍵會洩漏至遊戲視窗的漏洞",
-  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[1]": "如果候選詞框因退格鍵清空了預編輯字元而關閉會導致遊戲無法處理控制按鍵\n此時請按下 Esc 或輸入任意字元以解除此狀態",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[0]": "該補丁從GLFW回調層修復了輸入法候選詞框顯示時控制按鍵會洩漏至遊戲視窗的漏洞",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[1]": "如果候選詞框因退格鍵清空了預編輯字元而關閉會導致遊戲無法處理控制按鍵\n此時請按下Esc或輸入任意字元以解除此狀態",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.isHeadlessPreeditMode": "啟用無預編輯字元相容模式",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.isHeadlessPreeditMode.@Tooltip": "當且僅當預編輯字元無法在你的環境下顯示時才應開啟此選項",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOnArgName": "IBus 開啟輸入法的指令參數",

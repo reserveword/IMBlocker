@@ -3,6 +3,7 @@ package io.github.reserveword.imblocker.common.gui;
 import java.util.Objects;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.sun.jna.Platform;
 
 import imgui.moulberry92.ImDrawList;
 import imgui.moulberry92.ImGui;
@@ -62,7 +63,6 @@ public class UniversalIMEPreeditOverlay {
 			String compositionString = preeditContents.fullText();
 			int caretPosition = preeditContents.caretPosition();
 			if(!Objects.equals(preEditText, compositionString) || (preEditCaretPos != caretPosition)) {
-				boolean startComposition = preEditText == null;
 				preEditText = preeditContents.fullText();
 				preEditCaretPos = preeditContents.caretPosition();
 				
@@ -72,15 +72,12 @@ public class UniversalIMEPreeditOverlay {
 					preEditCaretRenderX = font.width(preEditText.substring(0, preEditCaretPos));
 					updatePreeditArea();
 				}else {
-					if(startComposition) {
-						preEditTextWidth = 0;
-						updatePreeditArea(); // On macOS, we must provide preedit area immediately.
-					}
 					preEditContentUpdated = true;
 				}
 			}
 		}else {
 			preEditText = null;
+			preEditTextWidth = 0;
 			preEditTextFormatted = null;
 			preEditContentUpdated = false;
 		}
@@ -88,7 +85,8 @@ public class UniversalIMEPreeditOverlay {
 	
 	private void updatePreeditArea() {
 		FocusableObject focusOwner = FocusManager.getFocusOwner();
-		if(focusOwner != null && preEditText != null) {
+		// On macOS, we must provide preedit area immediately.
+		if(focusOwner != null && (preEditText != null || Platform.isMac())) {
 			int containerFontSize;
 			double containerGuiScale;
 			Rectangle compositionBorder;

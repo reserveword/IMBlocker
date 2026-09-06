@@ -141,7 +141,7 @@ public final class IMManager {
 		if(Platform.isWindows()) {
 			INSTANCE = new IMManagerWindows();
 		}else if(Platform.isMac()) {
-			INSTANCE = new IMManagerMac2();
+			INSTANCE = new IMManagerMac();
 		}else if(Platform.isLinux()) {
 			PlatformIMManager linuxImpl;
 			try {

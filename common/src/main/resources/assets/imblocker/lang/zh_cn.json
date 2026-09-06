@@ -17,9 +17,7 @@
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[2]": "习惯使用拼音搜索的玩家推荐将此项设置为ENG\n此设置不影响聊天栏和搜索元素较少的模组",
   "text.autoconfig.imblocker.option.basicSettings.useStrictCursorRect": "使用严格预编辑光标区域",
   "text.autoconfig.imblocker.option.basicSettings.useStrictCursorRect.@Tooltip": "光标区域仅包含预编辑字符而不包含输入框内容\n\u00A76仅当候选词框会遮挡预编辑字符时才应考虑开启此选项",
-  "text.autoconfig.imblocker.option.basicSettings.extraScale": "额外缩放",
-  "text.autoconfig.imblocker.option.basicSettings.extraScale.@Tooltip": "如果候选词框始终以固定比例（一般是显示缩放比例）偏移则需要调整此值\n此值数值上等于候选词框X坐标/文本光标X坐标，其中X坐标均以游戏窗口左上角为原点",
-  
+
   "text.autoconfig.imblocker.option.advanceSettings": "高级设置",
   "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens": "模拟字符辅助屏幕",
   "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens.@Tooltip[0]": "\u00A7l通过发送模拟字符辅助定位焦点的屏幕列表",

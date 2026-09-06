@@ -17,9 +17,7 @@
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[2]": "This option doesn't affect chat field and mods with few search scenarios.",
   "text.autoconfig.imblocker.option.basicSettings.useStrictCursorRect": "Use Strict Pre-edit Cursor Rectangle",
   "text.autoconfig.imblocker.option.basicSettings.useStrictCursorRect.@Tooltip": "Do not include input widget content within the cursor rectangle.\n\u00A76This option should only be enabled if pre-edit content is obscured by IME's candidate window.",
-  "text.autoconfig.imblocker.option.basicSettings.extraScale": "Extra Scale",
-  "text.autoconfig.imblocker.option.basicSettings.extraScale.@Tooltip": "You may tweak this value if the candidate window is offset by a constant ratio (usually display scaling).\nThis value should be equal to candidate window X / caret X, where X is relative to the game window.",
-  
+
   "text.autoconfig.imblocker.option.advanceSettings": "Advance Settings",
   "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens": "Char Simulation-preferred Screens",
   "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens.@Tooltip[0]": "\u00A7lScreens that preferred to locate focus through char simulation.",

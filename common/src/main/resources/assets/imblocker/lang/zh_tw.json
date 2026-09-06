@@ -17,9 +17,7 @@
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[2]": "習慣使用 JECh 搜尋的玩家推薦將此項目設定為ENG\n此設定不影響聊天欄和搜尋元素較少的模組",
   "text.autoconfig.imblocker.option.basicSettings.useStrictCursorRect": "使用嚴格預編輯遊標區域",
   "text.autoconfig.imblocker.option.basicSettings.useStrictCursorRect.@Tooltip": "遊標區域僅包含預編輯字元而不包含輸入框内容\n\u00A76僅當候選詞框會遮擋預編輯字元時才應考慮開啟此選項",
-  "text.autoconfig.imblocker.option.basicSettings.extraScale": "額外縮放",
-  "text.autoconfig.imblocker.option.basicSettings.extraScale.@Tooltip": "如果候選詞框始終以固定比例（一般是顯示縮放比例）偏移則需要調整此值\n此值數值上等於候選詞框X座標/文字遊標X座標，其中X座標均以遊戲視窗左上角為原點",
-  
+
   "text.autoconfig.imblocker.option.advanceSettings": "進階設定",
   "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens": "模擬字元輔助螢幕",
   "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens.@Tooltip[0]": "\u00A7l透過傳送模擬字元輔助定位焦點的螢幕列表",

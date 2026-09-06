@@ -101,10 +101,6 @@ public class IMBlockerConfig {
 	public boolean useStrictCursorRect() {
 		return false;
 	}
-	
-	public float getExtraScale() {
-		return 1.0F;
-	}
 
 	public boolean isConversionStatusApiEnabled() {
 		return true;

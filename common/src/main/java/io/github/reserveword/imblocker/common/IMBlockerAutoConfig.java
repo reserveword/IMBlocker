@@ -67,11 +67,6 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	public boolean useStrictCursorRect() {
 		return basicSettings.useStrictCursorRect;
 	}
-	
-	@Override
-	public float getExtraScale() {
-		return basicSettings.extraScale;
-	}
 
 	@Override
 	public boolean isConversionStatusApiEnabled() {
@@ -154,9 +149,6 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 		
 		@ConfigEntry.Gui.Tooltip
 		boolean useStrictCursorRect = false;
-		
-		@ConfigEntry.Gui.Tooltip
-		float extraScale = 1.0F;
 	}
 	
 	static class AdvanceSettings {

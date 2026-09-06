@@ -26,28 +26,26 @@ final class MinecraftFocusContext extends FocusContainer {
 	private final Map<FocusableWidget, Long> focusCandidates = new IdentityHashMap<>();
 	
 	private final Runnable locateFocusByCharSimulation = () -> {
-		if(!focusCandidates.isEmpty()) {
-			FocusManager.isTrackingFocus = true;
-			try {
-				MinecraftClientUtil.sendChar(0);
-			} catch (Throwable e) {
-				IMBlockerCore.LOGGER.warn("[IMBlocker] Failed to locate focus with char simulation");
-			}
-			if(!FocusManager.isFocusLocated && IS_MODERNUI_LOADED) {
-				Optional<FocusableWidget> modernuiFocusCandidate = focusCandidates.keySet().stream()
-						.filter(w -> (w instanceof EditText)).findFirst();
-				if(modernuiFocusCandidate.isPresent()) {
-					switchFocus(modernuiFocusCandidate.get());
-					FocusManager.isFocusLocated = true;
-				}
-			}
-			if(!FocusManager.isFocusLocated) {
-				restoreContainerFocus();
-			}
-			//IMBlockerCore.LOGGER.info("[IMBlocker] Focus track result: {}", focusedWidget);
-			FocusManager.isTrackingFocus = false;
-			FocusManager.isFocusLocated = false;
+		FocusManager.isTrackingFocus = true;
+		try {
+			MinecraftClientUtil.sendChar(0);
+		} catch (Throwable e) {
+			IMBlockerCore.LOGGER.warn("[IMBlocker] Failed to locate focus with char simulation");
 		}
+		if(!FocusManager.isFocusLocated && IS_MODERNUI_LOADED) {
+			Optional<FocusableWidget> modernuiFocusCandidate = focusCandidates.keySet().stream()
+					.filter(w -> (w instanceof EditText)).findFirst();
+			if(modernuiFocusCandidate.isPresent()) {
+				switchFocus(modernuiFocusCandidate.get());
+				FocusManager.isFocusLocated = true;
+			}
+		}
+		if(!FocusManager.isFocusLocated) {
+			restoreContainerFocus();
+		}
+		//IMBlockerCore.LOGGER.info("[IMBlocker] Focus track result: {}", focusedWidget);
+		FocusManager.isTrackingFocus = false;
+		FocusManager.isFocusLocated = false;
 	};
 	
 	MinecraftFocusContext() {
@@ -111,11 +109,7 @@ final class MinecraftFocusContext extends FocusContainer {
 		if(focusCandidates.containsKey(toRemove)) {
 			focusCandidates.remove(toRemove);
 			//IMBlockerCore.LOGGER.info(focusCandidates);
-			if (focusCandidates.isEmpty()) {
-				restoreContainerFocus();
-			} else {
-				locateRealFocus();
-			} 
+			locateRealFocus();
 		}
 	}
 	

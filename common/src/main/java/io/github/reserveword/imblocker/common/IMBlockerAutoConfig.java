@@ -134,7 +134,7 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 
 		@ConfigEntry.Gui.Tooltip(count = 3)
 		@ConfigEntry.Gui.EnumHandler(option = EnumDisplayOption.BUTTON)
-		EnglishStateImpl englishStateImpl = (Platform.isWindows() || Platform.isMac()) ? 
+		EnglishStateImpl englishStateImpl = Platform.isWindows() ? 
 				EnglishStateImpl.CONVERSION_STATUS : EnglishStateImpl.DISABLE_IM;
 		
 		@ConfigEntry.Gui.Tooltip(count = 3)

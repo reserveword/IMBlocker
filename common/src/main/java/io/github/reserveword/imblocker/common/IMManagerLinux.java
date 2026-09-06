@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-final class IMManagerLinux implements IMManager.PlatformIMManager {
+class IMManagerLinux implements IMManager.PlatformIMManager {
 	private LinuxIMFramework imFramework = LinuxIMFramework.IBUS;
 	private static boolean state = false;
 	

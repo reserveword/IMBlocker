@@ -85,7 +85,7 @@ public abstract class AWTextInputWidgetMixin implements MinecraftFocusableWidget
 			imblocker$caretPos = currenetCaretPos;
 		}
 		if(boundsChanged || caretPosChanged) {
-			IMManager.updateCompositionWindowPos();
+			IMManager.updateCaretPosition();
 		}
 	}
 	

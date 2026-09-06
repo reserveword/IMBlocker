@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.llamalad7.mixinextras.sugar.Local;
 
 import io.github.reserveword.imblocker.common.gui.CurrentScreenInfoOverlay;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
 import io.github.reserveword.imblocker.common.gui.UniversalIMECandidateOverlay;
@@ -24,7 +23,7 @@ public abstract class GameRendererMixin {
 	public void renderUniversalPreeditOverlay(DeltaTracker deltaTracker, 
 			boolean shouldRenderLevel, CallbackInfo ci, 
 			@Local GuiGraphics graphics) {
-		if(FocusManager.getFocusedContainer() == FocusContainer.MINECRAFT) {
+		if(FocusManager.isMinecraftContextFocused()) {
 			UniversalIMEPreeditOverlay.getInstance().renderOnMinecraftSurface(graphics);
 			UniversalIMECandidateOverlay.getInstance().renderOnMinecraftSurface(graphics);
 			UniversalEnglishStateIndicator.renderOnMinecraftSurface(graphics);

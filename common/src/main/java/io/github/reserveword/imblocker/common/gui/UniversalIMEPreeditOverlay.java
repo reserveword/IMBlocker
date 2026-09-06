@@ -1,12 +1,14 @@
 package io.github.reserveword.imblocker.common.gui;
 
+import java.util.Objects;
+
 import imgui.moulberry92.ImDrawList;
 import imgui.moulberry92.ImGui;
+import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import xyz.rrtt217.HDRMod.compat.imblocker.IMManagerLinuxEnhanced;
 
 public class UniversalIMEPreeditOverlay {
 	private static final UniversalIMEPreeditOverlay INSTANCE = new UniversalIMEPreeditOverlay();
@@ -20,6 +22,7 @@ public class UniversalIMEPreeditOverlay {
 	
 	private int caretX;
 	private int caretY;
+	private int inputHeight;
 	
 	private String preEditText;
 	private int preEditCaretPos;
@@ -27,7 +30,6 @@ public class UniversalIMEPreeditOverlay {
 	
 	private int preEditTextWidth;
 	private int preEditCaretRenderX;
-	private Rectangle ingameOverlayBounds = Rectangle.EMPTY;
 	private Rectangle overlayBounds = Rectangle.EMPTY;
 
 	private UniversalIMEPreeditOverlay() {
@@ -35,24 +37,32 @@ public class UniversalIMEPreeditOverlay {
 		this.initTimeMs = System.currentTimeMillis();
 	}
 
-	public void updateCaretPosition(int caretX, int caretY) {
-		this.caretX = caretX;
-		this.caretY = caretY;
+	public void updateCaretPosition(CaretInfo caretInfo) {
+		this.caretX = caretInfo.caretX();
+		this.caretY = caretInfo.caretY();
+		this.inputHeight = caretInfo.inputHeight();
 		updatePreeditArea();
 	}
 	
 	public void preeditContentUpdated(String compositionString, int caretPosition) {
 		if(compositionString != null) {
-			preEditText = compositionString;
-			preEditCaretPos = caretPosition;
-			
-			if(FocusManager.getFocusedContainer() == FocusContainer.MINECRAFT) {
-				preEditTextWidth = font.width(preEditText);
-				preEditCaretRenderX = font.width(preEditText.substring(0, preEditCaretPos));
-				updatePreeditArea();
-			}else {
-				preEditContentUpdated = true;
-			}	
+			if(!Objects.equals(preEditText, compositionString) || (preEditCaretPos != caretPosition)) {
+				boolean startComposition = preEditText == null;
+				preEditText = compositionString;
+				preEditCaretPos = caretPosition;
+
+				if(FocusManager.isMinecraftContextFocused()) {
+					preEditTextWidth = font.width(preEditText);
+					preEditCaretRenderX = font.width(preEditText.substring(0, preEditCaretPos));
+					updatePreeditArea();
+				}else {
+					if(startComposition) {
+						preEditTextWidth = 0;
+						updatePreeditArea(); // On macOS, we must provide preedit area immediately.
+					}
+					preEditContentUpdated = true;
+				}
+			}
 		}else {
 			preEditText = null;
 			preEditContentUpdated = false;
@@ -62,8 +72,6 @@ public class UniversalIMEPreeditOverlay {
 	private void updatePreeditArea() {
 		FocusableObject focusOwner = FocusManager.getFocusOwner();
 		if(focusOwner != null && preEditText != null) {
-			double widgetGuiScale = focusOwner.getGuiScale();
-			int widgetFontSize = focusOwner.getFontHeight();
 			int containerFontSize;
 			double containerGuiScale;
 			Rectangle compositionBorder;
@@ -72,13 +80,13 @@ public class UniversalIMEPreeditOverlay {
 				containerGuiScale = focusedWidget.getFocusContainer().getGuiScale();
 				compositionBorder = focusedWidget.getFocusContainer().getBoundsAbs();
 			}else {
-				containerFontSize = widgetFontSize;
-				containerGuiScale = widgetGuiScale;
+				containerFontSize = focusOwner.getFontHeight();
+				containerGuiScale = focusOwner.getGuiScale();
 				compositionBorder = focusOwner.getBoundsAbs();
 			}
 
-			int inputHeight = (int) (widgetFontSize * widgetGuiScale + 5 * containerGuiScale);
-			int compositionX = caretX, compositionY = caretY + inputHeight,
+			int paddedInputHeight = (int) (inputHeight + 5 * containerGuiScale);
+			int compositionX = caretX, compositionY = caretY + paddedInputHeight,
 					compositionWidth = (int) (preEditTextWidth * containerGuiScale),
 					compositionHeight = (int) (containerFontSize * containerGuiScale);
 			if(compositionX + compositionWidth > compositionBorder.width()) {
@@ -88,16 +96,21 @@ public class UniversalIMEPreeditOverlay {
 				compositionY = (int) (caretY - (6 + containerFontSize) * containerGuiScale);
 			}
 			
-			ingameOverlayBounds = new Rectangle(1.0 / containerGuiScale, compositionX, compositionY, compositionWidth, compositionHeight);			
-			compositionX += compositionBorder.x();
-			compositionY += compositionBorder.y();
-			overlayBounds = new Rectangle(compositionX, compositionY, compositionWidth, compositionHeight);
+			if(FocusManager.isMinecraftContextFocused()) {
+				overlayBounds = new Rectangle(1.0 / containerGuiScale, compositionX, compositionY, compositionWidth, compositionHeight);			
+			}else {
+				overlayBounds = new Rectangle(compositionX, compositionY, compositionWidth, compositionHeight);
+			}
 			
-			if(IMManager.isEnhancedLinuxImplPresent()) {
-				int scaledMargin = (int) (2 * containerGuiScale);
-				IMManagerLinuxEnhanced.updatePreeditCursorRectanglePosition(
-						compositionX - scaledMargin, Math.min(caretY, compositionY) - scaledMargin,
-						compositionWidth + scaledMargin * 2, compositionHeight + inputHeight + scaledMargin * 2);
+			if(!IMBlockerConfig.INSTANCE.isIngameIMEEnabled()) {
+				int scaledMargin = (int) (2 * containerGuiScale), 
+						compositionMinY = Math.min(caretY, compositionY);
+				compositionX += compositionBorder.x();
+				compositionY += compositionBorder.y();
+				compositionMinY += compositionBorder.y();
+				IMManager.setPreeditCursorRectangle(
+						compositionX - scaledMargin, compositionMinY - scaledMargin,
+						compositionWidth + scaledMargin * 2, compositionHeight + paddedInputHeight + scaledMargin * 2);
 			}
 		}
 	}
@@ -107,14 +120,14 @@ public class UniversalIMEPreeditOverlay {
 			return;
 		}
 		
-		graphics.fill(ingameOverlayBounds.x() - 5, ingameOverlayBounds.y() - 5, 
-				ingameOverlayBounds.x() + ingameOverlayBounds.width() + 5, ingameOverlayBounds.y() + ingameOverlayBounds.height() + 5, BORDER_COLOR);
-		graphics.fill(ingameOverlayBounds.x() - 4, ingameOverlayBounds.y() - 4, 
-				ingameOverlayBounds.x() + ingameOverlayBounds.width() + 4, ingameOverlayBounds.y() + ingameOverlayBounds.height() + 4, -1);
-		graphics.drawString(font, preEditText, ingameOverlayBounds.x(), ingameOverlayBounds.y(), TEXT_COLOR, false);
+		graphics.fill(overlayBounds.x() - 5, overlayBounds.y() - 5, 
+				overlayBounds.x() + overlayBounds.width() + 5, overlayBounds.y() + overlayBounds.height() + 5, BORDER_COLOR);
+		graphics.fill(overlayBounds.x() - 4, overlayBounds.y() - 4, 
+				overlayBounds.x() + overlayBounds.width() + 4, overlayBounds.y() + overlayBounds.height() + 4, -1);
+		graphics.drawString(font, preEditText, overlayBounds.x(), overlayBounds.y(), TEXT_COLOR, false);
 		if (isCursorVisible()) {
-			graphics.fill(ingameOverlayBounds.x() + preEditCaretRenderX, ingameOverlayBounds.y() - 1, 
-					ingameOverlayBounds.x() + preEditCaretRenderX + 1, ingameOverlayBounds.y() + 10, TEXT_COLOR);
+			graphics.fill(overlayBounds.x() + preEditCaretRenderX, overlayBounds.y() - 1, 
+					overlayBounds.x() + preEditCaretRenderX + 1, overlayBounds.y() + 10, TEXT_COLOR);
 		}
 	}
 	

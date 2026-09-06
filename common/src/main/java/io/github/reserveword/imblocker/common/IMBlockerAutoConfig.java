@@ -30,7 +30,14 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	
 	@Override
 	public void validatePostLoad() {
+		reloadConfig();
+	}
+
+	@Override
+	public void reloadConfig() {
 		reloadScreenWhitelist(basicSettings.screenWhitelist);
+		reloadCharSimulationScreens(advanceSettings.charSimulationScreens);
+		reloadCommandPrefixRegex(advanceSettings.commandPrefixRegex);
 	}
 
 	@Override
@@ -54,11 +61,6 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	public EnglishState getPrimaryEnglishState() {
 		return basicSettings.primaryEnglishState;
 	}
-	
-	@Override
-	public boolean isCharSimulationEnabled() {
-		return advanceSettings.enableCharSimulation;
-	}
 
 	@Override
 	public boolean isConversionStatusApiEnabled() {
@@ -67,7 +69,7 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 
 	@Override
 	public boolean isCursorPositionTrackingEnabled() {
-		return windowsCompatibilitySettings.enableCursorPositionTracking;
+		return !Platform.isWindows() || windowsCompatibilitySettings.enableCursorPositionTracking;
 	}
 
 	@Override
@@ -142,7 +144,9 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 	
 	static class AdvanceSettings {
 		@ConfigEntry.Gui.Tooltip(count = 2)
-		boolean enableCharSimulation = false;
+		ArrayList<String> charSimulationScreens = new ArrayList<>();
+
+		String commandPrefixRegex = "^/";
 	}
 
 	static class WindowsCompatibilitySettings {

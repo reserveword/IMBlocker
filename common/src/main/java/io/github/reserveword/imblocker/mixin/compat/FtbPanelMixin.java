@@ -19,7 +19,7 @@ public abstract class FtbPanelMixin extends FtbWidgetMixin {
 	@Override
 	public void handleBoundsChanged() {
 		if(FocusManager.getFocusOwner() instanceof FtbTextInputWidget) {
-			IMManager.updateCompositionWindowPos();
+			IMManager.updateCaretPosition();
 		}
 	}
 	

@@ -8,7 +8,7 @@ import net.minecraft.client.gui.screens.Screen;
 public class CurrentScreenInfoOverlay {
 	public static void renderScreenClassName(GuiGraphics graphics) {
 		if(IMBlockerConfig.INSTANCE.isScreenRecoveringEnabled()) {
-			Screen currentScreen = Minecraft.getInstance().screen;
+			Screen currentScreen = MinecraftScreenMonitor.getCurrentScreen();
 			if(currentScreen != null) {
 				graphics.drawString(Minecraft.getInstance().font, currentScreen.getClass().getName(), 2, 2, -1, false);
 			}

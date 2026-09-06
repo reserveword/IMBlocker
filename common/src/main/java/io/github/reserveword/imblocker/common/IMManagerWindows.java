@@ -1,25 +1,33 @@
 package io.github.reserveword.imblocker.common;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.lwjgl.glfw.GLFWNativeWin32;
 
 import com.sun.jna.CallbackReference;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
+import com.sun.jna.Structure.FieldOrder;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.platform.win32.WinDef.HWND;
+import com.sun.jna.platform.win32.WinDef.LPARAM;
 import com.sun.jna.platform.win32.WinDef.LRESULT;
+import com.sun.jna.platform.win32.WinDef.WPARAM;
 import com.sun.jna.platform.win32.WinNT;
 import com.sun.jna.platform.win32.WinUser;
-import com.sun.jna.platform.win32.WinUser.WindowProc;
 import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.win32.StdCallLibrary.StdCallCallback;
+import com.sun.jna.win32.W32APITypeMapper;
 
+import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
 import io.github.reserveword.imblocker.common.gui.UniversalIMECandidateOverlay;
 import io.github.reserveword.imblocker.common.gui.UniversalIMEPreeditOverlay;
-import io.github.reserveword.imblocker.common.jnastructs.COMPOSITIONFORM;
-import io.github.reserveword.imblocker.common.jnastructs.LOGFONTW;
 
 final class IMManagerWindows implements IMManager.PlatformIMManager {
 
@@ -65,6 +73,16 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	private static final int GCS_COMPSTR = 0x0008;
 	private static final int GCS_CURSORPOS = 0x0080;
 	private static final int GCS_RESULTSTR = 0x0800;
+	
+	static {
+		Native.register("imm32");
+	}
+
+	public interface WindowProc extends StdCallCallback {
+	    LRESULT callback(HWND hwnd, int uMsg, WPARAM wParam, LPARAM lParam);
+	}
+
+	private static final User32 u = User32.INSTANCE;
 
 	public static long lastIMStateOnTimestamp = System.currentTimeMillis();
 
@@ -73,12 +91,6 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 	
 	private Pointer originalProc;
 	private WindowProc imeListener;
-
-	static {
-		Native.register("imm32");
-	}
-
-	private static final User32 u = User32.INSTANCE;
 
 	public IMManagerWindows() {
 		setConversionStateThread = new SetConversionStateThread();
@@ -210,6 +222,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 			return u.CallWindowProc(originalProc, _hwnd, uMsg, wParam, lParam);
 		};
 		originalProc = u.SetWindowLongPtr(hwnd, WinUser.GWL_WNDPROC, CallbackReference.getFunctionPointer(imeListener));
+		IMBlockerCore.invokeLater(FocusManager::initializeWindowFocus);
 	}
 	
 	private void onConversionStatusChanged() {
@@ -316,5 +329,80 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	@FieldOrder({"dwStyle", "ptCurrentPos", "rcArea"})
+	public static class COMPOSITIONFORM extends Structure {
+		public int dwStyle;
+		public POINT ptCurrentPos;
+		public RECT rcArea;
+
+		public COMPOSITIONFORM() {
+			ptCurrentPos = new POINT();
+			rcArea = new RECT();
+		}
+
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("dwStyle", "ptCurrentPos", "rcArea");
+		}
+	}
+
+	@FieldOrder({"lfHeight", "lfWidth", "lfEscapement", "lfOrientation",
+				"lfWeight", "lfItalic", "lfUnderline", "lfStrikeOut",
+				"lfCharSet", "lfOutPrecision", "lfClipPrecision",
+				"lfQuality", "lfPitchAndFamily", "lfFaceName"})
+	public static class LOGFONTW extends Structure {
+		public int lfHeight;
+		public int lfWidth;
+		public int lfEscapement;
+		public int lfOrientation;
+		public int lfWeight;
+		public byte lfItalic;
+		public byte lfUnderline;
+		public byte lfStrikeOut;
+		public byte lfCharSet;
+		public byte lfOutPrecision;
+		public byte lfClipPrecision;
+		public byte lfQuality;
+		public byte lfPitchAndFamily;
+		public char[] lfFaceName = new char[32];
+
+		public LOGFONTW() {
+			super(W32APITypeMapper.UNICODE);
+		}
+
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList(
+				"lfHeight", "lfWidth", "lfEscapement", "lfOrientation",
+				"lfWeight", "lfItalic", "lfUnderline", "lfStrikeOut",
+				"lfCharSet", "lfOutPrecision", "lfClipPrecision",
+				"lfQuality", "lfPitchAndFamily", "lfFaceName");
+		}
+	}
+
+	@FieldOrder({"x", "y"})
+	public static class POINT extends Structure {
+		public int x;
+		public int y;
+
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("x", "y");
+		}
+	}
+
+	@FieldOrder({"left", "top", "right", "bottom"})
+	public static class RECT extends Structure {
+	    public int left;
+	    public int top;
+	    public int right;
+	    public int bottom;
+
+	    @Override
+	    protected List<String> getFieldOrder() {
+	    	return Arrays.asList("left", "top", "right", "bottom");
+	    }
 	}
 }

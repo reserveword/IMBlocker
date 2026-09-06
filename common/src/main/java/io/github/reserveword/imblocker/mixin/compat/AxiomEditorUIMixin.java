@@ -10,7 +10,6 @@ import imgui.moulberry92.ImDrawList;
 import imgui.moulberry92.ImGui;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.gui.AxiomGuiMonitor;
-import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
 import io.github.reserveword.imblocker.common.gui.UniversalIMECandidateOverlay;
@@ -27,7 +26,7 @@ public abstract class AxiomEditorUIMixin {
 	
 	@Inject(method = "drawOverlayInternal", at = @At(value = "INVOKE", target = "Limgui/moulberry92/ImGui;render()V"))
 	private static void renderUniversalPreeditOverlay(CallbackInfo ci) {
-		if(FocusManager.getFocusedContainer() == FocusContainer.IMGUI) {
+		if(!FocusManager.isMinecraftContextFocused()) {
 			ImDrawList graphics = ImGui.getForegroundDrawList();
 			UniversalIMEPreeditOverlay.getInstance().renderOnImGuiSurface(graphics);
 			UniversalIMECandidateOverlay.getInstance().renderOnImGuiSurface(graphics);

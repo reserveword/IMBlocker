@@ -156,13 +156,17 @@ public abstract class FocusContainer implements FocusableObject {
 	public void setGuiScaleFactor(double factor) {
 		this.guiScaleFactor = factor;
 		IMBlockerCore.invokeLater(() -> {
-			IMManager.updateCompositionWindowPos();
+			IMManager.updateCaretPosition();
 			IMManager.updateCompositionFontSize();
 		});
 	}
 	
+	public final double getInternalGuiScale() {
+		return guiScaleFactor;
+	}
+
 	@Override
 	public double getGuiScale() {
-		return guiScaleFactor;
+		return getInternalGuiScale();
 	}
 }

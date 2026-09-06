@@ -49,23 +49,23 @@ public abstract class EssentialAbstractTextInputMixin extends EssentialUICompone
 	
 	@Inject(method = "setCursor", at = @At("TAIL"))
 	public void onCursorChanged(LinePosition value, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		IMManager.updateCaretPosition();
 	}
 	
 	@Inject(method = "setHorizontalScrollingOffset", at = @At("TAIL"))
 	public void onHorizontalScrolling(float f, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		IMManager.updateCaretPosition();
 	}
 	
 	@Inject(method = "setTargetVerticalScrollingOffset", at = @At("TAIL"))
 	public void onVerticalScrolling(float f, CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		IMManager.updateCaretPosition();
 	}
 	
 	@Override
 	public Point getCaretPos() {
 		Pair<Float, Float> caretPos = cursor.toScreenPos();
-		return new Point(getGuiScale(), caretPos.getFirst().intValue(), caretPos.getSecond().intValue());
+		return new Point(getGuiScale(), caretPos.getFirst().floatValue(), caretPos.getSecond().floatValue());
 	}
 	
 	@Override

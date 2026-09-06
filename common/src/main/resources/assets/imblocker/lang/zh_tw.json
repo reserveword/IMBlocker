@@ -17,9 +17,10 @@
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[2]": "習慣使用 JECh 搜尋的玩家推薦將此項目設定為ENG\n此設定不影響聊天欄和搜尋元素較少的模組",
   
   "text.autoconfig.imblocker.option.advanceSettings": "進階設定",
-  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation": "使用模擬字元定位焦點",
-  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[0]": "\u00A7l透過發送一個模擬字元來定位焦點組件",
-  "text.autoconfig.imblocker.option.advanceSettings.enableCharSimulation.@Tooltip[1]": "此方法可以絕對精準地定位到真正的焦點組件\n模擬字元通常可以被注入的回調安全吸收\n但可能洩漏至某些未過濾該字元的螢幕",
+  "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens": "模擬字元輔助螢幕",
+  "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens.@Tooltip[0]": "\u00A7l透過傳送模擬字元輔助定位焦點的螢幕列表",
+  "text.autoconfig.imblocker.option.advanceSettings.charSimulationScreens.@Tooltip[1]": "模擬字元可以絕對精準地定位到真正的焦點組件\n探針字元通常可以被注入的回調安全吸收\n但仍可能在某些場景下出現相容問題",
+  "text.autoconfig.imblocker.option.advanceSettings.commandPrefixRegex": "指令前綴正規表示式",
   
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings": "Windows 相容性設定",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi": "使用轉換狀態API",
@@ -32,8 +33,8 @@
   
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings": "Linux 相容性設定",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch": "啟用回調級鍵盤補丁",
-  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[0]": "該補丁從 GLFW 回調層修復了輸入法候選詞框顯示時控制按鍵會洩漏至遊戲視窗的漏洞",
-  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[1]": "如果候選詞框因退格鍵清空了預編輯字元而關閉會導致遊戲無法處理控制按鍵\n此時請按下 Esc 或輸入任意字元以解除此狀態",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[0]": "該補丁從GLFW回調層修復了輸入法候選詞框顯示時控制按鍵會洩漏至遊戲視窗的漏洞",
+  "text.autoconfig.imblocker.option.linuxCompatibilitySettings.enableKeyboardPatch.@Tooltip[1]": "如果候選詞框因退格鍵清空了預編輯字元而關閉會導致遊戲無法處理控制按鍵\n此時請按下Esc或輸入任意字元以解除此狀態",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOnArgName": "IBus 開啟輸入法的指令參數",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOnArgName.@Tooltip": "確定方法：系統終端中執行 “ibus engine <此參數>” 指令能夠開啟輸入法",
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.ibusOffArgName": "IBus 關閉輸入法的指令參數",

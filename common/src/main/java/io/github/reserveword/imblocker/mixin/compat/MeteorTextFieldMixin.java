@@ -46,7 +46,7 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin {
 	
 	@Inject(method = "cursorChanged", at = @At("TAIL"))
 	public void onCursorChanged(CallbackInfo ci) {
-		IMManager.updateCompositionWindowPos();
+		IMManager.updateCaretPosition();
 	}
 	
 	@Inject(method = "move", at = @At("TAIL"))
@@ -62,8 +62,8 @@ public abstract class MeteorTextFieldMixin extends MeteorWidgetMixin {
 	
 	@Override
 	public Point getCaretPos() {
-		int caretX = (int) (getTextWidth(cursor) - textStart + pad());
-		return new Point(caretX, (int) (height / 3.5));
+		double caretX = getTextWidth(cursor) - textStart + pad();
+		return new Point(getGuiScale(), caretX, height / 3.5);
 	}
 	
 	@Override

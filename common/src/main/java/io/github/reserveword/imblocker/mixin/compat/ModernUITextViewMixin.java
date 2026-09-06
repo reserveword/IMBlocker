@@ -86,11 +86,11 @@ public abstract class ModernUITextViewMixin extends View implements MinecraftFoc
 				y += _parent.getY() - _parent.getScrollY();
 			}
 		}
-		return new Rectangle((int) x, (int) y, getWidth(), getHeight());
+		return new Rectangle(getGuiScale(), x, y, getWidth(), getHeight());
 	}
 	
 	@Override
-	public double getGuiScale() {
+	public double getInternalGuiScale() {
 		return 1.0;
 	}
 	
@@ -98,8 +98,8 @@ public abstract class ModernUITextViewMixin extends View implements MinecraftFoc
 	public Point getCaretPos() {
 		FloatArrayList cursorInfo = new FloatArrayList();
 		mLayout.getCursorPath(getSelectionStart(), cursorInfo, mText);
-		return new Point((int) cursorInfo.getFloat(0) + getTotalPaddingLeft(), 
-				(int) cursorInfo.getFloat(3) + getTotalPaddingTop() - getFontHeight() - getScrollY());
+		return new Point(getGuiScale(), cursorInfo.getFloat(0) + getTotalPaddingLeft(), 
+				cursorInfo.getFloat(3) + getTotalPaddingTop() - getFontHeight() - getScrollY());
 	}
 	
 	@Override

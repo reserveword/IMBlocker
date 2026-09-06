@@ -26,7 +26,16 @@ public interface MinecraftFocusableWidget extends FocusableWidget {
 	
 	default void imblocker$onBoundsChanged() {
 		if(isTrulyFocused()) {
-			IMManager.updateCompositionWindowPos();
+			IMManager.updateCaretPosition();
 		}
+	}
+	
+	default double getInternalGuiScale() {
+		return getFocusContainer().getInternalGuiScale();
+	}
+
+	@Override
+	default double getGuiScale() {
+		return getInternalGuiScale() / FocusManager.getWindowPixelDensity();
 	}
 }

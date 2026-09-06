@@ -16,6 +16,17 @@ public enum EnglishStateImpl {
 			focusOwner -> {
 				IMManager.setEnglishState(focusOwner.getPreferredEnglishState());
 			}),
+	RIME(
+			focusOwner -> {
+				boolean shouldEnableIME = focusOwner.getPreferredState();
+				IMManager.setState(shouldEnableIME);
+				if(shouldEnableIME) {
+					IMManager.setRimeAsciiMode(focusOwner.getPreferredEnglishState());
+				}
+			},
+			focusOwner -> {
+				IMManager.setRimeAsciiMode(focusOwner.getPreferredEnglishState());
+			}),
 	DISABLE_IM(
 			focusOwner -> {
 				IMManager.setState(focusOwner.getPreferredState() && !focusOwner.getPreferredEnglishState());

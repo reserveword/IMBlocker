@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import icyllis.modernui.widget.EditText;
-import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.MathHelper;
 import io.github.reserveword.imblocker.common.MinecraftClientUtil;
@@ -89,7 +88,7 @@ final class MinecraftFocusContext extends FocusContainer {
 	 */
 	@Override
 	public void locateRealFocus() {
-		if(IMBlockerConfig.INSTANCE.isCharSimulationEnabled()) {
+		if(MinecraftScreenMonitor.isCharSimulationPreferred()) {
 			IMBlockerCore.invokeLater(locateFocusByCharSimulation);
 		}else {
 			Optional<FocusableWidget> promotedFocusCandidate = focusCandidates.keySet().stream()
@@ -169,5 +168,10 @@ final class MinecraftFocusContext extends FocusContainer {
 	public Point getCaretPos() {
 		Dimension contentSize = MinecraftClientUtil.getContentSize();
 		return new Point(contentSize.width() / 3, contentSize.height() / 2);
+	}
+	
+	@Override
+	public double getGuiScale() {
+		return getInternalGuiScale() / FocusManager.getWindowPixelDensity();
 	}
 }

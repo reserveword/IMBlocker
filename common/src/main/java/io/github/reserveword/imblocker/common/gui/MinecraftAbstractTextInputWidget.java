@@ -12,7 +12,7 @@ public interface MinecraftAbstractTextInputWidget<CI extends CursorInfo> extends
 	
 	default void imblocker$onCursorChanged() {
 		if(isTrulyFocused() && updateCursorInfo()) {
-			IMManager.updateCompositionWindowPos();
+			IMManager.updateCaretPosition();
 		}
 	}
 	

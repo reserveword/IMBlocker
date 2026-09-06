@@ -15,7 +15,7 @@ public abstract class FtbBaseScreenMixin extends FtbPanelMixin {
 	public void handleWidthChanged(int width, CallbackInfo ci) {
 		posX = (Minecraft.getInstance().getWindow().getGuiScaledWidth() - this.width) / 2;
 		if(FocusManager.getFocusOwner() instanceof FtbTextInputWidget) {
-			IMManager.updateCompositionWindowPos();
+			IMManager.updateCaretPosition();
 		}
 	}
 	
@@ -23,7 +23,7 @@ public abstract class FtbBaseScreenMixin extends FtbPanelMixin {
 	public void handleHeightChanged(int height, CallbackInfo ci) {
 		posY = (Minecraft.getInstance().getWindow().getGuiScaledHeight() - this.height) / 2;
 		if(FocusManager.getFocusOwner() instanceof FtbTextInputWidget) {
-			IMManager.updateCompositionWindowPos();
+			IMManager.updateCaretPosition();
 		}
 	}
 }

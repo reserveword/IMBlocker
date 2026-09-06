@@ -9,7 +9,7 @@
   "text.autoconfig.imblocker.option.basicSettings.recoveredScreens.@Tooltip": "列出显示过的屏幕，方便编辑白名单",
   "text.autoconfig.imblocker.option.basicSettings.englishStateImpl": "英文状态实现方式",
   "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[0]": "\u00A7l自动设置英文状态的方式",
-  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[1]": "一般仅推荐使用微软系列输入法时将此项设置为“CONVERSION_STATUS”",
+  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[1]": "一般仅推荐使用微软系列输入法时将此项设置为“CONVERSION_STATUS”\n中州韵输入法（小狼毫、鼠须管、fcitx5-rime）则推荐设置为“RIME”",
   "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[2]": "如果你的输入法不能正常自动切换至英文状态\n请将此项设置为“DISABLE_IM”并通过热键（默认右Shift）来解锁输入法",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState": "首选中英文状态",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[0]": "\u00A7l文本框获得焦点时输入法的初始中英文状态",

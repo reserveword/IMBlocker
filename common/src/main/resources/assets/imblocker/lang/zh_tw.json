@@ -9,7 +9,7 @@
   "text.autoconfig.imblocker.option.basicSettings.recoveredScreens.@Tooltip": "列出顯示過的螢幕，方便編輯白名單",
   "text.autoconfig.imblocker.option.basicSettings.englishStateImpl": "英文狀態實現方式",
   "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[0]": "\u00A7l自動設定英文狀態的方式",
-  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[1]": "一般僅建議使用微軟系列輸入法時將此項設定為「CONVERSION_STATUS」",
+  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[1]": "一般僅建議使用微軟系列輸入法時將此項設定為「CONVERSION_STATUS」\n中州韻輸入法（小狼毫、鼠須管、fcitx5-rime）則推薦設置爲「RIME」",
   "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[2]": "如果你的輸入法無法正常自動切換至英文狀態\n請將此項設為「DISABLE_IM」並透過熱鍵（預設右Shift）來解鎖輸入法",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState": "首選中英文狀態",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[0]": "\u00A7l文字方塊獲得焦點時輸入法的初始中英文狀態",

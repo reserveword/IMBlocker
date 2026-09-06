@@ -9,7 +9,7 @@
   "text.autoconfig.imblocker.option.basicSettings.recoveredScreens.@Tooltip": "Here lists all recorded Screens for whitelist editing.",
   "text.autoconfig.imblocker.option.basicSettings.englishStateImpl": "English State Implementation",
   "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[0]": "\u00A7lThe method of applying English state.",
-  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[1]": "\"CONVERSION_STATUS\" is generally recommended only for Microsoft IME users.",
+  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[1]": "\"CONVERSION_STATUS\" is generally recommended only for Microsoft IME users.\n\"RIME\" is the primary option for Weasel, Squirrel and fcitx5-rime.",
   "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[2]": "If your IME cannot auto-switch to English state normally,\nplease select \"DISABLE_IM\" and manually unlock the IME by pressing the hotkey (R-Shift by default).",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState": "Primary English State",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[0]": "\u00A7lThe initial English state of the IME when a text field focused.",

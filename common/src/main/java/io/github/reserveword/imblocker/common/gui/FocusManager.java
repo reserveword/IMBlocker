@@ -51,7 +51,7 @@ public class FocusManager {
 	private static FocusableObject focusOwner;
 	
 	private static boolean isWindowInitialized = !Platform.isWindows();
-	private static boolean isWindowFocused = false;
+	private static boolean isWindowFocused = !Platform.isWindows();
 	
 	private static float windowPixelDensity;
 	

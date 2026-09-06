@@ -2,6 +2,8 @@ package io.github.reserveword.imblocker.common.gui;
 
 import java.util.Objects;
 
+import com.sun.jna.Platform;
+
 import imgui.moulberry92.ImDrawList;
 import imgui.moulberry92.ImGui;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
@@ -42,7 +44,6 @@ public class UniversalIMEPreeditOverlay {
 	public void preeditContentUpdated(String compositionString, int caretPosition) {
 		if(compositionString != null) {
 			if(!Objects.equals(preEditText, compositionString) || (preEditCaretPos != caretPosition)) {
-				boolean startComposition = preEditText == null;
 				preEditText = compositionString;
 				preEditCaretPos = caretPosition;
 				
@@ -51,22 +52,20 @@ public class UniversalIMEPreeditOverlay {
 					preEditCaretRenderX = MinecraftClientAccessor.INSTANCE.getStringWidth(preEditText.substring(0, preEditCaretPos));
 					updatePreeditArea();
 				}else {
-					if(startComposition) {
-						preEditTextWidth = 0;
-						updatePreeditArea(); // On macOS, we must provide preedit area immediately.
-					}
 					preEditContentUpdated = true;
 				}
 			}
 		}else {
 			preEditText = null;
+			preEditTextWidth = 0;
 			preEditContentUpdated = false;
 		}
 	}
 	
 	private void updatePreeditArea() {
 		FocusableObject focusOwner = FocusManager.getFocusOwner();
-		if(focusOwner != null && preEditText != null) {
+		// On macOS, we must provide preedit area immediately.
+		if(focusOwner != null && (preEditText != null || Platform.isMac())) {
 			int containerFontSize;
 			double containerGuiScale;
 			Rectangle compositionBorder;

@@ -34,21 +34,17 @@ final class IMManagerMac implements IMManager.PlatformIMManager {
 			if (!state) {
 				Pointer textInputContextCls = RuntimeUtils.cls("NSTextInputContext");
 				Pointer currentCtx = RuntimeUtils.msgPointer(textInputContextCls, "currentInputContext");
-				if (currentCtx != null && Pointer.nativeValue(currentCtx) != 0) {
+				if (Pointer.nativeValue(currentCtx) != 0) {
 					RuntimeUtils.msg(currentCtx, "discardMarkedText");
 				}
-				if (eventArray != null && Pointer.nativeValue(eventArray) != 0) {
+				if (Pointer.nativeValue(eventArray) != 0) {
 					long count = RuntimeUtils.msg(eventArray, "count");
 					for (long i = 0; i < count; i++) {
 						Pointer event = RuntimeUtils.msgPointer(eventArray, "objectAtIndex:", i);
-						if (event == null || Pointer.nativeValue(event) == 0) {
-							continue;
-						}
 						Pointer characters = RuntimeUtils.msgPointer(event, "characters");
-						if (characters == null || Pointer.nativeValue(characters) == 0) {
-							continue;
+						if (Pointer.nativeValue(characters) != 0) {
+							RuntimeUtils.msg(self, "insertText:replacementRange:", characters, emptyRange);
 						}
-						RuntimeUtils.msg(self, "insertText:replacementRange:", characters, emptyRange);
 					}
 				}
 				return;

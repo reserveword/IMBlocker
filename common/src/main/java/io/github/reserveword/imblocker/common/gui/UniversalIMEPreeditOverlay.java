@@ -62,6 +62,7 @@ public class UniversalIMEPreeditOverlay {
 			String compositionString = preeditContents.fullText();
 			int caretPosition = preeditContents.caretPosition();
 			if(!Objects.equals(preEditText, compositionString) || (preEditCaretPos != caretPosition)) {
+				boolean startComposition = preEditText == null;
 				preEditText = preeditContents.fullText();
 				preEditCaretPos = preeditContents.caretPosition();
 				
@@ -71,6 +72,10 @@ public class UniversalIMEPreeditOverlay {
 					preEditCaretRenderX = font.width(preEditText.substring(0, preEditCaretPos));
 					updatePreeditArea();
 				}else {
+					if(startComposition) {
+						preEditTextWidth = 0;
+						updatePreeditArea(); // On macOS, we must provide preedit area immediately.
+					}
 					preEditContentUpdated = true;
 				}
 			}

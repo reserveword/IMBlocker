@@ -11,9 +11,11 @@ public class RimeAsciiModeManager {
 	public static final String OFF_ARG;
 	
 	public static void setAsciiMode(boolean isEN) {
-		String command = BASE_COMMAND + (isEN ? ON_ARG : OFF_ARG);
+		String state = (isEN ? ON_ARG : OFF_ARG);
 		try {
-			Runtime.getRuntime().exec(command.split(" "));
+			String[] commandArray = Platform.isMac() ? 
+					new String[] { BASE_COMMAND, state } : (BASE_COMMAND + state).split(" ");
+			Runtime.getRuntime().exec(commandArray);
 		} catch (IOException e) {
 			IMBlockerCore.LOGGER.error("[IMBlocker] {} not found!", IME_NAME);
 		}
@@ -27,7 +29,7 @@ public class RimeAsciiModeManager {
 			OFF_ARG = "/nascii";
 		} else if (Platform.isMac()) {
 			IME_NAME = "Squirrel";
-			BASE_COMMAND = "/Library/Input\\ Methods/Squirrel.app/Contents/MacOS/Squirrel ";
+			BASE_COMMAND = "/Library/Input Methods/Squirrel.app/Contents/MacOS/Squirrel";
 			ON_ARG = "--ascii";
 			OFF_ARG = "--nascii";
 		} else if (Platform.isLinux()) {

@@ -9,7 +9,7 @@
   "text.autoconfig.imblocker.option.basicSettings.recoveredScreens.@Tooltip": "Here lists all recorded Screens for whitelist editing.",
   "text.autoconfig.imblocker.option.basicSettings.englishStateImpl": "English State Implementation",
   "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[0]": "\u00A7lThe method of applying English state.",
-  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[1]": "\"CONVERSION_STATUS\" is generally recommended only for Microsoft IME users.",
+  "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[1]": "\"CONVERSION_STATUS\" is generally recommended only for Microsoft IME users.\n\"RIME\" is the primary option for Weasel, Squirrel and fcitx5-rime.",
   "text.autoconfig.imblocker.option.basicSettings.englishStateImpl.@Tooltip[2]": "If your IME cannot auto-switch to English state normally,\nplease select \"DISABLE_IM\" and manually unlock the IME by pressing the hotkey (R-Shift by default).",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState": "Primary English State",
   "text.autoconfig.imblocker.option.basicSettings.primaryEnglishState.@Tooltip[0]": "\u00A7lThe initial English state of the IME when a text field focused.",
@@ -30,7 +30,7 @@
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableConversionStatusApi.@Tooltip": "The API that controls the English state.\n\u00A77If disabled, CONVERSION_STATUS English state implementation will not work.",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCursorPositionTracking": "Caret Position Tracking",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableCompositionFontTweaks": "Composition Font Tweaks",
-  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableIngameIME": "[\u00A76Experimental\u00A7r] Enable Ingame IME",
+  "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableIngameIME": "Enable Ingame IME",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableIngameIME.@Tooltip[0]": "\u00A7lRender Candidates Manually If Exclusive FS Enabled",
   "text.autoconfig.imblocker.option.windowsCompatibilitySettings.enableIngameIME.@Tooltip[1]": "Recommended only if IME's candidate window is invisible under\nexclusive fullscreen. IME's candidate window has more features.",
   

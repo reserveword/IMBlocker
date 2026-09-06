@@ -108,8 +108,8 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		}
 		
 		if(IMBlockerCore.hasMod("reeses-sodium-options") || IMBlockerCore.hasMod("reeses_sodium_options")) {
-			validMixins.add("compat.RSOAbstractFrameMixin");
-			validMixins.add("compat.RSOSearchFieldMixin");
+			validMixins.add("compat.RSOBaseWidgetMixin");
+			validMixins.add("compat.RSOTextFieldMixin");
 		}
 		
 		if(IMBlockerCore.hasMod("blockui")) {

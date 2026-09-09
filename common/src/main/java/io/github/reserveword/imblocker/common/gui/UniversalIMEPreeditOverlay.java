@@ -3,7 +3,6 @@ package io.github.reserveword.imblocker.common.gui;
 import java.util.Objects;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.sun.jna.Platform;
 
 import imgui.moulberry92.ImDrawList;
 import imgui.moulberry92.ImGui;
@@ -85,8 +84,7 @@ public class UniversalIMEPreeditOverlay {
 	
 	private void updatePreeditArea() {
 		FocusableObject focusOwner = FocusManager.getFocusOwner();
-		// On macOS, we must provide preedit area immediately.
-		if(focusOwner != null && (preEditText != null || Platform.isMac())) {
+		if(focusOwner != null) {
 			int containerFontSize;
 			double containerGuiScale;
 			Rectangle compositionBorder;

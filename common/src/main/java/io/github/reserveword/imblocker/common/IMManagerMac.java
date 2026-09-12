@@ -45,6 +45,8 @@ final class IMManagerMac implements IMManager.PlatformIMManager {
 	
 	private static final SetMarkedTextCallback SetMarkedTextImp;
 	private static final SetMarkedTextCallback NewSetMarkedTextImp;
+	private static String markedText;
+	private static int selectedLocation;
 
 	static {
 		// keyDown replacement \\
@@ -53,11 +55,22 @@ final class IMManagerMac implements IMManager.PlatformIMManager {
 		Pointer keyDownMethod = Runtime.INSTANCE.class_getInstanceMethod(viewClass, keyDownSelector);
 		KeyDownImp = getImp(KeyDownCallback.class, keyDownMethod);
 		NewKeyDownImp = (self, selector, event) -> {
-			if (RuntimeUtils.msg(self, RuntimeUtils.sel("hasMarkedText")) == 0) {
+			if (markedText == null || markedText.isEmpty()) {
 				KeyDownImp.invoke(self, selector, event);
 			} else {
+				boolean shouldUnmarkText = false;
+				if (markedText.length() == 1) {
+					long keyCode = RuntimeUtils.msg(event, RuntimeUtils.sel("keyCode"));
+					if ((keyCode == 0x35/*Esc*/) || ((keyCode == 0x33/*Bkspc*/) && (selectedLocation == 1))) {
+						shouldUnmarkText = true;
+					}
+				}
+				
 				long events = RuntimeUtils.msg(RuntimeUtils.cls("NSArray"), RuntimeUtils.sel("arrayWithObject:"), event);
 				RuntimeUtils.msg(self, interpretKeySelector, events);
+				if (shouldUnmarkText) {
+					RuntimeUtils.msg(self, RuntimeUtils.sel("unmarkText"));
+				}
 			}
 		};
 		ObjC.INSTANCE.class_replaceMethod(viewClass, keyDownSelector, NewKeyDownImp, "v@:@");
@@ -299,6 +312,8 @@ final class IMManagerMac implements IMManager.PlatformIMManager {
 	}
 	
 	private static void postPreeditContent(String compositionString, int caretPosition) {
+		markedText = compositionString;
+		selectedLocation = caretPosition;
 		IMBlockerCore.invokeOnRenderThread(() -> UniversalIMEPreeditOverlay.getInstance()
 				.preeditContentUpdated(compositionString, caretPosition));
 	}

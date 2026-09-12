@@ -2,7 +2,8 @@ package io.github.reserveword.imblocker.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.sun.jna.Platform;
 
@@ -19,11 +20,11 @@ import net.minecraft.class_332;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 
-@Mixin(value = GameRenderer.class, remap = false)
+@Mixin(value = GameRenderer.class, remap = false, priority = 1)
 public abstract class IMEOverlayRendererV2 {
-	@Redirect(method = "method_3192", at = @At(value = "INVOKE", target = 
+	@Inject(method = "method_3192", at = @At(value = "INVOKE", target = 
 			"Lnet/minecraft/class_332;method_51452()V"))
-	public void renderIMEOverlays(class_332 rawGraphics) {
+	public void renderIMEOverlays(CallbackInfo ci) {
 		if((IMBlockerConfig.INSTANCE.isIngameIMEEnabled() || Platform.isMac() ||
 				IMManager.isEnhancedLinuxImplPresent() ||
 				IMBlockerConfig.INSTANCE.isScreenRecoveringEnabled()) &&
@@ -52,7 +53,6 @@ public abstract class IMEOverlayRendererV2 {
 			});
 			privateGraphics.method_51448().pop();
 		}
-		rawGraphics.method_51452();
 	}
 	
 	private void imblocker$drawManaged(class_332 drawContext, Runnable runnable) {

@@ -2,7 +2,8 @@ package io.github.reserveword.imblocker.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.sun.jna.Platform;
 
@@ -18,11 +19,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 
-@Mixin(value = GameRenderer.class, remap = false)
+@Mixin(value = GameRenderer.class, remap = false, priority = 1)
 public abstract class IMEOverlayRendererV2 {
-	@Redirect(method = "m_109093_", at = @At(value = "INVOKE", target = 
+	@Inject(method = "m_109093_", at = @At(value = "INVOKE", target = 
 			"Lnet/minecraft/client/gui/GuiGraphics;m_280262_()V"))
-	public void renderIMEOverlays(GuiGraphics rawGraphics) {
+	public void renderIMEOverlays(CallbackInfo ci) {
 		if((IMBlockerConfig.INSTANCE.isIngameIMEEnabled() || Platform.isMac() ||
 				IMManager.isEnhancedLinuxImplPresent() ||
 				IMBlockerConfig.INSTANCE.isScreenRecoveringEnabled()) && 
@@ -51,7 +52,6 @@ public abstract class IMEOverlayRendererV2 {
 			});
 			privateGraphics.m_280168_().popPose();
 		}
-		rawGraphics.m_280262_();
 	}
 }
 

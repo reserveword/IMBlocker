@@ -71,6 +71,7 @@ jobs:
           changelog-file: CHANGELOG.md
 
           loaders: ${{ matrix.loader }}
+          environment: client
           game-versions: ${{ matrix.game-versions }}
           
           files: ${{ matrix.project }}/build/libs/!(*-@(dev|sources|javadoc)).jar

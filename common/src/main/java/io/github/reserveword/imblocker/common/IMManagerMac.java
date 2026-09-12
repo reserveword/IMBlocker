@@ -16,7 +16,6 @@ import com.sun.jna.Structure.FieldOrder;
 import ca.weblite.objc.Proxy;
 import ca.weblite.objc.Runtime;
 import ca.weblite.objc.RuntimeUtils;
-import ca.weblite.objc.foundation.NSRange;
 import io.github.reserveword.imblocker.common.accessor.MinecraftClientAccessor;
 import io.github.reserveword.imblocker.common.gui.UniversalIMEPreeditOverlay;
 
@@ -205,7 +204,8 @@ final class IMManagerMac implements IMManager.PlatformIMManager {
 	 *      Developer Documentation for objc_runtime:</a>
 	 */
 	private interface ObjC extends Library {
-		ObjC INSTANCE = Native.load("objc.A", ObjC.class);
+		@SuppressWarnings("deprecation")
+		ObjC INSTANCE = Native.loadLibrary("objc.A", ObjC.class);
 
 		void class_replaceMethod(Pointer cls, Pointer selector, Callback imp, String types);
 
@@ -357,6 +357,28 @@ final class IMManagerMac implements IMManager.PlatformIMManager {
 		@Override
 		protected List<String> getFieldOrder() {
 			return Arrays.asList("x", "y", "width", "height");
+		}
+	}
+	
+	@FieldOrder({"location", "length"})
+	public static class NSRange extends Structure {
+		public static class ByReference extends NSRange implements Structure.ByReference{}
+	    public static class ByValue extends NSRange implements Structure.ByValue {}
+		
+		public long location;
+		public long length;
+		
+		public int getLocation() {
+	        return (int) Integer.toUnsignedLong((int) location);
+	    }
+
+	    public int getLength() {
+	        return (int) Integer.toUnsignedLong((int) length);
+	    }
+		
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("location", "length");
 		}
 	}
 }

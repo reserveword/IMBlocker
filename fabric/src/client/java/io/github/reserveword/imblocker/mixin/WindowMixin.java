@@ -8,14 +8,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import net.minecraft.client.util.Window;
 
-@Mixin(Window.class)
+@Mixin(value = Window.class, priority = 1)
 public abstract class WindowMixin {
-	@Inject(method = "setScaleFactor", at = @At("TAIL"), require = 0)
+	@Inject(method = "setScaleFactor", at = @At("HEAD"), require = 0)
 	public void onScaleFactorChanged(double scaleFactor, CallbackInfo ci) {
 		FocusContainer.MINECRAFT.setGuiScaleFactor(scaleFactor);
 	}
 	
-	@Inject(method = "method_15997(I)V", at = @At("TAIL"), require = 0, remap = false)
+	@Inject(method = "method_15997(I)V", at = @At("HEAD"), require = 0, remap = false)
 	public void onScaleFactorChanged(int scaleFactor, CallbackInfo ci) {
 		FocusContainer.MINECRAFT.setGuiScaleFactor(scaleFactor);
 	}

@@ -9,14 +9,14 @@ import com.mojang.blaze3d.platform.Window;
 
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 
-@Mixin(Window.class)
+@Mixin(value = Window.class, priority = 1)
 public abstract class WindowMixin {
-	@Inject(method = "setGuiScale(D)V", at = @At("TAIL"), require = 0)
+	@Inject(method = "setGuiScale(D)V", at = @At("HEAD"), require = 0)
 	public void onScaleFactorChanged(double scaleFactor, CallbackInfo ci) {
 		FocusContainer.MINECRAFT.setGuiScaleFactor(scaleFactor);
 	}
 	
-	@Inject(method = "setGuiScale(I)V", at = @At("TAIL"), require = 0, remap = false)
+	@Inject(method = "setGuiScale(I)V", at = @At("HEAD"), require = 0, remap = false)
 	public void onScaleFactorChanged(int scaleFactor, CallbackInfo ci) {
 		FocusContainer.MINECRAFT.setGuiScaleFactor(scaleFactor);
 	}

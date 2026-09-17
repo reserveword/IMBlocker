@@ -6,6 +6,7 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.sdl.SDLVideo;
+import org.lwjgl.system.MemoryStack;
 
 import com.mojang.blaze3d.platform.Window;
 
@@ -34,13 +35,18 @@ public abstract class MinecraftClientUtil {
 	
 	public static Rectangle getWindowBounds() {
 		Window gameWindow = Minecraft.getInstance().getWindow();
-		int[] width = new int[1], height = new int[1];
+		int x = gameWindow.getX(), y = gameWindow.getY();
 		if(IMBlockerCore.IS_SDL_PRESENT) {
-			SDLVideo.SDL_GetWindowSize(gameWindow.handle(), IntBuffer.wrap(width), IntBuffer.wrap(height));
+			try (MemoryStack stack = MemoryStack.stackPush()) {
+				IntBuffer width = stack.mallocInt(1), height = stack.mallocInt(1);
+				SDLVideo.SDL_GetWindowSize(gameWindow.handle(), width, height);
+				return new Rectangle(x, y, width.get(0), height.get(0));
+			}
 		}else {
+			int[] width = new int[1], height = new int[1];
 			GLFW.glfwGetWindowSize(gameWindow.handle(), width, height);
+			return new Rectangle(x, y, width[0], height[0]);
 		}
-		return new Rectangle(gameWindow.getX(), gameWindow.getY(), width[0], height[0]);
 	}
 	
 	public static Dimension getContentSize() {

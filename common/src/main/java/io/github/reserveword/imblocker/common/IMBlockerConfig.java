@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,11 +11,6 @@ import com.google.common.collect.Lists;
 import com.sun.jna.Platform;
 
 public class IMBlockerConfig {
-	public static final Pattern classNamePattern = Pattern
-			.compile("^([\\p{L}_][\\p{L}\\p{N}_]*:)?([\\p{L}_$][\\p{L}\\p{N}_$]*\\.)*[\\p{L}_$][\\p{L}\\p{N}_$]*$");
-
-	public static final Predicate<Object> checkClassForName = str -> (str instanceof String)
-			&& classNamePattern.matcher((String) str).matches();
 
 	public static IMBlockerConfig INSTANCE = new IMBlockerConfig();
 

@@ -7,6 +7,7 @@ version="${mod_version}"
 displayName="${mod_name}"
 displayURL="${mod_url}"
 logoFile="${mod_logo}"
+iconFile="${mod_logo}"
 credits="${credits}"
 authors="${author}"
 description='''Blocks Input Methods when you're not using it.

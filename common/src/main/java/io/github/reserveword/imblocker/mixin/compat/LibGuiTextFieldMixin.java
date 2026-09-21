@@ -49,6 +49,11 @@ public abstract class LibGuiTextFieldMixin extends LibGuiWidgetMixin implements 
 	public void onFocusLost(CallbackInfo ci) {
 		imblocker$onFocusLost();
 	}
+
+	@Inject(method = "onFocusLost", at = @At("TAIL"), require = 0)
+	public void onFocusLostR(CallbackInfo ci) {
+		imblocker$onFocusLost();
+	}
 	
 	@Inject(method = "onCharTyped", at = @At("HEAD"), cancellable = true)
 	public void checkFocusTracking(CharacterEvent input, CallbackInfoReturnable<Object> cir) {

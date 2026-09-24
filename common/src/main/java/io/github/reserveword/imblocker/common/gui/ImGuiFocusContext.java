@@ -1,6 +1,6 @@
 package io.github.reserveword.imblocker.common.gui;
 
-final class ImGuiFocusContext extends FocusContainer {
+public final class ImGuiFocusContext extends FocusContainer {
 
 	ImGuiFocusContext() {
 		super(false);

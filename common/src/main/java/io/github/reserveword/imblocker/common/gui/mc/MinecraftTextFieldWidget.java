@@ -1,8 +1,9 @@
-package io.github.reserveword.imblocker.common.gui;
+package io.github.reserveword.imblocker.common.gui.mc;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.MinecraftClientUtil;
 import io.github.reserveword.imblocker.common.StringUtil;
+import io.github.reserveword.imblocker.common.gui.Point;
 
 public interface MinecraftTextFieldWidget extends MinecraftAbstractTextInputWidget<SinglelineCursorInfo> {
 	

@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import dev.ftb.mods.ftblibrary.client.gui.widget.BaseScreen;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
-import io.github.reserveword.imblocker.common.gui.FtbTextInputWidget;
+import io.github.reserveword.imblocker.common.gui.mc.FtbTextInputWidget;
 import net.minecraft.client.Minecraft;
 
 @Mixin(BaseScreen.class)

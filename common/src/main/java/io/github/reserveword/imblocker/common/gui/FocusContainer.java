@@ -22,8 +22,8 @@ import io.github.reserveword.imblocker.common.MinecraftClientUtil;
  * @since 5.1.0
  */
 public abstract class FocusContainer implements FocusableObject {
-	public static final FocusContainer MINECRAFT = new MinecraftFocusContext();
-	public static final FocusContainer IMGUI = new ImGuiFocusContext();
+	public static final MinecraftFocusContext MINECRAFT = new MinecraftFocusContext();
+	public static final ImGuiFocusContext IMGUI = new ImGuiFocusContext();
 	
 	double guiScaleFactor = 1.0;
 	
@@ -44,11 +44,6 @@ public abstract class FocusContainer implements FocusableObject {
 			switchFocus(toFocus);
 		}
 	}
-	
-	/**
-	 * @see MinecraftFocusContext#locateRealFocus
-	 */
-	public void locateRealFocus() {}
 	
 	/**
 	 * Request to remove the given widget from this container's focus candidates.
@@ -82,11 +77,6 @@ public abstract class FocusContainer implements FocusableObject {
 	public void clearFocus() {
 		restoreContainerFocus();
 	}
-	
-	/**
-	 * @see MinecraftFocusContext#checkFocusCandidatesVisibility
-	 */
-	public void checkFocusCandidatesVisibility(long lastGameRenderTime) {}
 	
 	/**
 	 * Assign the global focus owner to this container if no focus destination available.
@@ -161,12 +151,8 @@ public abstract class FocusContainer implements FocusableObject {
 		});
 	}
 	
-	public double getInternalGuiScale() {
-		return guiScaleFactor;
-	}
-	
 	@Override
 	public double getGuiScale() {
-		return getInternalGuiScale();
+		return guiScaleFactor;
 	}
 }

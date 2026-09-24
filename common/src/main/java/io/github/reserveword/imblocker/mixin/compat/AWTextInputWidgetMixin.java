@@ -19,9 +19,9 @@ import com.apple.library.uikit.UIView;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
-import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import io.github.reserveword.imblocker.common.gui.mc.MinecraftFocusableWidget;
 
 @Mixin(value = {UITextField.class, UITextView.class}, remap = false)
 public abstract class AWTextInputWidgetMixin implements MinecraftFocusableWidget {

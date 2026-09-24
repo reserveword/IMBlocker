@@ -1,8 +1,7 @@
 package io.github.reserveword.imblocker.common.gui;
 
-import imgui.moulberry92.ImDrawList;
-import imgui.moulberry92.ImGui;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
+import io.github.reserveword.imblocker.common.accessor.ImGuiGraphicsAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 
@@ -30,17 +29,17 @@ public class UniversalEnglishStateIndicator {
 		}
 	}
 	
-	public static void renderOnImGuiSurface(ImDrawList graphics) {
+	public static void renderOnImGuiSurface(ImGuiGraphicsAccessor graphics) {
 		FocusableObject focusOwner;
 		if(IMBlockerConfig.INSTANCE.isIngameIMEEnabled() &&
 				imState && englishState && ((focusOwner = FocusManager.getFocusOwner()) != null)) {
 			int fontSize = focusOwner.getFontHeight() + 1;
-			int indicatorWidth = (int) ImGui.calcTextSize("EN").x;
+			int indicatorWidth = (int) graphics.getTextWidth("EN");
 			Rectangle containerBounds = focusOwner instanceof FocusableWidget ?
 					((FocusableWidget) focusOwner).getFocusContainer().getBoundsAbs() : focusOwner.getBoundsAbs();
 			int indicatorX = containerBounds.width() - fontSize * 4, indicatorY = containerBounds.height() - fontSize * 4;
-			graphics.addRectFilled(indicatorX - 4, indicatorY - 4, indicatorX + indicatorWidth + 3, indicatorY + fontSize + 3, ImGui.getColorU32i(0xFFFFFFFF));
-			graphics.addText(indicatorX, indicatorY, ImGui.getColorU32i(0xFF000000), "EN");
+			graphics.addRectFilled(indicatorX - 4, indicatorY - 4, indicatorX + indicatorWidth + 3, indicatorY + fontSize + 3, graphics.getColorU32i(0xFFFFFFFF));
+			graphics.addText(indicatorX, indicatorY, graphics.getColorU32i(0xFF000000), "EN");
 		}
 	}
 }

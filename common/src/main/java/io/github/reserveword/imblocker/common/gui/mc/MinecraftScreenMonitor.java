@@ -1,7 +1,8 @@
-package io.github.reserveword.imblocker.common.gui;
+package io.github.reserveword.imblocker.common.gui.mc;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
+import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import net.minecraft.client.gui.screens.Screen;
 
 public abstract class MinecraftScreenMonitor {

@@ -11,9 +11,9 @@ import icyllis.modernui.text.Layout;
 import icyllis.modernui.view.View;
 import icyllis.modernui.view.ViewParent;
 import icyllis.modernui.widget.TextView;
-import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import io.github.reserveword.imblocker.common.gui.mc.MinecraftFocusableWidget;
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
 
 @Mixin(value = TextView.class, remap = false)

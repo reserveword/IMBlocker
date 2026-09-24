@@ -12,7 +12,7 @@ import com.mojang.blaze3d.platform.Window;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
-import io.github.reserveword.imblocker.common.gui.MinecraftScreenMonitor;
+import io.github.reserveword.imblocker.common.gui.mc.MinecraftScreenMonitor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;

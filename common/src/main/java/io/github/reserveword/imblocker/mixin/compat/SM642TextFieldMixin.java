@@ -11,8 +11,8 @@ import com.supermartijn642.core.gui.widget.premade.TextFieldWidget;
 
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
-import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
-import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
+import io.github.reserveword.imblocker.common.gui.mc.MinecraftTextFieldWidget;
+import io.github.reserveword.imblocker.common.gui.mc.SinglelineCursorInfo;
 
 @Mixin(value = TextFieldWidget.class, remap = false)
 public abstract class SM642TextFieldMixin extends SM642WidgetMixin implements MinecraftTextFieldWidget {

@@ -1,6 +1,9 @@
-package io.github.reserveword.imblocker.common.gui;
+package io.github.reserveword.imblocker.common.gui.mc;
 
 import io.github.reserveword.imblocker.common.IMManager;
+import io.github.reserveword.imblocker.common.gui.FocusContainer;
+import io.github.reserveword.imblocker.common.gui.FocusManager;
+import io.github.reserveword.imblocker.common.gui.FocusableWidget;
 
 public interface MinecraftFocusableWidget extends FocusableWidget {
 	

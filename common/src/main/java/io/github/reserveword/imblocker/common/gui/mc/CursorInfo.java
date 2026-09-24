@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker.common.gui;
+package io.github.reserveword.imblocker.common.gui.mc;
 
 public abstract class CursorInfo {
 	public int cursorLineBeginIndex;

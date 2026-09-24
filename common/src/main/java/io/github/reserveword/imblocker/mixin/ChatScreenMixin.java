@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.gui.ChatState;
-import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
+import io.github.reserveword.imblocker.common.gui.mc.MinecraftTextFieldWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
 

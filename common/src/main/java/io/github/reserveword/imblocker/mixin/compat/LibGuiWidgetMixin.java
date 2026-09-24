@@ -10,9 +10,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
 import io.github.cottonmc.cotton.gui.widget.WWidget;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
-import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
-import io.github.reserveword.imblocker.common.gui.MinecraftScreenMonitor;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import io.github.reserveword.imblocker.common.gui.mc.MinecraftFocusableWidget;
+import io.github.reserveword.imblocker.common.gui.mc.MinecraftScreenMonitor;
 import net.minecraft.client.gui.screens.Screen;
 
 @Pseudo

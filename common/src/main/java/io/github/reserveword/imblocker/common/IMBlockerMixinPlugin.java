@@ -51,10 +51,10 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		}
 		
 		if(IMBlockerCore.hasMod("axiom")) {
-			validMixins.add("compat.AxiomEditorUIMixin");
-			validMixins.add("compat.ImGuiMixin");
+			validMixins.add("compat.imgui.AxiomEditorUIMixin");
+			validMixins.add("compat.imgui.AxiomImGuiMixin");
 			if (!IMBlockerCore.IS_SDL_PRESENT) {
-				validMixins.add("compat.ImGuiGlfwPatch");
+				validMixins.add("compat.imgui.AxiomImGuiGlfwPatch");
 			}
 		}
 		

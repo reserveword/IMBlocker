@@ -12,8 +12,8 @@ import com.supermartijn642.core.gui.widget.Widget;
 
 import io.github.reserveword.imblocker.common.MinecraftClientUtil;
 import io.github.reserveword.imblocker.common.gui.Dimension;
-import io.github.reserveword.imblocker.common.gui.MinecraftFocusableWidget;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
+import io.github.reserveword.imblocker.common.gui.mc.MinecraftFocusableWidget;
 
 @Mixin(value = BaseWidget.class, remap = false)
 public abstract class SM642WidgetMixin implements MinecraftFocusableWidget {

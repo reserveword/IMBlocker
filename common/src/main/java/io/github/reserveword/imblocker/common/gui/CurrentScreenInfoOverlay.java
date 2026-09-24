@@ -1,6 +1,7 @@
 package io.github.reserveword.imblocker.common.gui;
 
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
+import io.github.reserveword.imblocker.common.gui.mc.MinecraftScreenMonitor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;

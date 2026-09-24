@@ -10,8 +10,8 @@ import dev.ftb.mods.ftblibrary.client.gui.widget.Panel;
 import io.github.reserveword.imblocker.common.IMManager;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.FocusableObject;
-import io.github.reserveword.imblocker.common.gui.FtbTextInputWidget;
-import io.github.reserveword.imblocker.common.gui.MinecraftMultilineEditBoxWidget;
+import io.github.reserveword.imblocker.common.gui.mc.FtbTextInputWidget;
+import io.github.reserveword.imblocker.common.gui.mc.MinecraftMultilineEditBoxWidget;
 
 @Mixin(value = Panel.class, remap = false)
 public abstract class FtbPanelMixin extends FtbWidgetMixin {

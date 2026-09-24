@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
-import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
-import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
+import io.github.reserveword.imblocker.common.gui.mc.MinecraftTextFieldWidget;
+import io.github.reserveword.imblocker.common.gui.mc.SinglelineCursorInfo;
 import net.minecraft.client.input.CharacterEvent;
 
 @Pseudo

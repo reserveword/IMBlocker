@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.reserveword.imblocker.common.gui.MinecraftScreenMonitor;
+import io.github.reserveword.imblocker.common.gui.mc.MinecraftScreenMonitor;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Screen;
 

@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
-import io.github.reserveword.imblocker.common.gui.MinecraftTextFieldWidget;
-import io.github.reserveword.imblocker.common.gui.SinglelineCursorInfo;
+import io.github.reserveword.imblocker.common.gui.mc.MinecraftTextFieldWidget;
+import io.github.reserveword.imblocker.common.gui.mc.SinglelineCursorInfo;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.CharacterEvent;
 
@@ -118,7 +118,7 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
 	private void setRenderable(boolean renderable) {
 		if(isRenderable != renderable) {
 			this.isRenderable = renderable;
-			getFocusContainer().locateRealFocus();
+			FocusContainer.MINECRAFT.locateRealFocus();
 		}
 	}
 	

@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
-import io.github.reserveword.imblocker.common.gui.MinecraftMultilineEditBoxWidget;
-import io.github.reserveword.imblocker.common.gui.MultilineCursorInfo;
+import io.github.reserveword.imblocker.common.gui.mc.MinecraftMultilineEditBoxWidget;
+import io.github.reserveword.imblocker.common.gui.mc.MultilineCursorInfo;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.components.MultilineTextField;

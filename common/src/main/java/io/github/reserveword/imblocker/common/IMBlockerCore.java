@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import dev.ftb.mods.ftblibrary.client.gui.widget.ScreenWrapper;
 import io.github.reserveword.imblocker.common.accessor.ModLoaderAccessor;
+import io.github.reserveword.imblocker.common.gui.imgui.ImGuiManager;
 import me.decce.ixeris.api.IxerisApi;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -76,6 +77,7 @@ public class IMBlockerCore {
 	}
 	
 	public static synchronized void tickStart() {
+		ImGuiManager.tick();
 		deferredRunnables.forEach(Runnable::run);
 		deferredRunnables.clear();
 	}

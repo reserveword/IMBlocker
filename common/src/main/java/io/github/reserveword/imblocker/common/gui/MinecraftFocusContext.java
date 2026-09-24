@@ -8,10 +8,11 @@ import icyllis.modernui.widget.EditText;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.MathHelper;
 import io.github.reserveword.imblocker.common.MinecraftClientUtil;
+import io.github.reserveword.imblocker.common.gui.mc.MinecraftScreenMonitor;
+import io.github.reserveword.imblocker.common.gui.mc.MinecraftTextFieldWidget;
 
-final class MinecraftFocusContext extends FocusContainer {
+public final class MinecraftFocusContext extends FocusContainer {
 	
-	private static final boolean IS_AXIOM_LOADED = IMBlockerCore.hasMod("axiom");
 	private static final boolean IS_MODERNUI_LOADED = IMBlockerCore.hasMod("modernui");
 	
 	/**
@@ -47,6 +48,9 @@ final class MinecraftFocusContext extends FocusContainer {
 		FocusManager.isTrackingFocus = false;
 		FocusManager.isFocusLocated = false;
 	};
+	
+	private int gameContentOffsetX = 0;
+	private int gameContentOffsetY = 0;
 	
 	MinecraftFocusContext() {
 		super(true);
@@ -84,7 +88,6 @@ final class MinecraftFocusContext extends FocusContainer {
 	 * may leak to the screen if there's no focus owner located and the screen
 	 * doesn't filter it.
 	 */
-	@Override
 	public void locateRealFocus() {
 		if(MinecraftScreenMonitor.isCharSimulationPreferred()) {
 			IMBlockerCore.invokeLater(locateFocusByCharSimulation);
@@ -135,7 +138,6 @@ final class MinecraftFocusContext extends FocusContainer {
 	 * 
 	 * @see FocusableWidget#isRenderable
 	 */
-	@Override
 	public void checkFocusCandidatesVisibility(long lastGameRenderTime) {
 		focusCandidates.keySet().forEach(focusCandidate -> {
 			if(focusCandidate instanceof MinecraftTextFieldWidget) {
@@ -146,22 +148,23 @@ final class MinecraftFocusContext extends FocusContainer {
 	
 	@Override
 	public Rectangle getBoundsAbs() {
-		int x = 0, y = 0;
 		Dimension contentSize = MinecraftClientUtil.getContentSize();
-		if(IS_AXIOM_LOADED) {
-			AxiomGuiMonitor axiomMonitor = AxiomGuiMonitor.getInstance();
-			if(axiomMonitor != null && axiomMonitor.isAxiomEditorShowing()) {
-				x = axiomMonitor.getGameContentOffsetX();
-				y = axiomMonitor.getGameContentOffsetY();
-			}
-		}
-		return new Rectangle(x, y, contentSize.width(), contentSize.height());
+		return new Rectangle(gameContentOffsetX, gameContentOffsetY, contentSize.width(), contentSize.height());
 	}
 	
 	@Override
 	public Point getCaretPos() {
 		Dimension contentSize = MinecraftClientUtil.getContentSize();
 		return new Point(contentSize.width() / 3, contentSize.height() / 2);
+	}
+	
+	public void setGameContentOffset(int x, int y) {
+		this.gameContentOffsetX = x;
+		this.gameContentOffsetY = y;
+	}
+	
+	public double getInternalGuiScale() {
+		return guiScaleFactor;
 	}
 	
 	@Override

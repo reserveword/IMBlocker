@@ -4,11 +4,10 @@ import java.util.Objects;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 
-import imgui.moulberry92.ImDrawList;
-import imgui.moulberry92.ImGui;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.InputSystem;
 import io.github.reserveword.imblocker.common.ReflectionUtil;
+import io.github.reserveword.imblocker.common.accessor.ImGuiGraphicsAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -151,14 +150,14 @@ public class UniversalIMEPreeditOverlay {
 		}
 	}
 	
-	public void renderOnImGuiSurface(ImDrawList graphics) {
+	public void renderOnImGuiSurface(ImGuiGraphicsAccessor graphics) {
 		if(preEditText == null) {
 			return;
 		}
 		
 		if(preEditContentUpdated) {
-			preEditTextWidth = (int) ImGui.calcTextSize(preEditText).x;
-			preEditCaretRenderX = (int) ImGui.calcTextSize(preEditText.substring(0, preEditCaretPos)).x;
+			preEditTextWidth = (int) graphics.getTextWidth(preEditText);
+			preEditCaretRenderX = (int) graphics.getTextWidth(preEditText.substring(0, preEditCaretPos));
 			updatePreeditArea();
 			preEditContentUpdated = false;
 		}
@@ -166,13 +165,13 @@ public class UniversalIMEPreeditOverlay {
 		graphics.addRectFilled(
 				overlayBounds.x() - 4, overlayBounds.y() - 4, 
 				overlayBounds.x() + overlayBounds.width() + 4, overlayBounds.y() + overlayBounds.height() + 4, 
-				ImGui.getColorU32(1, 1, 1, 1));
-		graphics.addText(overlayBounds.x(), overlayBounds.y(), ImGui.getColorU32(0, 0, 0, 1), preEditText);
+				graphics.getColorU32(1, 1, 1, 1));
+		graphics.addText(overlayBounds.x(), overlayBounds.y(), graphics.getColorU32(0, 0, 0, 1), preEditText);
 		if(TextCursorUtils.isCursorVisible(Util.getMillis() - initTimeMs)) {
 			graphics.addRectFilled(
 					overlayBounds.x() + preEditCaretRenderX, overlayBounds.y(), 
 					overlayBounds.x() + preEditCaretRenderX + 2, overlayBounds.y() + overlayBounds.height(), 
-					ImGui.getColorU32(0, 0, 0, 1));
+					graphics.getColorU32(0, 0, 0, 1));
 		}
 	}
 	

@@ -1,4 +1,4 @@
-package io.github.reserveword.imblocker.mixin.compat;
+package io.github.reserveword.imblocker.mixin.compat.imgui;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCharCallback;
@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(targets = "com.moulberry.axiom.editor.CustomImGuiImplGlfw", remap = false)
-public abstract class ImGuiGlfwPatch {
+public abstract class AxiomImGuiGlfwPatch {
 	@Redirect(method = "init", at = @At(value = "INVOKE", target = 
 			"glfwSetCharModsCallback(JLorg/lwjgl/glfw/GLFWCharModsCallbackI;)Lorg/lwjgl/glfw/GLFWCharModsCallback;"), require = 0)
 	public GLFWCharModsCallback correctCharCallback(long window, GLFWCharModsCallbackI cbfun) {

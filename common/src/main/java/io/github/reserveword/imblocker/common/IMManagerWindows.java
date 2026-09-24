@@ -1,25 +1,31 @@
 package io.github.reserveword.imblocker.common;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.lwjgl.sdl.SDLKeyboard;
 
 import com.sun.jna.CallbackReference;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
+import com.sun.jna.Structure.FieldOrder;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinDef.LRESULT;
+import com.sun.jna.platform.win32.WinDef.POINT;
+import com.sun.jna.platform.win32.WinDef.RECT;
 import com.sun.jna.platform.win32.WinNT;
 import com.sun.jna.platform.win32.WinUser;
 import com.sun.jna.platform.win32.WinUser.WindowProc;
 import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.win32.W32APITypeMapper;
 
 import io.github.reserveword.imblocker.common.gui.CaretInfo;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.UniversalEnglishStateIndicator;
 import io.github.reserveword.imblocker.common.gui.UniversalIMECandidateOverlay;
-import io.github.reserveword.imblocker.common.jnastructs.COMPOSITIONFORM;
-import io.github.reserveword.imblocker.common.jnastructs.LOGFONTW;
 
 final class IMManagerWindows implements IMManager.PlatformIMManager {
 
@@ -268,6 +274,57 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	@FieldOrder({"dwStyle", "ptCurrentPos", "rcArea"})
+	public static class COMPOSITIONFORM extends Structure {
+		public int dwStyle;
+		public POINT ptCurrentPos;
+		public RECT rcArea;
+		
+		public COMPOSITIONFORM() {
+			ptCurrentPos = new POINT();
+			rcArea = new RECT();
+		}
+		
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("dwStyle", "ptCurrentPos", "rcArea");
+		}
+	}
+	
+	@FieldOrder({"lfHeight", "lfWidth", "lfEscapement", "lfOrientation",
+				"lfWeight", "lfItalic", "lfUnderline", "lfStrikeOut",
+				"lfCharSet", "lfOutPrecision", "lfClipPrecision",
+				"lfQuality", "lfPitchAndFamily", "lfFaceName"})
+	public static class LOGFONTW extends Structure {
+		public int lfHeight;
+		public int lfWidth;
+		public int lfEscapement;
+		public int lfOrientation;
+		public int lfWeight;
+		public byte lfItalic;
+		public byte lfUnderline;
+		public byte lfStrikeOut;
+		public byte lfCharSet;
+		public byte lfOutPrecision;
+		public byte lfClipPrecision;
+		public byte lfQuality;
+		public byte lfPitchAndFamily;
+		public char[] lfFaceName = new char[32];
+		
+		public LOGFONTW() {
+			super(W32APITypeMapper.UNICODE);
+		}
+		
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList(
+				"lfHeight", "lfWidth", "lfEscapement", "lfOrientation",
+				"lfWeight", "lfItalic", "lfUnderline", "lfStrikeOut",
+				"lfCharSet", "lfOutPrecision", "lfClipPrecision",
+				"lfQuality", "lfPitchAndFamily", "lfFaceName");
 		}
 	}
 }

@@ -58,6 +58,11 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			}
 		}
 		
+		if(IMBlockerCore.hasMod("flashback")) {
+			validMixins.add("compat.imgui.FlashbackReplayUIMixin");
+			validMixins.add("compat.imgui.FlashbackImGuiMixin");
+		}
+		
 		if(IMBlockerCore.hasMod("ftblibrary")) {
 			validMixins.add("compat.FtbWidgetMixin");
 			validMixins.add("compat.FtbTextFieldMixin");

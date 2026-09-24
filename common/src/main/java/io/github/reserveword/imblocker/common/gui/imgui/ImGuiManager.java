@@ -14,8 +14,8 @@ import io.github.reserveword.imblocker.common.gui.UniversalIMEPreeditOverlay;
 public final class ImGuiManager {
 	private static final Set<ImGuiIOAccessor> imGuiIOs = new HashSet<>();
 	
-	private static boolean axiomGuiCaptureKeyboard = false;
-	private static boolean axiomTextFieldFocused = false;
+	private static boolean imGuiCaptureKeyboard = false;
+	private static boolean imGuiTextFieldFocused = false;
 	
 	private static long lastTickTimestamp = 0;
 	
@@ -26,18 +26,18 @@ public final class ImGuiManager {
 	public static void tick() {
 		if(imGuiIOs.isEmpty() || (System.currentTimeMillis() - lastTickTimestamp < 50)) return;
 		
-		boolean isAxiomGuiFocused = imGuiIOs.stream().anyMatch(ImGuiIOAccessor::isCaptureKeyboard);
-		boolean isAxiomTextFieldFocused = imGuiIOs.stream().anyMatch(ImGuiIOAccessor::isTextFieldFocused);
+		boolean isImGuiFocused = imGuiIOs.stream().anyMatch(ImGuiIOAccessor::isCaptureKeyboard);
+		boolean isImGuiTextFieldFocused = imGuiIOs.stream().anyMatch(ImGuiIOAccessor::isTextFieldFocused);
 		
-		if(axiomGuiCaptureKeyboard != isAxiomGuiFocused) {
-			axiomGuiCaptureKeyboard = isAxiomGuiFocused;
-			FocusManager.requestFocus(isAxiomGuiFocused ? 
+		if(imGuiCaptureKeyboard != isImGuiFocused) {
+			imGuiCaptureKeyboard = isImGuiFocused;
+			FocusManager.requestFocus(isImGuiFocused ? 
 					FocusContainer.IMGUI : FocusContainer.MINECRAFT);
 		}
 		
-		if(axiomTextFieldFocused != isAxiomTextFieldFocused) {
-			axiomTextFieldFocused = isAxiomTextFieldFocused;
-			if(isAxiomTextFieldFocused) {
+		if(imGuiTextFieldFocused != isImGuiTextFieldFocused) {
+			imGuiTextFieldFocused = isImGuiTextFieldFocused;
+			if(isImGuiTextFieldFocused) {
 				FocusContainer.IMGUI.setPreferredState(true);
 			}else {
 				FocusContainer.IMGUI.clearFocus();

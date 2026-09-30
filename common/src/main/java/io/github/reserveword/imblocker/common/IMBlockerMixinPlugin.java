@@ -19,6 +19,8 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 	static {
 		boolean isOfficialMapping = IMBlockerCore.getMapping() == Mapping.OFFICIAL;
 		
+		validMixins.add("internal.IMBlockerAutoConfigMixin");
+		
 		validMixins.add("AbstractCommandBlockScreenMixin");
 		validMixins.add("ChatScreenMixin");
 		validMixins.add(isOfficialMapping ? "AbstractWidgetMixin" : "ClickableWidgetMixin");
@@ -164,11 +166,22 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 	public List<String> getMixins() {
 		return validMixins;
 	}
+	
+	@Override
+	public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
+		if(targetClassName.equals("io.github.reserveword.imblocker.common.IMBlockerAutoConfig")) {
+			if(!Platform.isWindows()) {
+				targetClass.fields.remove(2);
+			}
+			if(!Platform.isLinux()) {
+				targetClass.fields.remove(3);
+			}
+		}
+	}
 
 	public void onLoad(String mixinPackage) {}
 	public String getRefMapperConfig() { return null; }
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) { return true; }
 	public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {}
 	public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
-	public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
 }

@@ -25,11 +25,20 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 //	@ConfigEntry.Gui.CollapsibleObject
 //	ModCompatibilitySettings modCompatibilitySettings = new ModCompatibilitySettings();
 	
-	@ConfigEntry.Gui.CollapsibleObject
-	WindowsCompatibilitySettings windowsCompatibilitySettings = new WindowsCompatibilitySettings();
+	@ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+	WindowsCompatibilitySettings windowsCompatibilitySettings;
 	
-	@ConfigEntry.Gui.CollapsibleObject
-	LinuxCompatibilitySettings linuxCompatibilitySettings = new LinuxCompatibilitySettings();
+	@ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+	LinuxCompatibilitySettings linuxCompatibilitySettings;
+	
+	public IMBlockerAutoConfig() {
+		if(Platform.isWindows()) {
+			windowsCompatibilitySettings = new WindowsCompatibilitySettings();
+		}
+		if(Platform.isLinux()) {
+			linuxCompatibilitySettings = new LinuxCompatibilitySettings();
+		}
+	}
 	
 	@Override
 	public void validatePostLoad() {

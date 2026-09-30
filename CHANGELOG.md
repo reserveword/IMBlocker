@@ -1,5 +1,4 @@
- - macOS: 修复预编辑字符可能残留显示的问题
- - 提升了输入法渲染层的兼容性
- - 提升游戏窗口注入类的优先级以保证缩放值及时同步
+ - Forge：添加 LDLib2 的兼容层
+ - 与操作系统绑定的配置项现在仅在对应平台上可见
 
 [历史更新日志](https://github.com/reserveword/IMBlocker/blob/master/Changelog_History.md)

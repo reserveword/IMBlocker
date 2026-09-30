@@ -76,7 +76,7 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 
 	@Override
 	public boolean isConversionStatusApiEnabled() {
-		return windowsCompatibilitySettings.enableConversionStatusApi;
+		return !Platform.isWindows() || windowsCompatibilitySettings.enableConversionStatusApi;
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class IMBlockerAutoConfig extends IMBlockerConfig implements ConfigData {
 
 	@Override
 	public boolean isCompositionFontTweaksEnabled() {
-		return windowsCompatibilitySettings.enableCompositionFontTweaks;
+		return !Platform.isWindows() || windowsCompatibilitySettings.enableCompositionFontTweaks;
 	}
 	
 	@Override

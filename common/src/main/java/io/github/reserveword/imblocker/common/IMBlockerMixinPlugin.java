@@ -170,11 +170,11 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 	@Override
 	public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
 		if(targetClassName.equals("io.github.reserveword.imblocker.common.IMBlockerAutoConfig")) {
-			if(!Platform.isWindows()) {
-				targetClass.fields.remove(2);
-			}
 			if(!Platform.isLinux()) {
 				targetClass.fields.remove(3);
+			}
+			if(!Platform.isWindows()) {
+				targetClass.fields.remove(2);
 			}
 		}
 	}

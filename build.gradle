@@ -1,126 +1,84 @@
-plugins {
-    id 'eclipse'
-    id 'idea'
-    id 'java'
-}
-
-allprojects {
-	base {
-		archivesName = "${rootProject.name}-${mod_version}-${minecraft_version_range}"
-	}
-
+buildscript {
     repositories {
-        maven {
-            name = "Modrinth"
-            url = "https://api.modrinth.com/maven"
-            content {
-                includeGroup "maven.modrinth"
-            }
-        }
-        maven {
-            url = "https://www.cursemaven.com"
-            content {
-                includeGroup "curse.maven"
-            }
-        }
-        maven {
-            name = "AlexIIL"
-            url = "https://staging.alexiil.uk/maven/"
-            content {
-                includeGroup "io.github.cottonmc"
-            }
-        }
-        maven {
-            url "https://maven.shedaniel.me/"
-            content {
-                includeGroupAndSubgroups "me.shedaniel"
-                includeGroup "dev.architectury"
-            }
-        }
-        maven {
-            url = "https://maven.terraformersmc.com"
-            content {
-                includeGroup "com.terraformersmc"
-                includeGroup "dev.emi"
-            }
-        }
+        jcenter()
         mavenCentral()
-        maven {
-            name = "Jared's maven"
-            url = "https://maven.blamejared.com/"
-        }
-        maven {
-            name = "ModMaven"
-            url = "https://modmaven.dev"
-        }
-        maven {
-            url 'https://repo.spongepowered.org/repository/maven-public/'
-        }
-        maven { url "https://jitpack.io" }
-        maven {
-            name = "IzzelAliz Maven"
-            url = "https://maven.izzel.io/releases/"
-        }
+        maven { url = 'https://files.minecraftforge.net/maven' }
     }
-
-    def all_properties = [
-            minecraft_version   : minecraft_version,
-            mod_id              : mod_id,
-            mod_name            : mod_name,
-            mod_version         : mod_version,
-            mod_logo            : mod_logo,
-            mod_url             : mod_url,
-            issues_url          : issues_url,
-            maven_group         : maven_group,
-            license             : license,
-            credits             : credits,
-            author              : author,
-            email               : email,
-            description         : mod_description,
-            fabric_version      : fabric_version,
-            yarn_mappings       : yarn_mappings,
-            loader_version      : loader_version,
-            forge_version       : forge_version,
-            loader_version_range: loader_version_range,
-            mapping_channel     : mapping_channel,
-            mapping_version     : mapping_version
-    ]
-
-    tasks.withType(ProcessResources).configureEach {
-        inputs.properties all_properties
-
-        filesMatching(['META-INF/mods.toml', 'fabric.mod.json', 'META-INF/neoforge.mods.toml', 'pack.mcmeta']) {
-            expand all_properties
-        }
-    }
-
-    tasks.withType(JavaCompile).configureEach {
-        options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
     }
 }
 
-tasks.register('buildAll', Copy) {
-    group = 'build'
-    description = 'Build all sub-projects and collect their artifacts.'
-    	
-    dependsOn ':forge-legacy:build', ':forge:build', ':fabric:build', ':neoforge:build'
-    
-    from (project(':forge-legacy').layout.buildDirectory.dir('libs')) {
-    	include '*.jar'
-    	exclude '*-sources.jar'
-	}
-	from (project(':forge').layout.buildDirectory.dir('libs')) {
-    	include '*.jar'
-    	exclude '*-sources.jar'
-	}
-	from (project(':fabric').layout.buildDirectory.dir('libs')) {
-    	include '*.jar'
-    	exclude '*-sources.jar'
-	}
-	from (project(':neoforge').layout.buildDirectory.dir('libs')) {
-    	include '*.jar'
-    	exclude '*-sources.jar'
-	}
-	
-    into layout.buildDirectory.dir('libs')
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+version = mod_version
+group = 'io.github.reserveword'
+archivesBaseName = 'imblocker-forge-1.12.2'
+
+sourceCompatibility = targetCompatibility = '1.8'
+
+minecraft {
+    mappings channel: 'stable', version: '39-1.12'
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'fml.coreMods.load', 'io.github.reserveword.imblocker.legacy1122.IMBlockerLoadingPlugin'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    shade
+    compile.extendsFrom shade
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    shade 'net.java.dev.jna:jna:4.5.2'
+    shade 'net.java.dev.jna:jna-platform:4.5.2'
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', minecraft_version
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': project.version,
+                'mcversion': minecraft_version,
+                'mod_id': mod_id,
+                'mod_name': mod_name,
+                'mod_description': mod_description
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+jar {
+    from {
+        configurations.shade.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    exclude 'META-INF/*.SF', 'META-INF/*.RSA', 'META-INF/*.DSA'
+    manifest {
+        attributes(
+                'FMLCorePlugin': 'io.github.reserveword.imblocker.legacy1122.IMBlockerLoadingPlugin',
+                'FMLCorePluginContainsFMLMod': 'true',
+                'Specification-Title': mod_name,
+                'Specification-Vendor': 'reserveword',
+                'Specification-Version': '1',
+                'Implementation-Title': project.name,
+                'Implementation-Version': project.version,
+                'Implementation-Vendor': 'reserveword'
+        )
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }

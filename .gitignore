@@ -23,4 +23,6 @@ eclipse
 # Files from Forge MDK
 /forge/run/
 /forge/runs/
+/forge-legacy-1122/run/
+/forge-legacy-1122/runs/
 /fabric/run/

@@ -61,3 +61,9 @@ IMBlocker 模组能够识别当前游戏状态，并自动启用/禁用输入法
 注意，原贴中代码地址已失效，目前 Github 上的仓库为 [InputMethodBlocker](https://github.com/lss233/InputMethodBlocker)  
 
 模组 Logo by [@Halogly](https://github.com/Halogly)
+
+## Forge 1.12.2 测试版本
+
+仓库内新增了独立的 Forge 1.12.2 测试工程，位于 [`forge-legacy-1122`](forge-legacy-1122)。
+
+该目录使用独立的 ForgeGradle 3 和 Java 8 构建，不会参与现代版本的根 Gradle 多模块构建。详细说明请参阅 [`forge-legacy-1122/README.md`](forge-legacy-1122/README.md)。

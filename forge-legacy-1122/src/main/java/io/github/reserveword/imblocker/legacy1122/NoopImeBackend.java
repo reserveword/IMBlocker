@@ -2,7 +2,7 @@ package io.github.reserveword.imblocker.legacy1122;
 
 final class NoopImeBackend implements ImeBackend {
     @Override
-    public void setEnabled(boolean enabled) {}
+    public boolean setEnabled(boolean enabled) { return true; }
 
     @Override
     public void setEnglishMode(boolean english) {}

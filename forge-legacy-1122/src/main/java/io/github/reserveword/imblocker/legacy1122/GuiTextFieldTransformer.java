@@ -15,12 +15,15 @@ public final class GuiTextFieldTransformer implements IClassTransformer {
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         if (basicClass == null || !(GUI_TEXT_FIELD.equals(name) || GUI_TEXT_FIELD.equals(transformedName)
-                || "bib".equals(name))) {
+                || "bje".equals(name) || "bib".equals(name))) {
             return basicClass;
         }
 
         final String focusName = LegacyNames.runtimeMethod("setFocused", "func_146195_b", "(Z)V");
-        final String typedName = LegacyNames.runtimeMethod("textboxKeyTyped", "func_146203_a", "(CI)Z");
+        // In the 1.12.2 stable mappings the SRG name is func_146201_a.
+        // Keep the obfuscated names as a fallback for production LaunchWrapper
+        // runs where the class bytes are still named bje/b and a.
+        final String typedName = LegacyNames.runtimeMethod("textboxKeyTyped", "func_146201_a", "(CI)Z");
         final ClassReader reader = new ClassReader(basicClass);
         final ClassWriter writer = new ClassWriter(reader, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
         reader.accept(new ClassVisitor(Opcodes.ASM5, writer) {
@@ -28,7 +31,7 @@ public final class GuiTextFieldTransformer implements IClassTransformer {
             public MethodVisitor visitMethod(int access, String methodName, String descriptor,
                                              String signature, String[] exceptions) {
                 MethodVisitor visitor = super.visitMethod(access, methodName, descriptor, signature, exceptions);
-                if (("setFocused".equals(methodName) || focusName.equals(methodName))
+                if (("setFocused".equals(methodName) || focusName.equals(methodName) || "b".equals(methodName))
                         && "(Z)V".equals(descriptor)) {
                     return new MethodVisitor(Opcodes.ASM5, visitor) {
                         @Override
@@ -43,7 +46,7 @@ public final class GuiTextFieldTransformer implements IClassTransformer {
                         }
                     };
                 }
-                if (("textboxKeyTyped".equals(methodName) || typedName.equals(methodName))
+                if (("textboxKeyTyped".equals(methodName) || typedName.equals(methodName) || "a".equals(methodName))
                         && "(CI)Z".equals(descriptor)) {
                     return new MethodVisitor(Opcodes.ASM5, visitor) {
                         @Override

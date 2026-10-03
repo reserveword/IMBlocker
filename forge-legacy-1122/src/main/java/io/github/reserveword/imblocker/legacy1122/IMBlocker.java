@@ -15,6 +15,7 @@ public final class IMBlocker {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        System.out.println("[IMBlocker] Forge 1.12.2 client module loaded; Windows IMM32 backend will be initialized.");
         LegacyConfig.load(event.getSuggestedConfigurationFile());
         ClientRegistry.registerKeyBinding(LegacyConfig.unlockKey);
         MinecraftForge.EVENT_BUS.register(LegacyEventHandler.INSTANCE);

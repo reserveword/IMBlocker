@@ -28,10 +28,14 @@ final class WindowsImeBackend implements ImeBackend {
     private final User32 user32 = User32.INSTANCE;
     private final User32Ext user32Ext = User32Ext.INSTANCE;
 
-    private HANDLE associatedContext;
-    private HANDLE previousContext;
-    private boolean previousContextCaptured;
-    private HWND associatedWindow;
+    /**
+     * The context detached from the Minecraft window while IME is disabled.
+     * It is kept alive and re-associated when text input becomes active again.
+     * This is important for Microsoft Pinyin, which keeps conversion state in
+     * the window's existing HIMC rather than in a newly-created context.
+     */
+    private HANDLE detachedContext;
+    private HWND managedWindow;
 
     WindowsImeBackend() {
         imm32 = Native.loadLibrary("imm32", Imm32.class);
@@ -43,33 +47,43 @@ final class WindowsImeBackend implements ImeBackend {
     }
 
     @Override
-    public synchronized void setEnabled(boolean enabled) {
+    public synchronized boolean setEnabled(boolean enabled) {
         HWND hwnd = activeWindow();
         if (hwnd == null) {
-            return;
+            return false;
         }
-        if (enabled) {
-            if (associatedWindow != null && !sameWindow(associatedWindow, hwnd)) {
-                detachAndDestroy(associatedWindow);
-            }
-            if (associatedContext == null) {
-                associatedContext = imm32.ImmCreateContext();
-                associatedWindow = hwnd;
-                previousContext = null;
-                previousContextCaptured = false;
-            }
-            if (associatedContext != null) {
-                if (!previousContextCaptured) {
-                    previousContext = imm32.ImmAssociateContext(hwnd, associatedContext);
-                    previousContextCaptured = true;
-                } else {
-                    imm32.ImmAssociateContext(hwnd, associatedContext);
-                }
-                imm32.ImmSetOpenStatus(associatedContext, true);
-            }
+        if (managedWindow != null && !sameWindow(managedWindow, hwnd)) {
+            detachedContext = null;
+        }
+        managedWindow = hwnd;
+
+        if (!enabled) {
+            disableOnWindow(hwnd);
+            return true;
+        }
+
+        HANDLE context = detachedContext;
+        boolean acquiredContext = false;
+        if (context != null) {
+            detachedContext = null;
+            imm32.ImmAssociateContext(hwnd, context);
         } else {
-            detachAndDestroy(hwnd);
+            context = imm32.ImmGetContext(hwnd);
+            acquiredContext = context != null;
+            if (context == null) {
+                context = imm32.ImmCreateContext();
+                if (context != null) {
+                    imm32.ImmAssociateContext(hwnd, context);
+                }
+            }
         }
+        if (context != null) {
+            imm32.ImmSetOpenStatus(context, true);
+            if (acquiredContext) {
+                imm32.ImmReleaseContext(hwnd, context);
+            }
+        }
+        return true;
     }
 
     @Override
@@ -130,23 +144,40 @@ final class WindowsImeBackend implements ImeBackend {
     }
 
     private HWND activeWindow() {
-        // GetActiveWindow is thread-local. Conversion updates are scheduled on
-        // a daemon worker, so prefer the process foreground window first.
-        HWND hwnd = user32.GetForegroundWindow();
-        return hwnd != null ? hwnd : user32Ext.GetActiveWindow();
+        // GetActiveWindow is thread-local and is the reliable source while
+        // state changes are requested from Minecraft's client thread. The
+        // conversion-status task runs on a daemon worker, so keep using the
+        // last handle captured from that thread instead of accidentally
+        // changing the IME belonging to a launcher, terminal, or chat app.
+        if (managedWindow != null) {
+            return managedWindow;
+        }
+        HWND hwnd = user32Ext.GetActiveWindow();
+        return hwnd != null ? hwnd : user32.GetForegroundWindow();
     }
 
-    private void detachAndDestroy(HWND hwnd) {
-        if (hwnd != null && previousContext != null) {
-            imm32.ImmAssociateContext(hwnd, previousContext);
+    private void disableOnWindow(HWND hwnd) {
+        HANDLE context = imm32.ImmGetContext(hwnd);
+        if (context != null) {
+            try {
+                // ImmAssociateContext(NULL) is the operation used by the
+                // official 1.16.5 implementation. ImmSetOpenStatus alone is
+                // ignored by Microsoft Pinyin on some Windows 10/11 builds.
+                imm32.ImmSetOpenStatus(context, false);
+                IntByReference conversion = new IntByReference();
+                IntByReference sentence = new IntByReference();
+                if (imm32.ImmGetConversionStatus(context, conversion, sentence)) {
+                    conversion.setValue(conversion.getValue() & ~IME_CMODE_NATIVE);
+                    imm32.ImmSetConversionStatus(context, conversion.getValue(), sentence.getValue());
+                }
+            } finally {
+                imm32.ImmReleaseContext(hwnd, context);
+            }
         }
-        if (associatedContext != null) {
-            imm32.ImmDestroyContext(associatedContext);
+        HANDLE old = imm32.ImmAssociateContext(hwnd, null);
+        if (old != null) {
+            detachedContext = old;
         }
-        associatedContext = null;
-        previousContext = null;
-        previousContextCaptured = false;
-        associatedWindow = null;
     }
 
     private static boolean sameWindow(HWND first, HWND second) {

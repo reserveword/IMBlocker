@@ -17,9 +17,10 @@ final class ImeManager {
         thread.setDaemon(true);
         return thread;
     });
-    private boolean enabled;
-    private boolean requestedEnabled;
-    private boolean english = true;
+    private volatile boolean enabled;
+    private volatile boolean requestedEnabled;
+    private volatile boolean english = true;
+    private boolean stateInitialized;
     private long lastEnabledAt;
 
     private ImeManager() {
@@ -27,9 +28,11 @@ final class ImeManager {
         if (System.getProperty("os.name", "").toLowerCase(java.util.Locale.ROOT).contains("win")) {
             try {
                 selected = new WindowsImeBackend();
+                System.out.println("[IMBlocker] Windows IMM32 input method backend initialized.");
             } catch (Throwable throwable) {
                 selected = new NoopImeBackend();
                 LegacyStateController.log("Windows IME backend is unavailable", throwable);
+                System.err.println("[IMBlocker] Windows IMM32 backend unavailable: " + throwable);
             }
         } else {
             selected = new NoopImeBackend();
@@ -37,7 +40,7 @@ final class ImeManager {
         backend = selected;
     }
 
-    void setEnabled(boolean value) {
+    synchronized void setEnabled(boolean value) {
         requestedEnabled = value;
         applyRequestedState();
     }
@@ -45,15 +48,18 @@ final class ImeManager {
     private void applyRequestedState() {
         boolean shouldEnable = requestedEnabled
                 && !("DISABLE_IM".equalsIgnoreCase(LegacyConfig.englishStateMode) && english);
-        if (enabled == shouldEnable) {
+        if (stateInitialized && enabled == shouldEnable) {
             if (shouldEnable) {
                 scheduleEnglishState();
             }
             return;
         }
-        enabled = shouldEnable;
         try {
-            backend.setEnabled(shouldEnable);
+            if (!backend.setEnabled(shouldEnable)) {
+                return;
+            }
+            enabled = shouldEnable;
+            stateInitialized = true;
             if (shouldEnable) {
                 lastEnabledAt = System.currentTimeMillis();
                 scheduleEnglishState();
@@ -63,7 +69,7 @@ final class ImeManager {
         }
     }
 
-    void setEnglishMode(boolean value) {
+    synchronized void setEnglishMode(boolean value) {
         if (english == value) {
             return;
         }

@@ -1,9 +1,11 @@
 package io.github.reserveword.imblocker.legacy1122;
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 
 import java.util.Map;
 
+@MCVersion("1.12.2")
 public final class IMBlockerLoadingPlugin implements IFMLLoadingPlugin {
     @Override
     public String[] getASMTransformerClass() {

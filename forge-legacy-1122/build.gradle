@@ -1,0 +1,84 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url = 'https://files.minecraftforge.net/maven' }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+version = mod_version
+group = 'io.github.reserveword'
+archivesBaseName = 'imblocker-forge-1.12.2'
+
+sourceCompatibility = targetCompatibility = '1.8'
+
+minecraft {
+    mappings channel: 'stable', version: '39-1.12'
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'fml.coreMods.load', 'io.github.reserveword.imblocker.legacy1122.IMBlockerLoadingPlugin'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    shade
+    compile.extendsFrom shade
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    shade 'net.java.dev.jna:jna:4.5.2'
+    shade 'net.java.dev.jna:jna-platform:4.5.2'
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', minecraft_version
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': project.version,
+                'mcversion': minecraft_version,
+                'mod_id': mod_id,
+                'mod_name': mod_name,
+                'mod_description': mod_description
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+jar {
+    from {
+        configurations.shade.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    exclude 'META-INF/*.SF', 'META-INF/*.RSA', 'META-INF/*.DSA'
+    manifest {
+        attributes(
+                'FMLCorePlugin': 'io.github.reserveword.imblocker.legacy1122.IMBlockerLoadingPlugin',
+                'FMLCorePluginContainsFMLMod': 'true',
+                'Specification-Title': mod_name,
+                'Specification-Vendor': 'reserveword',
+                'Specification-Version': '1',
+                'Implementation-Title': project.name,
+                'Implementation-Version': project.version,
+                'Implementation-Vendor': 'reserveword'
+        )
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

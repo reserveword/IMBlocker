@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "${mod_id}",
+    "name": "${mod_name}",
+    "description": "${mod_description}",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://github.com/reserveword/IMBlocker",
+    "updateUrl": "https://github.com/reserveword/IMBlocker/releases",
+    "authorList": ["reserveword", "legacy1122 contributors"],
+    "credits": "Inspired by InputMethodBlocker by TimmyOVO.",
+    "logoFile": "imblocker.png",
+    "screenshots": [],
+    "dependencies": [],
+    "useDependencyInformation": true,
+    "requiredMods": []
+  }
+]

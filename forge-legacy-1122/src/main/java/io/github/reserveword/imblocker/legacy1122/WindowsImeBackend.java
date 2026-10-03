@@ -4,11 +4,16 @@ import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
+import com.sun.jna.CallbackReference;
 import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef.LPARAM;
+import com.sun.jna.platform.win32.WinDef.LRESULT;
+import com.sun.jna.platform.win32.WinDef.WPARAM;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinNT.HANDLE;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.win32.StdCallLibrary;
+import com.sun.jna.win32.StdCallLibrary.StdCallCallback;
 import com.sun.jna.win32.W32APIOptions;
 
 import java.util.Arrays;
@@ -23,6 +28,15 @@ final class WindowsImeBackend implements ImeBackend {
     private static final int CFS_POINT = 0x0002;
     private static final int IME_CMODE_NATIVE = 0x0001;
     private static final int IME_CMODE_FULLSHAPE = 0x0008;
+    private static final int GWL_WNDPROC = -4;
+    private static final int WM_KEYUP = 0x0101;
+    private static final int WM_SYSKEYUP = 0x0105;
+    private static final int WM_SETFOCUS = 0x0007;
+    private static final int WM_ACTIVATEAPP = 0x001C;
+    private static final int WM_IME_NOTIFY = 0x0282;
+    private static final int WM_INPUTLANGCHANGE = 0x0051;
+    private static final int IMN_SETCONVERSIONMODE = 0x0006;
+    private static final int VK_SHIFT = 0x10;
 
     private final Imm32 imm32;
     private final User32 user32 = User32.INSTANCE;
@@ -36,6 +50,9 @@ final class WindowsImeBackend implements ImeBackend {
      */
     private HANDLE detachedContext;
     private HWND managedWindow;
+    private HWND hookedWindow;
+    private Pointer originalProc;
+    private WindowProc imeListener;
 
     WindowsImeBackend() {
         imm32 = Native.loadLibrary("imm32", Imm32.class);
@@ -56,6 +73,7 @@ final class WindowsImeBackend implements ImeBackend {
             detachedContext = null;
         }
         managedWindow = hwnd;
+        installWindowHook(hwnd);
 
         if (!enabled) {
             disableOnWindow(hwnd);
@@ -84,6 +102,65 @@ final class WindowsImeBackend implements ImeBackend {
             }
         }
         return true;
+    }
+
+    @Override
+    public synchronized void onWindowFocusGained() {
+        HWND current = discoverWindow();
+        if (current == null) {
+            return;
+        }
+        if (managedWindow == null || !sameWindow(managedWindow, current)) {
+            detachedContext = null;
+            managedWindow = current;
+        }
+        installWindowHook(current);
+    }
+
+    @Override
+    public synchronized void reconcile(boolean desiredEnabled, boolean englishLocked, boolean english) {
+        HWND hwnd = activeWindow();
+        if (hwnd == null) {
+            return;
+        }
+        installWindowHook(hwnd);
+        if (!desiredEnabled) {
+            HANDLE context = imm32.ImmGetContext(hwnd);
+            if (context != null) {
+                imm32.ImmReleaseContext(hwnd, context);
+                disableOnWindow(hwnd);
+            }
+            return;
+        }
+
+        HANDLE context = imm32.ImmGetContext(hwnd);
+        if (context == null) {
+            setEnabled(true);
+            return;
+        }
+        try {
+            if (englishLocked) {
+                if (!imm32.ImmGetOpenStatus(context)) {
+                    imm32.ImmSetOpenStatus(context, true);
+                }
+                IntByReference conversion = new IntByReference();
+                IntByReference sentence = new IntByReference();
+                if (imm32.ImmGetConversionStatus(context, conversion, sentence)) {
+                    int mode = conversion.getValue();
+                    boolean currentlyEnglish = (mode & IME_CMODE_NATIVE) == 0;
+                    if (currentlyEnglish != english) {
+                        if (english) {
+                            mode &= ~IME_CMODE_NATIVE;
+                        } else {
+                            mode |= IME_CMODE_NATIVE;
+                        }
+                        imm32.ImmSetConversionStatus(context, mode, sentence.getValue());
+                    }
+                }
+            }
+        } finally {
+            imm32.ImmReleaseContext(hwnd, context);
+        }
     }
 
     @Override
@@ -156,6 +233,42 @@ final class WindowsImeBackend implements ImeBackend {
         return hwnd != null ? hwnd : user32.GetForegroundWindow();
     }
 
+    private HWND discoverWindow() {
+        HWND hwnd = user32Ext.GetActiveWindow();
+        return hwnd != null ? hwnd : user32.GetForegroundWindow();
+    }
+
+    private void installWindowHook(HWND hwnd) {
+        if (hwnd == null || (hookedWindow != null && sameWindow(hookedWindow, hwnd))) {
+            return;
+        }
+        if (hookedWindow != null && originalProc != null) {
+            try {
+                user32.SetWindowLongPtr(hookedWindow, GWL_WNDPROC, originalProc);
+            } catch (Throwable ignored) {
+                // The old window may already have been destroyed.
+            }
+        }
+        imeListener = new WindowProc() {
+            @Override
+            public LRESULT callback(HWND window, int message, WPARAM wParam, LPARAM lParam) {
+                LRESULT result = user32Ext.CallWindowProc(originalProc, window, message, wParam, lParam);
+                if ((message == WM_IME_NOTIFY && wParam.intValue() == IMN_SETCONVERSIONMODE)
+                        || message == WM_INPUTLANGCHANGE
+                        || message == WM_SETFOCUS
+                        || message == WM_ACTIVATEAPP
+                        || ((message == WM_KEYUP || message == WM_SYSKEYUP)
+                        && wParam.intValue() == VK_SHIFT)) {
+                    ImeManager.INSTANCE.onNativeStateChanged();
+                }
+                return result;
+            }
+        };
+        Pointer callback = CallbackReference.getFunctionPointer(imeListener);
+        originalProc = user32.SetWindowLongPtr(hwnd, GWL_WNDPROC, callback);
+        hookedWindow = hwnd;
+    }
+
     private void disableOnWindow(HWND hwnd) {
         HANDLE context = imm32.ImmGetContext(hwnd);
         if (context != null) {
@@ -195,6 +308,7 @@ final class WindowsImeBackend implements ImeBackend {
         boolean ImmGetConversionStatus(HANDLE context, IntByReference conversion, IntByReference sentence);
         boolean ImmSetConversionStatus(HANDLE context, int conversion, int sentence);
         boolean ImmSetOpenStatus(HANDLE context, boolean open);
+        boolean ImmGetOpenStatus(HANDLE context);
         boolean ImmGetCompositionWindow(HANDLE context, CompositionForm form);
         boolean ImmSetCompositionWindow(HANDLE context, CompositionForm form);
     }
@@ -202,6 +316,11 @@ final class WindowsImeBackend implements ImeBackend {
     private interface User32Ext extends StdCallLibrary {
         User32Ext INSTANCE = Native.loadLibrary("user32", User32Ext.class, W32APIOptions.DEFAULT_OPTIONS);
         HWND GetActiveWindow();
+        LRESULT CallWindowProc(Pointer previousProcedure, HWND hwnd, int message, WPARAM wParam, LPARAM lParam);
+    }
+
+    private interface WindowProc extends StdCallCallback {
+        LRESULT callback(HWND hwnd, int message, WPARAM wParam, LPARAM lParam);
     }
 
     public static class CompositionForm extends Structure {

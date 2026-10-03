@@ -24,6 +24,8 @@ gradlew.bat clean build --no-daemon --console plain
 - 监听 1.12.2 `GuiTextField` 文本框焦点变化。
 - 支持聊天框、命令输入、创造模式搜索、铁砧、服务器列表、书本、告示牌和命令方块等原版界面。
 - 使用 Windows IMM32 控制输入法状态，并处理输入法上下文恢复和窗口句柄变化。
+- 监听窗口重新激活、IMM32 转换状态通知和 Shift 释放事件，及时校正被外部快捷键改变的状态。
+- 通过低频状态监测处理微软拼音或第三方输入法自行恢复 HIMC 的情况，不吞掉 Minecraft 的 Shift 按键。
 - 同步现代版本中的输入法转换状态处理逻辑。
 - 同步原生候选框位置，使候选窗口靠近当前文本框。
 - 命令输入场景自动切换英文输入状态。
@@ -48,5 +50,15 @@ Windows 后端按照 IMM32 接口设计，目标兼容：
 ```text
 englishStateMode=DISABLE_IM
 ```
+
+Windows 兼容配置还包括：
+
+```text
+watchdogEnabled=true
+watchdogIntervalTicks=5
+watchdogCooldownMs=150
+```
+
+普通文本输入框不会屏蔽 Shift，用户仍可手动切换中英文；命令输入会锁定英文状态，并在检测到微软拼音或其他输入法通过 Shift 修改转换状态后自动恢复。非文本界面则直接解除窗口 HIMC，使输入法快捷键不再影响游戏窗口。
 
 本模组为客户端专用，不需要安装在独立服务器上。

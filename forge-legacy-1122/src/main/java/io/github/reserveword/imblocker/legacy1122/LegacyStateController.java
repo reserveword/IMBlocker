@@ -17,6 +17,8 @@ final class LegacyStateController {
     private GuiScreen lastScreen;
     private boolean manualUnlock;
     private boolean initialized;
+    private boolean displayActive;
+    private boolean displayStateKnown;
 
     private LegacyStateController() {}
 
@@ -29,6 +31,7 @@ final class LegacyStateController {
         lastScreen = screen;
         focusOwner = null;
         manualUnlock = false;
+        ImeManager.INSTANCE.clearEnglishModeLock();
         refresh(Minecraft.getMinecraft());
     }
 
@@ -48,7 +51,7 @@ final class LegacyStateController {
             String current = input.getText();
             boolean command = CommandDetector.isCommandAfter(current, character);
             if (LegacyConfig.commandEnglishMode && isChatScreen(Minecraft.getMinecraft().currentScreen)) {
-                ImeManager.INSTANCE.setEnglishMode(command);
+                ImeManager.INSTANCE.setEnglishMode(command, command);
             }
             updateCaret(Minecraft.getMinecraft(), input);
         }
@@ -63,24 +66,31 @@ final class LegacyStateController {
         if (!initialized || minecraft == null) {
             return;
         }
+        boolean active = isDisplayActive();
+        if (!displayStateKnown || (!displayActive && active)) {
+            displayStateKnown = true;
+            displayActive = active;
+            if (active) {
+                ImeManager.INSTANCE.onWindowFocusGained();
+            }
+        } else {
+            displayActive = active;
+        }
         if (lastScreen != minecraft.currentScreen) {
             onScreenChanged(minecraft.currentScreen);
         }
-        refresh(minecraft);
+        if (active) {
+            refresh(minecraft);
+            ImeManager.INSTANCE.tick(true);
+        } else {
+            ImeManager.INSTANCE.setEnabled(false);
+        }
     }
 
     private void refresh(Minecraft minecraft) {
         if (!LegacyConfig.enabled || minecraft == null) {
             ImeManager.INSTANCE.setEnabled(false);
             return;
-        }
-        try {
-            if (!Display.isActive()) {
-                ImeManager.INSTANCE.setEnabled(false);
-                return;
-            }
-        } catch (IllegalStateException ignored) {
-            // The display may not be initialized during the first client tick.
         }
         GuiScreen screen = minecraft.currentScreen;
         if (focusOwner == null) {
@@ -96,11 +106,15 @@ final class LegacyStateController {
         if (isChatScreen(screen)) {
             GuiTextField chatInput = findTextField(screen);
             if (chatInput != null) {
-                ImeManager.INSTANCE.setEnglishMode(CommandDetector.isCommand(chatInput.getText()));
+                boolean command = CommandDetector.isCommand(chatInput.getText());
+                ImeManager.INSTANCE.setEnglishMode(command, command);
                 updateCaret(minecraft, chatInput);
             }
         } else if (focusedTextField) {
+            ImeManager.INSTANCE.clearEnglishModeLock();
             updateCaret(minecraft, (GuiTextField) focusOwner);
+        } else {
+            ImeManager.INSTANCE.clearEnglishModeLock();
         }
     }
 
@@ -127,6 +141,15 @@ final class LegacyStateController {
 
     private static boolean isChatScreen(GuiScreen screen) {
         return screen instanceof GuiChat;
+    }
+
+    private static boolean isDisplayActive() {
+        try {
+            return Display.isActive();
+        } catch (IllegalStateException ignored) {
+            // The display may not be initialized during the first client tick.
+            return false;
+        }
     }
 
     static void log(String message, Throwable throwable) {

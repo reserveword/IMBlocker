@@ -14,6 +14,9 @@ final class LegacyConfig {
     static String englishStateMode = "CONVERSION_STATUS";
     static boolean preserveConversionFlags = true;
     static int conversionStatusCooldownMs = 60;
+    static boolean watchdogEnabled = true;
+    static int watchdogIntervalTicks = 5;
+    static int watchdogCooldownMs = 150;
     static int compositionWindowYOffset = 0;
     static boolean debug = false;
     static String[] screenWhitelist = new String[0];
@@ -50,6 +53,12 @@ final class LegacyConfig {
                 "Preserve IME-specific conversion flags used by Sogou, iFlytek, Rime and similar IMEs.");
         conversionStatusCooldownMs = configuration.getInt("conversionStatusCooldownMs", "windows", 60, 0, 500,
                 "Delay conversion-status updates after enabling an IME context.");
+        watchdogEnabled = configuration.getBoolean("watchdogEnabled", "windows", true,
+                "Periodically verify the native IME state and repair external changes.");
+        watchdogIntervalTicks = configuration.getInt("watchdogIntervalTicks", "windows", 5, 1, 40,
+                "Client ticks between native IME state checks (20 ticks = about one second).");
+        watchdogCooldownMs = configuration.getInt("watchdogCooldownMs", "windows", 150, 0, 1000,
+                "Minimum delay between watchdog corrections after an IME notification.");
         compositionWindowYOffset = configuration.getInt("compositionWindowYOffset", "windows", 0, -32, 32,
                 "Additional native composition-window Y offset in physical pixels.");
         debug = configuration.getBoolean("debug", "general", false,

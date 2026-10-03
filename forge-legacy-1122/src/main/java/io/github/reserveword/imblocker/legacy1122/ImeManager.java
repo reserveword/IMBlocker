@@ -20,8 +20,12 @@ final class ImeManager {
     private volatile boolean enabled;
     private volatile boolean requestedEnabled;
     private volatile boolean english = true;
+    private volatile boolean englishLocked;
+    private volatile boolean nativeStateDirty = true;
     private boolean stateInitialized;
     private long lastEnabledAt;
+    private long lastReconcileAt;
+    private int watchdogTicks;
 
     private ImeManager() {
         ImeBackend selected;
@@ -41,13 +45,18 @@ final class ImeManager {
     }
 
     synchronized void setEnabled(boolean value) {
+        boolean changed = requestedEnabled != value;
         requestedEnabled = value;
         applyRequestedState();
+        if (changed) {
+            nativeStateDirty = true;
+        }
     }
 
     private void applyRequestedState() {
         boolean shouldEnable = requestedEnabled
-                && !("DISABLE_IM".equalsIgnoreCase(LegacyConfig.englishStateMode) && english);
+                && !("DISABLE_IM".equalsIgnoreCase(LegacyConfig.englishStateMode)
+                && englishLocked && english);
         if (stateInitialized && enabled == shouldEnable) {
             if (shouldEnable) {
                 scheduleEnglishState();
@@ -70,11 +79,26 @@ final class ImeManager {
     }
 
     synchronized void setEnglishMode(boolean value) {
-        if (english == value) {
+        setEnglishMode(value, true);
+    }
+
+    synchronized void setEnglishMode(boolean value, boolean lock) {
+        if (english == value && englishLocked == lock) {
             return;
         }
         english = value;
+        englishLocked = lock;
         applyRequestedState();
+        nativeStateDirty = true;
+    }
+
+    synchronized void clearEnglishModeLock() {
+        if (!englishLocked) {
+            return;
+        }
+        englishLocked = false;
+        applyRequestedState();
+        nativeStateDirty = true;
     }
 
     void updateCompositionWindow(int x, int y, int height) {
@@ -88,6 +112,51 @@ final class ImeManager {
         }
     }
 
+    void onWindowFocusGained() {
+        nativeStateDirty = true;
+        try {
+            backend.onWindowFocusGained();
+        } catch (Throwable throwable) {
+            LegacyStateController.log("Failed to refresh the native IME window", throwable);
+        }
+        reconcileNow(true);
+    }
+
+    void onNativeStateChanged() {
+        nativeStateDirty = true;
+    }
+
+    void tick(boolean active) {
+        if (!active || !LegacyConfig.watchdogEnabled) {
+            return;
+        }
+        watchdogTicks++;
+        if (nativeStateDirty || watchdogTicks >= LegacyConfig.watchdogIntervalTicks) {
+            watchdogTicks = 0;
+            reconcileNow(false);
+        }
+    }
+
+    private synchronized void reconcileNow(boolean focusGained) {
+        if (!LegacyConfig.watchdogEnabled && !focusGained) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        if (!focusGained && now - lastReconcileAt < LegacyConfig.watchdogCooldownMs) {
+            return;
+        }
+        nativeStateDirty = false;
+        lastReconcileAt = now;
+        boolean shouldEnable = requestedEnabled
+                && !("DISABLE_IM".equalsIgnoreCase(LegacyConfig.englishStateMode)
+                && englishLocked && english);
+        try {
+            backend.reconcile(shouldEnable, englishLocked, english);
+        } catch (Throwable throwable) {
+            LegacyStateController.log("Failed to reconcile native IME state", throwable);
+        }
+    }
+
     private void scheduleEnglishState() {
         if (!backend.supportsConversionStatus()
                 || !"CONVERSION_STATUS".equalsIgnoreCase(LegacyConfig.englishStateMode)) {
@@ -98,7 +167,9 @@ final class ImeManager {
         conversionExecutor.schedule(() -> {
             try {
                 if (enabled) {
-                    backend.setEnglishMode(english);
+                    if (englishLocked) {
+                        backend.setEnglishMode(english);
+                    }
                 }
             } catch (Throwable throwable) {
                 LegacyStateController.log("Failed to update input method conversion mode", throwable);

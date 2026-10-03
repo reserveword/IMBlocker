@@ -12,6 +12,10 @@ interface ImeBackend {
 
     void updateCompositionWindow(int x, int y, int height);
 
+    default void onWindowFocusGained() {}
+
+    default void reconcile(boolean desiredEnabled, boolean englishLocked, boolean english) {}
+
     default boolean supportsConversionStatus() {
         return false;
     }

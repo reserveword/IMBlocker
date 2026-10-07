@@ -47,7 +47,7 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
 		imblocker$onFocusChanged(canConsumeInput());
 	}
 	
-	@Inject(method = "setVisible", at = @At("TAIL"))
+	@Inject(method = "setVisible", at = @At("TAIL"), require = 0)
 	public void visibilityChanged(boolean isVisible, CallbackInfo ci) {
 		imblocker$onFocusChanged(canConsumeInput());
 	}

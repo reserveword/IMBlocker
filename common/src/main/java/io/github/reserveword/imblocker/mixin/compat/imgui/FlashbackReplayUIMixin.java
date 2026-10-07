@@ -70,7 +70,7 @@ public abstract class FlashbackReplayUIMixin {
 		});
 	}
 	
-	@Inject(method = "transitionActiveState", at = @At("TAIL"))
+	@Inject(method = "transitionActiveState", at = @At("RETURN"))
 	private static void updateGameContentOffset(boolean active, CallbackInfo ci) {
 		if(active) {
 			FocusContainer.MINECRAFT.setGameContentOffset(ReplayUI.frameX, ReplayUI.frameY);

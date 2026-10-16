@@ -51,5 +51,7 @@
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnStateName.@Tooltip": "确定方法：系统终端中执行 “fcitx5-remote” 命令能够返回此参数",
   
   "key.category.imblocker": "IMBlocker",
-  "key.unlockIME": "解锁输入法"
+  "key.unlockIME": "解锁输入法",
+  
+  "imblocker.no_cloth_alert.message": "您必须安装Cloth Config才能修改配置项！"
 }

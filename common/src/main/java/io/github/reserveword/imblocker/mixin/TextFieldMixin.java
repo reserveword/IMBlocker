@@ -14,6 +14,7 @@ import io.github.reserveword.imblocker.common.gui.FocusContainer;
 import io.github.reserveword.imblocker.common.gui.FocusManager;
 import io.github.reserveword.imblocker.common.gui.mc.MinecraftTextFieldWidget;
 import io.github.reserveword.imblocker.common.gui.mc.SinglelineCursorInfo;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.input.CharacterEvent;
 
@@ -23,10 +24,12 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
 	@Shadow
 	private boolean isEditable;
 	
+	@Shadow private boolean centered;
 	@Shadow private boolean bordered;
 	@Shadow private int displayPos;
 	@Shadow private int cursorPos;
 	@Shadow private String value;
+	@Shadow private int textX;
 
 	private final SinglelineCursorInfo imblocker$cursorInfo = 
 			new SinglelineCursorInfo(bordered, height, displayPos, cursorPos, value);
@@ -67,6 +70,16 @@ public abstract class TextFieldMixin extends AbstractWidgetMixin implements Mine
 	@Inject(method = "scrollTo", at = @At("HEAD"), order = 1)
 	public void onTextChanged(int pos, CallbackInfo ci) {
 		IMBlockerCore.invokeLater(() -> imblocker$onCursorChanged());
+	}
+	
+	@Override
+	public boolean isCentered() {
+		return centered;
+	}
+	
+	@Override
+	public int getPaddingX() {
+		return textX - ((AbstractWidget) (Object) this).getX();
 	}
 	
 	@Override

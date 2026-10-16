@@ -51,5 +51,7 @@
   "text.autoconfig.imblocker.option.linuxCompatibilitySettings.fcitx5OnStateName.@Tooltip": "To determine it:\nExecute \"fcitx5-remote\" command in terminal will return <this argument>.",
   
   "key.category.imblocker.ime": "IMBlocker",
-  "key.unlockIME": "Unlock IME"
+  "key.unlockIME": "Unlock IME",
+  
+  "imblocker.no_cloth_alert.message": "You must install Cloth Config to modify the configuration!"
 }

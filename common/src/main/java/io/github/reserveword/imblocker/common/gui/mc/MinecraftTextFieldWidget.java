@@ -18,10 +18,14 @@ public interface MinecraftTextFieldWidget extends MinecraftAbstractTextInputWidg
 		if(cursorInfo == null) {
 			return Point.TOP_LEFT;
 		}
-		int caretX = (cursorInfo.hasBorder ? getPaddingX() : 0) + MinecraftClientUtil.getStringWidth(
+		int caretX = (cursorInfo.hasBorder || isCentered() ? getPaddingX() : 0) + MinecraftClientUtil.getStringWidth(
 				StringUtil.getSubstring(cursorInfo.text, cursorInfo.cursorLineBeginIndex, cursorInfo.cursor));
 		int caretY = cursorInfo.hasBorder ? (cursorInfo.widgetHeight - getFontHeight()) / 2 : 0;
     	return new Point(getGuiScale(), caretX, caretY);
+	}
+	
+	default boolean isCentered() {
+		return false;
 	}
 	
 	default int getPaddingX() {

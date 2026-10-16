@@ -30,13 +30,16 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 				"StringViewAccessor",
 				"MultilineTextFieldMixin",
 				"MultiLineEditBoxMixin",
-				"AbstractSignEditScreenMixin",
 				"GuiGraphicsExtractorMixin",
 				"TextInputManagerMixin",
 				"KeyboardHandlerMixin");
 		
 		if(Platform.isWindows()) {
 			validMixins.add("WindowsIngameIMEInitializer");
+		}
+		
+		if(!MinecraftClientUtil.isGameVersionReached(778/*26.4*/)) {
+			validMixins.add("AbstractSignEditScreenMixin");
 		}
 		
 		if(MinecraftClientUtil.isGameVersionReached(777/*26.3*/)) {

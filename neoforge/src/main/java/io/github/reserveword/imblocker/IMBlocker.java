@@ -4,6 +4,7 @@ import io.github.reserveword.imblocker.common.IMBlockerAutoConfig;
 import io.github.reserveword.imblocker.common.IMBlockerConfig;
 import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.IMBlockerKeyBindings;
+import io.github.reserveword.imblocker.common.gui.NoClothConfigAlertScreen;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -29,6 +30,8 @@ public class IMBlocker {
 			container.registerExtensionPoint(IConfigScreenFactory.class, 
 					(modContainer, modListScreen) -> IMBlockerAutoConfig.getConfigScreen(modListScreen));
 		}else {
+			container.registerExtensionPoint(IConfigScreenFactory.class, 
+					(modContainer, modListScreen) -> new NoClothConfigAlertScreen(modListScreen));
 			IMBlockerConfig.INSTANCE.reloadConfig();
 		}
 	}

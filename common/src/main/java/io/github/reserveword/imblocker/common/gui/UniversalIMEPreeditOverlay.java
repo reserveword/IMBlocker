@@ -11,6 +11,7 @@ import io.github.reserveword.imblocker.common.accessor.ImGuiGraphicsAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiPipeline;
 import net.minecraft.client.gui.components.TextCursorUtils;
 import net.minecraft.client.input.PreeditEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -191,9 +192,14 @@ public class UniversalIMEPreeditOverlay {
 			RenderPipeline guiTexturedPipeline = RenderPipelines.GUI_TEXTURED;
 			backgroundBlitterImpl = (graphics, x, y, width, height) -> graphics.blitSprite(guiTexturedPipeline, background, x, y, width, height);
 		} catch (Throwable e) {
-			com.mojang.renderpearl.api.pipeline.RenderPipeline guiTexturedPipeline = 
-					ReflectionUtil.getFieldValue(RenderPipelines.class, null, null, "GUI_TEXTURED");
-			backgroundBlitterImpl = (graphics, x, y, width, height) -> graphics.blitSprite(guiTexturedPipeline, background, x, y, width, height);
+			try {
+				com.mojang.renderpearl.api.pipeline.RenderPipeline guiTexturedPipeline = 
+						ReflectionUtil.getFieldValue(RenderPipelines.class, null, null, "GUI_TEXTURED");
+				backgroundBlitterImpl = (graphics, x, y, width, height) -> graphics.blitSprite(guiTexturedPipeline, background, x, y, width, height);
+			} catch (Throwable e1) {
+				GuiPipeline guiTexturedPipeline = GuiPipeline.TEXTURED;
+				backgroundBlitterImpl = (graphics, x, y, width, height) -> graphics.blitSprite(guiTexturedPipeline, background, x, y, width, height);
+			}
 		}
 		backgroundBlitter = backgroundBlitterImpl;
 	}

@@ -13,7 +13,6 @@ import com.sun.jna.Structure;
 import com.sun.jna.Structure.FieldOrder;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
-import com.sun.jna.platform.win32.WinDef.LRESULT;
 import com.sun.jna.platform.win32.WinDef.POINT;
 import com.sun.jna.platform.win32.WinDef.RECT;
 import com.sun.jna.platform.win32.WinNT;
@@ -186,10 +185,7 @@ final class IMManagerWindows implements IMManager.PlatformIMManager {
 				}
 			}else if(IMBlockerConfig.INSTANCE.isClassicCompositionStyle()) {
 				switch (uMsg) {
-					case WM_IME_SETCONTEXT:
-						LRESULT ret = u.CallWindowProc(originalProc, _hwnd, uMsg, wParam, lParam);
-						lParam.setValue(lParam.longValue() | ISC_SHOWUICOMPOSITIONWINDOW);
-						return ret;
+					case WM_IME_SETCONTEXT: 
 					case WM_IME_COMPOSITION:
 					case WM_IME_STARTCOMPOSITION:
 					case WM_IME_ENDCOMPOSITION:

@@ -51,6 +51,7 @@ That's why we need IMBlocker, which can tweak your IME depends on current input 
 [Essential Mod](https://essential.gg/)*  
 [Armourer's Workshop](https://github.com/Armourers-Workshop/Armourers-Workshop)  
 [ModernUI](https://github.com/BloCamLimb/ModernUI-MC)  
-[LDLib2](https://github.com/Low-Drag-MC/LDLib2)
+[LDLib2](https://github.com/Low-Drag-MC/LDLib2)  
+[Flashback](https://github.com/Moulberry/Flashback)
 
 *On Fabric, you need to extract the file named "essential-<32-bit code>.jar" from the root directory of its mod JAR and **only** put this file into your mod folder.

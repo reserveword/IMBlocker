@@ -32,7 +32,8 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 				"MultiLineEditBoxMixin",
 				"GuiGraphicsExtractorMixin",
 				"TextInputManagerMixin",
-				"KeyboardHandlerMixin");
+				"KeyboardHandlerMixin",
+				"compat.ComposeTextInputSessionMixin");
 		
 		if(Platform.isWindows()) {
 			validMixins.add("WindowsIngameIMEInitializer");
@@ -122,10 +123,6 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("compat.LDLibUIElementMixin");
 			validMixins.add("compat.LDLibTextFieldMixin");
 			validMixins.add("compat.LDLibTextAreaMixin");
-		}
-		
-		if(IMBlockerCore.hasMod("polycompose") || IMBlockerCore.hasMod("oneconfig")) {
-			validMixins.add("compat.ComposeTextInputSessionMixin");
 		}
 	}
 	

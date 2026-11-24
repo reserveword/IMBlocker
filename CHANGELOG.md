@@ -4,6 +4,7 @@
  - 修复屏幕切换后输入法状态残留的问题：在 Compose 界面（如 OneConfig）中，只有当文本框真正通过会话获得焦点时才会启用输入法，避免此前界面残留的输入法状态使候选框出现在屏幕中央
  - 加强 Compose 会话挂钩的诊断：会话捕获失效或缺少布局数据时会输出明确的警告日志
  - 修复 Compose 界面被覆盖或隐藏后重新显示时，会话未重新捕获导致候选框回退到屏幕中央的问题
+ - Compose 会话挂钩不再依赖特定模组 ID（polycompose/oneconfig），而是通过软目标惰性应用：任何依赖或内置 PolyCompose 的模组均可被覆盖
  
 **注意**：在 NeoForge 26.3 版本中无法显示输入法候选框的 Windows 用户请在配置中启用**经典合成字符样式**或**游戏内输入法**选项（详见[NeoForge#3447](https://github.com/neoforged/NeoForge/issues/3447#issuecomment-6722928418)）
  

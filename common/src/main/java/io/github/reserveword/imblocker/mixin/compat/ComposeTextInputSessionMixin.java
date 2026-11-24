@@ -18,8 +18,10 @@ import kotlin.coroutines.Continuation;
  * carries both the precise layout request and a reliable focus signal
  * ({@link #inputActive}), so focus and geometry come from a single source.
  *
- * <p>Gated together with the other PolyCompose mixins and uses
- * {@code require = 0} for version safety. Note that the failure modes under
+ * <p>Uses a string (soft) target with {@code require = 0}, so the mixin is
+ * applied lazily only when the PolyCompose {@code SceneContext} class actually
+ * loads - no mod-id gating is needed, which covers every PolyCompose consumer
+ * (standalone mod, nested jar, shaded bundle alike). The failure modes under
  * PolyCompose API drift are asymmetric: a renamed {@link #inputActive} field
  * fails the mixin application loudly, whereas a changed {@code sync} or
  * {@code startInputMethod} signature silently disables the injection. The

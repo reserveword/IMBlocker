@@ -8,9 +8,6 @@ import io.github.reserveword.imblocker.common.gui.FocusableObject;
 import net.minecraft.client.gui.screens.Screen;
 
 public abstract class MinecraftScreenMonitor {
-	private static final boolean IS_COMPOSE_POSSIBLE =
-			IMBlockerCore.hasMod("polycompose") || IMBlockerCore.hasMod("oneconfig");
-	
 	private static Screen currentScreen;
 	private static boolean isCharSimulationPreferred;
 	
@@ -58,9 +55,12 @@ public abstract class MinecraftScreenMonitor {
 	}
 	
 	private static boolean isComposeScreen(Screen screen) {
-		if(!IS_COMPOSE_POSSIBLE || screen == null) {
+		if(screen == null) {
 			return false;
 		}
+		// Walk the class hierarchy looking for PolyCompose's ComposeScreen.
+		// Deliberately not gated by mod id: any mod may bundle PolyCompose, and
+		// the walk is a handful of string comparisons once per screen change.
 		for(Class<?> cls = screen.getClass(); cls != null && cls != Object.class; cls = cls.getSuperclass()) {
 			if("org.polyfrost.compose.minecraft.screen.ComposeScreen".equals(cls.getName())) {
 				return true;

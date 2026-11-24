@@ -125,7 +125,7 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 		}
 		
 		if(IMBlockerCore.hasMod("polycompose")) {
-			validMixins.add("compat.PolyComposeTextInputMixin");
+			validMixins.add("compat.ComposeTextInputSessionMixin");
 		}
 	}
 	

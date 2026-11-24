@@ -46,7 +46,7 @@ public abstract class ComposeTextInputSessionMixin {
 			captureLogged = true;
 			IMBlockerCore.LOGGER.info("[IMBlocker] Compose text-input session hook active (tested with PolyCompose 3.0.7)");
 		}
-		ComposeTextFieldWidget.INSTANCE.setInputRequest(request);
+		ComposeTextFieldWidget.INSTANCE.setInputRequest((Object) this, request);
 	}
 
 	/**
@@ -55,13 +55,25 @@ public abstract class ComposeTextInputSessionMixin {
 	 * gives the exact focus transition, without the old scene-level start/stop
 	 * hook. The TAIL injection is skipped when {@code sync()} takes its
 	 * no-change early return, which is exactly when no focus update is needed.
+	 *
+	 * <p>The scene instance is passed as the session identity: a session can
+	 * outlive IMBlocker's focus (screen hidden/covered while the field stays
+	 * focused) and re-fire {@code sync(true)} without a new
+	 * {@code startInputMethod}, so the widget must re-attach this scene's own
+	 * captured request instead of relying on a single global one.
 	 */
 	@Inject(method = "sync", at = @At("TAIL"), require = 0, remap = false)
 	private void imblocker$onComposeInputActiveChanged(CallbackInfo ci) {
 		if (inputActive) {
-			ComposeTextFieldWidget.INSTANCE.focusGained();
+			ComposeTextFieldWidget.INSTANCE.focusGained((Object) this);
 		} else {
-			ComposeTextFieldWidget.INSTANCE.focusLost();
+			ComposeTextFieldWidget.INSTANCE.focusLost((Object) this);
 		}
+	}
+
+	/** Release the captured request when the scene context is disposed. */
+	@Inject(method = "close", at = @At("HEAD"), require = 0, remap = false)
+	private void imblocker$onComposeSceneClosed(CallbackInfo ci) {
+		ComposeTextFieldWidget.INSTANCE.sessionClosed((Object) this);
 	}
 }

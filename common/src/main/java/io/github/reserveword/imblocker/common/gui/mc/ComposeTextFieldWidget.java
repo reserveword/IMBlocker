@@ -9,6 +9,9 @@ import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import kotlin.jvm.functions.Function0;
 
+import java.util.IdentityHashMap;
+import java.util.Map;
+
 /**
  * Virtual focus owner standing for the text field currently focused inside a
  * Compose scene (PolyCompose). A Compose {@code BasicTextField} is not a
@@ -28,6 +31,15 @@ public final class ComposeTextFieldWidget implements MinecraftFocusableWidget {
 	public static final ComposeTextFieldWidget INSTANCE = new ComposeTextFieldWidget();
 
 	private PlatformTextInputMethodRequest inputRequest;
+	/**
+	 * Requests keyed by the SceneContext instance that delivered them. A session
+	 * can outlive IMBlocker's focus (screen hidden/covered while the field stays
+	 * focused), and PolyCompose then re-fires {@code sync(true)} without a new
+	 * {@code startInputMethod} call - keying by instance lets {@link #focusGained}
+	 * re-attach the still-valid request instead of degrading to the centre
+	 * fallback. Entries are removed when the scene context is closed.
+	 */
+	private final Map<Object, PlatformTextInputMethodRequest> sessionRequests = new IdentityHashMap<>();
 	private static boolean tickRegistered;
 	private static boolean missingRectWarned;
 	private long lastDebugLog;
@@ -43,7 +55,11 @@ public final class ComposeTextFieldWidget implements MinecraftFocusableWidget {
 			tickRegistered = true;
 			IMBlockerCore.registerClientTickEvent(() -> {
 				ComposeTextFieldWidget widget = INSTANCE;
-				if (widget.inputRequest != null && widget.isTrulyFocused()) {
+				// Poll whenever this widget truly owns focus. Do not gate on
+				// inputRequest: if the startInputMethod capture missed (PolyCompose
+				// drift) while sync() still fired, gating would silence debugLayout()
+				// and checkRectData() as well, making the centre fallback undiagnosable.
+				if (widget.isTrulyFocused()) {
 					IMManager.updateCaretPosition();
 					widget.checkRectData();
 					widget.debugLayout();
@@ -52,22 +68,28 @@ public final class ComposeTextFieldWidget implements MinecraftFocusableWidget {
 		}
 	}
 
-	public void setInputRequest(PlatformTextInputMethodRequest request) {
+	public void setInputRequest(Object session, PlatformTextInputMethodRequest request) {
 		ensureTickRegistered();
+		sessionRequests.put(session, request);
 		inputRequest = request;
 	}
 
-	public void clearInputRequest() {
-		inputRequest = null;
-	}
-
-	public void focusGained() {
+	public void focusGained(Object session) {
+		inputRequest = sessionRequests.get(session);
 		imblocker$onFocusGained();
 	}
 
-	public void focusLost() {
-		clearInputRequest();
+	public void focusLost(Object session) {
+		inputRequest = null;
 		imblocker$onFocusLost();
+	}
+
+	/** Scene context disposed; drop its request so disposed scenes cannot leak. */
+	public void sessionClosed(Object session) {
+		PlatformTextInputMethodRequest removed = sessionRequests.remove(session);
+		if (removed != null && removed == inputRequest) {
+			inputRequest = null;
+		}
 	}
 
 	private Rect getFieldRect() {
@@ -129,6 +151,15 @@ public final class ComposeTextFieldWidget implements MinecraftFocusableWidget {
 	// Raise a one-shot warning once the lack of rect data persists, so that
 	// degradation is diagnosable instead of invisible.
 	private void checkRectData() {
+		if (inputRequest == null) {
+			// startInputMethod capture never fired; focus came from sync() alone.
+			if (++missingRectTicks >= 20 && !missingRectWarned) { // ~1s without any layout data
+				missingRectWarned = true;
+				IMBlockerCore.LOGGER.warn("[IMBlocker] Compose session startInputMethod capture missed; "
+						+ "candidate window falls back to screen centre");
+			}
+			return;
+		}
 		if (getFieldRect() != null || getFocusedRect() != null) {
 			missingRectTicks = 0;
 			return;

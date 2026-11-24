@@ -20,6 +20,8 @@ import kotlin.jvm.functions.Function0;
  * the focused field's rectangle and caret rectangle in scene-root coordinates,
  * which match IMBlocker's content-area point space, so the IME candidate window
  * can follow the real caret instead of falling back to the content centre.
+ *
+ * <p>Tested against PolyCompose 3.0.7.
  */
 public final class ComposeTextFieldWidget implements MinecraftFocusableWidget {
 
@@ -27,7 +29,9 @@ public final class ComposeTextFieldWidget implements MinecraftFocusableWidget {
 
 	private PlatformTextInputMethodRequest inputRequest;
 	private static boolean tickRegistered;
+	private static boolean missingRectWarned;
 	private long lastDebugLog;
+	private int missingRectTicks;
 
 	private ComposeTextFieldWidget() {}
 
@@ -41,6 +45,7 @@ public final class ComposeTextFieldWidget implements MinecraftFocusableWidget {
 				ComposeTextFieldWidget widget = INSTANCE;
 				if (widget.inputRequest != null && widget.isTrulyFocused()) {
 					IMManager.updateCaretPosition();
+					widget.checkRectData();
 					widget.debugLayout();
 				}
 			});
@@ -117,6 +122,22 @@ public final class ComposeTextFieldWidget implements MinecraftFocusableWidget {
 	@Override
 	public int getFontHeight() {
 		return 8;
+	}
+
+	// The layout getters above are best-effort (catch Throwable), so if PolyCompose
+	// changes its request API this widget silently degrades to the centre fallback.
+	// Raise a one-shot warning once the lack of rect data persists, so that
+	// degradation is diagnosable instead of invisible.
+	private void checkRectData() {
+		if (getFieldRect() != null || getFocusedRect() != null) {
+			missingRectTicks = 0;
+			return;
+		}
+		if (++missingRectTicks >= 20 && !missingRectWarned) { // ~1s without any layout data
+			missingRectWarned = true;
+			IMBlockerCore.LOGGER.warn("[IMBlocker] PolyCompose returned no layout rect data; "
+					+ "candidate window falls back to screen centre (tested with PolyCompose 3.0.7)");
+		}
 	}
 
 	private void debugLayout() {

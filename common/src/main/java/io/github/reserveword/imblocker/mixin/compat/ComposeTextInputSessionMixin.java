@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import androidx.compose.ui.platform.PlatformTextInputMethodRequest;
+import io.github.reserveword.imblocker.common.IMBlockerCore;
 import io.github.reserveword.imblocker.common.gui.mc.ComposeTextFieldWidget;
 import kotlin.coroutines.Continuation;
 
@@ -18,7 +19,13 @@ import kotlin.coroutines.Continuation;
  * ({@link #inputActive}), so focus and geometry come from a single source.
  *
  * <p>Gated together with the other PolyCompose mixins and uses
- * {@code require = 0} for version safety.
+ * {@code require = 0} for version safety. Note that the failure modes under
+ * PolyCompose API drift are asymmetric: a renamed {@link #inputActive} field
+ * fails the mixin application loudly, whereas a changed {@code sync} or
+ * {@code startInputMethod} signature silently disables the injection. The
+ * one-shot log in the capture handler lets users verify the hook is live.
+ *
+ * <p>Tested against PolyCompose 3.0.7.
  */
 @Mixin(targets = "org.polyfrost.compose.minecraft.screen.SceneContext", remap = false)
 public abstract class ComposeTextInputSessionMixin {
@@ -26,10 +33,19 @@ public abstract class ComposeTextInputSessionMixin {
 	@Shadow
 	private boolean inputActive;
 
+	private static boolean captureLogged;
+
 	/** Capture the request, which exposes the focused field's live caret rect. */
 	@Inject(method = "startInputMethod", at = @At("HEAD"), require = 0, remap = false)
 	private void imblocker$captureComposeInputRequest(PlatformTextInputMethodRequest request,
 			Continuation<?> continuation, CallbackInfoReturnable<Object> cir) {
+		// One-shot proof that this injection applied and fired; if the PolyCompose
+		// method signature ever drifts, this log stays absent, which is the signal
+		// that the session hook is dead.
+		if (!captureLogged) {
+			captureLogged = true;
+			IMBlockerCore.LOGGER.info("[IMBlocker] Compose text-input session hook active (tested with PolyCompose 3.0.7)");
+		}
 		ComposeTextFieldWidget.INSTANCE.setInputRequest(request);
 	}
 

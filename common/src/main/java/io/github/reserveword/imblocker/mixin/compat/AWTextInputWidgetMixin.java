@@ -92,12 +92,12 @@ public abstract class AWTextInputWidgetMixin implements MinecraftFocusableWidget
 	
 	@Override
 	public Rectangle getBoundsAbs() {
-		return imblocker$bounds.derive(getGuiScale());
+		return imblocker$bounds.derive(getInternalGuiScale());
 	}
 	
 	@Override
 	public Point getCaretPos() {
-		return imblocker$caretPos.derive(getGuiScale() *  imblocker$scale);
+		return imblocker$caretPos.derive(getInternalGuiScale() *  imblocker$scale);
 	}
 	
 	@Override

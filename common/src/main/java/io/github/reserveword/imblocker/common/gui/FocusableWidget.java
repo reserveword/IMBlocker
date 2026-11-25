@@ -46,8 +46,8 @@ public interface FocusableWidget extends FocusableObject {
 	 * the game). It's <i>different</i> from {@code isVisible()} methods which
 	 * are generally shadowed from injected Minecraft widgets.
 	 * 
-	 * @see FocusContainer#checkFocusCandidatesVisibility
-	 * @see FocusContainer#locateRealFocus
+	 * @see MinecraftFocusContext#checkFocusCandidatesVisibility
+	 * @see MinecraftFocusContext#locateRealFocus
 	 */
 	default boolean isRenderable() {
 		return true;

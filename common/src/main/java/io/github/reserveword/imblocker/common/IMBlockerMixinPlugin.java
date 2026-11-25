@@ -123,6 +123,11 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 			validMixins.add("compat.LDLibTextFieldMixin");
 			validMixins.add("compat.LDLibTextAreaMixin");
 		}
+		
+		if(IMBlockerCore.hasMod("polycompose")) {
+			validMixins.add("compat.ComposeLegacyTextFieldStateMixin");
+			validMixins.add("compat.ComposeTextInputSessionMixin");
+		}
 	}
 	
 	@Override

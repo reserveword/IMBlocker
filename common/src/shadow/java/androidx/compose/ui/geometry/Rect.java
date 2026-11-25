@@ -1,6 +1,6 @@
 package androidx.compose.ui.geometry;
 
-/** Compile-time stub for Compose's Rect (supplied by PolyCompose at runtime). */
+/** Compile-time stub for Compose's Rect (supplied by the Compose Multiplatform ui-desktop runtime). */
 public final class Rect {
 	public final float getLeft() { return 0f; }
 	public final float getTop() { return 0f; }

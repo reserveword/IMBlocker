@@ -4,9 +4,11 @@ import androidx.compose.ui.geometry.Rect;
 import kotlin.jvm.functions.Function0;
 
 /**
- * Compile-time stub for the Compose text-input request (supplied by PolyCompose
- * at runtime). The getters are lazily evaluated by Compose, so reading them
- * while the field is focused yields live layout data.
+ * Compile-time stub for the Compose text-input request (supplied by the Compose
+ * Multiplatform ui-desktop runtime). {@code focusedRectInRoot} and
+ * {@code textFieldRectInRoot} are stock Compose desktop API; the getters are
+ * lazily evaluated by Compose, so reading them while the field is focused
+ * yields live layout data.
  */
 public interface PlatformTextInputMethodRequest {
 	Function0<Rect> getFocusedRectInRoot();

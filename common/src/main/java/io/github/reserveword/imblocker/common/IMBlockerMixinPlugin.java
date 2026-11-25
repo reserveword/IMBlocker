@@ -33,7 +33,8 @@ public class IMBlockerMixinPlugin implements IMixinConfigPlugin {
 				"GuiGraphicsExtractorMixin",
 				"TextInputManagerMixin",
 				"KeyboardHandlerMixin",
-				"compat.ComposeTextInputSessionMixin");
+				"compat.ComposeTextInputServiceMixin",
+				"compat.ComposeSessionRequestMixin");
 		
 		if(Platform.isWindows()) {
 			validMixins.add("WindowsIngameIMEInitializer");

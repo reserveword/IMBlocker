@@ -23,7 +23,7 @@ public abstract class MinecraftScreenMonitor {
 			config.recoverScreen(screen.getClass().getName());
 		}
 		// Compose screens (OneConfig etc.) get their IME exclusively through the
-		// PolyCompose session hook: the compose widget is the only focus owner
+		// Compose-core session hook: the compose widget is the only focus owner
 		// that should ever enable the IME there. Keeping the container path
 		// (screen whitelist) enabled for them shows the candidate window at the
 		// OS default position whenever the session has not started yet.
@@ -58,9 +58,12 @@ public abstract class MinecraftScreenMonitor {
 		if(screen == null) {
 			return false;
 		}
-		// Walk the class hierarchy looking for PolyCompose's ComposeScreen.
-		// Deliberately not gated by mod id: any mod may bundle PolyCompose, and
-		// the walk is a handful of string comparisons once per screen change.
+		// Walk the class hierarchy looking for PolyCompose's ComposeScreen, the
+		// screen base class every Compose screen currently derives from (the
+		// IME itself is driven by the Compose-core session hooks, which do not
+		// care about the screen class). Deliberately not gated by mod id: any
+		// mod may bundle PolyCompose, and the walk is a handful of string
+		// comparisons once per screen change.
 		for(Class<?> cls = screen.getClass(); cls != null && cls != Object.class; cls = cls.getSuperclass()) {
 			if("org.polyfrost.compose.minecraft.screen.ComposeScreen".equals(cls.getName())) {
 				return true;

@@ -9,37 +9,38 @@ import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import kotlin.jvm.functions.Function0;
 
-import java.util.IdentityHashMap;
-import java.util.Map;
+import java.util.Locale;
 
 /**
  * Virtual focus owner standing for the text field currently focused inside a
- * Compose scene (PolyCompose). A Compose {@code BasicTextField} is not a
- * Minecraft {@code EditBox}, so the vanilla widget mixins cannot observe it;
- * PolyCompose's text-input session callbacks drive this singleton instead.
+ * Compose scene. A Compose {@code BasicTextField} is not a Minecraft
+ * {@code EditBox}, so the vanilla widget mixins cannot observe it; the
+ * Compose-core session hooks ({@code ComposeTextInputServiceMixin} for the
+ * lifecycle, {@code ComposeSessionRequestMixin} for the request) drive this
+ * singleton instead. The hooks are host-agnostic, so this works for PolyCompose
+ * screens and HUD scenes alike, and for any other mod hosting Compose scenes
+ * on its own {@code PlatformContext}.
  *
  * <p>Precise layout data comes from the {@link PlatformTextInputMethodRequest}
- * delivered to {@code SceneContext.startInputMethod}. Its lazy getters expose
- * the focused field's rectangle and caret rectangle in scene-root coordinates,
- * which match IMBlocker's content-area point space, so the IME candidate window
- * can follow the real caret instead of falling back to the content centre.
+ * delivered to the session. Its lazy getters expose the focused field's
+ * rectangle and caret rectangle in scene-root coordinates, which match
+ * IMBlocker's content-area point space, so the IME candidate window can follow
+ * the real caret instead of falling back to the content centre.
  *
- * <p>Tested against PolyCompose 3.0.7.
+ * <p>Compose keeps exactly one session alive at a time ({@code SessionMutex}
+ * cancels the previous one before starting the next), so a single request slot
+ * is sufficient: the newest captured request always belongs to the active
+ * session. A session can outlive IMBlocker's attention (screen hidden/covered
+ * while the field stays focused) without any callback - the widget simply
+ * stays focused, which mirrors Compose's own state.
+ *
+ * <p>Tested against Compose Multiplatform 1.13.0-alpha02 (PolyCompose 3.0.7).
  */
 public final class ComposeTextFieldWidget implements MinecraftFocusableWidget {
 
 	public static final ComposeTextFieldWidget INSTANCE = new ComposeTextFieldWidget();
 
 	private PlatformTextInputMethodRequest inputRequest;
-	/**
-	 * Requests keyed by the SceneContext instance that delivered them. A session
-	 * can outlive IMBlocker's focus (screen hidden/covered while the field stays
-	 * focused), and PolyCompose then re-fires {@code sync(true)} without a new
-	 * {@code startInputMethod} call - keying by instance lets {@link #focusGained}
-	 * re-attach the still-valid request instead of degrading to the centre
-	 * fallback. Entries are removed when the scene context is closed.
-	 */
-	private final Map<Object, PlatformTextInputMethodRequest> sessionRequests = new IdentityHashMap<>();
 	private static boolean tickRegistered;
 	private static boolean missingRectWarned;
 	private long lastDebugLog;
@@ -56,9 +57,10 @@ public final class ComposeTextFieldWidget implements MinecraftFocusableWidget {
 			IMBlockerCore.registerClientTickEvent(() -> {
 				ComposeTextFieldWidget widget = INSTANCE;
 				// Poll whenever this widget truly owns focus. Do not gate on
-				// inputRequest: if the startInputMethod capture missed (PolyCompose
-				// drift) while sync() still fired, gating would silence debugLayout()
-				// and checkRectData() as well, making the centre fallback undiagnosable.
+				// inputRequest: if the request capture missed (Compose drift)
+				// while the lifecycle hook still fired, gating would silence
+				// debugLayout() and checkRectData() as well, making the centre
+				// fallback undiagnosable.
 				if (widget.isTrulyFocused()) {
 					IMManager.updateCaretPosition();
 					widget.checkRectData();
@@ -68,28 +70,25 @@ public final class ComposeTextFieldWidget implements MinecraftFocusableWidget {
 		}
 	}
 
-	public void setInputRequest(Object session, PlatformTextInputMethodRequest request) {
+	/** A Compose text-input session began: a text field now owns the IME focus. */
+	public void sessionStarted() {
 		ensureTickRegistered();
-		sessionRequests.put(session, request);
-		inputRequest = request;
-	}
-
-	public void focusGained(Object session) {
-		inputRequest = sessionRequests.get(session);
 		imblocker$onFocusGained();
 	}
 
-	public void focusLost(Object session) {
+	/**
+	 * The active session's coroutine was cancelled: focus left the field (or
+	 * moved to another one, whose start callback then re-focuses this widget).
+	 */
+	public void sessionEnded() {
 		inputRequest = null;
 		imblocker$onFocusLost();
 	}
 
-	/** Scene context disposed; drop its request so disposed scenes cannot leak. */
-	public void sessionClosed(Object session) {
-		PlatformTextInputMethodRequest removed = sessionRequests.remove(session);
-		if (removed != null && removed == inputRequest) {
-			inputRequest = null;
-		}
+	/** Attach the request delivered for the newest session (live rect source). */
+	public void setInputRequest(PlatformTextInputMethodRequest request) {
+		ensureTickRegistered();
+		inputRequest = request;
 	}
 
 	private Rect getFieldRect() {
@@ -146,16 +145,17 @@ public final class ComposeTextFieldWidget implements MinecraftFocusableWidget {
 		return 8;
 	}
 
-	// The layout getters above are best-effort (catch Throwable), so if PolyCompose
-	// changes its request API this widget silently degrades to the centre fallback.
-	// Raise a one-shot warning once the lack of rect data persists, so that
-	// degradation is diagnosable instead of invisible.
+	// The layout getters above are best-effort (catch Throwable), so if Compose
+	// changes its request API the widget silently degrades to the centre
+	// fallback. Raise a one-shot warning once the lack of rect data persists,
+	// so that degradation is diagnosable instead of invisible.
 	private void checkRectData() {
 		if (inputRequest == null) {
-			// startInputMethod capture never fired; focus came from sync() alone.
+			// The lifecycle hook fired but no request was captured, i.e. the
+			// request capture mixin is not applying.
 			if (++missingRectTicks >= 20 && !missingRectWarned) { // ~1s without any layout data
 				missingRectWarned = true;
-				IMBlockerCore.LOGGER.warn("[IMBlocker] Compose session startInputMethod capture missed; "
+				IMBlockerCore.LOGGER.warn("[IMBlocker] Compose session request capture inactive; "
 						+ "candidate window falls back to screen centre");
 			}
 			return;
@@ -166,8 +166,9 @@ public final class ComposeTextFieldWidget implements MinecraftFocusableWidget {
 		}
 		if (++missingRectTicks >= 20 && !missingRectWarned) { // ~1s without any layout data
 			missingRectWarned = true;
-			IMBlockerCore.LOGGER.warn("[IMBlocker] PolyCompose returned no layout rect data; "
-					+ "candidate window falls back to screen centre (tested with PolyCompose 3.0.7)");
+			IMBlockerCore.LOGGER.warn("[IMBlocker] Compose returned no layout rect data; "
+					+ "candidate window falls back to screen centre "
+					+ "(tested with Compose Multiplatform 1.13.0-alpha02 / PolyCompose 3.0.7)");
 		}
 	}
 
@@ -186,7 +187,7 @@ public final class ComposeTextFieldWidget implements MinecraftFocusableWidget {
 
 	private static String fmt(Rect r) {
 		if (r == null) return "null";
-		return String.format(java.util.Locale.ROOT, "(%.1f,%.1f %.1fx%.1f)",
+		return String.format(Locale.ROOT, "(%.1f,%.1f %.1fx%.1f)",
 				r.getLeft(), r.getTop(), r.getWidth(), r.getHeight());
 	}
 }

@@ -118,16 +118,6 @@ public final class IMManager {
 		IMBlockerCore.invokeOnMainThread(() -> IMManagerWindows.onCandidateChanged());
 	}
 	
-	public static void evaluateKeyInput(boolean isUnlockIMEKey, int action, int modifiers) {
-		if(IMBlockerConfig.INSTANCE.getEnglishStateImpl() == EnglishStateImpl.DISABLE_IM &&
-				isUnlockIMEKey && (modifiers & 14) == 0 && action == 0) {
-			FocusableObject focusOwner = FocusManager.getFocusOwner();
-			if(focusOwner != null && focusOwner.getPreferredState()) {
-				setState(true);
-			}
-		}
-	}
-	
 	static {
 		if(Platform.isWindows()) {
 			INSTANCE = new IMManagerWindows();

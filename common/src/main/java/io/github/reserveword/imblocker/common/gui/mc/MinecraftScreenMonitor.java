@@ -71,4 +71,9 @@ public abstract class MinecraftScreenMonitor {
 		}
 		return false;
 	}
+
+	/** Whether the currently shown screen is a Compose-hosted screen. */
+	static boolean isCurrentScreenCompose() {
+		return isComposeScreen(currentScreen);
+	}
 }

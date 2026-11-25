@@ -51,12 +51,16 @@ public abstract class ComposeTextInputServiceMixin {
 			IMBlockerCore.LOGGER.info("[IMBlocker] Compose text-input session hook active "
 					+ "(tested with Compose Multiplatform 1.13.0-alpha02 / PolyCompose 3.0.7)");
 		}
-		ComposeTextFieldWidget.INSTANCE.sessionStarted();
+		// This service instance doubles as the session identity: each Compose
+		// scene owns one TextInputService, and the paired stop callback fires
+		// on the same instance, so the widget can reference-count sessions per
+		// scene and stay immune to stale teardowns from closing scenes.
+		ComposeTextFieldWidget.INSTANCE.sessionStarted((Object) this);
 	}
 
 	/** Internal no-arg overload fired when the session coroutine is cancelled. */
 	@Inject(method = "stopInput()V", at = @At("HEAD"), require = 0, remap = false)
 	private void imblocker$onComposeSessionStopped(CallbackInfo ci) {
-		ComposeTextFieldWidget.INSTANCE.sessionEnded();
+		ComposeTextFieldWidget.INSTANCE.sessionEnded((Object) this);
 	}
 }

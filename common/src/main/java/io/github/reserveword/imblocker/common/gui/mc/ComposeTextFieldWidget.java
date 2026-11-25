@@ -9,7 +9,10 @@ import io.github.reserveword.imblocker.common.gui.Point;
 import io.github.reserveword.imblocker.common.gui.Rectangle;
 import kotlin.jvm.functions.Function0;
 
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Virtual focus owner standing for the text field currently focused inside a
@@ -27,12 +30,15 @@ import java.util.Locale;
  * IMBlocker's content-area point space, so the IME candidate window can follow
  * the real caret instead of falling back to the content centre.
  *
- * <p>Compose keeps exactly one session alive at a time ({@code SessionMutex}
- * cancels the previous one before starting the next), so a single request slot
- * is sufficient: the newest captured request always belongs to the active
- * session. A session can outlive IMBlocker's attention (screen hidden/covered
- * while the field stays focused) without any callback - the widget simply
- * stays focused, which mirrors Compose's own state.
+ * <p>Sessions are tracked per scene (each scene owns one
+ * {@code TextInputService}) and reference-counted: Compose cancels sessions
+ * asynchronously, so a stale session teardown from a closing scene can land
+ * after a fresh scene's session started, and a global focus toggle would then
+ * kill the new focus permanently (Compose never re-announces a still-alive
+ * session). Counting per service keeps the widget focused as long as any scene
+ * still holds a session. Focus that the environment clears while a session is
+ * alive is re-asserted on every tick (see {@link #ensureTickRegistered}),
+ * covering restored-focus flows where no new session event ever fires.
  *
  * <p>Tested against Compose Multiplatform 1.13.0-alpha02 (PolyCompose 3.0.7).
  */
@@ -41,6 +47,8 @@ public final class ComposeTextFieldWidget implements MinecraftFocusableWidget {
 	public static final ComposeTextFieldWidget INSTANCE = new ComposeTextFieldWidget();
 
 	private PlatformTextInputMethodRequest inputRequest;
+	/** Live sessions keyed by their owning per-scene {@code TextInputService}. */
+	private final Set<Object> liveSessions = Collections.newSetFromMap(new IdentityHashMap<>());
 	private static boolean tickRegistered;
 	private static boolean missingRectWarned;
 	private long lastDebugLog;
@@ -56,37 +64,52 @@ public final class ComposeTextFieldWidget implements MinecraftFocusableWidget {
 			tickRegistered = true;
 			IMBlockerCore.registerClientTickEvent(() -> {
 				ComposeTextFieldWidget widget = INSTANCE;
-				// Poll whenever this widget truly owns focus. Do not gate on
-				// inputRequest: if the request capture missed (Compose drift)
-				// while the lifecycle hook still fired, gating would silence
-				// debugLayout() and checkRectData() as well, making the centre
-				// fallback undiagnosable.
 				if (widget.isTrulyFocused()) {
 					IMManager.updateCaretPosition();
 					widget.checkRectData();
 					widget.debugLayout();
+				} else if (widget.hasLiveSession() && MinecraftScreenMonitor.isCurrentScreenCompose()) {
+					// A session is alive and a Compose screen is on top, but the
+					// focus container dropped our focus: the field restored its
+					// previous focus state while the screen opened, a stale
+					// teardown raced the fresh session, or the screen was simply
+					// re-shown. Compose has no callback for any of these (a
+					// still-alive session is never re-announced), so re-assert
+					// the focus that the old PolyCompose sync() hook used to
+					// replay every frame.
+					widget.imblocker$onFocusGained();
 				}
 			});
 		}
 	}
 
-	/** A Compose text-input session began: a text field now owns the IME focus. */
-	public void sessionStarted() {
-		ensureTickRegistered();
-		imblocker$onFocusGained();
+	/** A Compose text-input session began on the given per-scene text-input service. */
+	public synchronized void sessionStarted(Object service) {
+		if (liveSessions.add(service)) {
+			ensureTickRegistered();
+			imblocker$onFocusGained();
+		}
 	}
 
 	/**
-	 * The active session's coroutine was cancelled: focus left the field (or
-	 * moved to another one, whose start callback then re-focuses this widget).
+	 * The session running on the given per-scene service was cancelled. Other
+	 * scenes may still hold sessions, so the widget only loses focus when the
+	 * last one ends.
 	 */
-	public void sessionEnded() {
-		inputRequest = null;
-		imblocker$onFocusLost();
+	public synchronized void sessionEnded(Object service) {
+		if (liveSessions.remove(service) && liveSessions.isEmpty()) {
+			inputRequest = null;
+			imblocker$onFocusLost();
+		}
+	}
+
+	/** Whether any scene currently holds a live Compose text-input session. */
+	public synchronized boolean hasLiveSession() {
+		return !liveSessions.isEmpty();
 	}
 
 	/** Attach the request delivered for the newest session (live rect source). */
-	public void setInputRequest(PlatformTextInputMethodRequest request) {
+	public synchronized void setInputRequest(PlatformTextInputMethodRequest request) {
 		ensureTickRegistered();
 		inputRequest = request;
 	}

@@ -12,6 +12,7 @@ import androidx.compose.ui.text.input.TextFieldValue;
 import io.github.reserveword.imblocker.common.accessor.ComposeLegacyTextFieldStateAdapter;
 
 @Pseudo
+@SuppressWarnings("deprecation")
 @Mixin(targets = "androidx.compose.foundation.text.CoreTextFieldKt", remap = false)
 public abstract class ComposeCoreTextFieldKtMixin {
 	@Inject(method = "notifyFocusedRect", at = @At("TAIL"))

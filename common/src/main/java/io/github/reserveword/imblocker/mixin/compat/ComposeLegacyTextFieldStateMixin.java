@@ -21,6 +21,7 @@ import io.github.reserveword.imblocker.common.gui.Rectangle;
 import io.github.reserveword.imblocker.common.gui.mc.MinecraftFocusableWidget;
 
 @Pseudo
+@SuppressWarnings("deprecation")
 @Mixin(targets = "androidx.compose.foundation.text.LegacyTextFieldState", remap = false)
 public abstract class ComposeLegacyTextFieldStateMixin 
 	implements MinecraftFocusableWidget, ComposeLegacyTextFieldStateAdapter {
@@ -58,7 +59,7 @@ public abstract class ComposeLegacyTextFieldStateMixin
 		float scrollOffsetX = clippedBoundsRect.getLeft() - boundsRect.getLeft();
 		float scrollOffsetY = clippedBoundsRect.getTop() - boundsRect.getTop();
 		int transformedOffset = offsetMapping.originalToTransformed(
-				(int) (((ComposeTextFieldValueAccessor) value).getSelection() >> 32));
+				(int) (((ComposeTextFieldValueAccessor) (Object) value).getSelection() >> 32));
 		Rect cursorRect = getLayoutResult().getValue().getCursorRect(transformedOffset);
 		Point currentCaretPos = new Point(getGuiScale(), 
 				cursorRect.getRight() - scrollOffsetX, 
